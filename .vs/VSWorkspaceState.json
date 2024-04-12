@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\backend",
+    "\\backend\\models",
+    "\\backend\\views",
+    "\\backend\\views\\car"
+  ],
+  "SelectedNode": "\\backend\\views\\car\\index.php",
+  "PreviewInSolutionExplorer": false
+}

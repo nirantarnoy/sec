@@ -1,0 +1,27 @@
+<?php
+
+use yii\db\Migration;
+
+/**
+ * Handles adding columns to table `{{%work_queue}}`.
+ */
+class m230306_042351_add_test_price_column_to_work_queue_table extends Migration
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function safeUp()
+    {
+        $this->addColumn('{{%work_queue}}', 'test_price', $this->float());
+        $this->addColumn('{{%work_queue}}', 'damaged_price', $this->float());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function safeDown()
+    {
+        $this->dropColumn('{{%work_queue}}', 'test_price');
+        $this->dropColumn('{{%work_queue}}', 'damaged_price');
+    }
+}
