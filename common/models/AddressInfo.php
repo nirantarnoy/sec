@@ -8,7 +8,7 @@ use Yii;
  * This is the model class for table "address_info".
  *
  * @property int $id
- * @property int|null $party_type
+ * @property int|null $party_type_id
  * @property int|null $party_id
  * @property string|null $address
  * @property string|null $street
@@ -34,7 +34,7 @@ class AddressInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['party_type', 'party_id', 'district_id', 'city_id', 'province_id', 'status'], 'integer'],
+            [['party_type_id', 'party_id', 'district_id', 'city_id', 'province_id', 'status'], 'integer'],
             [['address', 'street', 'zipcode'], 'string', 'max' => 255],
         ];
     }
@@ -46,7 +46,7 @@ class AddressInfo extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'party_type' => 'Party Type',
+            'party_type_id' => 'Party Type ID',
             'party_id' => 'Party ID',
             'address' => 'Address',
             'street' => 'Street',

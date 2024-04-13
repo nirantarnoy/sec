@@ -40,9 +40,9 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['gender', 'position', 'salary_type', 'status', 'company_id', 'created_at', 'updated_at', 'created_by', 'updated_by','is_cashier'], 'integer'],
-            [['emp_start','card_issue_date','card_exp_date','passport_issue_date','passport_exp_date','cost_living_price','social_price'], 'safe'],
-            [['code', 'fname', 'lname', 'description', 'photo','id_card_no','card_issue_place','passport'], 'string', 'max' => 255],
+            [['gender', 'position', 'salary_type', 'status', 'company_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
+            [['emp_start'], 'safe'],
+            [['code', 'fname', 'lname', 'description', 'photo'], 'string', 'max' => 255],
         ];
     }
 
@@ -53,27 +53,17 @@ class Employee extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'code' => 'รหัส',
-            'fname' => 'ชื่อ',
-            'lname' => 'นามสกุล',
-            'gender' => 'เพศ',
-            'position' => 'ตำแหน่งงาน',
-            'salary_type' => 'ประเภทเงินเดือน',
-            'emp_start' => 'เริ่มการเป็นพนักงาน',
-            'description' => 'รายละเอียด',
-            'photo' => 'รูปภาพ',
-            'status' => 'สถานะ',
-            'id_card_no' => 'เลขที่บัตรประชาชน',
-            'card_issue_place' => 'ออกให้โดย',
-            'card_issue_date' => 'วันที่ทำ',
-            'card_exp_date' => 'วันหมดอายุ',
-            'passport' => 'เลขที่หนังสือเดินทาง',
-            'passport_issue_date' => 'วันที่ทำ',
-            'passport_exp_date' => 'วันหมดอายุ',
-            'cost_living_price' => 'ค่าครองชีพ',
-            'social_price' => 'ค่าประกันสังคม(%)',
-            'is_cashier' => 'จ่ายเงิน',
-            'company_id' => 'บริษัท',
+            'code' => 'Code',
+            'fname' => 'Fname',
+            'lname' => 'Lname',
+            'gender' => 'Gender',
+            'position' => 'Position',
+            'salary_type' => 'Salary Type',
+            'emp_start' => 'Emp Start',
+            'description' => 'Description',
+            'photo' => 'Photo',
+            'status' => 'Status',
+            'company_id' => 'Company ID',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',

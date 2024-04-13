@@ -11,7 +11,7 @@ use yii\widgets\Pjax;
 /** @var backend\models\StocksumSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'สินค้า/อะไหล่คงเหลือ';
+$this->title = 'สินค้าคงเหลือ';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="stocksum-index">

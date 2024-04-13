@@ -17,7 +17,7 @@ class StocksumSearch extends Stocksum
     public function rules()
     {
         return [
-            [['id', 'company_id', 'warehouse_id', 'item_id'], 'integer'],
+            [['id', 'warehouse_id', 'product_id'], 'integer'],
             [['qty'], 'number'],
             [['last_update'], 'safe'],
         ];
@@ -60,11 +60,9 @@ class StocksumSearch extends Stocksum
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'company_id' => $this->company_id,
             'warehouse_id' => $this->warehouse_id,
-            'item_id' => $this->item_id,
-            'qty' => $this->qty,
-            'last_update' => $this->last_update,
+            'product_id' => $this->product_id,
+            'qty' => $this->qty
         ]);
 
         return $dataProvider;

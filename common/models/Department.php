@@ -45,10 +45,10 @@ class Department extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'code' => 'รหัสแผนก',
-            'name' => 'ชื่อแผนก',
-            'status' => 'สถานะ',
-            'company_id' => 'บริษัท',
+            'code' => 'Code',
+            'name' => 'Name',
+            'status' => 'Status',
+            'company_id' => 'Company ID',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

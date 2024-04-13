@@ -9,7 +9,7 @@ use backend\models\Customergroup;
 /**
  * CustomergroupSearch represents the model behind the search form of `backend\models\Customergroup`.
  */
-class CustomergroupSearch extends Customergroup
+class CustomergroupSearch extends \backend\models\Customergroup
 {
     /**
      * {@inheritdoc}
@@ -20,7 +20,7 @@ class CustomergroupSearch extends Customergroup
     public function rules()
     {
         return [
-            [['id', 'status', 'company_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name', 'description','globalSearch'], 'safe'],
         ];
     }

@@ -11,7 +11,7 @@ use yii\widgets\LinkPager;
 /** @var backend\models\ProductSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'สินค้า/อะไหล่';
+$this->title = 'สินค้า';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="employee-index">

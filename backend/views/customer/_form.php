@@ -48,7 +48,7 @@ if($model_user_group_list!=null){
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'business_type')->textInput() ?>
+            <?= $form->field($model, 'taxid')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-3">
             <?php $model->customer_group_id = $group_assign_list;?>
@@ -67,31 +67,36 @@ if($model_user_group_list!=null){
     </div>
     <div class="row">
         <div class="col-lg-3">
-            <?= $form->field($model, 'work_type_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\WorkOptionType::find()->all(), 'id', function ($data) {
-                    return $data->name;
-                }),
-                'options' => [
-                    'placeholder' => '--ประเภทงาน--'
-                ]
-            ]) ?>
-        </div>
-        <div class="col-lg-3">
             <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'company_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Company::find()->all(), 'id', function ($data) {
+
+            <?= $form->field($model, 'payment_term_id')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentterm::find()->all(), 'id', function ($data) {
                     return $data->name;
                 }),
                 'options' => [
-                    'placeholder' => '--company--'
+                    'placeholder' => '--เลือกเงื่อนไขชำระเงิน--'
                 ]
             ]) ?>
+
         </div>
+        <div class="col-lg-3">
+
+            <?= $form->field($model, 'payment_method_id')->Widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentmethod::find()->all(), 'id', function ($data) {
+                    return $data->name;
+                }),
+                'options' => [
+                    'placeholder' => '--เลือกวิธีชำระเงิน--'
+                ]
+            ]) ?>
+
+        </div>
+
     </div>
 
     <div class="row">
@@ -163,45 +168,7 @@ if($model_user_group_list!=null){
     <br/>
     <div class="row">
         <div class="col-lg-3">
-
-            <?= $form->field($model, 'payment_term_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentterm::find()->all(), 'id', function ($data) {
-                    return $data->name;
-                }),
-                'options' => [
-                    'placeholder' => '--เลือกเงื่อนไขชำระเงิน--'
-                ]
-            ]) ?>
-
-        </div>
-        <div class="col-lg-3">
-
-            <?= $form->field($model, 'payment_method_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentmethod::find()->all(), 'id', function ($data) {
-                    return $data->name;
-                }),
-                'options' => [
-                    'placeholder' => '--เลือกวิธีชำระเงิน--'
-                ]
-            ]) ?>
-
-        </div>
-        <div class="col-lg-3"></div>
-        <div class="col-lg-3"></div>
-    </div>
-    <br/>
-    <div class="row">
-        <div class="col-lg-3">
-            <?= $form->field($model, 'taxid')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-lg-3">
             <?= $form->field($model, 'address')->textarea(['maxlength' => true]) ?>
-        </div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'branch_code')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'branch_name')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
 

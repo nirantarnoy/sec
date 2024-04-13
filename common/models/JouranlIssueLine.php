@@ -5,27 +5,25 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "stock_trans".
+ * This is the model class for table "jouranl_issue_line".
  *
  * @property int $id
- * @property string|null $trans_date
- * @property int|null $activity_type_id
+ * @property int|null $journal_issue_id
  * @property int|null $product_id
  * @property float|null $qty
- * @property int|null $trans_ref_id
+ * @property float|null $price
+ * @property float|null $line_total
  * @property int|null $status
- * @property int|null $created_at
- * @property int|null $created_by
  * @property string|null $remark
  */
-class StockTrans extends \yii\db\ActiveRecord
+class JouranlIssueLine extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'stock_trans';
+        return 'jouranl_issue_line';
     }
 
     /**
@@ -34,9 +32,8 @@ class StockTrans extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['trans_date'], 'safe'],
-            [['activity_type_id', 'product_id', 'trans_ref_id', 'status', 'created_at', 'created_by'], 'integer'],
-            [['qty'], 'number'],
+            [['journal_issue_id', 'product_id', 'status'], 'integer'],
+            [['qty', 'price', 'line_total'], 'number'],
             [['remark'], 'string', 'max' => 255],
         ];
     }
@@ -48,14 +45,12 @@ class StockTrans extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'trans_date' => 'Trans Date',
-            'activity_type_id' => 'Activity Type ID',
+            'journal_issue_id' => 'Journal Issue ID',
             'product_id' => 'Product ID',
             'qty' => 'Qty',
-            'trans_ref_id' => 'Trans Ref ID',
+            'price' => 'Price',
+            'line_total' => 'Line Total',
             'status' => 'Status',
-            'created_at' => 'Created At',
-            'created_by' => 'Created By',
             'remark' => 'Remark',
         ];
     }

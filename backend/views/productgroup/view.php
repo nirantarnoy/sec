@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /** @var backend\models\Productgroup $model */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'กลุ่มสินค้า/อะไหล่', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'กลุ่มสินค้า', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

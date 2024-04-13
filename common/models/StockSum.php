@@ -8,11 +8,12 @@ use Yii;
  * This is the model class for table "stock_sum".
  *
  * @property int $id
- * @property int|null $company_id
+ * @property int|null $product_id
  * @property int|null $warehouse_id
- * @property int|null $item_id
  * @property float|null $qty
- * @property string|null $last_update
+ * @property int|null $status
+ * @property int|null $created_at
+ * @property int|null $updated_at
  */
 class StockSum extends \yii\db\ActiveRecord
 {
@@ -30,9 +31,8 @@ class StockSum extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['company_id', 'warehouse_id', 'item_id'], 'integer'],
+            [['product_id', 'warehouse_id', 'status', 'created_at', 'updated_at'], 'integer'],
             [['qty'], 'number'],
-            [['last_update'], 'safe'],
         ];
     }
 
@@ -43,11 +43,12 @@ class StockSum extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'company_id' => 'บริษัท',
-            'warehouse_id' => 'คลังที่จัดเก็บ',
-            'item_id' => 'สินค้า/อะไหล่',
-            'qty' => 'จำนวน',
-            'last_update' => 'Last Update',
+            'product_id' => 'Product ID',
+            'warehouse_id' => 'Warehouse ID',
+            'qty' => 'Qty',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
         ];
     }
 }

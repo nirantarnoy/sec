@@ -20,7 +20,7 @@ class CustomerSearch extends Customer
     public function rules()
     {
         return [
-            [['id', 'business_type', 'status', 'crated_at', 'created_by', 'updated_at', 'udpated_by'], 'integer'],
+            [['id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['code', 'name'], 'safe'],
             [['globalSearch'], 'string'],
         ];

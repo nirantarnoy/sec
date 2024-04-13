@@ -45,10 +45,10 @@ class Warehouse extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'ชื่อคลัง',
-            'description' => 'รายละเอียด',
-            'company_id' => 'บริษัท',
-            'status' => 'สถานะ',
+            'name' => 'Name',
+            'description' => 'Description',
+            'company_id' => 'Company ID',
+            'status' => 'Status',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

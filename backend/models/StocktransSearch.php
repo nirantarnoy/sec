@@ -17,7 +17,7 @@ class StocktransSearch extends Stocktrans
     public function rules()
     {
         return [
-            [['id', 'activity_type_id', 'item_id', 'created_by', 'created_at', 'stock_type_id'], 'integer'],
+            [['id', 'activity_type_id', 'product_id', 'created_by', 'created_at', 'stock_type_id'], 'integer'],
             [['journal_no', 'trans_date'], 'safe'],
             [['qty'], 'number'],
         ];
@@ -62,7 +62,7 @@ class StocktransSearch extends Stocktrans
             'id' => $this->id,
             'trans_date' => $this->trans_date,
             'activity_type_id' => $this->activity_type_id,
-            'item_id' => $this->item_id,
+            'product_id' => $this->product_id,
             'qty' => $this->qty,
             'created_by' => $this->created_by,
             'created_at' => $this->created_at,

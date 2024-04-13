@@ -18,20 +18,6 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'taxid')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 
-        <div class="row">
-            <div class="col-lg-3">
-                <?= $form->field($model, 'social_base_price')->textInput(['maxlength' => true]) ?>
-            </div>
-            <div class="col-lg-3">
-                <?= $form->field($model, 'social_deduct_per')->textInput(['maxlength' => true]) ?>
-            </div>
-            <div class="col-lg-3">
-                <label for="">อัพเดทล่าสุด</label>
-                <input type="text" class="form-control" readonly value="<?=\backend\models\Company::findSocialLastUpdate($model->id)?>">
-            </div>
-        </div>
-
-
 
         <!-- <?= $form->field($model, 'status')->textInput() ?> -->
         <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>

@@ -15,6 +15,8 @@ use Yii;
  * @property int|null $created_by
  * @property int|null $updated_at
  * @property int|null $updated_by
+ * @property string|null $address
+ * @property string|null $taxid
  */
 class Company extends \yii\db\ActiveRecord
 {
@@ -33,8 +35,7 @@ class Company extends \yii\db\ActiveRecord
     {
         return [
             [['status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['name', 'description','doc','taxid','address'], 'string', 'max' => 255],
-            [['social_deduct_per','social_base_price'],'safe']
+            [['name', 'description', 'address', 'taxid'], 'string', 'max' => 255],
         ];
     }
 
@@ -48,13 +49,12 @@ class Company extends \yii\db\ActiveRecord
             'name' => 'Name',
             'description' => 'Description',
             'status' => 'Status',
-            'social_deduct_per'=>'อัตราหักประกันสังคม (%)',
-            'social_base_price'=>'ฐานเงินเดือนประกันสังคม',
-            'taxid'=>'เลขที่เสียภาษี',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
+            'address' => 'Address',
+            'taxid' => 'Taxid',
         ];
     }
 }

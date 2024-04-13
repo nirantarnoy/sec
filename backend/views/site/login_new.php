@@ -45,7 +45,7 @@ use yii\helpers\Html;
 
                 <div class="login-logo">
                     <a href="#">
-                        <img src="../../backend/web/uploads/logo/narono_logo.png" width="90%" alt="">
+                        <img src="../../backend/web/uploads/logo/ab_logo.jpg" width="70%" alt="">
                     </a>
 <!--                    <h1 style="color: dodgerblue">BKT</h1>-->
 <!--                    <h1 style="color: dodgerblue">BP</h1>-->
@@ -72,10 +72,16 @@ use yii\helpers\Html;
                         </div>
                     </div>
                     <!-- /.col -->
-                    <div class="col-4">
+<!--                    <div class="col-4">-->
+<!--                        <button type="submit" class="btn btn-primary btn-block">เข้าใช้งาน</button>-->
+<!--                    </div>-->
+                    <!-- /.col -->
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-lg-12">
                         <button type="submit" class="btn btn-primary btn-block">เข้าใช้งาน</button>
                     </div>
-                    <!-- /.col -->
                 </div>
                 <?php ActiveForm::end() ?>
 
@@ -90,9 +96,9 @@ use yii\helpers\Html;
                 </div>
                 <!-- /.social-auth-links -->
 
-                <p class="mb-1">
-                    <a href="forgot-password.html" style="color: #00A000">ลืมรหัสผ่าน ?</a>
-                </p>
+<!--                <p class="mb-1">-->
+<!--                    <a href="forgot-password.html" style="color: #00A000">ลืมรหัสผ่าน ?</a>-->
+<!--                </p>-->
                 <!--      <p class="mb-0">-->
                 <!--        <a href="register.html" class="text-center">Register a new membership</a>-->
                 <!--      </p>-->

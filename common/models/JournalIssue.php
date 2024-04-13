@@ -10,9 +10,8 @@ use Yii;
  * @property int $id
  * @property string|null $journal_no
  * @property string|null $trans_date
- * @property int|null $department_id
- * @property string|null $reason
- * @property int|null $status
+ * @property int|null $issue_for_id
+ * @property string|null $remark
  * @property int|null $created_at
  * @property int|null $created_by
  * @property int|null $updated_at
@@ -35,8 +34,8 @@ class JournalIssue extends \yii\db\ActiveRecord
     {
         return [
             [['trans_date'], 'safe'],
-            [['department_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','trans_ref_id'], 'integer'],
-            [['journal_no', 'reason'], 'string', 'max' => 255],
+            [['issue_for_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['journal_no', 'remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -47,12 +46,10 @@ class JournalIssue extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'journal_no' => 'เลขที่',
-            'trans_date' => 'วันที่',
-            'department_id' => 'แผนก',
-            'reason' => 'เหตุผล',
-            'status' => 'สถานะ',
-            'trans_ref_id' => 'อ้างอิงใบแจ้งซ่อม',
+            'journal_no' => 'Journal No',
+            'trans_date' => 'Trans Date',
+            'issue_for_id' => 'Issue For ID',
+            'remark' => 'Remark',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

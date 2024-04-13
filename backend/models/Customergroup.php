@@ -17,42 +17,7 @@ use Yii;
  * @property int|null $updated_at
  * @property int|null $updated_by
  */
-class Customergroup extends \common\models\Customergroup
+class Customergroup extends \common\models\CustomerGroup
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
-    {
-        return 'customergroup';
-    }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function rules()
-    {
-        return [
-            [['status', 'company_id', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['name', 'description'], 'string', 'max' => 255],
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'name' => 'ชื่อ',
-            'description' => 'รายละเอียด',
-            'status' => 'สถานะ',
-            'company_id' => 'บริษัท',
-            'created_at' => 'Created At',
-            'created_by' => 'Created By',
-            'updated_at' => 'Updated At',
-            'updated_by' => 'Updated By',
-        ];
-    }
 }

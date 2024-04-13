@@ -10,13 +10,18 @@ use Yii;
  * @property int $id
  * @property string|null $code
  * @property string|null $name
+ * @property string|null $sku
+ * @property string|null $barcode
+ * @property int|null $product_group_id
+ * @property int|null $unit_id
+ * @property float|null $cost_price
  * @property string|null $description
- * @property int|null $product_type_id
- * @property int|null $product_cat_id
  * @property int|null $status
- * @property float|null $last_price
- * @property float|null $std_price
- * @property int|null $company_id
+ * @property int|null $created_at
+ * @property int|null $created_by
+ * @property int|null $updated_at
+ * @property int|null $updated_by
+ * @property string|null $exp_date
  */
 class Product extends \yii\db\ActiveRecord
 {
@@ -34,10 +39,10 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[ 'product_cat_id', 'status', 'company_id'], 'integer'],
-            [['last_price', 'std_price'], 'number'],
-            [['code', 'name', 'description'], 'string', 'max' => 255],
-            [['product_type_id'],'safe']
+            [['product_group_id', 'unit_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['cost_price'], 'number'],
+            [['exp_date'], 'safe'],
+            [['code', 'name', 'sku', 'barcode', 'description'], 'string', 'max' => 255],
         ];
     }
 
@@ -48,15 +53,20 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'code' => 'รหัส',
-            'name' => 'ชื่อ',
-            'description' => 'รายละเอียด',
-            'product_type_id' => 'ประเภทสินค้า',
-            'product_cat_id' => 'หมวดหมู่สินค้า',
-            'status' => 'สถานะ',
-            'last_price' => 'ราคาล่าสุด',
-            'std_price' => 'ราคา',
-            'company_id' => 'บริษัท',
+            'code' => 'Code',
+            'name' => 'Name',
+            'sku' => 'Sku',
+            'barcode' => 'Barcode',
+            'product_group_id' => 'Product Group ID',
+            'unit_id' => 'Unit ID',
+            'cost_price' => 'Cost Price',
+            'description' => 'Description',
+            'status' => 'Status',
+            'created_at' => 'Created At',
+            'created_by' => 'Created By',
+            'updated_at' => 'Updated At',
+            'updated_by' => 'Updated By',
+            'exp_date' => 'Exp Date',
         ];
     }
 }

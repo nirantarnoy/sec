@@ -62,36 +62,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $car_qty = 0;
-        $work_queue_qty = 0;
-        $work_queue_not_complete_qty = 0;
-        $work_queue_complete_qty = 0;
 
-        $model_car_qty = \backend\models\Car::find()->count();
-        if($model_car_qty){
-            $car_qty = $model_car_qty;
-        }
-        $model_work_qty = \backend\models\Workqueue::find()->all();
-        if($model_work_qty){
-            foreach($model_work_qty as $value){
-                $work_queue_qty +=1;
-                if($value->status == 1){
-                    $work_queue_complete_qty +=1;
-                }else{
-                    $work_queue_not_complete_qty +=1;
-                }
-            }
-            $work_queue_qty = $model_work_qty;
-        }
-
-        return $this->render('index', [
-            'f_date' => null,
-            't_date' => null,
-            'car_qty'=>$car_qty,
-            'work_queue_qty'=> $work_queue_qty,
-            'work_queue_complete_qty' => $work_queue_complete_qty,
-            'work_queue_not_complete_qty'=>$work_queue_not_complete_qty,
-        ]);
+        return $this->render('index');
     }
 
     /**
