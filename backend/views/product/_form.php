@@ -13,8 +13,11 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <div class="row">
-        <div class="col-lg-6">
-            <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'sku')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'barcode')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-6">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>

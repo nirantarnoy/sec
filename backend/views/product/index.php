@@ -59,14 +59,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
 
-            'code',
+            'sku',
             'name',
-            'description',
+            'barcode',
            // 'product_type_id',
             [
-                'attribute' => 'product_cat_id',
+                'attribute' => 'product_group_id',
                 'value' => function ($data) {
-                    return \backend\models\Productgroup::findName($data->product_cat_id);
+                    return \backend\models\Productgroup::findName($data->product_group_id);
                 }
             ],
             //'product_cat_id',
@@ -85,6 +85,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     } else {
                         return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
                     }
+                }
+            ],
+            [
+                'attribute' => '',
+                'label' => 'คงเหลือ',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'value' => function ($data) {
+                   return '0';
                 }
             ],
 
