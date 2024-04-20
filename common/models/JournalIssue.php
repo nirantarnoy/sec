@@ -46,14 +46,15 @@ class JournalIssue extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'journal_no' => 'Journal No',
-            'trans_date' => 'Trans Date',
+            'journal_no' => 'เลขที่',
+            'trans_date' => 'วันที่',
             'issue_for_id' => 'Issue For ID',
-            'remark' => 'Remark',
+            'remark' => 'หมายเหตุ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
+            'status'=>'สถานะ',
         ];
     }
 }
