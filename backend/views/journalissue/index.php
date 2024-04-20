@@ -12,7 +12,7 @@ use yii\widgets\LinkPager;
 /** @var backend\models\JournalissueSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'เบิกสินค้า/อะไหล่';
+$this->title = 'เบิกสินค้า';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="journalissue-index">

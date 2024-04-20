@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /** @var backend\models\Journalissue $model */
 
 $this->title = $model->journal_no;
-$this->params['breadcrumbs'][] = ['label' => 'เบิกสินค้า/อะไหล่', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'เบิกสินค้า', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

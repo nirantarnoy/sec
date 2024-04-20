@@ -38,22 +38,7 @@ use yii\widgets\ActiveForm;
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4">
-                <?= $form->field($model, 'trans_ref_id')->widget(\kartik\select2\Select2::className(), [
-                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Workorder::find()->where(['is_issue_status' => 0])->all(), 'id', function ($data) {
-                        return $data->workorder_no .' ( '.\backend\models\Car::findName($data->car_id).' )';
-                    }),
-                    'options' => [
-                        'placeholder' => '--เลือกรายการ--'
-                    ],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                    ]
-                ]) ?>
-            </div>
-            <div class="col-lg-4">
-                <?= $form->field($model, 'reason')->textInput(['maxlength' => true]) ?>
-            </div>
+
             <div class="col-lg-4">
                 <?= $form->field($model, 'status')->textInput() ?>
             </div>
@@ -242,7 +227,7 @@ use yii\widgets\ActiveForm;
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>รายการสินค้า/อะไหล่</h3>
+                    <h3>รายการสินค้า</h3>
                 </div>
                 <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
                 <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->

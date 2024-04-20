@@ -47,12 +47,12 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'code' => 'Code',
-            'name' => 'Name',
-            'description' => 'Description',
+            'code' => 'รหัส',
+            'name' => 'ชื่อ',
+            'description' => 'รายละเอียด',
             'taxid' => 'Taxid',
-            'customer_group_id' => 'Customer Group ID',
-            'status' => 'Status',
+            'customer_group_id' => 'กลุ่มลูกค้า',
+            'status' => 'สถานะ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

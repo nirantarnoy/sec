@@ -45,9 +45,9 @@ class JournalReceive extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'journal_no' => 'Journal No',
-            'trans_date' => 'Trans Date',
-            'remark' => 'Remark',
+            'journal_no' => 'เลขที่',
+            'trans_date' => 'วันทึ่',
+            'remark' => 'หมายเหตุ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

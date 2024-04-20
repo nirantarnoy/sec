@@ -43,10 +43,10 @@ class StockSum extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'product_id' => 'Product ID',
-            'warehouse_id' => 'Warehouse ID',
-            'qty' => 'Qty',
-            'status' => 'Status',
+            'product_id' => 'รหัสสินค้า',
+            'warehouse_id' => 'คลังสินค้า',
+            'qty' => 'จำนวน',
+            'status' => 'สถานะ',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
