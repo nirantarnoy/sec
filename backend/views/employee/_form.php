@@ -50,33 +50,6 @@ $drivingcard_data = \backend\helpers\DrivingcardType::asArrayObject();
                 ]
             ]) ?>
         </div>
-        <div class="col-lg-4">
-            <?= $form->field($model, 'salary_type')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\SalaryType::asArrayObject(), 'id', 'name'),
-                'options' => [
-                    'placeholder' => '--เลือกประเภทเงินเดือน--'
-                ]
-            ]) ?>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-3">
-            <?= $form->field($model, 'company_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Company::find()->all(), 'id', 'name'),
-                'options' => [
-                    'placeholder' => '--เลือก--',
-                ]
-            ]) ?>
-        </div>
-        <div class="col-lg-3">
-
-        </div>
-        <div class="col-lg-3">
-
-        </div>
-        <div class="col-lg-3">
-
-        </div>
     </div>
 
     <br>

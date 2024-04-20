@@ -54,23 +54,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: center']],
             'username',
             [
-                'attribute' => 'group_id',
+                'attribute' => 'user_group_id',
                 'label'=>'กลุ่มผู้ใช้งาน',
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                   return \backend\models\Usergroup::findName($data->group_id);
+                   return \backend\models\Usergroup::findName($data->user_group_id);
                 }
             ],
-            [
-                'attribute' => 'employee_ref_id',
-                'label'=>'พนักงาน',
-                'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'text-align: left'],
-                'value' => function ($data) {
-                    return \backend\models\Employee::findFullName($data->employee_ref_id);
-                }
-            ],
+//            [
+//                'attribute' => 'employee_ref_id',
+//                'label'=>'พนักงาน',
+//                'headerOptions' => ['style' => 'text-align: center'],
+//                'contentOptions' => ['style' => 'text-align: left'],
+//                'value' => function ($data) {
+//                    return \backend\models\Employee::findFullName($data->employee_ref_id);
+//                }
+//            ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',

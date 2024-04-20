@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
             <?php if ($model->isNewRecord): ?>
                 <?= $form->field($model, 'pwd')->passwordInput()->label('Password') ?>
             <?php endif; ?>
-            <?= $form->field($model, 'group_id')->widget(\kartik\select2\Select2::className(), [
+            <?= $form->field($model, 'user_group_id')->widget(\kartik\select2\Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Usergroup::find()->all(), 'id', function ($data) {
                     return $data->name;
                 }),
