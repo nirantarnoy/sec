@@ -4,12 +4,12 @@ namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Product;
+use backend\models\Journalissue;
 
 /**
- * ProductSearch represents the model behind the search form of `backend\models\Product`.
+ * JournalissueSearch represents the model behind the search form of `backend\models\Journalissue`.
  */
-class ProductSearch extends Product
+class JournalissueSearch extends Journalissue
 {
     public $globalSearch;
     /**
@@ -18,9 +18,9 @@ class ProductSearch extends Product
     public function rules()
     {
         return [
-            [['id', 'product_group_id', 'status'], 'integer'],
-            [['code', 'name', 'description'], 'safe'],
-            [['globalSearch'],'string']
+            [['id', 'department_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['journal_no', 'trans_date', 'reason'], 'safe'],
+            [['globalSearch'],'string'],
         ];
     }
 
@@ -42,7 +42,7 @@ class ProductSearch extends Product
      */
     public function search($params)
     {
-        $query = Product::find();
+        $query = Journalissue::find();
 
         // add conditions that should always apply here
 
@@ -61,14 +61,18 @@ class ProductSearch extends Product
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'product_group_id' => $this->product_group_id,
+            'trans_date' => $this->trans_date,
+            'department_id' => $this->department_id,
             'status' => $this->status,
+            'created_at' => $this->created_at,
+            'created_by' => $this->created_by,
+            'updated_at' => $this->updated_at,
+            'updated_by' => $this->updated_by,
         ]);
 
-        if($this->globalSearch != ''){
-            $query->orFilterWhere(['like', 'code', $this->globalSearch])
-                ->orFilterWhere(['like', 'name', $this->globalSearch])
-                ->orFilterWhere(['like', 'description', $this->globalSearch]);
+        if($this->globalSearch!=''){
+            $query->orFilterWhere(['like', 'journal_no', $this->globalSearch])
+                ->orFilterWhere(['like', 'reason', $this->globalSearch]);
         }
 
 

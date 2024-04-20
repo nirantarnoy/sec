@@ -7,7 +7,7 @@ use yii\widgets\DetailView;
 /** @var backend\models\Warehouse $model */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'คลังสินค้า/อะไหล่', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'คลังสินค้า', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>

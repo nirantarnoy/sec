@@ -204,33 +204,7 @@
                                 </p>
                             </a>
                         </li>
-<!--                        <li class="nav-item">-->
-<!--                            <a href="index.php?r=vendorgroup" class="nav-link vendorgroup">-->
-<!--                                <i class="far fa-circlez nav-icon"></i>-->
-<!--                                <p>-->
-<!--                                    กลุ่มผู้ขาย-->
-<!--                                    <!--                                <span class="right badge badge-danger">New</span>-->-->
-<!--                                </p>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item">-->
-<!--                            <a href="index.php?r=vendor" class="nav-link vendor">-->
-<!--                                <i class="far fa-circlez nav-icon"></i>-->
-<!--                                <p>-->
-<!--                                    ผู้ขาย-->
-<!--                                    <!--                                <span class="right badge badge-danger">New</span>-->-->
-<!--                                </p>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item">-->
-<!--                            <a href="index.php?r=purchorder" class="nav-link purchorder">-->
-<!--                                <i class="far fa-circlez nav-icon"></i>-->
-<!--                                <p>-->
-<!--                                    ใบสั่งซื้อ-->
-<!--                                    <!--                                <span class="right badge badge-danger">New</span>-->-->
-<!--                                </p>-->
-<!--                            </a>-->
-<!--                        </li>-->
+
                         <li class="nav-item">
                             <a href="index.php?r=journalissue" class="nav-link journalissue">
                                 <i class="far fa-circlez nav-icon"></i>

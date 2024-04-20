@@ -27,7 +27,7 @@ use yii\widgets\ActiveForm;
     </div>
    <div class="row">
        <div class="col-lg-4">
-           <?= $form->field($model, 'product_cat_id')->widget(\kartik\select2\Select2::className(),[
+           <?= $form->field($model, 'product_group_id')->widget(\kartik\select2\Select2::className(),[
                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Productgroup::find()->all(),'id','name'),
                'options' => [
 
@@ -38,12 +38,12 @@ use yii\widgets\ActiveForm;
            ]) ?>
        </div>
        <div class="col-lg-4">
-           <?= $form->field($model, 'last_price')->textInput() ?>
+
        </div>
    </div>
     <div class="row">
         <div class="col-lg-3">
-            <?= $form->field($model, 'std_price')->textInput() ?>
+            <?= $form->field($model, 'cost_price')->textInput() ?>
         </div>
         <div class="col-lg-3">
             <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
