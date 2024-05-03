@@ -28,45 +28,34 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
         </div>
     </div>
-   <div class="row">
-       <div class="col-lg-4">
-           <?= $form->field($model, 'product_group_id')->widget(\kartik\select2\Select2::className(),[
-               'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Productgroup::find()->all(),'id','name'),
-               'options' => [
+    <div class="row">
+        <div class="col-lg-4">
+            <?= $form->field($model, 'product_group_id')->widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Productgroup::find()->all(), 'id', 'name'),
+                'options' => [
 
-               ],
-               'pluginOptions' => [
-                   'allowClear'=> true,
-               ]
-           ]) ?>
-       </div>
-       <div class="col-lg-4">
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                ]
+            ]) ?>
+        </div>
+        <div class="col-lg-4">
 
-       </div>
-   </div>
+        </div>
+    </div>
     <div class="row">
         <div class="col-lg-3">
             <?= $form->field($model, 'cost_price')->textInput() ?>
         </div>
         <div class="col-lg-3">
+            <?= $form->field($model, 'sale_price')->textInput() ?>
+        </div>
+        <div class="col-lg-3">
             <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
         </div>
         <div class="col-lg-3"></div>
-        <div class="col-lg-3"></div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     <div class="form-group">

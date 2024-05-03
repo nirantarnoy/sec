@@ -219,6 +219,25 @@
 
                     </ul>
                 </li>
+                <li class="nav-item has-treeview has-sub">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-shopping-cart"></i>
+                        <p>
+                            คำสั่งซื้อ
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <?php //if (\Yii::$app->user->can('position/index')): ?>
+                        <li class="nav-item">
+                            <a href="index.php?r=order/index" class="nav-link order">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>ใบสั่งซื้อ</p>
+                            </a>
+                        </li>
+                        <?php //endif; ?>
+                    </ul>
+                </li>
 <!--                <li class="nav-item has-treeview has-sub">-->
 <!--                    <a href="#" class="nav-link">-->
 <!--                        <i class="nav-icon fas fa-chart-pie"></i>-->
