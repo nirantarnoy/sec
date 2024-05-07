@@ -62,7 +62,7 @@ $this->title = 'ANNAB';
                 <button class="btn btn-outline-secondary">ค้นหา</button>
             </div>
             <div class="col-lg-2">
-                <div class="btn icon-cart" style="color: red;">ตะกร้าสินค้า</div>
+<!--                <div class="btn icon-cart" style="color: red;">ตะกร้าสินค้า</div>-->
             </div>
         </div>
     </form>
