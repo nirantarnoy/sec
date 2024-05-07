@@ -45,6 +45,14 @@ return [
 //            ],
 //        ],
 
+        'urlManagerBackend' => [
+            'class' => 'yii\web\urlManager',
+            'baseUrl' => '/annab/backend/web',
+            'scriptUrl'=>'/annab/backend/web/index.php',
+            'enablePrettyUrl' => false,
+            'showScriptName' => true,
+        ],
+
     ],
     'params' => $params,
 ];
