@@ -40,7 +40,7 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             [['product_group_id', 'unit_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['cost_price','sale_price'], 'number'],
+            [['cost_price','sale_price','total_qty'], 'number'],
             [['exp_date'], 'safe'],
             [['code', 'name', 'sku', 'barcode', 'description','photo'], 'string', 'max' => 255],
         ];
@@ -64,6 +64,7 @@ class Product extends \yii\db\ActiveRecord
             'status' => 'สถานะ',
             'photo' => 'รูปภาพ',
             'sale_price' => 'ราคา',
+            'total_qty' =>'จำนวนทั้งหมด',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

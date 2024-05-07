@@ -2,51 +2,146 @@
 
 /** @var yii\web\View $this */
 
-$this->title = 'My Yii Application';
+use yii\bootstrap4\LinkPager;
+use yii\helpers\Url;
+use yii\web\JqueryAsset;
+
+$this->title = 'ANNAB';
+
+////if (isset($_POST['add_to_cart'])) {
+//    if (isset($_SESSION['cart'])) {
+//        $session_array_id = array_column($_SESSION['cart'], 'id');
+//        if (!in_array($_GET['id'], $session_array_id)) {
+//            $session_array = array(
+//                "id" => $_GET['id'],
+//                "name" => "soap",// $_POST['name'],
+//                "price" => 100, //$_POST['price'],
+//                "qty" => 2, //$_POST['qty']
+//            );
+//
+//            $_SESSION['cart'][] = $session_array;
+//        }
+//    } else {
+//        $session_array = array(
+//            "id" => $_GET['id'],
+//            "name" => "soap",// $_POST['name'],
+//            "price" => 100, //$_POST['price'],
+//            "qty" => 2, //$_POST['qty']
+//        );
+//
+//        $_SESSION['cart'][] = $session_array;
+//    }
+////}
+//
+//var_dump($_SESSION['cart']);
+////unset($_SESSION['cart']);
+
 ?>
-<div class="site-index">
-    <div class="p-5 mb-4 bg-transparent rounded-3">
-        <div class="container-fluid py-5 text-center">
-            <h1 class="display-4">Congratulations!</h1>
-            <p class="fs-5 fw-light">You have successfully created your Yii-powered application.</p>
-            <p><a class="btn btn-lg btn-success" href="http://www.yiiframework.com">Get started with Yii</a></p>
+<div class="container-cart-index">
+    <form action="index.php?r=site/index" method="get">
+    <div class="row">
+        <div class="col-lg-2">
+            <?php
+            echo \kartik\select2\Select2::widget([
+                'name' => 'product_cat_search',
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Productgroup::find()->where(['status' => 1])->all(), 'id', 'name'),
+                'value' => $product_cat_search,
+                'options' => [
+                    'placeholder' => 'ทุกหมวดสินค้า'
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                ]
+            ]);
+            ?>
+        </div>
+        <div class="col-lg-7">
+            <input type="text" class="form-control" name="product_search" value="" placeholder="ค้นหาสินค้า">
+        </div>
+        <div class="col-lg-1">
+            <button class="btn btn-outline-secondary">ค้นหา</button>
+        </div>
+        <div class="col-lg-2">
+            <div class="btn icon-cart" style="color: red;">ตะกร้าสินค้า</div>
+        </div>
+    </div>
+    </form>
+    <br />
+    <?php if($product_cat_search !=null || $product_search != null):?>
+    <div class="row">
+        <div class="col-lg-12">
+            ผลการค้นหา <span style="color: red;"><i>"<?=$product_search?>"</i></span>
+        </div>
+    </div>
+    <br/>
+    <?php endif;?>
+    <div class="row">
+        <?php foreach ($model as $value): ?>
+            <div class="col-lg-2">
+                <div class="card" style="margin-top: 10px;">
+                    <img class="card-img-top"
+                         src="<?= \Yii::$app->getUrlManager()->baseUrl . '/uploads/product_photo/' . 'xx.jpg' ?>"
+                         alt="Card image">
+                    <div class="card-body">
+                        <h4 class="card-title" style="font-size: 16px;"><b
+                                    style="color: red;">&#3647 <?= $value->sale_price ?></b></h4>
+                        <h4 class="card-title" style="font-size: 16px;">SKU: <b><?= $value->sku ?></b></h4>
+                        <p class="card-text" style="font-size: 14px;"><?= $value->name ?></p>
+                        <a href="#" class="btn btn-sm btn-outline-success"><i class="fas fa-cubes"></i> เพิ่มสินค้า</a>
+                    </div>
+                </div>
+            </div>
+
+        <?php endforeach; ?>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-lg-12" style="text-align: center;">
+            <?php echo LinkPager::widget([
+                'pagination' => $pages,
+                'nextPageLabel' => '<span aria-hidden=\"true\">&raquo;</span></span>',
+                'prevPageLabel' => '<span aria-hidden=\"true\">&laquo;</span>',
+            ]);
+            ?>
         </div>
     </div>
 
-    <div class="body-content">
+<!--    <div class="row">-->
+<!--        <div class="col-lg-12">-->
+<!--            <table class="table">-->
+<!--                <tr>-->
+<!--                    <td>Name</td>-->
+<!--                    <td>Price</td>-->
+<!--                    <td>Qty</td>-->
+<!--                </tr>-->
+<!--            --><?php //if(!empty($_SESSION['cart'])):?>
+<!--                --><?php //foreach($_SESSION['cart'] as $key => $valuex):?>
+<!--                    <tr>-->
+<!--                        <td>--><?php //=$valuex['name']?><!--</td>-->
+<!--                        <td>--><?php //=$valuex['price']?><!--</td>-->
+<!--                        <td>--><?php //=$valuex['qty']?><!--</td>-->
+<!--                    </tr>-->
+<!--                --><?php //endforeach;?>
+<!--            --><?php //endif;?>
+<!--            </table>-->
+<!--        </div>-->
+<!--    </div>-->
+</div>
 
-        <div class="row">
-            <div class="col-lg-4">
-                <h2>Heading</h2>
+<div class="cartTab">
+    <div style="height: 155px; "></div>
+    <h5 style="color: grey">สินค้าในตะกร้า</h5>
+    <div class="listCart">
 
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
-            </div>
-            <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="http://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
-            </div>
-        </div>
-
+    </div>
+    <div class="btn">
+        <button class="btn btn-outline-danger close">ปิด</button>
+        <button class="btn btn-outline-primary checkOut">ชำระเงิน</button>
     </div>
 </div>
+
+<?php
+$uri = Url::base();
+//$this->registerCssFile("{$uri}/js/bootstrap.css", ['depends' => JqueryAsset::class]);
+$this->registerJsFile("{$uri}/js/cart.js", ['depends' => JqueryAsset::class]);
+?>

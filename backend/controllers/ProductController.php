@@ -8,13 +8,15 @@ use backend\models\WarehouseSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * ProductController implements the CRUD actions for Product model.
  */
 class ProductController extends Controller
 {
-    public $enableCsrfValidation =false;
+    public $enableCsrfValidation = false;
+
     /**
      * @inheritDoc
      */
@@ -26,7 +28,7 @@ class ProductController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'delete' => ['POST','GET'],
+                        'delete' => ['POST', 'GET'],
                     ],
                 ],
             ]
@@ -42,7 +44,7 @@ class ProductController extends Controller
     {
         $viewstatus = 1;
 
-        if(\Yii::$app->request->get('viewstatus')!=null){
+        if (\Yii::$app->request->get('viewstatus') != null) {
             $viewstatus = \Yii::$app->request->get('viewstatus');
         }
 
@@ -63,7 +65,7 @@ class ProductController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'perpage' => $pageSize,
-            'viewstatus'=>$viewstatus,
+            'viewstatus' => $viewstatus,
         ]);
     }
 
@@ -90,7 +92,19 @@ class ProductController extends Controller
         $model = new Product();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post())) {
+                if ($model->save(false)) {
+                    $uploaded = UploadedFile::getInstanceByName('product_photo');
+
+                    if (!empty($uploaded)) {
+                        $upfiles = "photo_" . time() . "." . $uploaded->getExtension();
+                        if ($uploaded->saveAs('uploads/product_photo/' . $upfiles)) {
+                            \backend\models\Product::updateAll(['photo' => $upfiles], ['id' => $model->id]);
+                        }
+
+                    }
+                }
+
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -112,13 +126,26 @@ class ProductController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $work_photo = '';
+        if ($this->request->isPost && $model->load($this->request->post())) {
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            $uploaded = UploadedFile::getInstanceByName('product_photo');
+            if ($model->save(false)) {
+                if (!empty($uploaded)) {
+                    $upfiles = "photo_" . time() . "." . $uploaded->getExtension();
+                    if ($uploaded->saveAs('uploads/product_photo/' . $upfiles)) {
+                        \backend\models\Product::updateAll(['photo' => $upfiles], ['id' => $model->id]);
+                    }
+
+                }
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'work_photo' => $work_photo,
         ]);
     }
 
@@ -150,5 +177,75 @@ class ProductController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+    public function actionImportpage()
+    {
+        return $this->render('_import');
+    }
+    public function actionImportproduct()
+    {
+        $uploaded = UploadedFile::getInstanceByName('file_import');
+        if (!empty($uploaded)) {
+            //echo "ok";return;
+            $upfiles = time() . "." . $uploaded->getExtension();
+            // if ($uploaded->saveAs(Yii::$app->request->baseUrl . '/uploads/files/' . $upfiles)) {
+            if ($uploaded->saveAs('../web/uploads/files/products/' . $upfiles)) {
+                //  echo "okk";return;
+                // $myfile = Yii::$app->request->baseUrl . '/uploads/files/' . $upfiles;
+                $myfile = '../web/uploads/files/products/' . $upfiles;
+                $file = fopen($myfile, "r+");
+                fwrite($file, "\xEF\xBB\xBF");
+
+                setlocale(LC_ALL, 'th_TH.TIS-620');
+                $i = -1;
+                $res = 0;
+                $data = [];
+                while (($rowData = fgetcsv($file, 10000, ",")) !== FALSE) {
+                    $i += 1;
+                    $catid = 0;
+                    $qty = 0;
+                    $price = 0;
+                    $cost = 0;
+                    if ($rowData[1] == '' || $i == 0) {
+                        continue;
+                    }
+
+                    $model_dup = \backend\models\Product::find()->where(['sku' => trim($rowData[1])])->one();
+                    if ($model_dup != null) {
+                        continue;
+                    }
+
+
+                    $modelx = new \backend\models\Product();
+                    // $modelx->code = $rowData[0];
+                    $modelx->code = $rowData[2];
+                    $modelx->sku = $rowData[2];
+                    $modelx->name = $rowData[1];
+                    $modelx->barcode = $rowData[3];
+                    $modelx->total_qty = $rowData[4];
+                    $modelx->sale_price = $rowData[5];
+                    $modelx->status = 1;
+                    if ($modelx->save(false)) {
+                        $res += 1;
+                    }
+                }
+                //    print_r($qty_text);return;
+
+                if ($res > 0) {
+                    $session = \Yii::$app->session;
+                    $session->setFlash('msg', 'นำเข้าข้อมูลเรียบร้อย');
+                    return $this->redirect(['index']);
+                } else {
+                    $session = \Yii::$app->session;
+                    $session->setFlash('msg-error', 'พบข้อมผิดพลาดนะ');
+                    return $this->redirect(['index']);
+                }
+                // }
+                fclose($file);
+//            }
+//        }
+            }
+            echo "ok";
+        }
     }
 }

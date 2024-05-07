@@ -2,10 +2,13 @@
 
 namespace frontend\controllers;
 
+use backend\models\ItemSearch;
+use frontend\models\ProductSearch;
 use frontend\models\ResendVerificationEmailForm;
 use frontend\models\VerifyEmailForm;
 use Yii;
 use yii\base\InvalidArgumentException;
+use yii\data\Pagination;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -75,7 +78,48 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $product_cat_search = \Yii::$app->request->get('product_cat_search');
+        $product_search = \Yii::$app->request->get('product_search');
+        $query = \backend\models\Product::find()->where(['status' => 1]);
+        if (!empty($product_cat_search)) {
+            $query->andFilterWhere(['product_cat_id' => $product_cat_search]);
+        }
+        if (!empty($product_search)) {
+            $query->andFilterWhere(['like', 'name', $product_search]);
+        }
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 18]);
+        $model = $query->offset($pages->offset)
+            ->limit($pages->limit)
+            ->all();
+        return $this->render('index', [
+            'model' => $model,
+            'pages' => $pages,
+            'product_cat_search' => $product_cat_search,
+            'product_search' => $product_search,
+        ]);
+    }
+
+    public function actionYourcart()
+    {
+
+        return $this->render('_cart');
+    }
+
+    public function actionProfile()
+    {
+
+        return $this->render('_account');
+    }
+
+    public function actionAddressinfo()
+    {
+        return $this->render('_address');
+    }
+
+    public function actionProductdetail()
+    {
+        return $this->render('_productdetail');
     }
 
     /**
@@ -217,8 +261,8 @@ class SiteController extends Controller
      * Verify email address
      *
      * @param string $token
-     * @throws BadRequestHttpException
      * @return yii\web\Response
+     * @throws BadRequestHttpException
      */
     public function actionVerifyEmail($token)
     {
