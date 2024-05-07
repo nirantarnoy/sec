@@ -81,7 +81,7 @@ $this->title = 'ANNAB';
                 <div class="card-product">
                     <div class="card" style="margin-top: 20px;">
                         <img class="card-img-top"
-                             src="<?= \Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . 'xx.jpg' ?>"
+                             src="<?= \Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $value->photo ?>"
                              alt="Card image">
                         <div class="card-body">
                             <h4 class="card-title" style="font-size: 16px;"><b
