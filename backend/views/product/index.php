@@ -88,12 +88,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'attribute' => '',
+                'attribute' => 'total_qty',
                 'label' => 'คงเหลือ',
-                'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'text-align: center'],
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
-                   return '0';
+                   return number_format($data->total_qty,0);
                 }
             ],
 
