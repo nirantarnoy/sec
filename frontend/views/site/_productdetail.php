@@ -12,12 +12,14 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="col-lg-8">
         <div style="borderx: 1px solid lightgrey;padding: 20px;">
-            <h5>25098999</h5>
-            <div>$B 250</div>
+            <div><b>รหัสสินค้า</b></div>
+            <h5><?=$model->sku?></h5>
+            <div><b>ราคา</b></div>
+            <div style="color: red;">&#3647 <b><?=$model->sale_price?></b></div>
             <hr />
             <div><b>รายละเอียดสินค้า</b></div>
             <div class="product-detail">
-
+               <span><?=$model->name?></span>
             </div>
             <div><b>หมวดสินค้า</b></div>
             <div><b>จำนวน</b></div>

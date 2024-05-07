@@ -39,57 +39,62 @@ $this->title = 'ANNAB';
 ?>
 <div class="container-cart-index">
     <form action="index.php?r=site/index" method="get">
-    <div class="row">
-        <div class="col-lg-2">
-            <?php
-            echo \kartik\select2\Select2::widget([
-                'name' => 'product_cat_search',
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Productgroup::find()->where(['status' => 1])->all(), 'id', 'name'),
-                'value' => $product_cat_search,
-                'options' => [
-                    'placeholder' => 'ทุกหมวดสินค้า'
-                ],
-                'pluginOptions' => [
-                    'allowClear' => true,
-                ]
-            ]);
-            ?>
+        <div class="row">
+            <div class="col-lg-2">
+                <?php
+                echo \kartik\select2\Select2::widget([
+                    'name' => 'product_cat_search',
+                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Productgroup::find()->where(['status' => 1])->all(), 'id', 'name'),
+                    'value' => $product_cat_search,
+                    'options' => [
+                        'placeholder' => 'ทุกหมวดสินค้า'
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ]
+                ]);
+                ?>
+            </div>
+            <div class="col-lg-7">
+                <input type="text" class="form-control" name="product_search" value="" placeholder="ค้นหาสินค้า">
+            </div>
+            <div class="col-lg-1">
+                <button class="btn btn-outline-secondary">ค้นหา</button>
+            </div>
+            <div class="col-lg-2">
+                <div class="btn icon-cart" style="color: red;">ตะกร้าสินค้า</div>
+            </div>
         </div>
-        <div class="col-lg-7">
-            <input type="text" class="form-control" name="product_search" value="" placeholder="ค้นหาสินค้า">
-        </div>
-        <div class="col-lg-1">
-            <button class="btn btn-outline-secondary">ค้นหา</button>
-        </div>
-        <div class="col-lg-2">
-            <div class="btn icon-cart" style="color: red;">ตะกร้าสินค้า</div>
-        </div>
-    </div>
     </form>
-    <br />
-    <?php if($product_cat_search !=null || $product_search != null):?>
-    <div class="row">
-        <div class="col-lg-12">
-            ผลการค้นหา <span style="color: red;"><i>"<?=$product_search?>"</i></span>
-        </div>
-    </div>
     <br/>
-    <?php endif;?>
+    <?php if ($product_cat_search != null || $product_search != null): ?>
+        <div class="row">
+            <div class="col-lg-12">
+                ผลการค้นหา <span style="color: red;"><i>"<?= $product_search ?>"</i></span>
+            </div>
+        </div>
+        <br/>
+    <?php endif; ?>
     <div class="row">
         <?php foreach ($model as $value): ?>
             <div class="col-lg-2">
-                <div class="card" style="margin-top: 10px;">
-                    <img class="card-img-top"
-                         src="<?= \Yii::$app->getUrlManager()->baseUrl . '/uploads/product_photo/' . 'xx.jpg' ?>"
-                         alt="Card image">
-                    <div class="card-body">
-                        <h4 class="card-title" style="font-size: 16px;"><b
-                                    style="color: red;">&#3647 <?= $value->sale_price ?></b></h4>
-                        <h4 class="card-title" style="font-size: 16px;">SKU: <b><?= $value->sku ?></b></h4>
-                        <p class="card-text" style="font-size: 14px;"><?= $value->name ?></p>
-                        <a href="#" class="btn btn-sm btn-outline-success"><i class="fas fa-cubes"></i> เพิ่มสินค้า</a>
+                <div class="card-product">
+                    <div class="card" style="margin-top: 20px;">
+                        <img class="card-img-top"
+                             src="<?= \Yii::$app->getUrlManager()->baseUrl . '/uploads/product_photo/' . 'xx.jpg' ?>"
+                             alt="Card image">
+                        <div class="card-body">
+                            <h4 class="card-title" style="font-size: 16px;"><b
+                                        style="color: red;">&#3647 <?= $value->sale_price ?></b></h4>
+                            <h4 class="card-title" style="font-size: 16px;">SKU: <b><?= $value->sku ?></b></h4>
+                            <p class="" style="font-size: 14px;"><?= $value->name ?></p>
+                            <a style="text-decoration: none;" href="index.php?r=site/productdetail&id=<?= $value->id ?>"
+                               target="_parent" class="btn btn-sm btn-outline-success"><i class="fas fa-cubes"></i>
+                                เพิ่มสินค้า</a>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
         <?php endforeach; ?>
@@ -106,26 +111,26 @@ $this->title = 'ANNAB';
         </div>
     </div>
 
-<!--    <div class="row">-->
-<!--        <div class="col-lg-12">-->
-<!--            <table class="table">-->
-<!--                <tr>-->
-<!--                    <td>Name</td>-->
-<!--                    <td>Price</td>-->
-<!--                    <td>Qty</td>-->
-<!--                </tr>-->
-<!--            --><?php //if(!empty($_SESSION['cart'])):?>
-<!--                --><?php //foreach($_SESSION['cart'] as $key => $valuex):?>
-<!--                    <tr>-->
-<!--                        <td>--><?php //=$valuex['name']?><!--</td>-->
-<!--                        <td>--><?php //=$valuex['price']?><!--</td>-->
-<!--                        <td>--><?php //=$valuex['qty']?><!--</td>-->
-<!--                    </tr>-->
-<!--                --><?php //endforeach;?>
-<!--            --><?php //endif;?>
-<!--            </table>-->
-<!--        </div>-->
-<!--    </div>-->
+    <!--    <div class="row">-->
+    <!--        <div class="col-lg-12">-->
+    <!--            <table class="table">-->
+    <!--                <tr>-->
+    <!--                    <td>Name</td>-->
+    <!--                    <td>Price</td>-->
+    <!--                    <td>Qty</td>-->
+    <!--                </tr>-->
+    <!--            --><?php //if(!empty($_SESSION['cart'])):?>
+    <!--                --><?php //foreach($_SESSION['cart'] as $key => $valuex):?>
+    <!--                    <tr>-->
+    <!--                        <td>--><?php //=$valuex['name']?><!--</td>-->
+    <!--                        <td>--><?php //=$valuex['price']?><!--</td>-->
+    <!--                        <td>--><?php //=$valuex['qty']?><!--</td>-->
+    <!--                    </tr>-->
+    <!--                --><?php //endforeach;?>
+    <!--            --><?php //endif;?>
+    <!--            </table>-->
+    <!--        </div>-->
+    <!--    </div>-->
 </div>
 
 <div class="cartTab">

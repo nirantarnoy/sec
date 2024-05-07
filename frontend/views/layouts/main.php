@@ -170,6 +170,15 @@ AppAsset::register($this);
             grid-template-rows: 70px 1fr 70px;
             transition: .5s;
         }
+        .cart-product{
+            text-decoration="none"
+        }
+        .card-product:hover{
+            transform: scale(1.1);
+        }
+        .card :hover{
+            transform: scale(1);
+        }
         body.showCart .cartTab{
             right: 0;
         }

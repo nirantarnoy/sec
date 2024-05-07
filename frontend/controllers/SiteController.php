@@ -117,9 +117,14 @@ class SiteController extends Controller
         return $this->render('_address');
     }
 
-    public function actionProductdetail()
+    public function actionProductdetail($id)
     {
-        return $this->render('_productdetail');
+        if($id){
+            $model = \backend\models\Product::find()->where(['id'=>$id])->one();
+        }
+        return $this->render('_productdetail',[
+            'model'=>$model
+        ]);
     }
 
     /**
