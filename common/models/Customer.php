@@ -35,6 +35,7 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['firstname', 'lastname','email'], 'required'],
             [['customer_group_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['code', 'name', 'description', 'taxid'], 'string', 'max' => 255],
         ];

@@ -82,7 +82,7 @@ class SiteController extends Controller
         $product_search = \Yii::$app->request->get('product_search');
         $query = \backend\models\Product::find()->where(['status' => 1]);
         if (!empty($product_cat_search)) {
-            $query->andFilterWhere(['product_cat_id' => $product_cat_search]);
+            $query->andFilterWhere(['product_group_id' => $product_cat_search]);
         }
         if (!empty($product_search)) {
             $query->andFilterWhere(['like', 'name', $product_search]);
@@ -106,15 +106,61 @@ class SiteController extends Controller
         return $this->render('_cart');
     }
 
-    public function actionProfile()
+    public function actionProfile($id)
     {
-
-        return $this->render('_account');
+        $model = null;
+        if($id){
+            $model = \backend\models\Customer::find()->where(['id'=>$id])->one();
+        }else{
+            $model = new \backend\models\Customer();
+        }
+        if($model->load(Yii::$app->request->post())){
+            if($model->save(false)) {
+                return $this->redirect(['profile', 'id' => $model->id]);
+            }
+        }
+        return $this->render('_account',[
+            'model'=>$model,
+        ]);
     }
 
-    public function actionAddressinfo()
+    public function actionAddressinfo($id)
     {
-        return $this->render('_address');
+        $model = null;
+        $party_id = 0;
+        if($id){
+            $party_id = $id;
+            $model = \backend\models\AddressInfo::find()->where(['party_id'=>$id,'party_type_id'=>2])->one();
+            if(!$model){
+                $model = new \backend\models\AddressInfo();
+            }
+        }else{
+            $model = new \backend\models\AddressInfo();
+        }
+        if($model->load(\Yii::$app->request->post())){
+            $model->party_type_id = 2;
+            $model->status  =1;
+            if($model->save(false)) {
+                return $this->redirect(['addressinfo', 'id' => $model->party_id]);
+            }
+        }
+        return $this->render('_address',[
+            'model'=>$model,
+            'party_id' => $party_id,
+        ]);
+    }
+    public function actionMyorder($id)
+    {
+        $model = null;
+        $party_id = 0;
+        if($id){
+            $party_id = $id;
+            $model = \backend\models\Order::find()->where(['customer_id'=>$id])->one();
+        }
+        return $this->render('_myorder',[
+            'model'=>$model,
+            'party_id' => $party_id,
+        ]);
     }
 
     public function actionProductdetail($id)
@@ -204,7 +250,7 @@ class SiteController extends Controller
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+            Yii::$app->session->setFlash('success', 'ขอบคุณสำหรับการลงทะเบียน. กรุณายืนยันการลงทะเบียนผ่านทาง Inbox อีเมลของคุณ.');
             return $this->goHome();
         }
 
@@ -304,5 +350,51 @@ class SiteController extends Controller
         return $this->render('resendVerificationEmail', [
             'model' => $model
         ]);
+    }
+
+    public
+    function actionShowcity($id)
+    {
+        $model = \common\models\Amphur::find()->where(['PROVINCE_ID' => $id])->all();
+
+        if (count($model) > 0) {
+            echo "<option>--- เลือกอำเภอ ---</option>";
+            foreach ($model as $value) {
+
+                echo "<option value='" . $value->AMPHUR_ID . "'>$value->AMPHUR_NAME</option>";
+
+            }
+        } else {
+            echo "<option>-</option>";
+        }
+    }
+
+    public
+    function actionShowdistrict($id)
+    {
+        $model = \common\models\District::find()->where(['AMPHUR_ID' => $id])->all();
+
+        if (count($model) > 0) {
+            foreach ($model as $value) {
+
+                echo "<option value='" . $value->DISTRICT_ID . "'>$value->DISTRICT_NAME</option>";
+
+            }
+        } else {
+            echo "<option>-</option>";
+        }
+    }
+
+    public function actionShowzipcode($id)
+    {
+        $model = \common\models\Amphur::find()->where(['AMPHUR_ID' => $id])->one();
+//        echo $id;
+        if ($model) {
+            echo $model->POSTCODE;
+//            echo '1110';
+        } else {
+            echo "";
+        }
+//        echo '111';
     }
 }

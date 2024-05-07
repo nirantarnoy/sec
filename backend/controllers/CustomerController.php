@@ -431,20 +431,5 @@ class CustomerController extends Controller
 //        echo '111';
     }
 
-    public
-    function actionShowaddress($id)
-    {
-        $model = \common\models\AddressInfo::find()->where(['party_type' => $id])->all();
-
-        if (count($model) > 0) {
-            foreach ($model as $value) {
-
-                echo "<option value='" . $value->DISTRICT_ID . "'>$value->DISTRICT_NAME</option>";
-
-            }
-        } else {
-            echo "<option>-</option>";
-        }
-    }
 
 }

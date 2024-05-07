@@ -34,6 +34,7 @@ class AddressInfo extends \common\models\AddressInfo
     public function rules()
     {
         return [
+            [['address', 'district_id','city_id', 'province_id', 'zipcode'], 'required'],
             [['party_type', 'party_id', 'district_id', 'city_id', 'province_id', 'status'], 'integer'],
             [['address', 'street', 'zipcode'], 'string', 'max' => 255],
         ];
