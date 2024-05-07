@@ -47,8 +47,8 @@ return [
 
         'urlManagerBackend' => [
             'class' => 'yii\web\urlManager',
-            'baseUrl' => '/annab/backend/web',
-            'scriptUrl'=>'/annab/backend/web/index.php',
+            'baseUrl' => 'http://93.127.199.220/annab/backend/web',
+            'scriptUrl'=>'http://93.127.199.220/annab/backend/web/index.php',
             'enablePrettyUrl' => false,
             'showScriptName' => true,
         ],
