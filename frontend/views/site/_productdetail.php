@@ -8,7 +8,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <div class="row">
     <div class="col-lg-4">
-        <img class="img-fluid" src="<?=\Yii::$app->getUrlManager()->baseUrl . '/uploads/product_photo/'.'xx.jpg' ?>">
+        <img class="img-fluid" src="<?=\Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $model->photo ?>">
     </div>
     <div class="col-lg-8">
         <div style="borderx: 1px solid lightgrey;padding: 20px;">
