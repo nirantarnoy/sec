@@ -95,10 +95,15 @@ use yii\widgets\ActiveForm;
                    <td style="width: 25%">สถานะชำระเงิน</td>
                    <td>
                        <?php if($model->pay_status == 1):?>
-                       <div class="badge badge-success">ชำระแล้ว</div>
+                           <div class="badge badge-success">ชำระแล้ว</div>
                        <?php else:?>
                            <div class="badge badge-secondary">ยังไม่ชำระ</div>
                        <?php endif;?>
+                   </td>
+               </tr>
+               <tr>
+                   <td style="width: 25%">หลักฐานการชำระเงิน</td>
+                   <td>
                    </td>
                </tr>
                <tr>
@@ -159,10 +164,23 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="form-group">
+                <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            </div>
+        </div>
+        <div class="col-lg-2"></div>
+        <div class="col-lg-2"></div>
+        <div class="col-lg-2"></div>
+        <div class="col-lg-4">
+            <div class="input-group">
+                <div class="btn btn-info">ยืนยันรับชำระเงิน</div>
+                <div class="btn btn-primary">ยืนยันการส่งสินค้าสำเร็จ</div>
+            </div>
+        </div>
     </div>
+
 
     <?php ActiveForm::end(); ?>
 

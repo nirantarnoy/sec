@@ -17,11 +17,11 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="stocksum-index">
 
     <?php Pjax::begin(); ?>
-    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-       // 'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -34,12 +34,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'attribute' => 'item_id',
+                'attribute' => 'product_id',
                 'value' => function ($data) {
                     return \backend\models\Product::findName($data->product_id);
                 }
             ],
             'qty',
+            [
+                'attribute' => 'expired_date',
+                'value' => function ($data) {
+                    return date('d/m/Y',strtotime($data->expired_date));
+                }
+            ]
             //'last_update',
         ],
     ]); ?>
