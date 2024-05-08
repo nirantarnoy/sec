@@ -113,8 +113,16 @@ class OrderController extends Controller
         $model = $this->findModel($id);
         $model_line = \common\models\OrderLine::find()->where(['order_id' => $id])->all();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $status = 0;
+            if($model->order_tracking_no !=''){
+                $status = 3;
+            }
+            $model->status = $status;
+            if($model->save(false)){
+                return $this->redirect(['order/index']);
+            }
+
         }
 
         return $this->render('update', [
