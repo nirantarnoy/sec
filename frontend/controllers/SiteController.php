@@ -260,6 +260,7 @@ class SiteController extends Controller
         Yii::$app->user->logout();
         unset($_SESSION['user_id']);
         unset($_SESSION['user_customer_id']);
+        unset($_SESSION['cart']);
         return $this->goHome();
     }
 
