@@ -586,10 +586,11 @@ class SiteController extends Controller
                         $model_line->save(false);
                     }
                     \backend\models\Order::updateAll(['total_amount' => $total_amount], ['id' => $model_order->id]);
-                    echo "success";
+                    unset($_SESSION['cart']);
                 }
 
             }
         }
+        return $this->redirect(['site/index']);
     }
 }
