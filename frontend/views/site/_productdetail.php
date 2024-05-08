@@ -65,7 +65,7 @@ $(function(){
         var id = $(".product-id").val();
         var name = $(".product-name").val();
         var price = $(".price").val();     
-        var qty = $(".qty").val();
+        var qty = $(".cart-selected-qty").val();
         var sku = $(".sku").val();
         var photo = $(".photo").val();
         if(id){

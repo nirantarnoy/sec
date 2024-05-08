@@ -141,16 +141,7 @@ if (isset($_SESSION['cart'])) {
     <div style="height: 155px; "></div>
     <h5 style="color: grey">สินค้าในตะกร้า</h5>
 
-        <?php
-        if (isset($_SESSION['cart'])):?>
-            <?php foreach ($_SESSION['cart'] as $key => $value): ?>
-               <div class="row">
-                   <div class="col-sm-2"><?= $value['product_name'] ?></div>
-                   <div class="col-sm-8"><?= $value['qty'] ?></div>
-               </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-
+       
     <div class="btn">
         <button class="btn btn-outline-danger close">ปิด</button>
         <button class="btn btn-outline-primary checkOut">ชำระเงิน</button>
