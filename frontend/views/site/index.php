@@ -137,16 +137,16 @@ if (isset($_SESSION['cart'])) {
     <!--    </div>-->
 </div>
 
-<div class="cartTab_">
-    <div style="height: 155px; "></div>
-    <h5 style="color: grey">สินค้าในตะกร้า</h5>
-
-       
-    <div class="btn">
-        <button class="btn btn-outline-danger close">ปิด</button>
-        <button class="btn btn-outline-primary checkOut">ชำระเงิน</button>
-    </div>
-</div>
+<!--<div class="cartTab_">-->
+<!--    <div style="height: 155px; "></div>-->
+<!--    <h5 style="color: grey">สินค้าในตะกร้า</h5>-->
+<!---->
+<!--       -->
+<!--    <div class="btn">-->
+<!--        <button class="btn btn-outline-danger close">ปิด</button>-->
+<!--        <button class="btn btn-outline-primary checkOut">ชำระเงิน</button>-->
+<!--    </div>-->
+<!--</div>-->
 
 <?php
 $uri = Url::base();
