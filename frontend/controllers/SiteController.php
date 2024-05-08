@@ -88,6 +88,7 @@ class SiteController extends Controller
         if (!empty($product_search)) {
             $query->andFilterWhere(['like', 'name', $product_search]);
         }
+        $query->orderBy(['id' => SORT_ASC]);
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 18]);
         $model = $query->offset($pages->offset)
