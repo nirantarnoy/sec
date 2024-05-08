@@ -8,8 +8,9 @@ use yii\web\JqueryAsset;
 
 $this->title = 'ANNAB';
 
+$cart_item_count = 0;
 ////if (isset($_POST['add_to_cart'])) {
-//    if (isset($_SESSION['cart'])) {
+if (isset($_SESSION['cart'])) {
 //        $session_array_id = array_column($_SESSION['cart'], 'id');
 //        if (!in_array($_GET['id'], $session_array_id)) {
 //            $session_array = array(
@@ -30,11 +31,13 @@ $this->title = 'ANNAB';
 //        );
 //
 //        $_SESSION['cart'][] = $session_array;
-//    }
+    $cart_item_count = count($_SESSION['cart']);
+    //  var_dump($_SESSION['cart']);
+}
 ////}
 //
 //var_dump($_SESSION['cart']);
-////unset($_SESSION['cart']);
+//unset($_SESSION['cart']);
 
 ?>
 <div class="container-cart-index">
@@ -62,7 +65,8 @@ $this->title = 'ANNAB';
                 <button class="btn btn-outline-secondary">ค้นหา</button>
             </div>
             <div class="col-lg-2">
-<!--                <div class="btn icon-cart" style="color: red;">ตะกร้าสินค้า</div>-->
+<!--                <div class="btn icon-cart" style="color: red;">สินค้า --><?php //= $cart_item_count ?><!--</div>-->
+                <a href="index.php?r=site/yourcart" style="color: red;text-decoration: none">ตะกร้า <div class="badge" style="font-size: 20px;background-color: black;color:white;"><?= $cart_item_count ?></div></a>
             </div>
         </div>
     </form>
@@ -133,12 +137,20 @@ $this->title = 'ANNAB';
     <!--    </div>-->
 </div>
 
-<div class="cartTab">
+<div class="cartTab_">
     <div style="height: 155px; "></div>
     <h5 style="color: grey">สินค้าในตะกร้า</h5>
-    <div class="listCart">
 
-    </div>
+        <?php
+        if (isset($_SESSION['cart'])):?>
+            <?php foreach ($_SESSION['cart'] as $key => $value): ?>
+               <div class="row">
+                   <div class="col-sm-2"><?= $value['product_name'] ?></div>
+                   <div class="col-sm-8"><?= $value['qty'] ?></div>
+               </div>
+            <?php endforeach; ?>
+        <?php endif; ?>
+
     <div class="btn">
         <button class="btn btn-outline-danger close">ปิด</button>
         <button class="btn btn-outline-primary checkOut">ชำระเงิน</button>

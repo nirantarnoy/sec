@@ -109,18 +109,18 @@ class SiteController extends Controller
     public function actionProfile($id)
     {
         $model = null;
-        if($id){
-            $model = \backend\models\Customer::find()->where(['id'=>$id])->one();
-        }else{
+        if ($id) {
+            $model = \backend\models\Customer::find()->where(['id' => $id])->one();
+        } else {
             $model = new \backend\models\Customer();
         }
-        if($model->load(Yii::$app->request->post())){
-            if($model->save(false)) {
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save(false)) {
                 return $this->redirect(['profile', 'id' => $model->id]);
             }
         }
-        return $this->render('_account',[
-            'model'=>$model,
+        return $this->render('_account', [
+            'model' => $model,
         ]);
     }
 
@@ -128,48 +128,49 @@ class SiteController extends Controller
     {
         $model = null;
         $party_id = 0;
-        if($id){
+        if ($id) {
             $party_id = $id;
-            $model = \backend\models\AddressInfo::find()->where(['party_id'=>$id,'party_type_id'=>2])->one();
-            if(!$model){
+            $model = \backend\models\AddressInfo::find()->where(['party_id' => $id, 'party_type_id' => 2])->one();
+            if (!$model) {
                 $model = new \backend\models\AddressInfo();
             }
-        }else{
+        } else {
             $model = new \backend\models\AddressInfo();
         }
-        if($model->load(\Yii::$app->request->post())){
+        if ($model->load(\Yii::$app->request->post())) {
             $model->party_type_id = 2;
-            $model->status  =1;
-            if($model->save(false)) {
+            $model->status = 1;
+            if ($model->save(false)) {
                 return $this->redirect(['addressinfo', 'id' => $model->party_id]);
             }
         }
-        return $this->render('_address',[
-            'model'=>$model,
+        return $this->render('_address', [
+            'model' => $model,
             'party_id' => $party_id,
         ]);
     }
+
     public function actionMyorder($id)
     {
         $model = null;
         $party_id = 0;
-        if($id){
+        if ($id) {
             $party_id = $id;
-            $model = \backend\models\Order::find()->where(['customer_id'=>$id])->one();
+            $model = \backend\models\Order::find()->where(['customer_id' => $id])->one();
         }
-        return $this->render('_myorder',[
-            'model'=>$model,
+        return $this->render('_myorder', [
+            'model' => $model,
             'party_id' => $party_id,
         ]);
     }
 
     public function actionProductdetail($id)
     {
-        if($id){
-            $model = \backend\models\Product::find()->where(['id'=>$id])->one();
+        if ($id) {
+            $model = \backend\models\Product::find()->where(['id' => $id])->one();
         }
-        return $this->render('_productdetail',[
-            'model'=>$model
+        return $this->render('_productdetail', [
+            'model' => $model
         ]);
     }
 
@@ -396,5 +397,99 @@ class SiteController extends Controller
             echo "";
         }
 //        echo '111';
+    }
+
+    public function actionAddcart()
+    {
+        $product_id = \Yii::$app->request->post('product_id');
+        $product_name = \Yii::$app->request->post('product_name');
+        $qty = \Yii::$app->request->post('qty');
+        $price = \Yii::$app->request->post('price');
+        $sku = \Yii::$app->request->post('sku');
+        $photo = \Yii::$app->request->post('photo');
+
+        if ($product_id) {
+            //if (isset($_POST['add_to_cart'])) {
+                if (isset($_SESSION['cart'])) {
+                    $session_array_id = array_column($_SESSION['cart'], 'product_id');
+                    print_r($session_array_id);
+                    if (!in_array($product_id, $session_array_id)) {
+                        $session_array = array(
+                            'product_id' => $product_id,
+                            'sku' => $sku,
+                            'product_name' =>  $product_name, // $_POST['name'],
+                            'price' => $price, //$_POST['price'],
+                            'qty' => (float)$qty, //$_POST['qty']
+                            'photo' => $photo, //$_POST['qty']
+                        );
+                      //  echo 1;
+                        $_SESSION['cart'][] = $session_array;
+                    }else{
+                        $index = array_search($product_id,$session_array_id);
+       //                 if (in_array($product_id, $session_array_id)) {
+                            $_SESSION['cart'][$index]['qty'] =$qty;
+//                            $_SESSION['cart'][$product_id]['total'] = $qty;
+      //                  }
+//                        $session_array = array(
+//                            "product_id" => $product_id,
+//                            "product_name" =>  $product_name, // $_POST['name'],
+//                            "price" => $price, //$_POST['price'],
+//                            "qty" => $qty, //$_POST['qty']
+//                        );
+
+//                        $_SESSION['cart'][] = $session_array;
+                      //  echo 100;
+                    }
+
+                } else {
+                    $session_array = array(
+                        'product_id' => $product_id,
+                        'sku' => $sku,
+                        'product_name' =>  $product_name, // $_POST['name'],
+                        'price' => $price, //$_POST['price'],
+                        'qty' => (float)$qty, //$_POST['qty']
+                        'photo' => $photo,
+                    );
+                  //  echo 2;
+                    $_SESSION['cart'][] = $session_array;
+                }
+            //}
+        }
+         return $this->redirect(['site/index']);
+    }
+
+    public function actionUpdatecart()
+    {
+        $product_id = \Yii::$app->request->post('product_id');
+        $qty = \Yii::$app->request->post('qty');
+
+        if ($product_id) {
+            if (isset($_SESSION['cart'])) {
+                $session_array_id = array_column($_SESSION['cart'], 'product_id');
+                if (in_array($product_id, $session_array_id)) {
+                    $index = array_search($product_id,$session_array_id);
+                    $_SESSION['cart'][$index]['qty'] = $qty;
+                }
+            }
+            echo "success";
+        }
+    }
+    public function actionRemovecart()
+    {
+        $product_id = \Yii::$app->request->post('product_id');
+        if ($product_id) {
+            if (isset($_SESSION['cart'])) {
+                $session_array_id = array_column($_SESSION['cart'], 'product_id');
+                if (in_array($product_id, $session_array_id)) {
+                    $index = array_search($product_id,$session_array_id);
+                    unset($_SESSION['cart'][$index]);
+                }
+            }
+            echo "success";
+        }
+    }
+
+    public function actionCreateorder(){
+        
     }
 }

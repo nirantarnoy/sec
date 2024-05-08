@@ -40,8 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
                <table class="table">
                    <thead>
                    <tr>
-                       <th>#</th>
-                       <th style="width: ">เลขที่คำสั่งซื้อ</th>
+                       <th style="text-align: center">#</th>
+                       <th style="width: 10%">เลขที่คำสั่งซื้อ</th>
                        <th>วันที่</th>
                        <th>เลขที่ติดตามสินค้า</th>
                        <th>สถานะ</th>
@@ -53,6 +53,19 @@ $this->params['breadcrumbs'][] = $this->title;
                        <td colspan="5" style="padding: 15px;text-align: center;color: lightgrey;">ไม่พบรายการสั่งซื้อ</td>
                    </tr>
                    <?php else:?>
+                   <?php $loop_count = 0;?>
+                   <?php foreach($model as $value):?>
+                       <?php
+                       $loop_count += 1;
+                           ?>
+                           <tr>
+                               <td style="text-align: center"><?=$loop_count?></td>
+                               <td><?=$value->order_no?></td>
+                               <td><?=date('d-m-Y',strtotime($value->order_date))?></td>
+                               <td><?php echo ""?></td>
+                               <td><?php echo "รอ"?></td>
+                           </tr>
+                   <?php endforeach;?>
                    <?php endif;?>
                    </tbody>
                </table>
