@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var backend\models\Customer $model */
 
-$model_contact_data = \common\models\ContactInfo::find()->where(['party_id' => $model->id])->all();
+//$model_contact_data = \common\models\ContactInfo::find()->where(['party_id' => $model->id])->all();
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'ลูกค้า', 'url' => ['index']];
@@ -56,18 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ]) ?>
         </div>
         <div class="col-lg-4">
-            <?= DetailView::widget([
-                'model' => $model,
-                'attributes' => [
-                    [
-                        'label' => 'บริษัท',
-                        'value' => function ($data) {
-                            return \backend\models\Company::findCompanyName($data->company_id);
-                        }
-                    ]
 
-                ],
-            ]) ?>
         </div>
     </div>
 
@@ -179,33 +168,4 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <br>
 
-    <?php if (count($model_contact_data)): ?>
-        <h4>รายชื่อผู้ติดต่อ</h4>
-        <div class="row">
-            <div class="col-lg-12">
-                <table class="table table-bordered table-striped">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>ชื่อผู้ติดต่อ</th>
-                        <th>ช่องทาง</th>
-                        <th>ข้อมูล</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php $i = 0; ?>
-                    <?php foreach ($model_contact_data as $value): ?>
-                        <?php $i++; ?>
-                        <tr>
-                            <td style="text-align: center"><?= $i; ?></td>
-                            <td><?= $value->contact_name ?></td>
-                            <td><?= \backend\helpers\ContactcatType::getTypeById($value->type_id) ?></td>
-                            <td><?= $value->contact_no ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    <?php endif; ?>
 </div>

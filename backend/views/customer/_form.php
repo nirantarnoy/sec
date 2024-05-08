@@ -26,11 +26,7 @@ $x_street = $address_chk == null ? '' : $address_chk->street;
 $x_zipcode = $address_chk == null ? '' : $address_chk->zipcode;
 
 $group_assign_list = [];
-if($model_user_group_list!=null){
-    foreach ($model_user_group_list as $value){
-        array_push($group_assign_list,$value->group_id);
-    }
-}
+
 
 //print_r($address_chk) ; return;
 ?>
@@ -41,70 +37,36 @@ if($model_user_group_list!=null){
     <input type="hidden" class="remove-list" name="remove_list" value="">
 
     <div class="row">
+        <div class="col-lg-1"></div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'taxid')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-lg-3">
-            <?php $model->customer_group_id = $group_assign_list;?>
-            <?= $form->field($model, 'customer_group_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customergroup::find()->all(), 'id', function ($data) {
-                    return $data->name;
-                }),
-                'options' => [
-                    'placeholder' => '--กลุ่มลูกค้า--'
-                ],
-                'pluginOptions' => [
-                    'multiple' => true,
-                ]
-            ]) ?>
+            <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
     <div class="row">
+        <div class="col-lg-1"></div>
         <div class="col-lg-3">
             <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
         </div>
-        <div class="col-lg-3">
-
-            <?= $form->field($model, 'payment_term_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentterm::find()->all(), 'id', function ($data) {
-                    return $data->name;
-                }),
-                'options' => [
-                    'placeholder' => '--เลือกเงื่อนไขชำระเงิน--'
-                ]
-            ]) ?>
-
-        </div>
-        <div class="col-lg-3">
-
-            <?= $form->field($model, 'payment_method_id')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentmethod::find()->all(), 'id', function ($data) {
-                    return $data->name;
-                }),
-                'options' => [
-                    'placeholder' => '--เลือกวิธีชำระเงิน--'
-                ]
-            ]) ?>
-
-        </div>
 
     </div>
 
     <div class="row">
+        <div class="col-lg-1"></div>
         <div class="col-lg-4">
             <label for="">ที่อยู่</label>
             <input type="text" class="form-control cus-address" id="cus-address"
                    value="<?= $model->isNewRecord ? '' : $x_address ?>" name="cus_address">
         </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-1"></div>
         <div class="col-lg-4">
             <label for="">ถนน</label>
             <input type="text" class="form-control cus-street" id="cus-street"
@@ -112,39 +74,9 @@ if($model_user_group_list!=null){
         </div>
     </div>
     <br/>
-
     <div class="row">
-        <div class="col-lg-3">
-            <label for="">จังหวัด</label>
-            <select name="province_id" class="form-control province-id" id=""
-                    onchange="getCity($(this))">
-                <option value="0">--จังหวัด--</option>
-                <?php foreach ($province_data as $val3): ?>
-                    <?php
-                    $selected = '';
-                    if ($val3->PROVINCE_ID == $province_chk)
-                        $selected = 'selected';
-//                    ?>
-                    <option value="<?= $val3->PROVINCE_ID ?>" <?= $selected ?>><?= $val3->PROVINCE_NAME ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div class="col-lg-3">
-            <label for="">อำเภอ/เขต</label>
-            <select name="city_id" class="form-control city-id" id="city"
-                    onchange="getDistrict($(this))">
-                <option value="0">--อำเภอ/เขต--</option>
-                <?php foreach ($city_data as $val2): ?>
-                    <?php
-                    $selected = '';
-                    if ($val2->AMPHUR_ID == $city_chk)
-                        $selected = 'selected';
-//                    ?>
-                    <option value="<?= $val2->AMPHUR_ID ?>" <?= $selected ?>><?= $val2->AMPHUR_NAME ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div class="col-lg-3">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-4">
             <label for="">ตำบล/แขวง</label>
             <select name="district_id" class="form-control district-id" id="district"
                     onchange="">
@@ -159,7 +91,49 @@ if($model_user_group_list!=null){
                 <?php endforeach; ?>
             </select>
         </div>
-        <div class="col-lg-3">
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-4">
+            <label for="">อำเภอ/เขต</label>
+            <select name="city_id" class="form-control city-id" id="city"
+                    onchange="getDistrict($(this))">
+                <option value="0">--อำเภอ/เขต--</option>
+                <?php foreach ($city_data as $val2): ?>
+                    <?php
+                    $selected = '';
+                    if ($val2->AMPHUR_ID == $city_chk)
+                        $selected = 'selected';
+//                    ?>
+                    <option value="<?= $val2->AMPHUR_ID ?>" <?= $selected ?>><?= $val2->AMPHUR_NAME ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-4">
+            <label for="">จังหวัด</label>
+            <select name="province_id" class="form-control province-id" id=""
+                    onchange="getCity($(this))">
+                <option value="0">--จังหวัด--</option>
+                <?php foreach ($province_data as $val3): ?>
+                    <?php
+                    $selected = '';
+                    if ($val3->PROVINCE_ID == $province_chk)
+                        $selected = 'selected';
+//                    ?>
+                    <option value="<?= $val3->PROVINCE_ID ?>" <?= $selected ?>><?= $val3->PROVINCE_NAME ?></option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-4">
             <label for="">รหัสไปรษณีย์</label>
             <input type="text" class="form-control zipcode" id="zipcode"
                    value="<?= $model->isNewRecord ? '' : $x_zipcode ?>" name="zipcode" readonly>
@@ -167,18 +141,27 @@ if($model_user_group_list!=null){
     </div>
     <br/>
     <div class="row">
-        <div class="col-lg-3">
-            <?= $form->field($model, 'address')->textarea(['maxlength' => true]) ?>
+        <div class="col-lg-1"></div>
+        <div class="col-lg-4">
+            <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
         </div>
     </div>
+    <br/>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-4">
+            <div class="form-group">
+                <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            </div>
+        </div>
+    </div>
+    <br/>
 
     <!--    <? //= $form->field($model, 'status')->textInput() ?>-->
-    <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
-    
 
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
+
+
+
 
 
     <?php ActiveForm::end(); ?>

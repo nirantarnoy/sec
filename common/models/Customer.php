@@ -37,7 +37,7 @@ class Customer extends \yii\db\ActiveRecord
         return [
             [['firstname', 'lastname','email'], 'required'],
             [['customer_group_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['code', 'name', 'description', 'taxid'], 'string', 'max' => 255],
+            [['code', 'name', 'description', 'taxid','first_name','last_name'], 'string', 'max' => 255],
         ];
     }
 
@@ -53,6 +53,8 @@ class Customer extends \yii\db\ActiveRecord
             'description' => 'รายละเอียด',
             'taxid' => 'Taxid',
             'customer_group_id' => 'กลุ่มลูกค้า',
+            'first_name' => 'ชื่อ',
+            'last_name' => 'นามสกุล',
             'status' => 'สถานะ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',

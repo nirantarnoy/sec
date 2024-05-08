@@ -60,6 +60,8 @@ class Customer extends \common\models\Customer
             'work_type_id'=>'ประเภทงาน',
             'address'=>'ที่อยู่วางบิล',
             'taxid'=>'เลขที่ผู้เสียภาษี',
+            'first_name' => 'ชื่อ',
+            'last_name' => 'นามสกุล',
             'branch_code'=>'รหัสสาขา',
             'branch_name'=>'ชื่อสาขา',
             'crated_at' => 'สร้างเมื่อ',

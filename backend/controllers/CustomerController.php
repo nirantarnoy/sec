@@ -205,11 +205,11 @@ class CustomerController extends Controller
 
         $model_line = \common\models\AddressInfo::find()->where(['party_id' => $id])->all();
 
-        $model_contact_line = \common\models\ContactInfo::find()->where(['party_id' => $id])->all();
+        //$model_contact_line = \common\models\ContactInfo::find()->where(['party_id' => $id])->all();
 
-        $model_customer_tax_info = \common\models\CustomerInvoiceInfo::find()->where(['customer_id' => $id])->one();
-
-        $model_user_group_list = \common\models\CustomerAssignList::find()->where(['customer_id'=>$id])->all();
+//        $model_customer_tax_info = \common\models\CustomerInvoiceInfo::find()->where(['customer_id' => $id])->one();
+//
+//        $model_user_group_list = \common\models\CustomerAssignList::find()->where(['customer_id'=>$id])->all();
 
         if ($this->request->isPost && $model->load($this->request->post())) {
             $party_type = 2;
@@ -220,27 +220,15 @@ class CustomerController extends Controller
             $province_id = \Yii::$app->request->post('province_id');
             $zipcode = \Yii::$app->request->post('zipcode');
 
-            $line_contact_name = \Yii::$app->request->post('line_name');
-            $line_type_id = \Yii::$app->request->post('line_type_id');
-            $line_contact_no = \Yii::$app->request->post('line_contact_no');
-
-            $removelist = \Yii::$app->request->post('remove_list');
-            $rec_id = \Yii::$app->request->post('rec_id');
-
-            $customer_payment_tax_id = \Yii::$app->request->post('customer_tax_id');
-            $customer_payment_tax_branch = \Yii::$app->request->post('customer_tax_branch');
-            $customer_payment_tax_email = \Yii::$app->request->post('customer_tax_email');
-
-            // print_r($model->customer_group_id);return;
 
 //            print_r($removelist); return;
             if ($model->save(false)) {
                 if ($party_type) {
 //                    echo 'dd'; return
-                    $address_chk = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type' => $party_type])->one();
+                    $address_chk = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type_id' => $party_type])->one();
 //                    echo 'dd'; return;
                     if ($address_chk) {
-                        $address_chk->party_type = $party_type;
+                        $address_chk->party_type_id = $party_type;
                         $address_chk->address = $address;
                         $address_chk->street = $street;
                         $address_chk->district_id = $district_id;
@@ -253,7 +241,7 @@ class CustomerController extends Controller
                         }
                     } else {
                         $new_address = new \common\models\AddressInfo();
-                        $new_address->party_type = $party_type;
+                        $new_address->party_type_id = $party_type;
                         $new_address->party_id = $model->id;
                         $new_address->address = $address;
                         $new_address->street = $street;
@@ -267,66 +255,8 @@ class CustomerController extends Controller
                         }
                     }
                 }
-                if (count($line_contact_name)) {
-                    for ($i = 0; $i <= count($line_contact_name) - 1; $i++) {
-                        //print_r($line_contact_name);return ;
-                        if ($line_contact_name[$i]) {
-                            //print_r($line_contact_name);return ;
-                            $contact_chk = \common\models\ContactInfo::find()->where(['party_id' => $model->id, 'contact_name' => trim($line_contact_name[$i]), 'party_type' => $party_type])->one();
-//                            print_r($contact_chk);return ;
-                            if ($contact_chk) {
-                                $contact_chk->contact_name = trim($line_contact_name[$i]);
-                                $contact_chk->type_id = $line_type_id[$i];
-                                $contact_chk->contact_no = trim($line_contact_no[$i]);
-                                if ($contact_chk->save(false)) {
 
-                                }
-                            } else {
-                                $new_contact = new \common\models\ContactInfo();
-                                $new_contact->party_type = $party_type;
-                                $new_contact->party_id = $model->id;
-                                $new_contact->type_id = $line_type_id[$i];
-                                $new_contact->contact_name = trim($line_contact_name[$i]);
-                                $new_contact->contact_no = trim($line_contact_no[$i]);
-                                if ($new_contact->save(false)) {
 
-                                }
-                            }
-
-                            $delete_rec = explode(",", $removelist);
-                            if (count($delete_rec)) {
-                                \common\models\ContactInfo::deleteAll(['party_id' => $model->id, 'id' => $delete_rec]);
-                            }
-                        }
-                        //                            print_r($line_contact_name);return ;
-
-                    }
-                }
-                $model_tax_check = \common\models\CustomerInvoiceInfo::find()->where(['customer_id' => $model->id])->one();
-                if ($model_tax_check) {
-                    $model_tax_check->tax_id = $customer_payment_tax_id;
-                    $model_tax_check->branch = $customer_payment_tax_branch;
-                    $model_tax_check->email = $customer_payment_tax_email;
-                    $model_tax_check->save(false);
-                } else {
-                    $model_tax = new \common\models\CustomerInvoiceInfo();
-                    $model_tax->customer_id = $model->id;
-                    $model_tax->tax_id = $customer_payment_tax_id;
-                    $model_tax->branch = $customer_payment_tax_branch;
-                    $model_tax->email = $customer_payment_tax_email;
-                    $model_tax->status = 1;
-                    $model_tax->save(false);
-                }
-
-                if ($model->customer_group_id) {
-                    \common\models\CustomerAssignList::deleteAll(['customer_id' => $model->id]);
-                    for ($m = 0; $m <= count($model->customer_group_id) - 1; $m++) {
-                        $model_group_assign = new \common\models\CustomerAssignList();
-                        $model_group_assign->customer_id = $model->id;
-                        $model_group_assign->group_id = $model->customer_group_id[$m];
-                        $model_group_assign->save(false);
-                    }
-                }
 
             }
             return $this->redirect(['view', 'id' => $model->id]);
@@ -334,10 +264,10 @@ class CustomerController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'model_line' => $model_line,
-            'model_contact_line' => $model_contact_line,
-            'model_customer_tax_info' => $model_customer_tax_info,
-            'model_user_group_list' => $model_user_group_list,
+//            'model_line' => $model_line,
+//            'model_contact_line' => $model_contact_line,
+//            'model_customer_tax_info' => $model_customer_tax_info,
+//            'model_user_group_list' => $model_user_group_list,
         ]);
     }
 
