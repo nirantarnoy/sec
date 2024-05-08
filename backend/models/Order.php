@@ -59,5 +59,34 @@ class Order extends \common\models\Orders
         return $model != null ? $model->code : '';
     }
 
+    public static function getLastNo()
+    {
+        //   $model = Orders::find()->MAX('order_no');
+        $model = Order::find()->MAX('order_no');
+
+        $pre = "SO";
+
+        if ($model != null) {
+//            $prefix = $pre.substr(date("Y"),2,2);
+//            $cnum = substr((string)$model,4,strlen($model));
+//            $len = strlen($cnum);
+//            $clen = strlen($cnum + 1);
+//            $loop = $len - $clen;
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+            $cnum = substr((string)$model, 5, strlen($model));
+            $len = strlen($cnum);
+            $clen = strlen($cnum + 1);
+            $loop = $len - $clen;
+            for ($i = 1; $i <= $loop; $i++) {
+                $prefix .= "0";
+            }
+            $prefix .= $cnum + 1;
+            return $prefix;
+        } else {
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2). substr(date("m"),0,2);
+            return $prefix . '00001';
+        }
+    }
+
 
 }

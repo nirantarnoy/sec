@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'item_id',
                 'value' => function ($data) {
-                    return \backend\models\Product::findName($data->item_id);
+                    return \backend\models\Product::findName($data->product_id);
                 }
             ],
             'qty',

@@ -35,7 +35,7 @@ class StockTrans extends \yii\db\ActiveRecord
     {
         return [
             [['trans_date'], 'safe'],
-            [['activity_type_id', 'product_id', 'trans_ref_id', 'status', 'created_at', 'created_by'], 'integer'],
+            [['activity_type_id', 'product_id', 'trans_ref_id', 'status', 'created_at', 'created_by','warehouse_id'], 'integer'],
             [['qty'], 'number'],
             [['remark'], 'string', 'max' => 255],
         ];
@@ -53,6 +53,7 @@ class StockTrans extends \yii\db\ActiveRecord
             'product_id' => 'รหัสสินค้า',
             'qty' => 'จำนวน',
             'trans_ref_id' => 'อ้างอิง',
+            'warehouse_id'=> 'คลังสินค้า',
             'status' => 'สถานะ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',

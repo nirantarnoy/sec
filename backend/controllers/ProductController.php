@@ -93,6 +93,10 @@ class ProductController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
+                $line_warehouse = \Yii::$app->request->post('warehouse_id');
+                $line_qty = \Yii::$app->request->post('line_qty');
+                $line_exp_date = \Yii::$app->request->post('line_exp_date');
+
                 if ($model->save(false)) {
                     $uploaded = UploadedFile::getInstanceByName('product_photo');
 
@@ -102,6 +106,40 @@ class ProductController extends Controller
                             \backend\models\Product::updateAll(['photo' => $upfiles], ['id' => $model->id]);
                         }
 
+                    }
+
+                    if($line_warehouse != null){
+                        for($i=0;$i<count($line_warehouse);$i++){
+                            if($line_qty[$i] == 0){
+                                continue;
+                            }
+                            $xdate = explode('/',$line_exp_date[$i]);
+                            $exp_date = date('Y-m-d');
+                            if($xdate!=null){
+                                $exp_date = $xdate[2].'/'.$xdate[1].'/'.$xdate[0];
+                            }
+
+                            $model_trans = new \backend\models\Stocktrans();
+                            $model_trans->product_id = $model->id;
+                            $model_trans->trans_date = date('Y-m-d H:i:s');
+                            $model_trans->activity_type_id = 1; // 1 ปรับสต๊อก 2 รับเข้า 3 จ่ายออก
+                            $model_trans->qty = $line_qty[$i];
+                            $model_trans->status = 1;
+                            if($model_trans->save(false)){
+                                $model_sum = \backend\models\Stocksum::find()->where(['product_id'=>$model->id,'warehouse_id'=>$line_warehouse[$i],'expired_date'=>date('Y-m-d',strtotime($exp_date))])->one();
+                                if($model_sum){
+                                    $model_sum->qty = $line_qty[$i];
+                                    $model_sum->save(false);
+                                }else{
+                                    $model_sum = new \backend\models\Stocksum();
+                                    $model_sum->product_id = $model->id;
+                                    $model_sum->warehouse_id = $line_warehouse[$i];
+                                    $model_sum->qty = $line_qty[$i];
+                                    $model_sum->expired_date = date('Y-m-d',strtotime($exp_date));
+                                    $model_sum->save(false);
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -126,8 +164,13 @@ class ProductController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model_line = \common\models\StockSum::find()->where(['product_id'=>$id])->all();
         $work_photo = '';
         if ($this->request->isPost && $model->load($this->request->post())) {
+
+            $line_warehouse = \Yii::$app->request->post('warehouse_id');
+            $line_qty = \Yii::$app->request->post('line_qty');
+            $line_exp_date = \Yii::$app->request->post('line_exp_date');
 
             $uploaded = UploadedFile::getInstanceByName('product_photo');
             if ($model->save(false)) {
@@ -138,6 +181,36 @@ class ProductController extends Controller
                     }
 
                 }
+                for($i=0;$i<count($line_warehouse);$i++){
+                    if($line_qty[$i] == 0){
+                        continue;
+                    }
+                    $xdate = explode('/',$line_exp_date[$i]);
+                    $exp_date = date('Y-m-d');
+                    if($xdate!=null){
+                        $exp_date = $xdate[2].'/'.$xdate[1].'/'.$xdate[0];
+                    }
+                    $model_trans = new \backend\models\Stocktrans();
+                    $model_trans->product_id = $model->id;
+                    $model_trans->trans_date = date('Y-m-d H:i:s');
+                    $model_trans->activity_type_id = 1; // 1 ปรับสต๊อก 2 รับเข้า 3 จ่ายออก
+                    $model_trans->qty = $line_qty[$i];
+                    $model_trans->status = 1;
+                    if($model_trans->save(false)){
+                        $model_sum = \backend\models\Stocksum::find()->where(['product_id'=>$model->id,'warehouse_id'=>$line_warehouse[$i],'expired_date'=>date('Y-m-d',strtotime($exp_date))])->one();
+                        if($model_sum){
+                            $model_sum->qty = $line_qty[$i];
+                            $model_sum->save(false);
+                        }else{
+                            $model_sum = new \backend\models\Stocksum();
+                            $model_sum->product_id = $model->id;
+                            $model_sum->warehouse_id = $line_warehouse[$i];
+                            $model_sum->qty = $line_qty[$i];
+                            $model_sum->expired_date = date('Y-m-d',strtotime($exp_date));
+                            $model_sum->save(false);
+                        }
+                    }
+                }
             }
 
             return $this->redirect(['view', 'id' => $model->id]);
@@ -146,6 +219,7 @@ class ProductController extends Controller
         return $this->render('update', [
             'model' => $model,
             'work_photo' => $work_photo,
+            'model_line' => $model_line,
         ]);
     }
 

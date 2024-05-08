@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var backend\models\Product $model */
 /** @var yii\widgets\ActiveForm $form */
+$data_warehouse = \backend\models\Warehouse::find()->all();
 ?>
 
 <div class="product-form">
@@ -91,6 +92,82 @@ use yii\widgets\ActiveForm;
 
     </div>
     <br />
+    <div class="row">
+        <div class="col-lg-12">
+            <h4>จัดการสต๊อกสินค้า</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-striped" id="table-list">
+                <thead>
+                <tr>
+                    <th style="text-align: center;">ที่จัดเก็บ</th>
+                    <th style="text-align: center;">จำนวนคงเหลือ</th>
+                    <th style="text-align: center;">วันหมดอายุ</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if($model_line != null):?>
+                <?php foreach($model_line as $value):?>
+                    <tr>
+                        <td>
+<!--                            <input type="text" class="form-control line-warehouse-id" name="warehouse_id[]" value="--><?php //=$value->warehouse_id?><!--">-->
+                            <select name="warehouse_id[]" id="" class="form-control line-warehouse-id">
+                                <option value="-1">--เลือก-</option>
+                                <?php foreach($data_warehouse as $xvalue):?>
+                                <?php
+                                    $selected = '';
+                                    if($value->warehouse_id == $xvalue->id){
+                                        $selected = 'selected';
+                                    }
+                                    ?>
+                                    <option value="<?=$xvalue->id?>" <?=$selected?>><?=$xvalue->name?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control line-qty" name="line_qty[]" value="<?=$value->qty?>">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control line-exp-date" name="line_exp_date[]" value="<?=date('d/m/Y',strtotime($value->expired_date))?>">
+                        </td>
+
+                    </tr>
+                <?php endforeach;?>
+                <?php else:?>
+                    <tr>
+                        <td>
+<!--                            <input type="text" class="form-control line-warehouse-id" name="warehouse_id[]" value="">-->
+                            <select name="warehouse_id[]" id="" class="form-control line-warehouse-id">
+                                <option value="-1">--เลือก-</option>
+                                <?php foreach($data_warehouse as $xvalue):?>
+                                    <option value="<?=$xvalue->id?>"><?=$xvalue->name?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control line-qty" name="line_qty[]" value="">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control line-exp-date" name="line_exp_date[]" value="">
+                        </td>
+
+                    </tr>
+                <?php endif;?>
+
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align: left;">
+                        <div class="btn btn-sm btn-primary" onclick="addline($(this))">เพิ่ม</div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <br />
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
@@ -99,3 +176,45 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+<?php
+$js=<<<JS
+function addline(e){
+    var tr = $("#table-list tbody tr:last");
+    var clone = tr.clone();
+                    //clone.find(":text").val("");
+                    // clone.find("td:eq(1)").text("");
+    clone.find(".line-warehouse-id").val("-1").change();
+    clone.find(".line-qty").val("");
+    clone.find(".line-exp-date").val("");
+
+    tr.after(clone);
+     
+}
+function removeline(e) {
+        if (confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) {
+            if (e.parent().parent().attr("data-var") != '') {
+                removelist2.push(e.parent().parent().attr("data-var"));
+                $(".remove-list2").val(removelist2);
+            }
+            // alert(removelist);
+            // alert(e.parent().parent().attr("data-var"));
+
+            if ($("#table-list2 tbody tr").length == 1) {
+                $("#table-list2 tbody tr").each(function () {
+                    $(this).find(":text").val("");
+                   // $(this).find(".line-prod-photo").attr('src', '');
+                   
+                     $(this).find(".price-line").val(0);
+                    $(this).find(".remark-line").val('');
+                    // cal_num();
+                });
+            } else {
+                e.parent().parent().remove();
+            }
+            // cal_linenum();
+            // cal_all();
+        }
+}
+JS;
+$this->registerJs($js,static::POS_END);
+?>

@@ -562,7 +562,7 @@ class SiteController extends Controller
         if (isset($_SESSION['cart'])) {
             if (!empty($_SESSION['cart'])) {
                 $model_order = new \backend\models\Order();
-                $model_order->order_no = 'SO' . time();
+                $model_order->order_no = $model_order::getLastNo();
                 $model_order->order_date = date('Y-m-d H:i:s');
                 $model_order->customer_id = $customer_id;
                 $model_order->customer_type = 1;
