@@ -27,9 +27,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-        //    'id',
+            //    'id',
             'order_no',
-            ['attribute' => 'order_date','value' => function ($model) {
+            ['attribute' => 'order_date', 'value' => function ($model) {
                 return date('d/m/Y H:i:s', strtotime($model->order_date));
             }],
 //            'customer_id',
@@ -45,7 +45,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'status',
             'order_tracking_no',
             'delivery_status',
-            'status',
+            [
+                'attribute' => 'status',
+                'value' => function ($data) {
+                    return \backend\helpers\OrderStatus::getTypeById($data->id);
+                },
+            ],
 //            'created_at',
 //            'created_by',
 //            'updated_at',

@@ -40,12 +40,12 @@ use yii\widgets\ActiveForm;
             <table class="table table-bordered table-striped">
                 <thead>
                 <tr>
-                    <th style="width:5%;text-align: center;">#</th>
-                    <th style="text-align: center;max-width: 50px;"></th>
-                    <th style="text-align: center">สินค้า</th>
-                    <th style="text-align: right">จำนวน</th>
-                    <th style="text-align: right">ราคา</th>
-                    <th style="text-align: right">รวม</th>
+                    <th style="width:5%;text-align: center;background-color: #36ab63;color: white;">#</th>
+                    <th style="text-align: center;max-width: 50px;background-color: #36ab63;color: white;"></th>
+                    <th style="text-align: center;background-color: #36ab63;color: white;">สินค้า</th>
+                    <th style="text-align: right;background-color: #36ab63;color: white;">จำนวน</th>
+                    <th style="text-align: right;background-color: #36ab63;color: white;">ราคา</th>
+                    <th style="text-align: right;background-color: #36ab63;color: white;">รวม</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -114,19 +114,19 @@ use yii\widgets\ActiveForm;
                <tr>
                    <td>ชื่อลูกค้า</td>
                    <td>
-                       <p><?=\backend\models\Customer::findCusFullName(1)?></p>
+                       <?=\backend\models\Customer::findCusFullName(1)?>
                    </td>
                </tr>
                <tr>
                    <td>Email</td>
                    <td>
-                       <p><?=\backend\models\Customer::findEmail(1)?></p>
+                       <?=\backend\models\Customer::findEmail(1)?>
                    </td>
                </tr>
                <tr>
                    <td>เบอร์โทร</td>
                    <td>
-                       <p><?=\backend\models\Customer::findPhone(1)?></p>
+                       <?=\backend\models\Customer::findPhone(1)?>
                    </td>
                </tr>
                <tr>
@@ -138,14 +138,22 @@ use yii\widgets\ActiveForm;
                <tr>
                    <td>สถานะคำสั่งซื้อ</td>
                    <?php
-                   $order_color = '';
-                   if($model->status == 1) {
-                       $order_color = 'color: orange';
-                   }elseif($model->status == 4) {
-                       $order_color = 'color: green';
+                   $color_status = '';
+                   if ($model->status == 3) {
+                       $color_status = 'color: orange';
+                   } elseif ($model->status == 4) {
+                       $color_status = 'color: green';
+                   } elseif ($model->status == 5) {
+                       $color_status = 'color: red';
                    }
                    ?>
-                   <td style="<?=$order_color?>"><?=\backend\helpers\OrderStatus::getTypeById($model->status)?></td>
+                   <td style="<?=$color_status?>"><?=\backend\helpers\OrderStatus::getTypeById($model->status)?></td>
+               </tr>
+               <tr>
+                   <td>เลขที่ติดตามพัสดุ</td>
+                   <td style="color: green;">
+                       <?=$model->order_tracking_no?>
+                   </td>
                </tr>
            </table>
         </div>

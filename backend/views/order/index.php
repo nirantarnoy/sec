@@ -74,7 +74,22 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 //            'status',
             'order_tracking_no',
-            'delivery_status',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function ($data) {
+                    $color_status = '';
+                    if ($data->status == 3) {
+                        $color_status = 'color: orange;';
+                    } elseif ($data->status == 4) {
+                        $color_status = 'color: green;';
+                    } elseif ($data->status == 5) {
+                        $color_status = 'color: red';
+                    }
+                    return '<div style="'.$color_status.'">'.\backend\helpers\OrderStatus::getTypeById($data->status).'</div>';
+                   // return $data->status;
+                },
+            ],
             //'created_at',
             //'created_by',
             //'updated_at',
