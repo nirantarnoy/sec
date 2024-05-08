@@ -213,12 +213,24 @@ AppAsset::register($this);
         echo Html::tag('div',Html::a('เข้าระบบ',['/site/login'],['class' => ['btn login text-decoration-none text-white']]),['class' => ['d-flex']]);
       //  echo Html::tag('div',Html::a('ตะกร้าสินค้า',['/site/yourcart'],['class' => ['btn login text-decoration-none text-white']]),['class' => ['d-flex']]);
     } else {
-        echo Html::beginForm(['/site/logout'], 'post', ['class' => 'd-flex'])
-            . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
-                ['class' => 'btn btn-link logout text-decoration-none']
-            )
-            . Html::endForm();
+//        echo Html::beginForm(['/site/logout'], 'post', ['class' => 'd-flex'])
+//            . Html::submitButton(
+//                'Logout (' . Yii::$app->user->identity->username . ')',
+//                ['class' => 'btn btn-link logout text-decoration-none']
+//            )
+//            . Html::endForm();
+        $user_menu_item[]=  [
+            'label' => 'สวัสดีคุณ (' . Yii::$app->user->identity->username . ')',
+            'options' => ['class' => 'd-flex'],
+            'items' => [
+                ['label' => 'ข้อมูลของคุณ', 'url' => ['/site/profile']],
+                ['label' => 'ออกจากระบบ', 'url' => ['/site/logout']],
+            ],
+        ];
+        echo Nav::widget([
+            'options' => ['class' => 'navbar-nav'],
+            'items' => $user_menu_item,
+        ]);
     }
     NavBar::end();
     ?>

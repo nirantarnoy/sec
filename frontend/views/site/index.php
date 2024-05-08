@@ -40,6 +40,7 @@ if (isset($_SESSION['cart'])) {
 //unset($_SESSION['cart']);
 
 ?>
+<br />
 <div class="container-cart-index">
     <form action="index.php?r=site/index" method="get">
         <div class="row">
@@ -66,7 +67,7 @@ if (isset($_SESSION['cart'])) {
             </div>
             <div class="col-lg-2">
 <!--                <div class="btn icon-cart" style="color: red;">สินค้า --><?php //= $cart_item_count ?><!--</div>-->
-                <a href="index.php?r=site/yourcart" style="color: red;text-decoration: none">ตะกร้า <div class="badge" style="font-size: 20px;background-color: black;color:white;"><?= $cart_item_count ?></div></a>
+                <a href="index.php?r=site/yourcart" style="color: red;text-decoration: none">ตะกร้าสินค้า <div class="badge" style="font-size: 20px;background-color: black;color:white;"><?= $cart_item_count ?></div></a>
             </div>
         </div>
     </form>
