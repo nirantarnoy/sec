@@ -70,7 +70,7 @@ use yii\widgets\ActiveForm;
                             <td style="text-align: center;"><?= ++$loop_count ?></td>
                             <td style="text-align: center;"><img
                                         src="<?= \Yii::$app->getUrlManager()->baseUrl . '/uploads/product_photo/' . $photo ?>"
-                                        style="margin-top: 5px;" alt=""></td>
+                                        style="margin-top: 5px;max-width: 50px" alt=""></td>
                             <td style="text-align: left;"><?= \backend\models\Product::findName($model_detail_item->product_id) ?></td>
                             <td style="text-align: right;"><?= number_format($model_detail_item->qty, 2) ?></td>
                             <td style="text-align: right;"><?= number_format($model_detail_item->price, 2) ?></td>
