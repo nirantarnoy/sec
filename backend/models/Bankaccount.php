@@ -7,7 +7,7 @@ use yii\db\ActiveRecord;
 
 date_default_timezone_set('Asia/Bangkok');
 
-class Product extends \common\models\Product
+class Bankaccount extends \common\models\BankAccount
 {
     public function behaviors()
     {
@@ -40,19 +40,19 @@ class Product extends \common\models\Product
                 ],
                 'value' => Yii::$app->user->id,
             ],
-//            'timestampcompany' => [
-//                'class' => \yii\behaviors\AttributeBehavior::className(),
-//                'attributes' => [
-//                    ActiveRecord::EVENT_BEFORE_INSERT => 'company_id',
+//            'timestampcompany'=>[
+//                'class'=> \yii\behaviors\AttributeBehavior::className(),
+//                'attributes'=>[
+//                    ActiveRecord::EVENT_BEFORE_INSERT=>'company_id',
 //                ],
-//                'value' => isset($_SESSION['user_company_id']) ? $_SESSION['user_company_id'] : 1,
+//                'value'=> isset($_SESSION['user_company_id'])? $_SESSION['user_company_id']:1,
 //            ],
-//            'timestampbranch' => [
-//                'class' => \yii\behaviors\AttributeBehavior::className(),
-//                'attributes' => [
-//                    ActiveRecord::EVENT_BEFORE_INSERT => 'branch_id',
+//            'timestampbranch'=>[
+//                'class'=> \yii\behaviors\AttributeBehavior::className(),
+//                'attributes'=>[
+//                    ActiveRecord::EVENT_BEFORE_INSERT=>'branch_id',
 //                ],
-//                'value' => isset($_SESSION['user_branch_id']) ? $_SESSION['user_branch_id'] : 1,
+//                'value'=> isset($_SESSION['user_branch_id'])? $_SESSION['user_branch_id']:1,
 //            ],
             'timestampupdate' => [
                 'class' => \yii\behaviors\AttributeBehavior::className(),
@@ -64,32 +64,12 @@ class Product extends \common\models\Product
         ];
     }
 
-    public function findCode($id){
-        $model = Product::find()->where(['id'=>$id])->one();
-        return $model != null ?$model->code:'';
-    }
-    public function findName($id){
-        $model = Product::find()->where(['id'=>$id])->one();
-        return $model != null ?$model->name:'';
-    }
-    public function findDesc($id){
-        $model = Product::find()->where(['id'=>$id])->one();
-        return $model != null ?$model->description:'';
-    }
-    public function findPhoto($id){
-        $model = Product::find()->where(['id'=>$id])->one();
-        return $model != null ?$model->photo:'';
-    }
 
-//    public static function findName($id){
-//        $model = \common\models\RoutePlan::find()->where(['id'=>$id])->one();
-//        return $model!= null?$model->name:'';
-//    }
-//    public function findUnitid($code){
-//        $model = Unit::find()->where(['name'=>$code])->one();
-//        return count($model)>0?$model->id:0;
-//    }
-
+    public static function findEmpcompanyid($id)
+    {
+        $model = Employee::find()->where(['id' => $id])->one();
+        return $model != null ? $model->company_id : 0;
+    }
 
 
 }

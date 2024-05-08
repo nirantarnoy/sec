@@ -74,6 +74,22 @@ class Customer extends \common\models\Customer
         $model = Customer::find()->where(['id' => $id])->one();
         return $model != null ? $model->name : '';
     }
+
+    public static function findCusFullName($id)
+    {
+        $model = Customer::find()->where(['id' => $id])->one();
+        return $model != null ? $model->first_name.' '.$model->last_name : '';
+    }
+    public static function findEmail($id)
+    {
+        $model = Customer::find()->where(['id' => $id])->one();
+        return $model != null ? $model->email : '';
+    }
+    public static function findPhone($id)
+    {
+        $model = Customer::find()->where(['id' => $id])->one();
+        return $model != null ? $model->phone : '';
+    }
     public static function findAddress($id)
     {
         $model = Customer::find()->where(['id' => $id])->one();
@@ -116,5 +132,20 @@ class Customer extends \common\models\Customer
     {
         $model = Customer::find()->where(['id' => $id])->one();
         return $model != null ? $model->name : '';
+    }
+
+    public static function findFullAddress($customer_id)
+    {
+        $address_name = '';
+        $model = AddressInfo::find()->where(['party_type_id' => 2, 'party_id' => $customer_id])->one();
+        if($model){
+            $address_name = $model->address;
+            $address_name .= ' '.$model->street;
+            $address_name .= ' '.District::find()->where(['DISTRICT_ID' => $model->district_id])->one()->DISTRICT_NAME;
+            $address_name .= ' '.Amphur::find()->where(['AMPHUR_ID' => $model->city_id])->one()->AMPHUR_NAME;
+            $address_name .= ' '.Province::find()->where(['PROVINCE_ID' => $model->province_id])->one()->PROVINCE_NAME;
+            $address_name .= ' '.$model->zipcode;
+        }
+        return $address_name;
     }
 }

@@ -7,6 +7,7 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
+
 /** @var yii\web\View $this */
 /** @var backend\models\OrderSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -37,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </form>
         </div>
     </div>
-    <?php echo $this->render('_search', ['model' => $searchModel,'viewstatus'=>$viewstatus]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel, 'viewstatus' => $viewstatus]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
@@ -58,12 +59,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
             'order_no',
-            'order_date',
-            'customer_id',
-            'customer_name',
+            ['attribute' => 'order_date','value' => function ($model) {
+                return date('d/m/Y H:i:s', strtotime($model->order_date));
+            }],
+//            'customer_id',
+//            'customer_name',
             //'customer_type',
             'total_amount',
-            'status',
+            [
+                    'attribute' => 'transfer_bank_account_id',
+                'value' => function ($model) {
+                    return \backend\models\Bank::findName($model->transfer_bank_account_id);
+                }
+            ],
+//            'status',
+            'order_tracking_no',
             'delivery_status',
             //'created_at',
             //'created_by',

@@ -6,14 +6,12 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var backend\models\Order $model */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => 'Orders', 'url' => ['index']];
+$this->title = $model->order_no;
+$this->params['breadcrumbs'][] = ['label' => 'คำสั่งซื้อ', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="order-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -29,18 +27,29 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+        //    'id',
             'order_no',
-            'order_date',
-            'customer_id',
-            'customer_name',
-            'customer_type',
+            ['attribute' => 'order_date','value' => function ($model) {
+                return date('d/m/Y H:i:s', strtotime($model->order_date));
+            }],
+//            'customer_id',
+//            'customer_name',
+            //'customer_type',
             'total_amount',
+            [
+                'attribute' => 'transfer_bank_account_id',
+                'value' => function ($model) {
+                    return \backend\models\Bank::findName($model->transfer_bank_account_id);
+                }
+            ],
+//            'status',
+            'order_tracking_no',
+            'delivery_status',
             'status',
-            'created_at',
-            'created_by',
-            'updated_at',
-            'updated_by',
+//            'created_at',
+//            'created_by',
+//            'updated_at',
+//            'updated_by',
         ],
     ]) ?>
 

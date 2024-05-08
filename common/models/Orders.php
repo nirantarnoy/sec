@@ -37,9 +37,9 @@ class Orders extends \yii\db\ActiveRecord
     {
         return [
             [['order_date'], 'safe'],
-            [['customer_id', 'customer_type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','delivery_status'], 'integer'],
-            [['total_amount'], 'number'],
-            [['order_no', 'customer_name'], 'string', 'max' => 255],
+            [['customer_id', 'customer_type', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','delivery_status','transfer_bank_account_id','pay_status'], 'integer'],
+            [['total_amount','pay_amount'], 'number'],
+            [['order_no', 'customer_name','order_tracking_no'], 'string', 'max' => 255],
         ];
     }
 
@@ -50,13 +50,17 @@ class Orders extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'order_no' => 'Order No',
-            'order_date' => 'Order Date',
-            'customer_id' => 'Customer ID',
-            'customer_name' => 'Customer Name',
-            'customer_type' => 'Customer Type',
-            'total_amount' => 'Total Amount',
-            'status' => 'Status',
+            'order_no' => 'เลขที่คำสั่งซื้อ',
+            'order_date' => 'วันที่สั่งซื้อ',
+            'customer_id' => 'ลูกค้า',
+            'customer_name' => 'ชื่อลูกค้า',
+            'customer_type' => 'ประเภทลูกค้า',
+            'total_amount' => 'ยอดรวม',
+            'order_tracking_no'=>'เลขที่ติดตามสินค้า',
+            'transfer_bank_account_id'=> 'บัญชีรับโอน',
+            'status' => 'สถานะ',
+            'pay_amount' => 'ยอดชำระเงิน',
+            'pay_status' => 'สถานะชำระเงิน',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

@@ -2,17 +2,17 @@
 
 namespace backend\controllers;
 
-use backend\models\Order;
-use backend\models\OrderSearch;
-use backend\models\PositionSearch;
+use backend\models\Bankaccount;
+use backend\models\BankaccountSearch;
+use backend\models\CustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * OrderController implements the CRUD actions for Order model.
+ * BankaccountController implements the CRUD actions for Bankaccount model.
  */
-class OrderController extends Controller
+class BankaccountController extends Controller
 {
     /**
      * @inheritDoc
@@ -33,41 +33,28 @@ class OrderController extends Controller
     }
 
     /**
-     * Lists all Order models.
+     * Lists all Bankaccount models.
      *
      * @return string
      */
     public function actionIndex()
     {
-        $viewstatus = 1;
-
-        if(\Yii::$app->request->get('viewstatus')!=null){
-            $viewstatus = \Yii::$app->request->get('viewstatus');
-        }
-
         $pageSize = \Yii::$app->request->post("perpage");
-        $searchModel = new OrderSearch();
-        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
-        if($viewstatus ==1){
-            $dataProvider->query->andFilterWhere(['status'=>$viewstatus]);
-        }
-        if($viewstatus == 2){
-            $dataProvider->query->andFilterWhere(['status'=>0]);
-        }
 
-        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+        $searchModel = new BankaccountSearch();
+        $dataProvider = $searchModel->search($this->request->queryParams);
+
         $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'perpage' => $pageSize,
-            'viewstatus'=>$viewstatus,
         ]);
     }
 
     /**
-     * Displays a single Order model.
+     * Displays a single Bankaccount model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -80,17 +67,17 @@ class OrderController extends Controller
     }
 
     /**
-     * Creates a new Order model.
+     * Creates a new Bankaccount model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Order();
+        $model = new Bankaccount();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['bankaccount/index']);
             }
         } else {
             $model->loadDefaultValues();
@@ -102,7 +89,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Updates an existing Order model.
+     * Updates an existing Bankaccount model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -111,20 +98,18 @@ class OrderController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model_line = \common\models\OrderLine::find()->where(['order_id' => $id])->all();
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['bankaccount/index']);
         }
 
         return $this->render('update', [
             'model' => $model,
-            'model_line' => $model_line,
         ]);
     }
 
     /**
-     * Deletes an existing Order model.
+     * Deletes an existing Bankaccount model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -138,15 +123,15 @@ class OrderController extends Controller
     }
 
     /**
-     * Finds the Order model based on its primary key value.
+     * Finds the Bankaccount model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Order the loaded model
+     * @return Bankaccount the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Order::findOne(['id' => $id])) !== null) {
+        if (($model = Bankaccount::findOne(['id' => $id])) !== null) {
             return $model;
         }
 

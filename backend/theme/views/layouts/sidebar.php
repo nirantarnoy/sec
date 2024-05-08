@@ -65,6 +65,18 @@
                                     <p>เงื่อนไขชำระเงิน</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="index.php?r=bank" class="nav-link bank">
+                                    <i class="far fa-file-import nav-icon"></i>
+                                    <p>ธนาคาร</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="index.php?r=bankaccount" class="nav-link bankaccount">
+                                    <i class="far fa-file-import nav-icon"></i>
+                                    <p>บัญชีธนาคาร</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                 <?php endif; ?>

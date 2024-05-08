@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use backend\models\Customer;
 use backend\models\ItemSearch;
 use frontend\models\ProductSearch;
 use frontend\models\ResendVerificationEmailForm;
@@ -49,7 +50,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::class,
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['post','GET'],
                 ],
             ],
         ];
@@ -102,12 +103,27 @@ class SiteController extends Controller
 
     public function actionYourcart()
     {
-
-        return $this->render('_cart');
+        $address = 'xx';
+        $customer_id = 0;
+        if (isset($_SESSION['user_id'])) {
+            $customer_id = \backend\models\User::findCustomerId($_SESSION['user_id']);
+            $address = \backend\models\Customer::findFullAddress($customer_id);
+        }
+        return $this->render('_cart',[
+            'address'=> $address,
+            'customer_id' => $customer_id,
+        ]);
     }
 
-    public function actionProfile($id)
+    public function actionProfile()
     {
+        $id=0;
+        if (!isset($_SESSION['user_id'])) {
+            return $this->redirect(['site/login']);
+        }
+        if (isset($_SESSION['user_customer_id'])) {
+            $id = $_SESSION['user_customer_id'];
+        }
         $model = null;
         if ($id) {
             $model = \backend\models\Customer::find()->where(['id' => $id])->one();
@@ -124,8 +140,15 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionAddressinfo($id)
+    public function actionAddressinfo()
     {
+        $id=0;
+        if (!isset($_SESSION['user_id'])) {
+            return $this->redirect(['site/login']);
+        }
+        if (isset($_SESSION['user_customer_id'])) {
+            $id = $_SESSION['user_customer_id'];
+        }
         $model = null;
         $party_id = 0;
         if ($id) {
@@ -150,17 +173,42 @@ class SiteController extends Controller
         ]);
     }
 
-    public function actionMyorder($id)
+    public function actionMyorder()
     {
+        $id=0;
+        if (!isset($_SESSION['user_id'])) {
+            return $this->redirect(['site/login']);
+        }
+        if (isset($_SESSION['user_customer_id'])) {
+            $id = $_SESSION['user_customer_id'];
+        }
         $model = null;
         $party_id = 0;
         if ($id) {
             $party_id = $id;
-            $model = \backend\models\Order::find()->where(['customer_id' => $id])->one();
+            $model = \backend\models\Order::find()->where(['customer_id' => $id])->all();
         }
         return $this->render('_myorder', [
             'model' => $model,
             'party_id' => $party_id,
+        ]);
+    }
+
+    public function actionMyorderdetail($id)
+    {
+        if (!isset($_SESSION['user_id'])) {
+            return $this->redirect(['site/login']);
+        }
+        $model = null;
+        $model_line = null;
+        if ($id) {
+            $model = \backend\models\Order::find()->where(['id' => $id])->one();
+            $model_line = \common\models\OrderLine::find()->where(['order_id' => $id])->all();
+        }
+        return $this->render('_myorderdetail', [
+            'model_line' => $model_line,
+            'model' => $model,
+            'party_id' => 1,
         ]);
     }
 
@@ -187,6 +235,10 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            $customer_id = \backend\models\User::findCustomerId(\Yii::$app->user->identity->id);
+            $_SESSION['user_id'] = \Yii::$app->user->identity->id;
+            $_SESSION['user_customer_id'] = $customer_id;
+
             return $this->goBack();
         }
 
@@ -205,7 +257,8 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
+        unset($_SESSION['user_id']);
+        unset($_SESSION['user_customer_id']);
         return $this->goHome();
     }
 
@@ -251,6 +304,13 @@ class SiteController extends Controller
     {
         $model = new SignupForm();
         if ($model->load(Yii::$app->request->post()) && $model->signup()) {
+            $model_customer = new Customer();
+            $model_customer->email = $model->email;
+            $model_customer->status = 0;
+            if($model_customer->save(false)){
+                $max_id = \backend\models\User::find()->where(['status'=>10])->max('id');
+                \backend\models\User::updateAll(['customer_ref_id' => $model_customer->id], ['id' => $max_id]);
+            }
             Yii::$app->session->setFlash('success', 'ขอบคุณสำหรับการลงทะเบียน. กรุณายืนยันการลงทะเบียนผ่านทาง Inbox อีเมลของคุณ.');
             return $this->goHome();
         }
@@ -410,26 +470,26 @@ class SiteController extends Controller
 
         if ($product_id) {
             //if (isset($_POST['add_to_cart'])) {
-                if (isset($_SESSION['cart'])) {
-                    $session_array_id = array_column($_SESSION['cart'], 'product_id');
-                    print_r($session_array_id);
-                    if (!in_array($product_id, $session_array_id)) {
-                        $session_array = array(
-                            'product_id' => $product_id,
-                            'sku' => $sku,
-                            'product_name' =>  $product_name, // $_POST['name'],
-                            'price' => $price, //$_POST['price'],
-                            'qty' => (float)$qty, //$_POST['qty']
-                            'photo' => $photo, //$_POST['qty']
-                        );
-                      //  echo 1;
-                        $_SESSION['cart'][] = $session_array;
-                    }else{
-                        $index = array_search($product_id,$session_array_id);
-       //                 if (in_array($product_id, $session_array_id)) {
-                            $_SESSION['cart'][$index]['qty'] =$qty;
+            if (isset($_SESSION['cart'])) {
+                $session_array_id = array_column($_SESSION['cart'], 'product_id');
+                print_r($session_array_id);
+                if (!in_array($product_id, $session_array_id)) {
+                    $session_array = array(
+                        'product_id' => $product_id,
+                        'sku' => $sku,
+                        'product_name' => $product_name, // $_POST['name'],
+                        'price' => $price, //$_POST['price'],
+                        'qty' => (float)$qty, //$_POST['qty']
+                        'photo' => $photo, //$_POST['qty']
+                    );
+                    //  echo 1;
+                    $_SESSION['cart'][] = $session_array;
+                } else {
+                    $index = array_search($product_id, $session_array_id);
+                    //                 if (in_array($product_id, $session_array_id)) {
+                    $_SESSION['cart'][$index]['qty'] = $qty;
 //                            $_SESSION['cart'][$product_id]['total'] = $qty;
-      //                  }
+                    //                  }
 //                        $session_array = array(
 //                            "product_id" => $product_id,
 //                            "product_name" =>  $product_name, // $_POST['name'],
@@ -438,24 +498,24 @@ class SiteController extends Controller
 //                        );
 
 //                        $_SESSION['cart'][] = $session_array;
-                      //  echo 100;
-                    }
-
-                } else {
-                    $session_array = array(
-                        'product_id' => $product_id,
-                        'sku' => $sku,
-                        'product_name' =>  $product_name, // $_POST['name'],
-                        'price' => $price, //$_POST['price'],
-                        'qty' => (float)$qty, //$_POST['qty']
-                        'photo' => $photo,
-                    );
-                  //  echo 2;
-                    $_SESSION['cart'][] = $session_array;
+                    //  echo 100;
                 }
+
+            } else {
+                $session_array = array(
+                    'product_id' => $product_id,
+                    'sku' => $sku,
+                    'product_name' => $product_name, // $_POST['name'],
+                    'price' => $price, //$_POST['price'],
+                    'qty' => (float)$qty, //$_POST['qty']
+                    'photo' => $photo,
+                );
+                //  echo 2;
+                $_SESSION['cart'][] = $session_array;
+            }
             //}
         }
-         return $this->redirect(['site/index']);
+        return $this->redirect(['site/index']);
     }
 
     public function actionUpdatecart()
@@ -467,13 +527,14 @@ class SiteController extends Controller
             if (isset($_SESSION['cart'])) {
                 $session_array_id = array_column($_SESSION['cart'], 'product_id');
                 if (in_array($product_id, $session_array_id)) {
-                    $index = array_search($product_id,$session_array_id);
+                    $index = array_search($product_id, $session_array_id);
                     $_SESSION['cart'][$index]['qty'] = $qty;
                 }
             }
             echo "success";
         }
     }
+
     public function actionRemovecart()
     {
         $product_id = \Yii::$app->request->post('product_id');
@@ -481,7 +542,7 @@ class SiteController extends Controller
             if (isset($_SESSION['cart'])) {
                 $session_array_id = array_column($_SESSION['cart'], 'product_id');
                 if (in_array($product_id, $session_array_id)) {
-                    $index = array_search($product_id,$session_array_id);
+                    $index = array_search($product_id, $session_array_id);
                     unset($_SESSION['cart'][$index]);
                 }
             }
@@ -489,7 +550,44 @@ class SiteController extends Controller
         }
     }
 
-    public function actionCreateorder(){
+    public function actionCreateorder()
+    {
+        $customer_id = 0;
+        if(!isset($_SESSION['user_id'])){
+            return $this->redirect(['site/login']);
+        }
+        if (isset($_SESSION['user_customer_id'])) {
+            $customer_id = $_SESSION['user_customer_id'];
+        }
+        if (isset($_SESSION['cart'])) {
+            if (!empty($_SESSION['cart'])) {
+                $model_order = new \backend\models\Order();
+                $model_order->order_no = 'SO' . time();
+                $model_order->order_date = date('Y-m-d H:i:s');
+                $model_order->customer_id = $customer_id;
+                $model_order->customer_type = 1;
+                $model_order->transfer_bank_account_id = 1;
+                $model_order->total_amount = 0;
+                $model_order->status = 1;
 
+                if ($model_order->save(false)) {
+                    $total_amount = 0;
+                    foreach ($_SESSION['cart'] as $key => $value) {
+                        $total_amount = $total_amount + (float)$value['qty'] * (float)$value['price'];
+                        $model_line = new \common\models\OrderLine();
+                        $model_line->order_id = $model_order->id;
+                        $model_line->product_id = $value['product_id'];
+                        $model_line->qty = $value['qty'];
+                        $model_line->price = $value['price'];
+                        $model_line->line_total = (float)$value['qty'] * (float)$value['price'];
+                        $model_line->status = 1;
+                        $model_line->save(false);
+                    }
+                    \backend\models\Order::updateAll(['total_amount' => $total_amount], ['id' => $model_order->id]);
+                    echo "success";
+                }
+
+            }
+        }
     }
 }

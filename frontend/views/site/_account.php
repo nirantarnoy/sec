@@ -12,22 +12,22 @@ $this->params['breadcrumbs'][] = $this->title;
         <br/>
         <table class="table">
             <tr>
-                <td style="border: 1px solid lightgrey"><a href="index.php?r=site/profile&id=<?= $model->id; ?>"
+                <td style="border: 1px solid lightgrey"><a href="index.php?r=site/profile"
                                                            style="text-decoration: none;color: grey;">ข้อมูลส่วนตัว</a>
                 </td>
             </tr>
             <tr>
-                <td style="border: 1px solid lightgrey"><a href="index.php?r=site/addressinfo&id=<?= $model->id; ?>"
+                <td style="border: 1px solid lightgrey"><a href="index.php?r=site/addressinfo"
                                                            style="text-decoration: none;color: grey;">ที่อยู่สำหรับจัดส่งสินค้า</a>
                 </td>
             </tr>
             <tr>
-                <td style="border: 1px solid lightgrey"><a href="index.php?r=site/myorder&id=<?= $model->id; ?>"
+                <td style="border: 1px solid lightgrey"><a href="index.php?r=site/myorder"
                                                            style="text-decoration: none;color: grey;">การสั่งซื้อของฉัน</a>
                 </td>
             </tr>
             <tr>
-                <td style="border: 1px solid lightgrey"><a href="#"
+                <td style="border: 1px solid lightgrey"><a href="index.php?r=site/logout"
                                                            style="text-decoration: none;color: red;">ออกจากระบบ</a></td>
             </tr>
         </table>

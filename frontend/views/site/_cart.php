@@ -4,9 +4,11 @@ $total_amount = 0;
 if (isset($_SESSION['cart'])) {
     $item_count = count($_SESSION['cart']);
 }
+
+$model_account = \backend\models\Bankaccount::find()->where(['status' => 1])->one();
 ?>
 
-    <br/>
+    <br xmlns="http://www.w3.org/1999/html"/>
     <div class="card">
         <div class="row">
             <div class="col-md-8 cart">
@@ -23,7 +25,7 @@ if (isset($_SESSION['cart'])) {
                         <div class="row border-top border-bottom">
                             <div class="row main align-items-center">
                                 <div class="col-2"><img class="img-fluid"
-                                                        src="<?= \Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $value['photo']?>">
+                                                        src="<?= \Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $value['photo'] ?>">
                                 </div>
                                 <div class="col">
                                     <div class="row text-muted"><?= $value['sku'] ?></div>
@@ -93,6 +95,55 @@ if (isset($_SESSION['cart'])) {
                                     class="text-muted"> ซื้อสินค้าเพิ่ม</span></div>
                     <?php endif; ?>
                 <?php endif; ?>
+
+                <hr style="border: 1px dashed grey;"/>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h5>ที่อยู่ในการจัดส่ง</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!--                    <div class="col-lg-1">-->
+                        <!--                        <input type="checkbox" class="checkbox">-->
+                        <!--                    </div>-->
+                        <div class="col-lg-11">
+                            <?php if ($address == ''): ?>
+                                <a href="index.php?r=site%2Faddressinfo" class="btn btn-sm btn-outline-info">เพิ่มที่อยู่</a>
+                            <?php else: ?>
+                                <p><?= $address ?></p>
+                            <?php endif; ?>
+
+                        </div>
+                    </div>
+                    <hr style="border: 1px dashed grey;"/>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <h5>ชำระเงินผ่านบัญชีธนาคาร</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-11">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                <tr style="background-color: #08883f;color: white;">
+                                    <th style="text-align: center;background-color: #267243;color: white;">ธนาคาร</th>
+                                    <th style="text-align: center;background-color: #267243;color: white;">ชื่อบัญชี
+                                    </th>
+                                    <th style="text-align: center;background-color: #267243;color: white;">เลขบัญชี</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td style="text-align: center;"><?= \backend\models\Bank::findName($model_account->bank_id) ?></td>
+                                    <td style="text-align: center;"><?= $model_account->account_name ?></td>
+                                    <td style="text-align: center;"><?= $model_account->account_no ?></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
             <div class="col-md-4 summary">
                 <div><h5><b>รวมจำนวนเงิน</b></h5></div>
@@ -106,15 +157,13 @@ if (isset($_SESSION['cart'])) {
                 <select class="form-control">
                     <option class="text-muted">Standard-Delivery- &#3647 5.00</option>
                 </select>
-
-
                 <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                     <div class="col">ราคารวมทั้งหมด</div>
                     <div class="col text-right">&#3647 <?= number_format($total_amount, 2) ?></div>
                 </div>
                 <?php if (isset($_SESSION['cart'])): ?>
-                    <?php if (count($_SESSION['cart']) > 0): ?>
-                        <button class="btn-checkout" style="font-size: 20px;">ชำระเงิน</button>
+                    <?php if (count($_SESSION['cart'] ) > 0 && $address !='') : ?>
+                        <a href="index.php?r=site/createorder" style="text-decoration: none;"><div style="font-size: 20px;height: 50px;width: 100%;background-color: black;color: white;text-align: center;padding: 10px">ชำระเงิน</div></a>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>

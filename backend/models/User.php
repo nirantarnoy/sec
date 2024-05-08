@@ -88,6 +88,11 @@ class User extends \common\models\User
         $model = User::find()->where(['employee_ref_id' => $id])->one();
         return $model != null ? $model->id : 0;
     }
+    public static function findCustomerId($id)
+    {
+        $model = User::find()->where(['id' => $id])->one();
+        return $model != null ? $model->customer_ref_id : 0;
+    }
 
     public static function findGroup($id)
     {
