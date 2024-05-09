@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <img class="img-fluid" src="<?=\Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $model->photo ?>">
             </div>
         </div>
+        <div style="height: 10px;"></div>
         <div class="row">
             <div class="col-lg-12">
                 <img class="img-fluid" src="<?=\Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $model->photo ?>">
