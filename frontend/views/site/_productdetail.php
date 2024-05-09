@@ -8,7 +8,17 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <div class="row">
     <div class="col-lg-4">
-        <img class="img-fluid" src="<?=\Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $model->photo ?>">
+        <div class="row">
+            <div class="col-lg-12">
+                <img class="img-fluid" src="<?=\Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $model->photo ?>">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <img class="img-fluid" src="<?=\Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $model->photo ?>">
+            </div>
+        </div>
+
     </div>
     <div class="col-lg-8">
         <div style="borderx: 1px solid lightgrey;padding: 20px;">
@@ -88,6 +98,39 @@ $(function(){
         }
         
     });
+    // var fullWidth = 864; // Width in pixels of full-sized image
+    //             var fullHeight = 648; // Height in pixels of full-sized image
+    //             var thumbnailWidth = 389;  // Width in pixels of thumbnail image
+    //             var thumbnailHeight = 292;  // Height in pixels of thumbnail image
+    //
+    //             // Set size of div
+    //             $('#picture').css({
+    //                     'width': thumbnailWidth+'px',
+    //                     'height': thumbnailHeight+'px'
+    //             });
+    //
+    //             // Hide the full-sized picture
+    //             $('#full').hide();
+    //
+    //             // Toggle pictures on click
+    //             $('#picture').click(function() {
+    //                     $('#thumbnail').toggle();
+    //                     $('#full').toggle();
+    //             });
+    //
+    //             // Do some calculations
+    //             $('#picture').mousemove(function(e) {
+    //                     var mouseX = e.pageX - $(this).attr('offsetLeft'); 
+    //                     var mouseY = e.pageY - $(this).attr('offsetTop'); 
+    //
+    //                     var posX = (Math.round((mouseX/thumbnailWidth)*100)/100) * (fullWidth-thumbnailWidth);
+    //                     var posY = (Math.round((mouseY/thumbnailHeight)*100)/100) * (fullHeight-thumbnailHeight);
+    //
+    //                     $('#full').css({
+    //                             'left': '-' + posX + 'px',
+    //                             'top': '-' + posY + 'px'
+    //                     });
+    //             });
 });
 function increaseitem(){
     var qty = $(".cart-selected-qty").val();

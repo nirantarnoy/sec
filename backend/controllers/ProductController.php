@@ -99,11 +99,19 @@ class ProductController extends Controller
 
                 if ($model->save(false)) {
                     $uploaded = UploadedFile::getInstanceByName('product_photo');
+                    $uploaded2 = UploadedFile::getInstanceByName('product_photo_2');
 
                     if (!empty($uploaded)) {
                         $upfiles = "photo_" . time() . "." . $uploaded->getExtension();
                         if ($uploaded->saveAs('uploads/product_photo/' . $upfiles)) {
                             \backend\models\Product::updateAll(['photo' => $upfiles], ['id' => $model->id]);
+                        }
+
+                    }
+                    if (!empty($uploaded2)) {
+                        $upfiles2 = "photo_" . time() . "." . $uploaded2->getExtension();
+                        if ($uploaded2->saveAs('uploads/product_photo/' . $upfiles2)) {
+                            \backend\models\Product::updateAll(['photo_2' => $upfiles2], ['id' => $model->id]);
                         }
 
                     }
@@ -173,11 +181,19 @@ class ProductController extends Controller
             $line_exp_date = \Yii::$app->request->post('line_exp_date');
 
             $uploaded = UploadedFile::getInstanceByName('product_photo');
+            $uploaded2 = UploadedFile::getInstanceByName('product_photo_2');
             if ($model->save(false)) {
                 if (!empty($uploaded)) {
                     $upfiles = "photo_" . time() . "." . $uploaded->getExtension();
                     if ($uploaded->saveAs('uploads/product_photo/' . $upfiles)) {
                         \backend\models\Product::updateAll(['photo' => $upfiles], ['id' => $model->id]);
+                    }
+
+                }
+                if (!empty($uploaded2)) {
+                    $upfiles2 = "photo_" . time() . "." . $uploaded2->getExtension();
+                    if ($uploaded2->saveAs('uploads/product_photo/' . $upfiles2)) {
+                        \backend\models\Product::updateAll(['photo_2' => $upfiles2], ['id' => $model->id]);
                     }
 
                 }
