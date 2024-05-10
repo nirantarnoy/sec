@@ -5,25 +5,25 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "jouranl_issue_line".
+ * This is the model class for table "customer_invoice_line".
  *
  * @property int $id
- * @property int|null $journal_issue_id
+ * @property int|null $customer_invoice_id
  * @property int|null $product_id
  * @property float|null $qty
  * @property float|null $price
- * @property float|null $line_total
+ * @property float|null $line_discount
+ * @property float|null $line_amount
  * @property int|null $status
- * @property string|null $remark
  */
-class JouranlIssueLine extends \yii\db\ActiveRecord
+class CustomerInvoiceLine extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'jouranl_issue_line';
+        return 'customer_invoice_line';
     }
 
     /**
@@ -32,9 +32,8 @@ class JouranlIssueLine extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['journal_issue_id', 'product_id', 'status','warehouse_id','stock_sum_id'], 'integer'],
-            [['qty', 'price', 'line_total'], 'number'],
-            [['remark'], 'string', 'max' => 255],
+            [['customer_invoice_id', 'product_id', 'status'], 'integer'],
+            [['qty', 'price', 'line_discount', 'line_amount'], 'number'],
         ];
     }
 
@@ -45,13 +44,13 @@ class JouranlIssueLine extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'journal_issue_id' => 'Journal Issue ID',
+            'customer_invoice_id' => 'Customer Invoice ID',
             'product_id' => 'Product ID',
             'qty' => 'Qty',
             'price' => 'Price',
-            'line_total' => 'Line Total',
+            'line_discount' => 'Line Discount',
+            'line_amount' => 'Line Amount',
             'status' => 'Status',
-            'remark' => 'Remark',
         ];
     }
 }

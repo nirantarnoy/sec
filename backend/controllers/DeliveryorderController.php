@@ -2,17 +2,17 @@
 
 namespace backend\controllers;
 
-use backend\models\Order;
-use backend\models\OrderSearch;
+use backend\models\Deliveryorder;
+use backend\models\DeliveryorderSearch;
 use backend\models\PositionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * OrderController implements the CRUD actions for Order model.
+ * DeliveryorderController implements the CRUD actions for Deliveryorder model.
  */
-class OrderController extends Controller
+class DeliveryorderController extends Controller
 {
     /**
      * @inheritDoc
@@ -33,7 +33,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Lists all Order models.
+     * Lists all Deliveryorder models.
      *
      * @return string
      */
@@ -46,14 +46,14 @@ class OrderController extends Controller
         }
 
         $pageSize = \Yii::$app->request->post("perpage");
-        $searchModel = new OrderSearch();
+        $searchModel = new DeliveryorderSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
-//        if($viewstatus ==1){
-//            $dataProvider->query->andFilterWhere(['status'=>$viewstatus]);
-//        }
-//        if($viewstatus == 2){
-//            $dataProvider->query->andFilterWhere(['status'=>0]);
-//        }
+        if($viewstatus ==1){
+            $dataProvider->query->andFilterWhere(['status'=>$viewstatus]);
+        }
+        if($viewstatus == 2){
+            $dataProvider->query->andFilterWhere(['status'=>0]);
+        }
 
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
@@ -67,7 +67,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Displays a single Order model.
+     * Displays a single Deliveryorder model.
      * @param int $id ID
      * @return string
      * @throws NotFoundHttpException if the model cannot be found
@@ -80,13 +80,13 @@ class OrderController extends Controller
     }
 
     /**
-     * Creates a new Order model.
+     * Creates a new Deliveryorder model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
     public function actionCreate()
     {
-        $model = new Order();
+        $model = new Deliveryorder();
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -102,7 +102,7 @@ class OrderController extends Controller
     }
 
     /**
-     * Updates an existing Order model.
+     * Updates an existing Deliveryorder model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param int $id ID
      * @return string|\yii\web\Response
@@ -111,29 +111,18 @@ class OrderController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model_line = \common\models\OrderLine::find()->where(['order_id' => $id])->all();
 
-
-        if ($this->request->isPost && $model->load($this->request->post())) {
-            $status = 0;
-            if($model->order_tracking_no !=''){
-                $status = 3;
-            }
-            $model->status = $status;
-            if($model->save(false)){
-                return $this->redirect(['order/index']);
-            }
-
+        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
-            'model_line' => $model_line,
         ]);
     }
 
     /**
-     * Deletes an existing Order model.
+     * Deletes an existing Deliveryorder model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param int $id ID
      * @return \yii\web\Response
@@ -147,44 +136,18 @@ class OrderController extends Controller
     }
 
     /**
-     * Finds the Order model based on its primary key value.
+     * Finds the Deliveryorder model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param int $id ID
-     * @return Order the loaded model
+     * @return Deliveryorder the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Order::findOne(['id' => $id])) !== null) {
+        if (($model = Deliveryorder::findOne(['id' => $id])) !== null) {
             return $model;
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
-    }
-
-    public function actionCreateissue(){
-       $order_id = \Yii::$app->request->get('order_id');
-       if($order_id){
-           $model = new \backend\models\Journalissue();
-           $model->journal_no = $model::getLastNo();
-           $model->issue_for_id = $order_id;
-           $model->trans_date = date('Y-m-d H:i:s');
-           $model->status = 0;
-           if($model->save(false)){
-               $order_data = \common\models\OrderLine::find()->where(['order_id'=>$order_id])->all();
-               if($order_data){
-                   foreach ($order_data as $key => $value) {
-                       $model_line = new \common\models\JouranlIssueLine();
-                       $model_line->journal_issue_id = $model->id;
-                       $model_line->product_id = $value->product_id;
-                       $model_line->qty = $value->qty;
-                       $model_line->price = $value->price;
-                       $model_line->status = 0;
-                       $model_line->save(false);
-                   }
-               }
-           }
-       }
-       return $this->redirect(['order/update','id'=>$order_id]);
     }
 }

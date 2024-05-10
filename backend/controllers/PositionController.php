@@ -65,7 +65,7 @@ class PositionController extends Controller
 
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new PositionSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
         if($viewstatus ==1){
             $dataProvider->query->andFilterWhere(['status'=>$viewstatus]);
         }

@@ -1,21 +1,20 @@
 <?php
 
-use backend\models\Journalissue;
+use backend\models\Customerinvoice;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
-
 /** @var yii\web\View $this */
-/** @var backend\models\JournalissueSearch $searchModel */
+/** @var backend\models\CustomerinvoiceSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'เบิกสินค้า';
+$this->title = 'ใบกำกับภาษี';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="journalissue-index">
+<div class="customerinvoice-index">
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
@@ -24,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['employee/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['position/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
@@ -38,8 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </form>
         </div>
     </div>
-    <?php echo $this->render('_search', ['model' => $searchModel, 'viewstatus' => $viewstatus]); ?>
-
+    <?php echo $this->render('_search', ['model' => $searchModel,'viewstatus'=>$viewstatus]); ?>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
@@ -56,24 +54,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             [
                 'class' => 'yii\grid\SerialColumn',
-                'headerOptions' => ['style' => 'text-align:center;'],
+                'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
-
-            'journal_no',
-            [
-                'attribute' => 'trans_date',
-                'value' => function ($data) {
-                    return date('d-m-Y', strtotime($data->trans_date));
-                }
-            ],
-            [
-                'attribute' => 'issue_for_id',
-                'value' => function ($data) {
-                    return \backend\models\Journalissue::findJournalno($data->issue_for_id);
-                }
-            ],
-            'reason',
+            'invioce_no',
+            'trans_date',
+            'order_ref_id',
+            'total_amount',
+            //'vat_amount',
+            //'grand_total_amount',
+            //'vat_id',
             [
 
                 'header' => 'ตัวเลือก',

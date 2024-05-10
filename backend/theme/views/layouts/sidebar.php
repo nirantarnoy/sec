@@ -248,6 +248,22 @@
                             </a>
                         </li>
                         <?php //endif; ?>
+                        <?php //if (\Yii::$app->user->can('position/index')): ?>
+                        <li class="nav-item">
+                            <a href="index.php?r=deliveryorder/index" class="nav-link deliveryorder">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>ใบส่งของ</p>
+                            </a>
+                        </li>
+                        <?php //endif; ?>
+                        <?php //if (\Yii::$app->user->can('position/index')): ?>
+                        <li class="nav-item">
+                            <a href="index.php?r=customerinvoice/index" class="nav-link customerinvoice">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>ใบกำกับภาษี</p>
+                            </a>
+                        </li>
+                        <?php //endif; ?>
                     </ul>
                 </li>
 <!--                <li class="nav-item has-treeview has-sub">-->

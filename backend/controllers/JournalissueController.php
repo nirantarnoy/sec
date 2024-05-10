@@ -159,11 +159,14 @@ class JournalissueController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model_line = \common\models\JournalIssueLine::find()->where(['journal_issue_id' => $id])->all();
+        $model_line = \common\models\JouranlIssueLine::find()->where(['journal_issue_id' => $id])->all();
 
         if ($this->request->isPost && $model->load($this->request->post())) {
+            $line_rec_id = \Yii::$app->request->post('line_rec_id');
             $line_item_id = \Yii::$app->request->post('line_product_id');
             $line_warehouse_id = \Yii::$app->request->post('line_warehouse_id');
+            $line_product_expiry_date = \Yii::$app->request->post('line_product_expiry_date');
+            $line_remark = \Yii::$app->request->post('line_remark');
             $line_qty = \Yii::$app->request->post('line_qty');
             $removelist = \Yii::$app->request->post('removelist');
 
@@ -177,6 +180,35 @@ class JournalissueController extends Controller
             $model->trans_date = date('Y-m-d', strtotime($t_date));
 
             if ($model->save(false)) {
+                if($line_rec_id != null){
+                    for ($i = 0; $i <= count($line_rec_id) - 1; $i++) {
+                        $model_line = \common\models\JouranlIssueLine::find()->where(['id' => $line_rec_id[$i]])->one();
+                        $model_line->warehouse_id = $line_warehouse_id[$i];
+                        $model_line->stock_sum_id = $line_product_expiry_date[$i];
+                        $model_line->remark = $line_remark[$i];
+                        $model_line->qty = $line_qty[$i];
+                        if($model_line->save(false)){
+                            $model_trans = new \backend\models\Stocktrans();
+                            $model_trans->journal_no = '';//$model_trans::getLastNo();
+                            $model_trans->trans_date = date('Y-m-d H:i:s');
+                            $model_trans->product_id = $model_line->product_id;
+                            $model_trans->qty = (float)$line_qty[$i];
+                            $model_trans->activity_type_id = 2; // 2 is deduct issue
+                            $model_trans->stock_type_id = 2; // 1 = in , 2 = out
+                            $model_trans->trans_ref_id = $model->id;
+                            if ($model_trans->save(false)) {
+                                $model_stock = \backend\models\Stocksum::find()->where(['product_id' => $model_line->product_id, 'warehouse_id' => $line_warehouse_id[$i]])->one();
+                                if ($model_stock) {
+                                    if($model_stock->qty >=$line_qty[$i]){
+                                        $model_stock->qty = (float)$model_stock->qty + (float)$line_qty[$i];
+                                        $model_stock->save(false);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
 //                if ($line_item_id != null) {
 //                    for ($i = 0; $i <= count($line_item_id) - 1; $i++) {
 //                        $model_check = \common\models\JournalIssueLine::find()->where(['journal_issue_id' => $model->id, 'product_id' => $line_item_id[$i]])->one();
@@ -236,6 +268,7 @@ class JournalissueController extends Controller
                         }
                     }
                 }
+                \common\models\JournalIssue::updateAll(['status' => 100], ['id' => $model->id]);
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -316,5 +349,20 @@ class JournalissueController extends Controller
         }
         echo $html;
     }
+    public function actionFindexpdate(){
+        $warehouse_id = \Yii::$app->request->post('warehouse_id');
+        $product_id = \Yii::$app->request->post('product_id');
 
+        $html = '';
+        if($warehouse_id != null && $product_id != null){
+            $model = \common\models\StockSum::find()->where(['product_id' => $product_id, 'warehouse_id' => $warehouse_id])->andFilterWhere(['>','qty',0])->all();
+            if($model){
+                $html .= '<option value="">เลือกวันหมดอายุ</option>';
+                foreach ($model as $key => $value) {
+                    $html .= '<option value="'.$value->id.'" data-foo="'.$value->qty.'">'.date('d/m/Y',strtotime($value->expired_date)).'</option>';
+                }
+            }
+        }
+        echo $html;
+    }
 }

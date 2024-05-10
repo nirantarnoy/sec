@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var backend\models\Journalissue $model */
 /** @var yii\widgets\ActiveForm $form */
+$warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all();
 ?>
 
     <div class="journalissue-form">
@@ -14,7 +15,7 @@ use yii\widgets\ActiveForm;
         <input type="hidden" name="removelist" class="remove-list" value="">
         <div class="row">
             <div class="col-lg-4">
-                <?= $form->field($model, 'journal_no')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'journal_no')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
             </div>
             <div class="col-lg-4">
                 <?php $model->trans_date = $model->isNewRecord ? date('d-m-Y') : date('d-m-Y', strtotime($model->trans_date)) ?>
@@ -26,13 +27,11 @@ use yii\widgets\ActiveForm;
                 ]) ?>
             </div>
             <div class="col-lg-4">
-                <?= $form->field($model, 'department_id')->widget(\kartik\select2\Select2::className(), [
-                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Department::find()->all(), 'id', 'name'),
-                    'options' => [
-                        'placeholder' => '--เลือกแผนก--'
-                    ],
+                <?= $form->field($model, 'issue_for_id')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Order::find()->all(), 'id', 'order_no'),
                     'pluginOptions' => [
-                        'allowClear' => true,
+                        'allowClear' => false,
+                        'disabled' => true,
                     ]
                 ]) ?>
             </div>
@@ -40,7 +39,7 @@ use yii\widgets\ActiveForm;
         <div class="row">
 
             <div class="col-lg-4">
-                <?= $form->field($model, 'status')->textInput() ?>
+                <?php //echo $form->field($model, 'status')->textInput() ?>
             </div>
         </div>
         <br/>
@@ -53,7 +52,8 @@ use yii\widgets\ActiveForm;
                         <th style="width: 15%">รหัสสินค้า</th>
                         <th>รายละเอียด</th>
                         <th style="width: 10%;text-align: left;">คลังสินค้า</th>
-                        <th style="width: 10%;text-align: right;">จำนวนคงเหลือ</th>
+                        <th style="width: 10%;text-align: right;">วันหมดอายุ</th>
+                        <th style="width: 10%;text-align: right;">ยอดคงเหลือ</th>
                         <th style="width: 10%;text-align: right;">จำนวนเบิก</th>
                         <th style="width: 15%;text-align: left;">หมายเหตุ</th>
                         <th style="width: 5%;text-align: center;">-</th>
@@ -106,6 +106,7 @@ use yii\widgets\ActiveForm;
                                 <tr data-var="<?= $value->id ?>">
                                     <td style="text-align: center;"><?= $line_num; ?></td>
                                     <td>
+                                        <input type="hidden" name="line_rec_id[]" value="<?= $value->id ?>">
                                         <input type="hidden" class="line-product-id" name="line_product_id[]"
                                                value="<?= $value->product_id ?>">
                                         <input type="text" class="form-control line-product-code"
@@ -117,30 +118,52 @@ use yii\widgets\ActiveForm;
                                         <input type="text" class="form-control line-product-name"
                                                name="line_product_name[]"
                                                value="<?= \backend\models\Product::findName($value->product_id) ?>"
-                                               readonly>
+                                        >
                                     </td>
                                     <td>
-                                        <input type="hidden" class="line-product-warehouse-id"
-                                               name="line_product_warehouse_id[]"
-                                               value="<?= $value->warehouse_id ?>">
-                                        <input type="text" class="form-control line-product-warehouse-name"
-                                               name="line_product_warehouse_name[]"
-                                               value="<?= \backend\models\Warehouse::findName($value->warehouse_id) ?>"
-                                               readonly>
+                                        <select class="form-control" name="line_warehouse_id[]"
+                                                id="line-product-warehouse-id" onchange="pullstocksum($(this))">
+                                            <option value="-1">--เลือกคลัง--</option>
+                                            <?php foreach ($warehouse_data as $value_wh): ?>
+                                                <?php $selected = ($value_wh->id == $value->warehouse_id) ? 'selected' : ''; ?>
+                                                <option value="<?= $value_wh->id ?>" <?= $selected ?>><?= $value_wh->name ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select name="line_product_expiry_date[]"
+                                                class="form-control line-product-expiry-date" id=""
+                                                onchange="settuponhandqty($(this))">
+                                            <?php
+                                            $onhand_data = getlineExpDate($value->product_id, $value->warehouse_id);
+                                            if ($onhand_data != null) {
+                                                for ($a = 0; $a < count($onhand_data); $a++) {
+                                                    {
+                                                        $selected = ($onhand_data[$a]['id'] == $value->stock_sum_id) ? 'selected' : '';
+                                                        echo '<option value="' . $onhand_data[$a]['id'] . '" ' . $selected . ' data-foo="' . $onhand_data[$a]['qty'] . '">' . $onhand_data[$a]['exp_date'] . '</option>';
+                                                    }
+                                                }
+                                            }else{
+
+                                            }
+
+                                            ?>
+                                        </select>
                                     </td>
                                     <td>
                                         <input type="number" class="form-control line-product-onhand"
-                                               name="line_product_onhand[]"
-                                               value="" readonly>
+                                               name="line_onhand_qty[]"
+                                               value="0"
+                                               readonly>
                                     </td>
                                     <td>
                                         <input type="number" class="form-control line-qty" name="line_qty[]"
-                                               value="<?= $value->qry ?>"
+                                               value="<?= $value->qty ?>"
                                                onchange="linecal($(this))">
                                     </td>
                                     <td>
                                         <input type="text" class="form-control line-remark" name="line_remark[]"
-                                               value="<?= $value->reason ?>">
+                                               value="<?= $value->remark ?>">
                                     </td>
                                     <td>
                                         <?php if ($model->isNewRecord): ?>
@@ -199,9 +222,9 @@ use yii\widgets\ActiveForm;
                     <tfoot>
                     <tr>
                         <td style="text-align: center;">
-                            <div class="btn btn-sm btn-primary" onclick="finditem();"><i class="fa fa-plus"></i></div>
+                            <!--                            <div class="btn btn-sm btn-primary" onclick="finditem();"><i class="fa fa-plus"></i></div>-->
                         </td>
-                        <td colspan="4" style="text-align: right">รวม</td>
+                        <td colspan="5" style="text-align: right">รวม</td>
                         <td>
                             <input type="text" class="form-control qty-all-total" value="0"
                                    readonly>
@@ -212,11 +235,20 @@ use yii\widgets\ActiveForm;
                 </table>
             </div>
         </div>
-        <div class="form-group">
-            <?php if($model->isNewRecord):?>
-            <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-            <?php endif;?>
+        <div class="row">
+            <div class="col-lg-2">
+                <div class="form-group">
+                    <?php if ($model->status != 100): ?>
+                        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="col-lg-10" style="text-align: right;">
+                <!--                <a href="index.php?r=journalissue/confirmissue&order_id=-->
+                <?php //= $model->id ?><!--" class="btn btn-info">ยืนยันการเบิกสินค้า</a>-->
+            </div>
         </div>
+
 
         <?php ActiveForm::end(); ?>
 
@@ -262,10 +294,27 @@ use yii\widgets\ActiveForm;
 
         </div>
     </div>
+<?php
+function getlineExpDate($product_id, $warehouse_id)
+{
+    $data = [];
+    if ($product_id && $warehouse_id) {
+        $model = \common\models\StockSum::find()->where(['product_id' => $product_id, 'warehouse_id' => $warehouse_id])->all();
+        if ($model) {
+            foreach ($model as $value) {
+                array_push($data, ['id' => $value->id, 'exp_date' => date('d/m/Y', strtotime($value->expired_date)), 'qty' => $value->qty]);
+            }
+        }
+    }
 
+    return $data;
+}
+
+?>
 <?php
 //$url_to_find_workqueue = \yii\helpers\Url::to(['preinvoice/findworkqueue'], true);
 $url_to_find_item = \yii\helpers\Url::to(['journalissue/finditem'], true);
+$url_to_find_exp_date = \yii\helpers\Url::to(['journalissue/findexpdate'], true);
 $js = <<<JS
 var selecteditem = [];
 var selectedorderlineid = [];
@@ -570,7 +619,36 @@ function printdoc(el)
          window.print();
          document.body.innerHTML = restorepage;
      }
-
+function pullstocksum(e){
+    var id = e.val();
+    var product_id = e.closest("tr").find(".line-product-id").val();
+    if(id > 0 && product_id > 0){
+       
+        $.ajax({
+            type: "POST",
+            dataType: "html",
+            url: "$url_to_find_exp_date",
+            data: {
+                'warehouse_id': id,
+                'product_id': product_id
+            },
+            success: function (data) {
+                e.closest("tr").find(".line-product-expiry-date").html(data);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
+            }
+        })
+    }
+}
+function settuponhandqty(e){
+    var selected = e.find('option:selected');
+    var qty = selected.attr('data-foo');
+    if(qty > 0){
+        e.closest("tr").find(".line-product-onhand").val(qty);
+    }
+    
+}
 JS;
 $this->registerJs($js, static::POS_END);
 ?>

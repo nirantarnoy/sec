@@ -55,6 +55,21 @@ $group_assign_list = [];
         </div>
 
     </div>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'taxid')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'payment_term_id')->widget(\kartik\select2\Select2::className(),
+                ['data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentterm::find()->all(), 'id', 'name'),
+                    'options' => [
+                            'placeholder' => 'เลือก',
+                    ],
+                    'pluginOptions' => ['allowClear' => true]])->label() ?>
+        </div>
+
+    </div>
 
     <div class="row">
         <div class="col-lg-1"></div>
@@ -158,10 +173,6 @@ $group_assign_list = [];
     <br/>
 
     <!--    <? //= $form->field($model, 'status')->textInput() ?>-->
-
-
-
-
 
 
     <?php ActiveForm::end(); ?>

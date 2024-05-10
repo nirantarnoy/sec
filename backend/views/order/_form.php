@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var backend\models\Order $model */
 /** @var yii\widgets\ActiveForm $form */
+$model_issue_data = \common\models\JournalIssue::find()->where(['issue_for_id'=>$model->id])->one();
 ?>
 
 <div class="order-form">
@@ -91,31 +92,31 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="col-lg-6">
            <table class="table table-striped table-bordered">
-               <tr>
-                   <td style="width: 25%">สถานะชำระเงิน</td>
-                   <td>
-                       <?php if($model->pay_status == 1):?>
-                           <div class="badge badge-success">ชำระแล้ว</div>
-                       <?php else:?>
-                           <div class="badge badge-secondary">ยังไม่ชำระ</div>
-                       <?php endif;?>
-                   </td>
-               </tr>
-               <tr>
-                   <td style="width: 25%">หลักฐานการชำระเงิน</td>
-                   <td>
-                   </td>
-               </tr>
-               <tr>
-                   <td style="width: 25%">วิธีชำระเงิน</td>
-                   <td>โอนบัญชีธนาคาร</td>
-               </tr>
-               <tr>
-                   <td>เข้าบัญชีธนาคาร</td>
-                   <td>
-
-                   </td>
-               </tr>
+<!--               <tr>-->
+<!--                   <td style="width: 25%">สถานะชำระเงิน</td>-->
+<!--                   <td>-->
+<!--                       --><?php //if($model->pay_status == 1):?>
+<!--                           <div class="badge badge-success">ชำระแล้ว</div>-->
+<!--                       --><?php //else:?>
+<!--                           <div class="badge badge-secondary">ยังไม่ชำระ</div>-->
+<!--                       --><?php //endif;?>
+<!--                   </td>-->
+<!--               </tr>-->
+<!--               <tr>-->
+<!--                   <td style="width: 25%">หลักฐานการชำระเงิน</td>-->
+<!--                   <td>-->
+<!--                   </td>-->
+<!--               </tr>-->
+<!--               <tr>-->
+<!--                   <td style="width: 25%">วิธีชำระเงิน</td>-->
+<!--                   <td>โอนบัญชีธนาคาร</td>-->
+<!--               </tr>-->
+<!--               <tr>-->
+<!--                   <td>เข้าบัญชีธนาคาร</td>-->
+<!--                   <td>-->
+<!---->
+<!--                   </td>-->
+<!--               </tr>-->
                <tr>
                    <td>ชื่อลูกค้า</td>
                    <td>
@@ -160,6 +161,12 @@ use yii\widgets\ActiveForm;
                        <?=$model->order_tracking_no?>
                    </td>
                </tr>
+               <tr>
+                   <td>เลขที่ใบเบิก</td>
+                   <td>
+                       <a style="text-decoration: none;color: blue;" href="index.php?r=journalissue/update&id=<?=$model_issue_data!=null?$model_issue_data->id:''?>"><?=$model_issue_data!=null?$model_issue_data->journal_no:''?></a>
+                   </td>
+               </tr>
            </table>
         </div>
     </div>
@@ -172,12 +179,13 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="col-lg-2"></div>
         <div class="col-lg-2"></div>
-        <div class="col-lg-2"></div>
-        <div class="col-lg-4">
+        <div class="col-lg-4"></div>
+        <div class="col-lg-2" style="text-align: right;">
+            <?php if($model_issue_data ==null):?>
             <div class="input-group">
-                <div class="btn btn-info">ยืนยันรับชำระเงิน</div>
-                <div class="btn btn-primary">ยืนยันการส่งสินค้าสำเร็จ</div>
+                <a href="index.php?r=order/createissue&order_id=<?= $model->id ?>" class="btn btn-info">สร้างใบเบิกสินค้า</a>
             </div>
+            <?php endif;?>
         </div>
     </div>
 

@@ -32,7 +32,7 @@ class PaymentTerm extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by','day_count'], 'integer'],
             [['name', 'description'], 'string', 'max' => 255],
         ];
     }
@@ -46,6 +46,7 @@ class PaymentTerm extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'ชื่อรายการ',
             'description' => 'รายละเอียด',
+            'day_count' => 'จำนวนวัน',
             'status' => 'สถานะ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
