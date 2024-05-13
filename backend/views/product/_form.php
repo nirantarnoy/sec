@@ -222,6 +222,7 @@ function addline(e){
     clone.find(".line-warehouse-id").val("-1").change();
     clone.find(".line-qty").val("");
     clone.find(".line-exp-date").val("");
+    clone.find(".line-rec-id").val("0");
 
     tr.after(clone);
      
