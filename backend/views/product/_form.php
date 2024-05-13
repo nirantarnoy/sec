@@ -144,7 +144,7 @@ $data_warehouse = \backend\models\Warehouse::find()->all();
                 <?php foreach($model_line as $value):?>
                     <tr>
                         <td>
-<!--                            <input type="text" class="form-control line-warehouse-id" name="warehouse_id[]" value="--><?php //=$value->warehouse_id?><!--">-->
+                            <input type="hidden" class="form-control line-rec-id" name="line_rec_id[]" value="<?=$value->id?>">
                             <select name="warehouse_id[]" id="" class="form-control line-warehouse-id">
                                 <option value="-1">--เลือก-</option>
                                 <?php foreach($data_warehouse as $xvalue):?>
@@ -171,6 +171,7 @@ $data_warehouse = \backend\models\Warehouse::find()->all();
                     <tr>
                         <td>
 <!--                            <input type="text" class="form-control line-warehouse-id" name="warehouse_id[]" value="">-->
+                            <input type="hidden" class="form-control line-rec-id" name="line_rec_id[]" value="0">
                             <select name="warehouse_id[]" id="" class="form-control line-warehouse-id">
                                 <option value="-1">--เลือก-</option>
                                 <?php foreach($data_warehouse as $xvalue):?>
@@ -210,6 +211,9 @@ $data_warehouse = \backend\models\Warehouse::find()->all();
 </div>
 <?php
 $js=<<<JS
+$(function(){
+  // $(".line-exp-date").datepicker(); 
+});
 function addline(e){
     var tr = $("#table-list tbody tr:last");
     var clone = tr.clone();

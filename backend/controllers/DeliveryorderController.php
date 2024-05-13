@@ -150,4 +150,26 @@ class DeliveryorderController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+    public function actionPrint($id)
+    {
+        //if($id != null){
+            $model = \backend\models\Journalissue::find()->where(['id' => $id])->one();
+            $model_line = \common\models\JouranlIssueLine::find()->where(['journal_issue_id' => $id])->all();
+            return $this->render('_print', [
+                'model' => $model,
+                'model_line' => $model_line
+            ]);
+        //}
+    }
+    public function actionPrintreciept($id)
+    {
+        //if($id != null){
+        $model = \backend\models\Journalissue::find()->where(['id' => $id])->one();
+        $model_line = \common\models\JouranlIssueLine::find()->where(['journal_issue_id' => $id])->all();
+        return $this->render('_printreciept', [
+            'model' => $model,
+            'model_line' => $model_line
+        ]);
+        //}
+    }
 }

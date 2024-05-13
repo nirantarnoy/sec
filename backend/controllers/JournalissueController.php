@@ -365,4 +365,16 @@ class JournalissueController extends Controller
         }
         echo $html;
     }
+
+    public function actionPrint($id)
+    {
+        if($id != null){
+            $model = $this->findModel($id);
+            $model_line = \common\models\JouranlIssueLine::find()->where(['journal_issue_id' => $id])->all();
+            return $this->render('_print', [
+                'model' => $model,
+                'model_line' => $model_line
+            ]);
+        }
+    }
 }

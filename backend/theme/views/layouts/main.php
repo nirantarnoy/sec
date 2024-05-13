@@ -107,6 +107,9 @@ $is_pos_user = 0;
             -webkit-transform: scale(1.1);
             transform: scale(1.1);
         }
+        input[type=checkbox] {
+            transform: scale(1.5);
+        }
     </style>
 </head>
 <body class="hold-transition sidebar-mini">

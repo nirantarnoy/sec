@@ -182,6 +182,9 @@ class ProductController extends Controller
 
             $uploaded = UploadedFile::getInstanceByName('product_photo');
             $uploaded2 = UploadedFile::getInstanceByName('product_photo_2');
+
+            $line_rec_id = \Yii::$app->request->post('line_rec_id');
+
             if ($model->save(false)) {
                 if (!empty($uploaded)) {
                     $upfiles = "photo_" . time() . "." . $uploaded->getExtension();
@@ -213,18 +216,23 @@ class ProductController extends Controller
                     $model_trans->qty = $line_qty[$i];
                     $model_trans->status = 1;
                     if($model_trans->save(false)){
-                        $model_sum = \backend\models\Stocksum::find()->where(['product_id'=>$model->id,'warehouse_id'=>$line_warehouse[$i],'expired_date'=>date('Y-m-d',strtotime($exp_date))])->one();
-                        if($model_sum){
-                            $model_sum->qty = $line_qty[$i];
-                            $model_sum->save(false);
-                        }else{
-                            $model_sum = new \backend\models\Stocksum();
-                            $model_sum->product_id = $model->id;
-                            $model_sum->warehouse_id = $line_warehouse[$i];
-                            $model_sum->qty = $line_qty[$i];
-                            $model_sum->expired_date = date('Y-m-d',strtotime($exp_date));
-                            $model_sum->save(false);
-                        }
+                  //      $model_sum = \backend\models\Stocksum::find()->where(['product_id'=>$model->id,'warehouse_id'=>$line_warehouse[$i],'expired_date'=>date('Y-m-d',strtotime($exp_date))])->one();
+                       if($line_rec_id[$i] != 0){
+                           $model_sum = \backend\models\Stocksum::find()->where(['product_id'=>$model->id,'warehouse_id'=>$line_warehouse[$i],'id'=>$line_rec_id[$i]])->one();
+                           if($model_sum){
+                               $model_sum->expired_date = date('Y-m-d',strtotime($exp_date));
+                               $model_sum->qty = $line_qty[$i];
+                               $model_sum->save(false);
+                           }
+                       }else{
+                           $model_sum_new = new \backend\models\Stocksum();
+                           $model_sum_new->product_id = $model->id;
+                           $model_sum_new->warehouse_id = $line_warehouse[$i];
+                           $model_sum_new->qty = $line_qty[$i];
+                           $model_sum_new->expired_date = date('Y-m-d',strtotime($exp_date));
+                           $model_sum_new->save(false);
+                       }
+
                     }
                 }
             }
