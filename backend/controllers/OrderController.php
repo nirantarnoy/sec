@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
  */
 class OrderController extends Controller
 {
+    public $enableCsrfValidation = false;
     /**
      * @inheritDoc
      */
@@ -217,7 +218,6 @@ class OrderController extends Controller
         //$message = "This is test send request from camel paperless";
         $line_api = 'https://notify-api.line.me/api/notify';
         $line_token = '';
-
 
         $b_token = '8H8dtjz5QWvWWBFrMAwYrglYhkwu3Pw7rnXeBK9vYFK';
         $line_token = trim($b_token);
