@@ -223,13 +223,13 @@ class OrderController extends Controller
         $line_token = trim($b_token);
 
         $message = '' . "\n";
-        $message .= 'ANNAB: แจ้งเตือนมีคำสั่งซื้อใหม่' . "\n";
-        $message .= 'ลูกค้า :' . 'คุณทดสอบ' . "\n";
+        $message .= 'แจ้งเตือนมีคำสั่งซื้อใหม่' . "\n";
+        $message .= 'ลูกค้า:' . 'คุณทดสอบ2' . "\n";
         //   $message .= 'User:' . \backend\models\User::findName($user_id) . "\n";
-        $message .= "วันที่: " . date('Y-m-d') . "(" . date('H:i:s') . ")" . "\n";
+        $message .= "วันที่:" . date('Y-m-d') . "(" . date('H:i:s') . ")" . "\n";
 
-        $message .= 'เลขที่คำสั่งซื้อ: ' .'SO2405-00001'. "\n";
-        $message .= "ยอดเงิน: " . number_format(15000, 2) . "\n";
+        $message .= 'เลขที่คำสั่งซื้อ: ' .'SO2405-00002'. "\n";
+        $message .= "ยอดเงิน: " . number_format(8000, 2) . "\n";
 
       //  $message .= 'สามารถดูรายละเอียดได้ที่ http:///103.253.73.108/icesystemdindang/backend/web/index.php?r=dailysum/indexnew' . "\n"; // bkt
 
