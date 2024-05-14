@@ -212,4 +212,42 @@ class OrderController extends Controller
         }
         return $this->redirect(['order/update','id'=>$order_id]);
     }
+    public function actionNotifymessage()
+    {
+        //$message = "This is test send request from camel paperless";
+        $line_api = 'https://notify-api.line.me/api/notify';
+        $line_token = '';
+
+
+        $b_token = '8H8dtjz5QWvWWBFrMAwYrglYhkwu3Pw7rnXeBK9vYFK';
+        $line_token = trim($b_token);
+
+        $message = '' . "\n";
+        $message .= 'ANNAB: แจ้งเตือนมีคำสั่งซื้อใหม่' . "\n";
+        $message .= 'ลูกค้า :' . 'คุณทดสอบ' . "\n";
+        //   $message .= 'User:' . \backend\models\User::findName($user_id) . "\n";
+        $message .= "วันที่: " . date('Y-m-d') . "(" . date('H:i:s') . ")" . "\n";
+
+        $message .= 'เลขที่คำสั่งซื้อ: ' .'SO2405-00001'. "\n";
+        $message .= "ยอดเงิน: " . number_format(15000, 2) . "\n";
+
+      //  $message .= 'สามารถดูรายละเอียดได้ที่ http:///103.253.73.108/icesystemdindang/backend/web/index.php?r=dailysum/indexnew' . "\n"; // bkt
+
+
+        $queryData = array('message' => $message);
+        $queryData = http_build_query($queryData, '', '&');
+        $headerOptions = array(
+            'http' => array(
+                'method' => 'POST',
+                'header' => "Content-Type: application/x-www-form-urlencoded\r\n"
+                    . "Authorization: Bearer " . $line_token . "\r\n"
+                    . "Content-Length: " . strlen($queryData) . "\r\n",
+                'content' => $queryData
+            )
+        );
+        $context = stream_context_create($headerOptions);
+        $result = file_get_contents($line_api, FALSE, $context);
+        $res = json_decode($result);
+        return $res;
+    }
 }
