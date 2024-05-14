@@ -1,21 +1,21 @@
 <?php
 
-use backend\models\Product;
+use backend\models\Journalreceive;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-//use yii\widgets\LinkPager;
-use yii\bootstrap4\LinkPager;
+use yii\widgets\LinkPager;
 /** @var yii\web\View $this */
-/** @var backend\models\ProductSearch $searchModel */
+/** @var backend\models\JournalreceiveSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'สินค้า';
+$this->title = 'รับเข้าสินค้า';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="employee-index">
+<div class="journalreceive-index">
+
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['employee/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['journalreceive/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </form>
         </div>
     </div>
-    <?php echo $this->render('_search', ['model' => $searchModel,'viewstatus'=>$viewstatus]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel, 'viewstatus' => $viewstatus]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -60,45 +60,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
 
-            'sku',
-            'name',
-            'barcode',
-           // 'product_type_id',
+            'journal_no',
             [
-                'attribute' => 'product_group_id',
+                'attribute' => 'trans_date',
                 'value' => function ($data) {
-                    return \backend\models\Productgroup::findName($data->product_group_id);
+                    return date('d-m-Y', strtotime($data->trans_date));
                 }
             ],
-            //'product_cat_id',
-            //'status',
-            //'last_price',
-            //'std_price',
-            //'company_id',
-            [
-                'attribute' => 'status',
-                'format' => 'raw',
-                'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'text-align: center'],
-                'value' => function ($data) {
-                    if ($data->status == 1) {
-                        return '<div class="badge badge-success">ใช้งาน</div>';
-                    } else {
-                        return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
-                    }
-                }
-            ],
-            [
-                'attribute' => 'total_qty',
-                'label' => 'คงเหลือ',
-                'headerOptions' => ['style' => 'text-align: right'],
-                'contentOptions' => ['style' => 'text-align: right'],
-                'value' => function ($data) {
-                    $qty = \backend\models\Product::getTotalQty($data->id);
-                   return number_format($qty,0);
-                }
-            ],
-
+//            [
+//                'attribute' => 'issue_for_id',
+//                'value' => function ($data) {
+//                    return \backend\models\Journalissue::findJournalno($data->issue_for_id);
+//                }
+//            ],
+            'remark',
             [
 
                 'header' => 'ตัวเลือก',

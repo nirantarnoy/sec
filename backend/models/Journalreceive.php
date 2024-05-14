@@ -7,7 +7,7 @@ use yii\db\ActiveRecord;
 
 date_default_timezone_set('Asia/Bangkok');
 
-class Product extends \common\models\Product
+class Journalreceive extends \common\models\JournalReceive
 {
     public function behaviors()
     {
@@ -64,30 +64,13 @@ class Product extends \common\models\Product
         ];
     }
 
-    public function findCode($id){
-        $model = Product::find()->where(['id'=>$id])->one();
-        return $model != null ?$model->code:'';
-    }
-    public function findBarCode($id){
-        $model = Product::find()->where(['id'=>$id])->one();
-        return $model != null ?$model->barcode:'';
-    }
-    public function findName($id){
-        $model = Product::find()->where(['id'=>$id])->one();
-        return $model != null ?$model->name:'';
+    public function findJournalno($id){
+        $model = Journalreceive::find()->where(['id'=>$id])->one();
+        return $model != null ?$model->journal_no:'';
     }
     public function findDesc($id){
-        $model = Product::find()->where(['id'=>$id])->one();
+        $model = Warehouse::find()->where(['id'=>$id])->one();
         return $model != null ?$model->description:'';
-    }
-    public function findPhoto($id){
-        $model = Product::find()->where(['id'=>$id])->one();
-        return $model != null ?$model->photo:'';
-    }
-
-    static function getTotalQty($id){
-        $model = \backend\models\Stocksum::find()->where(['product_id'=>$id])->sum('qty');
-        return $model;
     }
 
 //    public static function findName($id){
@@ -98,7 +81,61 @@ class Product extends \common\models\Product
 //        $model = Unit::find()->where(['name'=>$code])->one();
 //        return count($model)>0?$model->id:0;
 //    }
+    public static function getLastNo()
+    {
+        $model = \common\models\JournalReceive::find()->MAX('journal_no');
 
+        $pre = "IS";
+
+        if ($model != null) {
+//            $prefix = $pre.substr(date("Y"),2,2);
+//            $cnum = substr((string)$model,4,strlen($model));
+//            $len = strlen($cnum);
+//            $clen = strlen($cnum + 1);
+//            $loop = $len - $clen;
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+            $cnum = substr((string)$model, 5, strlen($model));
+            $len = strlen($cnum);
+            $clen = strlen($cnum + 1);
+            $loop = $len - $clen;
+            for ($i = 1; $i <= $loop; $i++) {
+                $prefix .= "0";
+            }
+            $prefix .= $cnum + 1;
+            return $prefix;
+        } else {
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+            return $prefix . '00001';
+        }
+    }
+
+    public static function getReturnLastNo()
+    {
+        $model = Journalreceive::find()->MAX('journal_no');
+
+        $pre = "RC";
+
+        if ($model != null) {
+//            $prefix = $pre.substr(date("Y"),2,2);
+//            $cnum = substr((string)$model,4,strlen($model));
+//            $len = strlen($cnum);
+//            $clen = strlen($cnum + 1);
+//            $loop = $len - $clen;
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+            $cnum = substr((string)$model, 5, strlen($model));
+            $len = strlen($cnum);
+            $clen = strlen($cnum + 1);
+            $loop = $len - $clen;
+            for ($i = 1; $i <= $loop; $i++) {
+                $prefix .= "0";
+            }
+            $prefix .= $cnum + 1;
+            return $prefix;
+        } else {
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+            return $prefix . '00001';
+        }
+    }
 
 
 }
