@@ -74,4 +74,32 @@ class Deliveryorder extends \common\models\DeliveryOrder
 //        return count($model)>0?$model->id:0;
 //    }
 
+    public static function getLastNo()
+    {
+        $model = Deliveryorder::find()->MAX('order_no');
+
+        $pre = "DO";
+
+        if ($model != null) {
+//            $prefix = $pre.substr(date("Y"),2,2);
+//            $cnum = substr((string)$model,4,strlen($model));
+//            $len = strlen($cnum);
+//            $clen = strlen($cnum + 1);
+//            $loop = $len - $clen;
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+            $cnum = substr((string)$model, 5, strlen($model));
+            $len = strlen($cnum);
+            $clen = strlen($cnum + 1);
+            $loop = $len - $clen;
+            for ($i = 1; $i <= $loop; $i++) {
+                $prefix .= "0";
+            }
+            $prefix .= $cnum + 1;
+            return $prefix;
+        } else {
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+            return $prefix . '00001';
+        }
+    }
+
 }

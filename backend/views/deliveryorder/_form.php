@@ -17,12 +17,18 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'order_no')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'trans_date')->textInput() ?>
+            <?php $model->trans_date=$model->isNewRecord ? date('d/m/Y') : date('d/m/Y',strtotime($model->trans_date)); ?>
+            <?= $form->field($model, 'trans_date')->widget(\kartik\date\DatePicker::className(),[
+                    'value' => date('d/m/Y')
+            ]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'issue_ref_id')->textInput() ?>
+            <label for="">เลขที่ใบเบิก</label>
+            <input type="text" class="form-control" readonly value="<?=\backend\models\Journalissue::findJournalNo($model->issue_ref_id)?>">
         </div>
-        <div class="col-lg-3"></div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'issue_ref_id')->hiddenInput()->label(false) ?>
+        </div>
     </div>
     <br />
     <div class="row">
@@ -33,15 +39,75 @@ use yii\widgets\ActiveForm;
             <table class="table table-striped table-bordered">
                 <thead>
                 <tr>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
-                    <th></th>
+                    <th style="width: 5%">#</th>
+                    <th style="width: 25%;">รหัสสินค้า</th>
+                    <th>ชื่อสินค้า</th>
+                    <th style="width: 15%;">จำนวน</th>
+                    <th style="width: 10%;">หน่วยนับ</th>
                 </tr>
                 </thead>
                 <tbody>
+                <?php if ($model_line != null): ?>
+                    <?php $line_num = 0; ?>
+                    <?php foreach ($model_line as $value): ?>
+                        <?php $line_num += 1; ?>
+                        <tr data-var="<?= $value->id ?>">
+                            <td style="text-align: center;"><?= $line_num; ?></td>
+                            <td>
+                                <input type="hidden" name="line_rec_id[]" value="<?= $value->id ?>">
+                                <input type="hidden" class="line-product-id" name="line_product_id[]"
+                                       value="<?= $value->product_id ?>">
+                                <input type="text" class="form-control line-product-code"
+                                       name="line_product_code[]"
+                                       value="<?= \backend\models\Product::findCode($value->product_id) ?>"
+                                       readonly>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control line-product-name"
+                                       name="line_product_name[]"
+                                       value="<?= $value->name?>"
+                                >
+                            </td>
 
+                            <td>
+                                <input type="number" class="form-control line-qty" name="line_qty[]"
+                                       value="<?= $value->qty ?>"
+                                       onchange="linecal($(this))">
+                            </td>
+                            <td style="text-align: center;">
+                                ชิ้น
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr data-var="0">
+                        <td style="text-align: center;"></td>
+                        <td>
+                            <input type="hidden" name="line_rec_id[]" value="0">
+                            <input type="hidden" class="line-product-id" name="line_product_id[]"
+                                   value="">
+                            <input type="text" class="form-control line-product-code"
+                                   name="line_product_code[]"
+                                   value=""
+                                   readonly>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control line-product-name"
+                                   name="line_product_name[]"
+                                   value=""
+                            >
+                        </td>
+
+                        <td>
+                            <input type="number" class="form-control line-qty" name="line_qty[]"
+                                   value="0"
+                                   onchange="linecal($(this))">
+                        </td>
+                        <td style="text-align: center;">
+                            ชิ้น
+                        </td>
+                    </tr>
+                <?php endif; ?>
                 </tbody>
             </table>
         </div>

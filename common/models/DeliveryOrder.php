@@ -33,8 +33,8 @@ class DeliveryOrder extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['trans_date'], 'safe'],
-            [['issue_ref_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['trans_date','issue_ref_id'], 'safe'],
+            [[ 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['order_no'], 'string', 'max' => 255],
         ];
     }
@@ -46,10 +46,10 @@ class DeliveryOrder extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'order_no' => 'Order No',
-            'trans_date' => 'Trans Date',
-            'issue_ref_id' => 'Issue Ref ID',
-            'status' => 'Status',
+            'order_no' => 'เลขที่ใบส่งของ',
+            'trans_date' => 'วันที่',
+            'issue_ref_id' => 'เลขที่ใบเบิก',
+            'status' => 'สถานะ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

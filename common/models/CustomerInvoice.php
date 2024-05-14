@@ -40,7 +40,7 @@ class CustomerInvoice extends \yii\db\ActiveRecord
             [['trans_date'], 'safe'],
             [['order_ref_id', 'vat_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['total_amount', 'vat_amount', 'grand_total_amount'], 'number'],
-            [['invioce_no'], 'string', 'max' => 255],
+            [['invoice_no'], 'string', 'max' => 255],
         ];
     }
 
@@ -51,14 +51,14 @@ class CustomerInvoice extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'invioce_no' => 'Invioce No',
-            'trans_date' => 'Trans Date',
-            'order_ref_id' => 'Order Ref ID',
-            'total_amount' => 'Total Amount',
-            'vat_amount' => 'Vat Amount',
-            'grand_total_amount' => 'Grand Total Amount',
-            'vat_id' => 'Vat ID',
-            'status' => 'Status',
+            'invoice_no' => 'เลขที่ใบกำกับภาษี',
+            'trans_date' => 'วันที่',
+            'order_ref_id' => 'คำสั่งซื้อ',
+            'total_amount' => 'ยอดเงินทั้งหมด',
+            'vat_amount' => 'ยอด vat',
+            'grand_total_amount' => 'ยอดเงินสุทธิ',
+            'vat_id' => 'vat',
+            'status' => 'สถานะ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

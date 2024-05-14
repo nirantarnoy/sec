@@ -249,7 +249,6 @@ class JournalissueController extends Controller
                                     $model_stock = \backend\models\Stocksum::find()->where(['item_id' => $model_return->product_id, 'warehouse_id' => $line_warehouse_id[$m]])->one();
                                     if ($model_stock) {
                                         $model_stock->qty = (float)$model_stock->qty + (float)$model_return->qry;
-                                        $model_stock->last_update = date('Y-m-d H:i:s');
                                         $model_stock->save(false);
                                     } else {
 //                                        $model_new = new \backend\models\Stocksum();
@@ -268,7 +267,10 @@ class JournalissueController extends Controller
                         }
                     }
                 }
-                \common\models\JournalIssue::updateAll(['status' => 100], ['id' => $model->id]);
+
+                if(\common\models\JournalIssue::updateAll(['status' => 100], ['id' => $model->id])){
+                    $this->createDeliveryorder($id);
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
 
@@ -375,6 +377,31 @@ class JournalissueController extends Controller
                 'model' => $model,
                 'model_line' => $model_line
             ]);
+        }
+    }
+
+    public function createDeliveryorder($id)   {
+        if($id){
+            $model = \common\models\JouranlIssueLine::find()->where(['journal_issue_id' => $id])->all();
+            if($model){
+
+                $model_do = new \backend\models\Deliveryorder();
+                $model_do->order_no = $model_do::getLastNo();
+                $model_do->trans_date = date('Y-m-d H:i:s');
+                $model_do->issue_ref_id = $id;
+                $model_do->status = 0;
+                if($model_do->save(false)){
+                    foreach ($model as $key => $value) {
+                        $model_line = new \common\models\DeliveryOrderLine();
+                        $model_line->delivery_order_id = $model_do->id;
+                        $model_line->product_id = $value->product_id;
+                        $model_line->name =\backend\models\Product::findName($value->product_id);
+                        $model_line->qty = $value->qty;
+                        $model_line->save(false);
+                    }
+                }
+
+            }
         }
     }
 }

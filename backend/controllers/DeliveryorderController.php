@@ -48,12 +48,12 @@ class DeliveryorderController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new DeliveryorderSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
-        if($viewstatus ==1){
-            $dataProvider->query->andFilterWhere(['status'=>$viewstatus]);
-        }
-        if($viewstatus == 2){
-            $dataProvider->query->andFilterWhere(['status'=>0]);
-        }
+//        if($viewstatus ==1){
+//            $dataProvider->query->andFilterWhere(['status'=>$viewstatus]);
+//        }
+//        if($viewstatus == 2){
+//            $dataProvider->query->andFilterWhere(['status'=>0]);
+//        }
 
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
@@ -112,12 +112,27 @@ class DeliveryorderController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $model_line = \common\models\DeliveryOrderLine::find()->where(['delivery_order_id' => $id])->all();
+
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $line_rec_id = \Yii::$app->request->post('line_rec_id');
+            $line_name = \Yii::$app->request->post('line_product_name');
+            $line_qty = \Yii::$app->request->post('line_qty');
+
+            if($model->save(false)){
+                if($line_rec_id!=null){
+                    for($i=0;$i<count($line_rec_id);$i++) {
+                        \common\models\DeliveryOrderLine::updateAll(['name' => $line_name[$i], 'qty' => $line_qty[$i]], ['id' => $line_rec_id[$i]]);
+                    }
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+
         }
 
         return $this->render('update', [
             'model' => $model,
+            'model_line' => $model_line
         ]);
     }
 

@@ -29,13 +29,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
            // 'id',
             'order_no',
-            'trans_date',
-            'issue_ref_id',
-            'status',
-            'created_at',
-            'created_by',
-            'updated_at',
-            'updated_by',
+            [
+                'attribute' => 'trans_date',
+                'value' => function ($data) {
+                    return date('d/m/Y', strtotime($data->trans_date));
+                }],
+            [
+                'attribute' => 'issue_ref_id',
+                'value' => function ($data) {
+                    return \backend\models\Journalissue::findJournalno($data->issue_ref_id);
+                }],
+
+            //         'status',
+//            'created_at',
+//            'created_by',
+//            'updated_at',
+//            'updated_by',
         ],
     ]) ?>
 

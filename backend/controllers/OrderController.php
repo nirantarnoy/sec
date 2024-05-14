@@ -187,4 +187,29 @@ class OrderController extends Controller
        }
        return $this->redirect(['order/update','id'=>$order_id]);
     }
+    public function actionCreateinvoice(){
+        $order_id = \Yii::$app->request->get('order_id');
+        if($order_id){
+            $model = new \backend\models\Customerinvoice();
+            $model->invoice_no = $model::getLastNo();
+            $model->order_ref_id = $order_id;
+            $model->trans_date = date('Y-m-d H:i:s');
+            $model->status = 0;
+            if($model->save(false)){
+                $order_data = \common\models\OrderLine::find()->where(['order_id'=>$order_id])->all();
+                if($order_data){
+                    foreach ($order_data as $key => $value) {
+                        $model_line = new \common\models\CustomerInvoiceLine();
+                        $model_line->customer_invoice_id = $model->id;
+                        $model_line->product_id = $value->product_id;
+                        $model_line->qty = $value->qty;
+                        $model_line->price = $value->price;
+                        $model_line->status = 0;
+                        $model_line->save(false);
+                    }
+                }
+            }
+        }
+        return $this->redirect(['order/update','id'=>$order_id]);
+    }
 }

@@ -12,7 +12,7 @@ $data_warehouse = \backend\models\Warehouse::find()->all();
 <div class="product-form">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype'=>'multipart/form-data']]); ?>
-
+    <input type="hidden" class="remove-list" name="remove_list" value="">
     <div class="row">
         <div class="col-lg-3">
             <?= $form->field($model, 'sku')->textInput(['maxlength' => true]) ?>
@@ -137,12 +137,13 @@ $data_warehouse = \backend\models\Warehouse::find()->all();
                     <th style="text-align: center;">ที่จัดเก็บ</th>
                     <th style="text-align: center;">จำนวนคงเหลือ</th>
                     <th style="text-align: center;">วันหมดอายุ</th>
+                    <th>-</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php if($model_line != null):?>
                 <?php foreach($model_line as $value):?>
-                    <tr>
+                    <tr data-var="<?=$value->id;?>">
                         <td>
                             <input type="hidden" class="form-control line-rec-id" name="line_rec_id[]" value="<?=$value->id?>">
                             <select name="warehouse_id[]" id="" class="form-control line-warehouse-id">
@@ -164,11 +165,14 @@ $data_warehouse = \backend\models\Warehouse::find()->all();
                         <td>
                             <input type="text" class="form-control line-exp-date" name="line_exp_date[]" value="<?=date('d/m/Y',strtotime($value->expired_date))?>">
                         </td>
+                        <td>
+                            <div class="btn btn-danger" onclick="removeline($(this))"><i class="fa fa-trash"></i></div>
+                        </td>
 
                     </tr>
                 <?php endforeach;?>
                 <?php else:?>
-                    <tr>
+                    <tr data-var="">
                         <td>
 <!--                            <input type="text" class="form-control line-warehouse-id" name="warehouse_id[]" value="">-->
                             <input type="hidden" class="form-control line-rec-id" name="line_rec_id[]" value="0">
@@ -185,7 +189,9 @@ $data_warehouse = \backend\models\Warehouse::find()->all();
                         <td>
                             <input type="text" class="form-control line-exp-date" name="line_exp_date[]" value="">
                         </td>
-
+                         <td>
+                             <div class="btn btn-danger" onclick="removeline($(this))"><i class="fa fa-trash"></i></div>
+                         </td>
                     </tr>
                 <?php endif;?>
 
@@ -211,6 +217,7 @@ $data_warehouse = \backend\models\Warehouse::find()->all();
 </div>
 <?php
 $js=<<<JS
+var removelist = [];
 $(function(){
   // $(".line-exp-date").datepicker(); 
 });
@@ -230,20 +237,19 @@ function addline(e){
 function removeline(e) {
         if (confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) {
             if (e.parent().parent().attr("data-var") != '') {
-                removelist2.push(e.parent().parent().attr("data-var"));
-                $(".remove-list2").val(removelist2);
+                removelist.push(e.parent().parent().attr("data-var"));
+                $(".remove-list").val(removelist);
             }
             // alert(removelist);
             // alert(e.parent().parent().attr("data-var"));
 
-            if ($("#table-list2 tbody tr").length == 1) {
-                $("#table-list2 tbody tr").each(function () {
+            if ($("#table-list tbody tr").length == 1) {
+                $("#table-list tbody tr").each(function () {
                     $(this).find(":text").val("");
-                   // $(this).find(".line-prod-photo").attr('src', '');
-                   
-                     $(this).find(".price-line").val(0);
-                    $(this).find(".remark-line").val('');
-                    // cal_num();
+                    $(this).find(".line-warehouse-id").val("-1").change();
+                    $(this).find(".line-qty").val("");
+                    $(this).find(".line-exp-date").val("");
+                    $(this).find(".line-rec-id").val("0");
                 });
             } else {
                 e.parent().parent().remove();
