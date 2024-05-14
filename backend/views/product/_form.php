@@ -7,12 +7,14 @@ use yii\widgets\ActiveForm;
 /** @var backend\models\Product $model */
 /** @var yii\widgets\ActiveForm $form */
 $data_warehouse = \backend\models\Warehouse::find()->all();
+$data_customer = \backend\models\Customer::find()->all();
 ?>
 
 <div class="product-form">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype'=>'multipart/form-data']]); ?>
     <input type="hidden" class="remove-list" name="remove_list" value="">
+    <input type="hidden" class="remove-customer-list" name="remove_customer_list" value="">
     <div class="row">
         <div class="col-lg-3">
             <?= $form->field($model, 'sku')->textInput(['maxlength' => true]) ?>
@@ -208,6 +210,86 @@ $data_warehouse = \backend\models\Warehouse::find()->all();
     </div>
     <br />
 
+    <br />
+    <div class="row">
+        <div class="col-lg-12">
+            <h4>ราคาสินค้าระบุลูกค้า</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-bordered table-striped" id="table-list2">
+                <thead>
+                <tr>
+                    <th style="text-align: center;">ลูกค้า</th>
+                    <th style="text-align: center;">ราคา</th>
+                    <th>-</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if($model_customer_line != null):?>
+                    <?php foreach($model_customer_line as $valuex):?>
+                        <tr data-var="<?=$valuex->id;?>">
+                            <td>
+                                <input type="hidden" class="form-control line-customer-rec-id" name="line_customer_rec_id[]" value="<?=$valuex->id?>">
+                                <select name="line_product_customer_id[]" id="" class="form-control line-product-customer-id">
+                                    <option value="-1">--เลือก-</option>
+                                    <?php foreach($data_customer as $value_cus):?>
+                                        <?php
+                                        $selected = '';
+                                        if($valuex->customer_id == $value_cus->id){
+                                            $selected = 'selected';
+                                        }
+                                        ?>
+                                        <option value="<?=$value_cus->id?>" <?=$selected?>><?=$value_cus->name?></option>
+                                    <?php endforeach;?>
+                                </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control line-customer-price" name="line_customer_price[]" value="<?=$valuex->sale_price?>">
+                            </td>
+                            <td>
+                                <div class="btn btn-danger" onclick="removecustomerpriceline($(this))"><i class="fa fa-trash"></i></div>
+                            </td>
+
+                        </tr>
+                    <?php endforeach;?>
+                <?php else:?>
+                    <tr data-var="">
+                        <td>
+                            <input type="hidden" class="form-control line-customer-rec-id" name="line_customer_rec_id[]" value="0">
+                            <select name="line_product_customer_id[]" id="" class="form-control line-product-customer-id">
+                                <option value="-1">--เลือก-</option>
+                                <?php foreach($data_customer as $value_cus):?>
+                                    <?php
+                                    $selected = '';
+                                    ?>
+                                    <option value="<?=$value_cus->id?>" <?=$selected?>><?=$value_cus->name?></option>
+                                <?php endforeach;?>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control line-customer-price" name="line_customer_price[]" value="">
+                        </td>
+                        <td>
+                            <div class="btn btn-danger" onclick="removecustomerpriceline($(this))"><i class="fa fa-trash"></i></div>
+                        </td>
+                    </tr>
+                <?php endif;?>
+
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align: left;">
+                        <div class="btn btn-sm btn-primary" onclick="addcustomerpriceline($(this))">เพิ่ม</div>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+    <br />
+
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
     </div>
@@ -218,6 +300,7 @@ $data_warehouse = \backend\models\Warehouse::find()->all();
 <?php
 $js=<<<JS
 var removelist = [];
+var removecustomerpricelist = [];
 $(function(){
   // $(".line-exp-date").datepicker(); 
 });
@@ -257,6 +340,39 @@ function removeline(e) {
             // cal_linenum();
             // cal_all();
         }
+}
+function removecustomerpriceline(e) {
+        if (confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) {
+            if (e.parent().parent().attr("data-var") != '') {
+                removecustomerpricelist.push(e.parent().parent().attr("data-var"));
+                $(".remove-customer-list").val(removecustomerpricelist);
+            }
+            // alert(removelist);
+            // alert(e.parent().parent().attr("data-var"));
+
+            if ($("#table-list2 tbody tr").length == 1) {
+                $("#table-list2 tbody tr").each(function () {
+                    $(this).find(":text").val("");
+                    $(this).find(".line-product-customer-id").val("-1").change();
+                    $(this).find(".line-customer-price").val("0");
+                });
+            } else {
+                e.parent().parent().remove();
+            }
+            // cal_linenum();
+            // cal_all();
+        }
+}
+function addcustomerpriceline(e){
+    var tr = $("#table-list2 tbody tr:last");
+    var clone = tr.clone();
+                    //clone.find(":text").val("");
+                    // clone.find("td:eq(1)").text("");
+    clone.find(".line-product-customer-id").val("-1").change();
+    clone.find(".line-customer-price").val("0");
+
+    tr.after(clone);
+     
 }
 JS;
 $this->registerJs($js,static::POS_END);

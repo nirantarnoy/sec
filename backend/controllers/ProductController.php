@@ -173,6 +173,7 @@ class ProductController extends Controller
     {
         $model = $this->findModel($id);
         $model_line = \common\models\StockSum::find()->where(['product_id'=>$id])->all();
+        $model_customer_line = \common\models\CustomerProductPrice::find()->where(['product_id'=>$id])->all();
         $work_photo = '';
         if ($this->request->isPost && $model->load($this->request->post())) {
 
@@ -186,7 +187,16 @@ class ProductController extends Controller
             $line_rec_id = \Yii::$app->request->post('line_rec_id');
             $removelist = \Yii::$app->request->post('remove_list');
 
-            //  print_r($line_warehouse);return;
+
+
+            /// customer price
+
+            $line_customer_rec_id = \Yii::$app->request->post('line_customer_rec_id');
+            $line_product_customer_id = \Yii::$app->request->post('line_product_customer_id');
+            $line_customer_price = \Yii::$app->request->post('line_customer_price');
+            $removecustomerlist = \Yii::$app->request->post('remove_customer_list');
+
+            //  print_r($line_customer_rec_id);return;
 
             if ($model->save(false)) {
                 if (!empty($uploaded)) {
@@ -241,10 +251,44 @@ class ProductController extends Controller
                     }
                 }
 
+
+                if($line_product_customer_id!=null){
+
+                    for($i=0;$i<count($line_product_customer_id);$i++){
+                        if($line_customer_price[$i] == 0){
+                            continue;
+                        }
+                       // echo "ok";return;
+                        $model_check = \common\models\CustomerProductPrice::find()->where(['id'=>$line_customer_rec_id[$i]])->one();
+                        if($model_check){
+                            $model_check->customer_id = $line_product_customer_id[$i];
+                            $model_check->sale_price = $line_customer_price[$i];
+                            $model_check->save(false);
+                        }else{
+                            $model_customer = new \common\models\CustomerProductPrice();
+                            $model_customer->product_id = $model->id;
+                            $model_customer->customer_id = $line_product_customer_id[$i];
+                            $model_customer->sale_price = $line_customer_price[$i];
+                            $model_customer->status = 0;
+                            $model_customer->price_date = date('Y-m-d H:i:s');
+                            $model_customer->save(false);
+                        }
+
+                    }
+                }
+
+
                 if($removelist!=null){
                     $xdel = explode(',', $removelist);
                     for($i=0;$i<count($xdel);$i++){
                         \backend\models\Stocksum::deleteAll(['id'=>$xdel[$i]]);
+                    }
+                }
+
+                if($removecustomerlist!=null){
+                    $xdel2 = explode(',', $removecustomerlist);
+                    for($i=0;$i<count($xdel2);$i++){
+                        \common\models\CustomerProductPrice::deleteAll(['id'=>$xdel2[$i]]);
                     }
                 }
             }
@@ -256,6 +300,7 @@ class ProductController extends Controller
             'model' => $model,
             'work_photo' => $work_photo,
             'model_line' => $model_line,
+            'model_customer_line'=>$model_customer_line,
         ]);
     }
 
