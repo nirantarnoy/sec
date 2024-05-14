@@ -85,7 +85,7 @@ class Journalreceive extends \common\models\JournalReceive
     {
         $model = \common\models\JournalReceive::find()->MAX('journal_no');
 
-        $pre = "IS";
+        $pre = "RC";
 
         if ($model != null) {
 //            $prefix = $pre.substr(date("Y"),2,2);

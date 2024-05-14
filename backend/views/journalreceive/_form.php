@@ -8,6 +8,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 
 $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all();
+$product_data = \backend\models\Product::find()->all();
 ?>
 
 <div class="journalreceive-form">
@@ -60,9 +61,18 @@ $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all
                     <tr>
                         <td></td>
                         <td>
-                            <input type="hidden" class="line-product-id" name="line_product_id[]" value="">
-                            <input type="text" class="form-control line-product-code" name="line_product_code[]"
-                                   value="" readonly>
+<!--                            <input type="hidden" class="line-product-id" name="line_product_id[]" value="">-->
+<!--                            <input type="hidden" class="form-control line-product-code" name="line_product_code[]"-->
+<!--                                   value="" readonly>-->
+                            <select class="form-control ine-product-id" name="line_product_id[]"
+                                    id="" onchange="">
+                                <option value="-1">--เลือกสินค้า--</option>
+                                <?php foreach ($product_data as $value_product): ?>
+
+                                    <option value="<?= $value_product->id ?>"><?= $value_product->name ?></option>
+                                <?php endforeach; ?>
+                            </select>
+
                         </td>
                         <td>
                             <input type="text" class="form-control line-product-name" name="line_product_name[]"
@@ -70,8 +80,8 @@ $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all
                         </td>
                         <td>
 
-                            <select class="form-control" name="line_warehouse_id[]"
-                                    id="line-product-warehouse-id" onchange="">
+                            <select class="form-control line-product-warehouse-id" name="line_product_warehouse_id[]"
+                                    id="" onchange="">
                                 <option value="-1">--เลือกคลัง--</option>
                                 <?php foreach ($warehouse_data as $value_wh): ?>
 
@@ -119,7 +129,7 @@ $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all
                                     >
                                 </td>
                                 <td>
-                                    <select class="form-control" name="line_warehouse_id[]"
+                                    <select class="form-control" name="line_product_warehouse_id[]"
                                             id="line-product-warehouse-id" onchange="pullstocksum($(this))">
                                         <option value="-1">--เลือกคลัง--</option>
                                         <?php foreach ($warehouse_data as $value_wh): ?>
@@ -166,7 +176,7 @@ $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all
                             </td>
                             <td>
 
-                                <select class="form-control" name="line_warehouse_id[]"
+                                <select class="form-control" name="line_product_warehouse_id[]"
                                         id="line-product-warehouse-id" onchange="">
                                     <option value="-1">--เลือกคลัง--</option>
                                     <?php foreach ($warehouse_data as $value_wh): ?>
@@ -221,3 +231,33 @@ $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all
     <?php ActiveForm::end(); ?>
 
 </div>
+
+
+<?php
+$js=<<<JS
+$(function(){
+   
+});
+function linecal(e){
+    calall();
+    
+}
+function calall(){
+    
+    var total_qty = 0;
+  
+      $("#table-list tbody tr").each(function () {
+           var line_qty = $(this).find('.line-qty').val();
+         //  alert(line_amt);
+           if(line_qty != null){
+               total_qty = parseFloat(total_qty) + parseFloat(line_qty);
+           }
+          
+      });
+      
+    $(".qty-all-total").val(parseFloat(total_qty).toFixed(0));
+   
+}
+JS;
+$this->registerJs($js,static::POS_END);
+?>

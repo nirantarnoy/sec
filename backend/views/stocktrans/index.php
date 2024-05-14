@@ -4,8 +4,10 @@ use backend\models\Stocktrans;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
-use yii\grid\GridView;
+//use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
+use yii\widgets\LinkPager;
 
 /** @var yii\web\View $this */
 /** @var backend\models\StocktransSearch $searchModel */
@@ -75,6 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'created_at',
             //'stock_type_id',
         ],
+        'pager' => ['class' => LinkPager::className()],
     ]); ?>
 
     <?php Pjax::end(); ?>

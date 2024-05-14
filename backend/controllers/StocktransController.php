@@ -40,6 +40,7 @@ class StocktransController extends Controller
     {
         $searchModel = new StocktransSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,

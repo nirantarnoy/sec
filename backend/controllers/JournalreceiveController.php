@@ -92,7 +92,7 @@ class JournalreceiveController extends Controller
                 }
                 $model->journal_no = Journalreceive::getLastNo();
                 $model->trans_date = date('Y-m-d H:i:s', strtotime($t_date));
-                $model->status = 0;
+                //$model->status = 0;
                 if($model->save(false)){
                     if ($line_item_id != null) {
                         for ($i = 0; $i <= count($line_item_id) - 1; $i++) {
@@ -106,25 +106,23 @@ class JournalreceiveController extends Controller
                             $model_line = new \common\models\JouranlReceiveLine();
                             $model_line->journal_rec_id = $model->id;
                             $model_line->product_id = $line_item_id[$i];
-                            $model_line->qry = $line_qty[$i];
+                            $model_line->qty = $line_qty[$i];
                             $model_line->status = 0;
-                            $model_line->warehouse_id = $line_warehouse_id[$i];
                             $model_line->remark = $line_remark[$i];
                             if ($model_line->save(false)) {
                                 $model_trans = new \backend\models\Stocktrans();
                                 $model_trans->journal_no = $model->journal_no;
                                 $model_trans->trans_date = date('Y-m-d H:i:s');
-                                $model_trans->item_id = $line_item_id[$i];
+                                $model_trans->product_id = $line_item_id[$i];
                                 $model_trans->qty = (float)$line_qty[$i];
                                 $model_trans->activity_type_id = 5; // 5 is receive
                                 $model_trans->stock_type_id = 1; // 1 = in , 2 = out
                                 $model_trans->warehouse_id = $line_warehouse_id[$i];
                                 $model_trans->trans_ref_id = $model->id;
                                 if ($model_trans->save(false)) {
-                                    $model_stock = \backend\models\Stocksum::find()->where(['item_id' => $line_item_id[$i], 'warehouse_id' => $line_warehouse_id[$i],'date(expired_date)'=>date('Y-m-d',strtotime($exp_date))])->one();
+                                    $model_stock = \backend\models\Stocksum::find()->where(['product_id' => $line_item_id[$i], 'warehouse_id' => $line_warehouse_id[$i],'date(expired_date)'=>date('Y-m-d',strtotime($exp_date))])->one();
                                     if ($model_stock) {
                                         $model_stock->qty = (float)$model_stock->qty + (float)$line_qty[$i];
-                                        $model_stock->last_update = date('Y-m-d H:i:s');
                                         $model_stock->save(false);
                                     } else {
                                         $model_new = new \backend\models\Stocksum();
@@ -221,7 +219,7 @@ class JournalreceiveController extends Controller
                     $product_code = \backend\models\Product::findCode($value->product_id);
                     $product_name = \backend\models\Product::findName($value->product_id);
 
-                    $journal_detail.= $product_code.' '.$product_name.' '.number_format($value->qty)."<br />";
+                    $journal_detail.= $product_code.' '.$product_name.' '.number_format($value->qty)."\n";
                 }
             }
 
