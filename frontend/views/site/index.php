@@ -84,6 +84,7 @@ if (isset($_SESSION['cart'])) {
         <?php foreach ($model as $value): ?>
             <?php
                $sale_price = $value->sale_price;
+               $new_name = substr(0,30);
                if($value->customer_id !=null){
                    $sale_price = $value->customer_sale_price;
                }
@@ -98,7 +99,7 @@ if (isset($_SESSION['cart'])) {
                             <h4 class="card-title" style="font-size: 16px;"><b
                                         style="color: red;">&#3647 <?= $sale_price ?></b></h4>
                             <h4 class="card-title" style="font-size: 16px;">SKU: <b><?= $value->sku ?></b></h4>
-                            <p class="" style="font-size: 14px;"><?= $value->name ?></p>
+                            <p class="" style="font-size: 14px;"><?= $new_name ?></p>
                             <a style="text-decoration: none;" href="index.php?r=site/productdetail&id=<?= $value->id ?>"
                                target="_parent" class="btn btn-sm btn-outline-success"><i class="fas fa-cubes"></i>
                                 เพิ่มสินค้า</a>
