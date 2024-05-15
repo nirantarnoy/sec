@@ -212,12 +212,12 @@ if($model){
                 <?php endif;?>
                 <?php if($delivery_id > 0):?>
 
-                        <a href="index.php?r=deliveryorder/printdo&id=<?= $delivery_id ?>" class="btn btn-secondary">พิมพ์ใบเสร็จ</a>
+                        <a href="index.php?r=deliveryorder/printreciept&id=<?= $model->id ?>" class="btn btn-secondary">พิมพ์ใบเสร็จ</a>
 
                 <?php endif;?>
                 <?php if($delivery_id > 0):?>
 
-                        <a href="index.php?r=deliveryorder/printdo&id=<?= $delivery_id ?>" class="btn btn-info">พิมพ์ใบกำกับ</a>
+                        <a href="index.php?r=deliveryorder/printtaxinvoice&id=<?= $model->id ?>" class="btn btn-info">พิมพ์ใบกำกับ</a>
 
                 <?php endif;?>
             </div>

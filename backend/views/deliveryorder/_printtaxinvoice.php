@@ -149,13 +149,7 @@
                     <?php endif;?>
                     <tr>
                         <td colspan="3" rowspan="5" style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">
-                            <div style="display: table-cell;">
-                                ชำระโดย             <span> </span>  <input type="checkbox"><span> </span>เงินสด    <span>  </span>     <input type="checkbox"><span> </span>เงินโอน             <span>  </span> <input type="checkbox"><span> </span>เช็ค เลขที่ ....................................................................................................
-                                <div style="height: 15px;"></div>
-                                <p>ธนาคาร ....................................................................... สาขา ............................................................ ลงวันที่ .....................................................................</p>
-                                <p>จำนวนเงิน .....................................................................................................................................................................................................................................</p>
-                            </div>
-
+                          
                         </td>
                         <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">ราคารวม</td>
                         <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format($total_amount,2)?></b></td>
