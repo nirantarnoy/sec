@@ -10,7 +10,7 @@ $issue_id =0;
 $delivery_id = 0;
 $do_no = '';
 $model_issue_data = \common\models\JournalIssue::find()->where(['issue_for_id'=>$model->id])->one();
-if($model){
+if($model_issue_data){
     $issue_id = $model_issue_data->id;
     if($issue_id){
         $model_do = \common\models\DeliveryOrder::find()->select(['id','order_no'])->where(['issue_ref_id'=>$issue_id])->one();
