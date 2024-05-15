@@ -189,7 +189,7 @@ class JournalissueController extends Controller
                         $model_line->qty = $line_qty[$i];
                         if($model_line->save(false)){
                             $model_trans = new \backend\models\Stocktrans();
-                            $model_trans->journal_no = '';//$model_trans::getLastNo();
+                            $model_trans->journal_no = $model->journal_no;//$model_trans::getIssueLastNo();
                             $model_trans->trans_date = date('Y-m-d H:i:s');
                             $model_trans->product_id = $model_line->product_id;
                             $model_trans->qty = (float)$line_qty[$i];
@@ -197,10 +197,11 @@ class JournalissueController extends Controller
                             $model_trans->stock_type_id = 2; // 1 = in , 2 = out
                             $model_trans->trans_ref_id = $model->id;
                             if ($model_trans->save(false)) {
-                                $model_stock = \backend\models\Stocksum::find()->where(['product_id' => $model_line->product_id, 'warehouse_id' => $line_warehouse_id[$i]])->one();
+                              //  $model_stock = \backend\models\Stocksum::find()->where(['product_id' => $model_line->product_id, 'warehouse_id' => $line_warehouse_id[$i]])->one();
+                                $model_stock = \backend\models\Stocksum::find()->where(['id'=>$line_product_expiry_date[$i]])->one();
                                 if ($model_stock) {
                                     if($model_stock->qty >=$line_qty[$i]){
-                                        $model_stock->qty = (float)$model_stock->qty + (float)$line_qty[$i];
+                                        $model_stock->qty = (float)$model_stock->qty - (float)$line_qty[$i];
                                         $model_stock->save(false);
                                     }
                                 }

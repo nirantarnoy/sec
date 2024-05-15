@@ -5,13 +5,13 @@
         <div class="col-lg-12">
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 100%;text-align: center"><h3>ใบเบิกสินค้า</h3></td>
+                    <td style="width: 100%;text-align: center"><h3>ใบส่งสินค้า/บิลเงินสด</h3></td>
                 </tr>
             </table>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3"><h6>ชื่อลูกค้า <span style="font-weight: bold;"><?= $model->journal_no; ?></span>
+        <div class="col-lg-3"><h6>ชื่อลูกค้า <span style="font-weight: bold;"><?= $model->order_no; ?></span>
             </h6></div>
     </div>
     <div class="row">
@@ -59,7 +59,7 @@
                         <tr>
                             <td style="text-align: center;border:1px solid lightgrey;padding: 10px;"><?= $loop_no ?></td>
                             <td style="text-align: center;border:1px solid lightgrey;padding: 5px;"><?= \backend\models\Product::findCode($value->product_id) ?></td>
-                            <td style="text-align: left;border:1px solid lightgrey;padding: 5px;"><?= \backend\models\Product::findName($value->product_id) ?></td>
+                            <td style="text-align: left;border:1px solid lightgrey;padding: 5px;"><?= $value->name ?></td>
                             <td style="text-align: center;border:1px solid lightgrey;">ชิ้น</td>
                             <td style="text-align: right;border:1px solid lightgrey;padding: 5px;"><?= number_format($value->qty, 0) ?></td>
                             <td style="text-align: center;border:1px solid lightgrey;">-</td>
@@ -80,7 +80,7 @@
 
         </div>
     </div>
-   <div style="height: 10px;"></div>
+    <div style="height: 10px;"></div>
     <div class="row">
         <div class="col-lg-6">
             <table style="width: 100%">
@@ -117,7 +117,7 @@
 <br/>
 <table width="100%" class="table-title">
     <td style="text-align: right">
-<!--        <button id="btn-export-excel" class="btn btn-secondary">Export Excel</button>-->
+        <!--        <button id="btn-export-excel" class="btn btn-secondary">Export Excel</button>-->
         <button id="btn-print" class="btn btn-warning" onclick="printContent('div1')">Print</button>
     </td>
 </table>

@@ -6,7 +6,20 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var backend\models\Order $model */
 /** @var yii\widgets\ActiveForm $form */
+$issue_id =0;
+$delivery_id = 0;
+$do_no = '';
 $model_issue_data = \common\models\JournalIssue::find()->where(['issue_for_id'=>$model->id])->one();
+if($model){
+    $issue_id = $model_issue_data->id;
+    if($issue_id){
+        $model_do = \common\models\DeliveryOrder::find()->select(['id','order_no'])->where(['issue_ref_id'=>$issue_id])->one();
+        if($model_do){
+            $delivery_id = $model_do->id;
+            $do_no = $model_do->order_no;
+        }
+    }
+}
 ?>
 
 <div class="order-form">
@@ -155,16 +168,22 @@ $model_issue_data = \common\models\JournalIssue::find()->where(['issue_for_id'=>
                    ?>
                    <td style="<?=$color_status?>"><?=\backend\helpers\OrderStatus::getTypeById($model->status)?></td>
                </tr>
-               <tr>
-                   <td>เลขที่ติดตามพัสดุ</td>
-                   <td style="color: green;">
-                       <?=$model->order_tracking_no?>
-                   </td>
-               </tr>
+<!--               <tr>-->
+<!--                   <td>เลขที่ติดตามพัสดุ</td>-->
+<!--                   <td style="color: green;">-->
+<!--                       --><?php //=$model->order_tracking_no?>
+<!--                   </td>-->
+<!--               </tr>-->
                <tr>
                    <td>เลขที่ใบเบิก</td>
                    <td>
                        <a style="text-decoration: none;color: blue;" href="index.php?r=journalissue/update&id=<?=$model_issue_data!=null?$model_issue_data->id:''?>"><?=$model_issue_data!=null?$model_issue_data->journal_no:''?></a>
+                   </td>
+               </tr>
+               <tr>
+                   <td>เลขที่ใบส่งของ</td>
+                   <td style="color: green;">
+                       <a style="text-decoration: none;color: blue;" href="index.php?r=deliveryorder/update&id=<?=$delivery_id!=0?$delivery_id:''?>"><?=$delivery_id!=null?$do_no:''?></a>
                    </td>
                </tr>
            </table>
@@ -179,13 +198,30 @@ $model_issue_data = \common\models\JournalIssue::find()->where(['issue_for_id'=>
         </div>
         <div class="col-lg-2"></div>
         <div class="col-lg-2"></div>
-        <div class="col-lg-4"></div>
-        <div class="col-lg-2" style="text-align: right;">
-            <?php if($model_issue_data ==null):?>
+        <div class="col-lg-6" style="text-align: right;">
             <div class="input-group">
-                <a href="index.php?r=order/createissue&order_id=<?= $model->id ?>" class="btn btn-info">สร้างใบเบิกสินค้า</a>
+                <?php if($model_issue_data ==null):?>
+
+                        <a href="index.php?r=order/createissue&order_id=<?= $model->id ?>" class="btn btn-info">สร้างใบเบิกสินค้า</a>
+
+                <?php endif;?>
+                <?php if($delivery_id > 0):?>
+
+                        <a href="index.php?r=deliveryorder/printdo&id=<?= $delivery_id ?>" class="btn btn-warning">พิมพ์ใบส่งของ</a>
+
+                <?php endif;?>
+                <?php if($delivery_id > 0):?>
+
+                        <a href="index.php?r=deliveryorder/printdo&id=<?= $delivery_id ?>" class="btn btn-secondary">พิมพ์ใบเสร็จ</a>
+
+                <?php endif;?>
+                <?php if($delivery_id > 0):?>
+
+                        <a href="index.php?r=deliveryorder/printdo&id=<?= $delivery_id ?>" class="btn btn-info">พิมพ์ใบกำกับ</a>
+
+                <?php endif;?>
             </div>
-            <?php endif;?>
+
         </div>
     </div>
 

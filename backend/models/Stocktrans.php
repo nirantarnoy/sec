@@ -109,5 +109,32 @@ class Stocktrans extends \common\models\StockTrans
             return $prefix . '00001';
         }
     }
+    public static function getIssueLastNo()
+    {
+        $model = Stocktrans::find()->where(['activity_type_id' => 5])->MAX('journal_no');
+
+        $pre = "IS";
+
+        if ($model != null) {
+//            $prefix = $pre.substr(date("Y"),2,2);
+//            $cnum = substr((string)$model,4,strlen($model));
+//            $len = strlen($cnum);
+//            $clen = strlen($cnum + 1);
+//            $loop = $len - $clen;
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+            $cnum = substr((string)$model, 5, strlen($model));
+            $len = strlen($cnum);
+            $clen = strlen($cnum + 1);
+            $loop = $len - $clen;
+            for ($i = 1; $i <= $loop; $i++) {
+                $prefix .= "0";
+            }
+            $prefix .= $cnum + 1;
+            return $prefix;
+        } else {
+            $prefix = $pre . '-' . substr(date("Y"), 2, 2);
+            return $prefix . '00001';
+        }
+    }
 
 }

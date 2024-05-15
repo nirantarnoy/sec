@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'issue_for_id',
                 'value' => function ($data) {
-                    return \backend\models\Journalissue::findJournalno($data->issue_for_id);
+                    return \backend\models\Order::findNo($data->issue_for_id);
                 }
             ],
             'reason',

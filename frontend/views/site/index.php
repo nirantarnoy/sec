@@ -85,7 +85,7 @@ if (isset($_SESSION['cart'])) {
             <?php
                $sale_price = $value->sale_price;
                $new_name = substr($value->name,0,120);
-               if($value->customer_id !=null){
+               if($value->customer_id !=null && $value->customer_id == $customer_id){
                    $sale_price = $value->customer_sale_price;
                }
             ?>

@@ -1,10 +1,17 @@
 <?php
 $this->title = 'รายละเอียดสินค้า';
 $this->params['breadcrumbs'][] = $this->title;
+
+$new_sale_price = $model->sale_price;
+if($model->customer_id !=null && $model->customer_id == $customer_id){
+    $new_sale_price = $model->customer_sale_price;
+}
 ?>
 
 <div class="row">
-    <div class="col-lg-12"><b></b></div>
+    <div class="col-lg-12"><b>
+            <input type="hidden" class="product-onhand-qty" value="<?=$model->qty;?>">
+        </b></div>
 </div>
 <div class="row">
     <div class="col-lg-4">
@@ -26,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div><b>รหัสสินค้า</b></div>
             <h5><?=$model->sku?></h5>
             <div><b>ราคา</b></div>
-            <div style="color: red;">&#3647 <b><?=$model->customer_id!=null?$model->customer_sale_price:$model->sale_price?></b></div>
+            <div style="color: red;">&#3647 <b><?=$new_sale_price?></b></div>
             <hr />
             <div><b>รายละเอียดสินค้า</b></div>
             <div class="product-detail">
@@ -38,12 +45,13 @@ $this->params['breadcrumbs'][] = $this->title;
             <br />
             <div><b>จำนวนสินค้าคงเหลือ</b></div>
             <div><b style="color: red;"><?=number_format($model->qty)?></b></div>
+            <div class="alert alert-danger alert-over-qty">จำนวนสินค้าไม่พอ</div>
             <br />
             <div><b>จำนวน</b></div>
             <div style="max-width: 180px;padding: 15px 15px 15px 0px;">
                 <div class="input-group">
                     <div class="btn btn-success" style="font-size: 20px;" onclick="decreaseitem()">-</div>
-                    <input type="text" class="form-control cart-selected-qty" style="text-align: center;" name="cart_selected_qty" value="1" pattern="[0-9]" onkeypress="return /[0-9]/i.test(event.key)" >
+                    <input type="text" class="form-control cart-selected-qty" style="text-align: center;" name="cart_selected_qty" value="1" pattern="[0-9]" onkeypress="return /[0-9]/i.test(event.key)" onchange="checkonhand()" >
                     <div class="btn btn-success" style="font-size: 20px;" onclick="increaseitem()">+</div>
                 </div>
 
@@ -66,7 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
     <input type="hidden" class="product-id" value="<?=$model->id?>">
     <input type="hidden" class="product-name" value="<?=$model->name?>">
-    <input type="hidden" class="price" value="<?=$model->customer_id !=null?$model->customer_sale_price:$model->sale_price?>">
+    <input type="hidden" class="price" value="<?=$new_sale_price?>">
     <input type="hidden" class="qty" value="1">
     <input type="hidden" class="sku" value="<?=$model->sku?>">
     <input type="hidden" class="photo" value="<?=$model->photo?>">
@@ -75,6 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
 $url_to_add_cart = \yii\helpers\Url::to(['site/addcart'],true);
 $js=<<<JS
 $(function(){
+    $(".alert-over-qty").hide();
     $('.btn-add-to-cart').click(function(){
         var id = $(".product-id").val();
         var name = $(".product-name").val();
@@ -138,15 +147,51 @@ $(function(){
 });
 function increaseitem(){
     var qty = $(".cart-selected-qty").val();
+    var onhand = $(".product-onhand-qty").val();
+    
     qty = parseInt(qty) + 1;
+    if(parseInt(qty) > parseInt(onhand)){
+        $(".alert-over-qty").show();
+        //qty = parseInt(qty) - 1;
+        $(".cart-selected-qty").val(qty);
+        $(".btn-add-to-cart").hide();
+        return false;
+    }else{
+        $(".alert-over-qty").hide();
+        $(".btn-add-to-cart").show();
+    }
     $(".cart-selected-qty").val(qty);
 }
 function decreaseitem(){
     var qty = $(".cart-selected-qty").val();
-    if(qty <= 1){
+    var onhand = $(".product-onhand-qty").val();
+    qty = parseInt(qty) - 1;
+     if(parseInt(qty) <= 1){
         return false;
     }
-    qty = parseInt(qty) - 1;
+     
+    if(parseInt(qty) <= parseInt(onhand)){
+        $(".alert-over-qty").hide();
+        $(".btn-add-to-cart").show();
+    }
+  
+   $(".cart-selected-qty").val(qty);
+    
+}
+function checkonhand(){
+     var qty = $(".cart-selected-qty").val();
+    var onhand = $(".product-onhand-qty").val();
+    
+    if(parseInt(qty) > parseInt(onhand)){
+        $(".alert-over-qty").show();
+        $(".btn-add-to-cart").hide();
+       // qty = parseInt(qty) - 1;
+        $(".cart-selected-qty").val(qty);
+        return false;
+    }else{
+        $(".alert-over-qty").hide();
+        $(".btn-add-to-cart").show();
+    }
     $(".cart-selected-qty").val(qty);
 }
 JS;

@@ -34,6 +34,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                    'attribute' => 'product_id',
+                'value' => function($data){
+                    return \backend\models\Product::findSku($data->product_id);
+                }
+            ],
+            [
                 'attribute' => 'product_id',
                 'value' => function ($data) {
                     return \backend\models\Product::findName($data->product_id);

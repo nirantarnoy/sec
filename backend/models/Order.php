@@ -53,10 +53,10 @@ class Order extends \common\models\Orders
         $model = Employee::find()->where(['id' => $id])->one();
         return $model != null ? $model->company_id : 0;
     }
-    public static function findCode($id)
+    public static function findNo($id)
     {
-        $model = Employee::find()->where(['id' => $id])->one();
-        return $model != null ? $model->code : '';
+        $model = Order::find()->where(['id' => $id])->one();
+        return $model != null ? $model->order_no : '';
     }
 
     public static function getLastNo()

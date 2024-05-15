@@ -111,7 +111,7 @@ $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all
                                                value="<?= $value->product_id ?>">
                                         <input type="text" class="form-control line-product-code"
                                                name="line_product_code[]"
-                                               value="<?= \backend\models\Product::findCode($value->product_id) ?>"
+                                               value="<?= \backend\models\Product::findSku($value->product_id) ?>"
                                                readonly>
                                     </td>
                                     <td>

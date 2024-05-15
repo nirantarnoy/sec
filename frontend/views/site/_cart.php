@@ -163,7 +163,7 @@ $model_account = \backend\models\Bankaccount::find()->where(['status' => 1])->on
                 </div>
                 <?php if (isset($_SESSION['cart'])): ?>
                     <?php if (count($_SESSION['cart'] ) > 0 && $address !='') : ?>
-                        <a href="index.php?r=site/createorder" style="text-decoration: none;"><div style="font-size: 20px;height: 50px;width: 100%;background-color: black;color: white;text-align: center;padding: 10px">ชำระเงิน</div></a>
+                        <a href="index.php?r=site/createorder" style="text-decoration: none;"><div style="font-size: 20px;height: 50px;width: 100%;background-color: black;color: white;text-align: center;padding: 10px">สั่งซื้อสินค้า</div></a>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>

@@ -79,6 +79,12 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $customer_id=0;
+
+        if (isset($_SESSION['user_customer_id'])) {
+            $customer_id = $_SESSION['user_customer_id'];
+        }
+
         $product_cat_search = \Yii::$app->request->get('product_cat_search');
         $product_search = \Yii::$app->request->get('product_search');
         $query = \common\models\ViewProductPage::find()->where(['status' => 1]);
@@ -88,6 +94,7 @@ class SiteController extends Controller
         if (!empty($product_search)) {
             $query->andFilterWhere(['like', 'name', $product_search]);
         }
+
         $query->orderBy(['id' => SORT_ASC]);
         $countQuery = clone $query;
         $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 18]);
@@ -99,6 +106,7 @@ class SiteController extends Controller
             'pages' => $pages,
             'product_cat_search' => $product_cat_search,
             'product_search' => $product_search,
+            'customer_id' => $customer_id,
         ]);
     }
 
@@ -215,11 +223,17 @@ class SiteController extends Controller
 
     public function actionProductdetail($id)
     {
+        $customer_id=0;
+
+        if (isset($_SESSION['user_customer_id'])) {
+            $customer_id = $_SESSION['user_customer_id'];
+        }
         if ($id) {
             $model = \common\models\ViewProductPage::find()->where(['id' => $id])->one();
         }
         return $this->render('_productdetail', [
-            'model' => $model
+            'model' => $model,
+            'customer_id' => $customer_id,
         ]);
     }
 

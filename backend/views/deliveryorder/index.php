@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'trans_date',
                 'value' => function ($data) {
-                    return date('d/m/Y', strtotime($data->trans_date));
+                    return date('d/m/Y H:i:s', strtotime($data->trans_date));
                 }],
             [
                 'attribute' => 'issue_ref_id',
