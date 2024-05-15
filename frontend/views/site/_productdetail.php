@@ -37,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <div><i>ไม่ระบุ</i></div>
             <br />
             <div><b>จำนวนสินค้าคงเหลือ</b></div>
-            <br />
             <div><b style="color: red;"><?=number_format($model->qty)?></b></div>
             <br />
             <div><b>จำนวน</b></div>
