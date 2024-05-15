@@ -36,9 +36,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <div><b>หมวดสินค้า</b></div>
             <div><i>ไม่ระบุ</i></div>
             <br />
-            <div><b style="color: red;">จำนวนสินค้าคงเหลือ</b></div>
+            <div><b>จำนวนสินค้าคงเหลือ</b></div>
             <br />
-            <div><b><?=number_format($model->qty)?></b></div>
+            <div><b style="color: red;"><?=number_format($model->qty)?></b></div>
             <br />
             <div><b>จำนวน</b></div>
             <div style="max-width: 180px;padding: 15px 15px 15px 0px;">
