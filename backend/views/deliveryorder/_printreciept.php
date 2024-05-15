@@ -2,82 +2,112 @@
 ?>
 <div id="div1">
 <div class="row">
-    <div class="col-lg-7">
-        <div class="row">
-            <div class="col-lg-2">
-                <img src="<?= \Yii::$app->getUrlManager()->baseUrl . '/uploads/logo/ab_logo.jpg' ?>"
-                     style="margin-top: 5px;max-width: 100px" alt="">
-            </div>
-            <div class="col-lg-9">
-                <div style="padding-top: 15px;">
-                    <b>บริษัท แอนนาบี จำกัด</b>
-                </div>
-                <div style="padding-top: 15px;">
-                    ANNAB CO.,LTD.
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <p style="font-size: 12px;">78/24 หมู่บ้าน เดอะคอนเนค 50 ม.3 ต.บ้านฉาง อ.เมือง จ.ปทุมธานี
-                    12000(สำนักงานใหญ่)</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-5">
+    <div class="col-lg-12">
         <table style="width: 100%">
             <tr>
-                <td style="width: 100%;text-align: center;border: 1px solid lightgrey;padding: 10px;">
-                    <h6><b>ใบเสร็จรับเงิน (ต้นฉบับบ)</b></h6>
-                    <h6><b>ORIGINAL RECEIPT</b></h6>
+                <td style="width: 59%">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-2">
+                                    <img src="<?= \Yii::$app->getUrlManager()->baseUrl . '/uploads/logo/ab_logo.jpg' ?>"
+                                         style="margin-top: 5px;max-width: 100px" alt="">
+                                </div>
+                                <div class="col-lg-9">
+                                    <div style="padding-top: 15px;">
+                                        <b>บริษัท แอนนาบี จำกัด</b>
+                                    </div>
+                                    <div style="padding-top: 15px;">
+                                        ANNAB CO.,LTD.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p style="font-size: 12px;">78/24 หมู่บ้าน เดอะคอนเนค 50 ม.3 ต.บ้านฉาง อ.เมือง จ.ปทุมธานี
+                                        12000(สำนักงานใหญ่)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
-            </tr>
-            <tr>
-                <td style="width: 100%;text-align: center;border: 1px solid lightgrey;padding: 10px;">
-                    <h6>สำหรับลูกค้า</h6>
-                    <h6>ORIGINAL CUSTOMER</h6>
-                </td>
-            </tr>
+                <td>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table style="width: 100%">
+                                <tr>
+                                    <td style="width: 100%;text-align: center;border: 1px solid lightgrey;padding: 10px;">
+                                        <h6><b>ใบเสร็จรับเงิน (ต้นฉบับบ)</b></h6>
+                                        <h6><b>ORIGINAL RECEIPT</b></h6>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 100%;text-align: center;border: 1px solid lightgrey;padding: 10px;">
+                                        <h6>สำหรับลูกค้า</h6>
+                                        <h6>ORIGINAL CUSTOMER</h6>
+                                    </td>
+                                </tr>
 
+                            </table>
+                        </div>
+                    </div>
+                </td>
+            </tr>
         </table>
     </div>
+
+
 
 </div>
 <div style="height: 5px;"></div>
 <div class="row">
-    <div class="col-lg-7">
-        <div class="row">
-            <div class="col-lg-6">
-                <p style="font-size: 16px;">โทรศัพท์</p>
-            </div>
-            <div class="col-lg-6">
-                <p style="font-size: 16px;">แฟ็กส์ -</p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-12">
-                <p style="font-size: 16px;">เลขที่ประจำตัวผู้เสียภาษี</p>
-            </div>
-        </div>
-    </div>
-    <div class="col-lg-5">
+    <div class="col-lg-12">
         <table style="width: 100%">
             <tr>
-                <td style="width: 34%;text-align: left;border: 1px solid lightgrey;padding: 5px;">
-                    <h6>เลขที่</h6>
+                <td style="width: 59%">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <p style="font-size: 16px;">โทรศัพท์</p>
+                                </div>
+                                <div class="col-lg-6">
+                                    <p style="font-size: 16px;">แฟ็กส์ -</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <p style="font-size: 16px;">เลขที่ประจำตัวผู้เสียภาษี</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </td>
-                <td style="text-align: left;border: 1px solid lightgrey;padding: 5px;">
+                <td>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <table style="width: 100%">
+                                <tr>
+                                    <td style="width: 34%;text-align: left;border: 1px solid lightgrey;padding: 5px;">
+                                        <h6>เลขที่</h6>
+                                    </td>
+                                    <td style="text-align: left;border: 1px solid lightgrey;padding: 5px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 34%;text-align: left;border: 1px solid lightgrey;padding: 5px;">
+                                        <h6>วันที่เอกสาร</h6>
+                                    </td>
+                                    <td style="text-align: left;border: 1px solid lightgrey;padding: 5px;">
+
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
                 </td>
             </tr>
-            <tr>
-                <td style="width: 34%;text-align: left;border: 1px solid lightgrey;padding: 5px;">
-                    <h6>วันที่เอกสาร</h6>
-                </td>
-                <td style="text-align: left;border: 1px solid lightgrey;padding: 5px;">
-
-                </td>
-            </tr>
-
         </table>
     </div>
 
@@ -88,12 +118,12 @@
         <table style="width: 100%;">
             <tr>
                 <td rowspan="3" style="width: 59%;border: 1px solid lightgrey;padding: 10px">
-                    <p style="font-size: 16px;">ลูกค้า</p>
-                    <p style="font-size: 16px;">ที่อยู่</p>
+                    <p style="font-size: 16px;">ลูกค้า <b><?=\backend\models\Customer::findCusFullName($model->customer_id)?></b></p>
+                    <p style="font-size: 16px;">ที่อยู่ <b><?=\backend\models\CUstomer::findFullAddress($model->customer_id)?></b></p>
                 </td>
                 <td style="width: 14%;border: 1px solid lightgrey;padding: 8px;"><p style="font-size: 16px;display: table-cell;vertical-align: middle;">
                         อ้างอิงเลขที่ใบสั่งซื้อ</p></td>
-                <td style="border: 1px solid lightgrey"></td>
+                <td style="border: 1px solid lightgrey;padding: 8px;"><b><?= $model->order_no ?></b></td>
             </tr>
             <tr>
                 <td style="width: 14%;border: 1px solid lightgrey;padding: 8px;"><p style="font-size: 16px;display: table-cell;vertical-align: middle;">
@@ -120,20 +150,27 @@
                 <td style="width: 28%;border: 1px solid lightgrey;text-align: center;">สินค้า</td>
                 <td style="width: 10%;border: 1px solid lightgrey;text-align: center;">จำนวน</td>
                 <td style="width: 10%;border: 1px solid lightgrey;text-align: center;">ราคาต่อหน่วย</td>
-                <td style="width: 10%;border: 1px solid lightgrey;text-align: center;">จำนวนเงิน</td>
+                <td style="width: 10%;border: 1px solid lightgrey;text-align: right;">จำนวนเงิน</td>
             </tr>
             <?php
             $line_num = 0;
+            $total_amount = 0;
+            $discount = 0;
+            $vat_per = 0;
+            $vat_amount = 0;
             ?>
             <?php if($model_line !=null):?>
                 <?php foreach ($model_line as $key => $value): ?>
+                    <?php
+                        $total_amount = $total_amount + ($value['qty']*$value['price']);
+                    ?>
                     <tr>
                         <td style="border: 1px solid lightgrey;text-align: center;padding: 10px;"><?= $key+1 ?></td>
                         <td style="border: 1px solid lightgrey;text-align: center;padding: 10px;"><?= \backend\models\Product::findBarCode($value['product_id']) ?></td>
                         <td style="border: 1px solid lightgrey;text-align: left;padding: 10px;"><?= \backend\models\Product::findName($value['product_id']) ?></td>
                         <td style="border: 1px solid lightgrey;text-align: center;padding: 10px;"><?= $value['qty'] ?></td>
                         <td style="border: 1px solid lightgrey;text-align: center;padding: 10px;"><?= $value['price'] ?></td>
-                        <td style="border: 1px solid lightgrey;text-align: center;padding: 10px;"><?= number_format($value['qty']*$value['price'],2) ?></td>
+                        <td style="border: 1px solid lightgrey;text-align: right;padding: 10px;"><?= number_format($value['qty']*$value['price'],2) ?></td>
                     </tr>
                     <?php
                     $line_num = $key+1;
@@ -151,32 +188,35 @@
 
                 </td>
                 <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">ราคารวม</td>
-                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format($total_amount,2)?></b></td>
             </tr>
             <tr>
 
                 <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">ส่วนลด</td>
-                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format($discount,2)?></b></td>
             </tr>
             <tr>
 
                 <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">ยอดหักหลังส่วนลด</td>
-                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format(($total_amount - $discount),2)?></b></td>
             </tr>
             <tr>
 
                 <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">มูลค่ารวมก่อนภาษี</td>
-                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format(($total_amount - $discount),2)?></b></td>
             </tr>
             <tr>
 
                 <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">จำนวนภาษีมูลค่าเพิ่ม</td>
-                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format($vat_amount,2)?></b></td>
             </tr>
             <tr>
-                <td colspan="3" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                <td colspan="3" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;">
+                    <input type="hidden" class="total-amount" value="<?=($total_amount - $discount) + $vat_amount?>">
+                    <span class="total-amount-text" style="font-weight: bold;"></span>
+                </td>
                 <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">ราคาสุทธิ</td>
-                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format(($total_amount - $discount) + $vat_amount,2)?></b></td>
             </tr>
         </table>
     </div>
@@ -226,8 +266,15 @@
 
     <br/>
 <?php
+$url_to_convertnumtotext = \yii\helpers\Url::to(['order/convertnumtostring'], true);
 $this->registerJsFile(\Yii::$app->request->baseUrl . '/js/jquery.table2excel.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $js = <<<JS
+ $(function(){
+    var total_amount = $(".total-amount").val();
+    //alert(total_amount);
+    shownumtotext(total_amount); 
+ });
+
  $("#btn-export-excel").click(function(){
   $("#table-data").table2excel({
     // exclude CSS class
@@ -266,6 +313,23 @@ function printContent(el)
          window.print();
          document.body.innerHTML = restorepage;
      }
+function shownumtotext(nums){
+    $.ajax({
+      type: 'post',
+      dataType: 'html',
+      url:'$url_to_convertnumtotext',
+      async: false,
+      data: {'amount': nums},
+      success: function(data){
+         // alert(data);
+          $(".total-amount-text").html(data);
+      },
+      error: function(err){
+          alert(err);
+      }
+      
+    });
+}     
 JS;
 $this->registerJs($js, static::POS_END);
 ?>

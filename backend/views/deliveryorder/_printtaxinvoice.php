@@ -88,12 +88,12 @@
                 <table style="width: 100%;">
                     <tr>
                         <td rowspan="3" style="width: 59%;border: 1px solid lightgrey;padding: 10px">
-                            <p style="font-size: 16px;">ลูกค้า</p>
-                            <p style="font-size: 16px;">ที่อยู่</p>
+                            <p style="font-size: 16px;">ลูกค้า <b><?=\backend\models\Customer::findCusFullName($model->customer_id)?></b></p>
+                            <p style="font-size: 16px;">ที่อยู่ <b><?=\backend\models\CUstomer::findFullAddress($model->customer_id)?></b></p>
                         </td>
                         <td style="width: 14%;border: 1px solid lightgrey;padding: 8px;"><p style="font-size: 16px;display: table-cell;vertical-align: middle;">
                                 อ้างอิงเลขที่ใบสั่งซื้อ</p></td>
-                        <td style="border: 1px solid lightgrey"></td>
+                        <td style="border: 1px solid lightgrey;padding: 8px;"><b><?= $model->order_no ?></b></td>
                     </tr>
                     <tr>
                         <td style="width: 14%;border: 1px solid lightgrey;padding: 8px;"><p style="font-size: 16px;display: table-cell;vertical-align: middle;">
@@ -102,7 +102,7 @@
                     </tr>
                     <tr>
                         <td style="width: 14%;border: 1px solid lightgrey;padding: 8px;"><p
-                                style="font-size: 16px;vertical-align: middle;display: table-cell;vertical-align: middle;">กำหนดชำระเงิน</p></td>
+                                    style="font-size: 16px;vertical-align: middle;display: table-cell;vertical-align: middle;">กำหนดชำระเงิน</p></td>
                         <td style="border: 1px solid lightgrey"></td>
                     </tr>
                 </table>
@@ -120,20 +120,27 @@
                         <td style="width: 28%;border: 1px solid lightgrey;text-align: center;">สินค้า</td>
                         <td style="width: 10%;border: 1px solid lightgrey;text-align: center;">จำนวน</td>
                         <td style="width: 10%;border: 1px solid lightgrey;text-align: center;">ราคาต่อหน่วย</td>
-                        <td style="width: 10%;border: 1px solid lightgrey;text-align: center;">จำนวนเงิน</td>
+                        <td style="width: 10%;border: 1px solid lightgrey;text-align: right;">จำนวนเงิน</td>
                     </tr>
                     <?php
                     $line_num = 0;
+                    $total_amount = 0;
+                    $discount = 0;
+                    $vat_per = 0;
+                    $vat_amount = 0;
                     ?>
                     <?php if($model_line !=null):?>
                         <?php foreach ($model_line as $key => $value): ?>
+                            <?php
+                            $total_amount = $total_amount + ($value['qty']*$value['price']);
+                            ?>
                             <tr>
                                 <td style="border: 1px solid lightgrey;text-align: center;padding: 10px;"><?= $key+1 ?></td>
                                 <td style="border: 1px solid lightgrey;text-align: center;padding: 10px;"><?= \backend\models\Product::findBarCode($value['product_id']) ?></td>
                                 <td style="border: 1px solid lightgrey;text-align: left;padding: 10px;"><?= \backend\models\Product::findName($value['product_id']) ?></td>
                                 <td style="border: 1px solid lightgrey;text-align: center;padding: 10px;"><?= $value['qty'] ?></td>
                                 <td style="border: 1px solid lightgrey;text-align: center;padding: 10px;"><?= $value['price'] ?></td>
-                                <td style="border: 1px solid lightgrey;text-align: center;padding: 10px;"><?= number_format($value['qty']*$value['price'],2) ?></td>
+                                <td style="border: 1px solid lightgrey;text-align: right;padding: 10px;"><?= number_format($value['qty']*$value['price'],2) ?></td>
                             </tr>
                             <?php
                             $line_num = $key+1;
@@ -142,35 +149,44 @@
                     <?php endif;?>
                     <tr>
                         <td colspan="3" rowspan="5" style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">
+                            <div style="display: table-cell;">
+                                ชำระโดย             <span> </span>  <input type="checkbox"><span> </span>เงินสด    <span>  </span>     <input type="checkbox"><span> </span>เงินโอน             <span>  </span> <input type="checkbox"><span> </span>เช็ค เลขที่ ....................................................................................................
+                                <div style="height: 15px;"></div>
+                                <p>ธนาคาร ....................................................................... สาขา ............................................................ ลงวันที่ .....................................................................</p>
+                                <p>จำนวนเงิน .....................................................................................................................................................................................................................................</p>
+                            </div>
 
                         </td>
                         <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">ราคารวม</td>
-                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format($total_amount,2)?></b></td>
                     </tr>
                     <tr>
 
                         <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">ส่วนลด</td>
-                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format($discount,2)?></b></td>
                     </tr>
                     <tr>
 
                         <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">ยอดหักหลังส่วนลด</td>
-                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format(($total_amount - $discount),2)?></b></td>
                     </tr>
                     <tr>
 
                         <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">มูลค่ารวมก่อนภาษี</td>
-                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format(($total_amount - $discount),2)?></b></td>
                     </tr>
                     <tr>
 
                         <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">จำนวนภาษีมูลค่าเพิ่ม</td>
-                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format($vat_amount,2)?></b></td>
                     </tr>
                     <tr>
-                        <td colspan="3" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                        <td colspan="3" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;">
+                            <input type="hidden" class="total-amount" value="<?=($total_amount - $discount) + $vat_amount?>">
+                            <span class="total-amount-text" style="font-weight: bold;"></span>
+                        </td>
                         <td style="width: 5%;border: 1px solid lightgrey;text-align: left;padding: 10px;">ราคาสุทธิ</td>
-                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: center;padding: 10px;"></td>
+                        <td colspan="2" style="width: 5%;border: 1px solid lightgrey;text-align: right;padding: 10px;"><b><?=number_format(($total_amount - $discount) + $vat_amount,2)?></b></td>
                     </tr>
                 </table>
             </div>
@@ -220,8 +236,15 @@
 
     <br/>
 <?php
+$url_to_convertnumtotext = \yii\helpers\Url::to(['order/convertnumtostring'], true);
 $this->registerJsFile(\Yii::$app->request->baseUrl . '/js/jquery.table2excel.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $js = <<<JS
+ $(function(){
+    var total_amount = $(".total-amount").val();
+    //alert(total_amount);
+    shownumtotext(total_amount); 
+ });
+
  $("#btn-export-excel").click(function(){
   $("#table-data").table2excel({
     // exclude CSS class
@@ -260,6 +283,23 @@ function printContent(el)
          window.print();
          document.body.innerHTML = restorepage;
      }
+function shownumtotext(nums){
+    $.ajax({
+      type: 'post',
+      dataType: 'html',
+      url:'$url_to_convertnumtotext',
+      async: false,
+      data: {'amount': nums},
+      success: function(data){
+         // alert(data);
+          $(".total-amount-text").html(data);
+      },
+      error: function(err){
+          alert(err);
+      }
+      
+    });
+}     
 JS;
 $this->registerJs($js, static::POS_END);
 ?>

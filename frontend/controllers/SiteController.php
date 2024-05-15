@@ -81,7 +81,7 @@ class SiteController extends Controller
     {
         $product_cat_search = \Yii::$app->request->get('product_cat_search');
         $product_search = \Yii::$app->request->get('product_search');
-        $query = \backend\models\Product::find()->where(['status' => 1]);
+        $query = \common\models\ViewProductPage::find()->where(['status' => 1]);
         if (!empty($product_cat_search)) {
             $query->andFilterWhere(['product_group_id' => $product_cat_search]);
         }
@@ -216,7 +216,7 @@ class SiteController extends Controller
     public function actionProductdetail($id)
     {
         if ($id) {
-            $model = \backend\models\Product::find()->where(['id' => $id])->one();
+            $model = \common\models\ViewProductPage::find()->where(['id' => $id])->one();
         }
         return $this->render('_productdetail', [
             'model' => $model

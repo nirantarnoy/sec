@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div><b>รหัสสินค้า</b></div>
             <h5><?=$model->sku?></h5>
             <div><b>ราคา</b></div>
-            <div style="color: red;">&#3647 <b><?=$model->sale_price?></b></div>
+            <div style="color: red;">&#3647 <b><?=$model->customer_id!=null?$model->customer_sale_price:$model->sale_price?></b></div>
             <hr />
             <div><b>รายละเอียดสินค้า</b></div>
             <div class="product-detail">
@@ -35,6 +35,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <br />
             <div><b>หมวดสินค้า</b></div>
             <div><i>ไม่ระบุ</i></div>
+            <br />
+            <div><b style="color: red;">จำนวนสินค้าคงเหลือ</b></div>
+            <br />
+            <div><b><?=number_format($model->qty)?></b></div>
             <br />
             <div><b>จำนวน</b></div>
             <div style="max-width: 180px;padding: 15px 15px 15px 0px;">
@@ -63,8 +67,8 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
     <input type="hidden" class="product-id" value="<?=$model->id?>">
     <input type="hidden" class="product-name" value="<?=$model->name?>">
-    <input type="hidden" class="price" value="<?=$model->sale_price?>">
-    <input type="hidden" class="qty" value="10">
+    <input type="hidden" class="price" value="<?=$model->customer_id !=null?$model->customer_sale_price:$model->sale_price?>">
+    <input type="hidden" class="qty" value="1">
     <input type="hidden" class="sku" value="<?=$model->sku?>">
     <input type="hidden" class="photo" value="<?=$model->photo?>">
 

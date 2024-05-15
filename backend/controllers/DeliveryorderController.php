@@ -179,8 +179,8 @@ class DeliveryorderController extends Controller
     public function actionPrintreciept($id)
     {
         //if($id != null){
-        $model = \backend\models\Journalissue::find()->where(['id' => $id])->one();
-        $model_line = \common\models\JouranlIssueLine::find()->where(['journal_issue_id' => $id])->all();
+        $model = \backend\models\Order::find()->where(['id' => $id])->one();
+        $model_line = \common\models\OrderLine::find()->where(['order_id' => $id])->all();
         return $this->render('_printreciept', [
             'model' => $model,
             'model_line' => $model_line
@@ -190,8 +190,8 @@ class DeliveryorderController extends Controller
     public function actionPrinttaxinvoice($id)
     {
         //if($id != null){
-        $model = \backend\models\Journalissue::find()->where(['id' => $id])->one();
-        $model_line = \common\models\JouranlIssueLine::find()->where(['journal_issue_id' => $id])->all();
+        $model = \backend\models\Order::find()->where(['id' => $id])->one();
+        $model_line = \common\models\OrderLine::find()->where(['order_id' => $id])->all();
         return $this->render('_printtaxinvoice', [
             'model' => $model,
             'model_line' => $model_line

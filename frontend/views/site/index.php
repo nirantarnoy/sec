@@ -82,6 +82,12 @@ if (isset($_SESSION['cart'])) {
     <?php endif; ?>
     <div class="row">
         <?php foreach ($model as $value): ?>
+            <?php
+               $sale_price = $value->sale_price;
+               if($value->customer_id !=null){
+                   $sale_price = $value->customer_sale_price;
+               }
+            ?>
             <div class="col-lg-2">
                 <div class="card-product">
                     <div class="card" style="margin-top: 20px;">
@@ -90,7 +96,7 @@ if (isset($_SESSION['cart'])) {
                              alt="Card image">
                         <div class="card-body">
                             <h4 class="card-title" style="font-size: 16px;"><b
-                                        style="color: red;">&#3647 <?= $value->sale_price ?></b></h4>
+                                        style="color: red;">&#3647 <?= $sale_price ?></b></h4>
                             <h4 class="card-title" style="font-size: 16px;">SKU: <b><?= $value->sku ?></b></h4>
                             <p class="" style="font-size: 14px;"><?= $value->name ?></p>
                             <a style="text-decoration: none;" href="index.php?r=site/productdetail&id=<?= $value->id ?>"
