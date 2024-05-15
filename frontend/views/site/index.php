@@ -94,7 +94,7 @@ if (isset($_SESSION['cart'])) {
                     <div class="card" style="margin-top: 20px;">
                         <img class="card-img-top"
                              src="<?= \Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $value->photo ?>"
-                             alt="Card image" style="max-width: 50px;">
+                             alt="Card image" style="max-width: 150px;">
                         <div class="card-body">
                             <h4 class="card-title" style="font-size: 16px;"><b
                                         style="color: red;">&#3647 <?= $sale_price ?></b></h4>
