@@ -250,4 +250,87 @@ class OrderController extends Controller
         $res = json_decode($result);
         return $res;
     }
+
+    public function actionConvertnumtostring()
+    {
+        $txt = '';
+        $amount = \Yii::$app->request->post('amount');
+        if ($amount >= 0) {
+            $txt = self::numtothai($amount);
+        }
+        echo $txt;
+    }
+
+    public function numtothai($num)
+    {
+        $return = "";
+        $num = str_replace(",", "", $num);
+        $number = explode(".", $num);
+        if (sizeof($number) > 2) {
+            return 'รูปแบบข้อมุลไม่ถูกต้อง';
+            exit;
+        } else if (sizeof($number) == 1) {
+            $number[1] = 0;
+        }
+        // return $number[0];
+        $return .= self::numtothaistring($number[0]) . "บาท";
+
+        $stang = intval($number[1]);
+        // return $stang;
+        if ($stang > 0) {
+            if (strlen($stang) == 1) {
+                $stang = $stang . '0';
+            }
+            if ($stang == '10') {
+                $return .= 'สิบสตางค์';
+            } else if ($stang == '11') {
+                $return .= 'สิบเอ็ดสตางค์';
+            } else if ($stang == '12') {
+                $return .= 'สิบสองสตางค์';
+            } else if ($stang == '13') {
+                $return .= 'สิบสามสตางค์';
+            } else if ($stang == '14') {
+                $return .= 'สิบสี่สตางค์';
+            } else if ($stang == '15') {
+                $return .= 'สิบห้าสตางค์';
+            } else if ($stang == '16') {
+                $return .= 'สิบหกสตางค์';
+            } else if ($stang == '17') {
+                $return .= 'สิบเจ็ดสตางค์';
+            } else if ($stang == '18') {
+                $return .= 'สิบแปดสตางค์';
+            } else if ($stang == '19') {
+                $return .= 'สิบเก้าสตางค์';
+            } else {
+                $return .= self::numtothaistring($stang) . "สตางค์";
+            }
+
+        } else {
+            $return .= "ถ้วน";
+        }
+        return $return;
+    }
+
+    public function numtothaistring($num)
+    {
+        $return_str = "";
+        $txtnum1 = array('', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า');
+        $txtnum2 = array('', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน');
+        $num_arr = str_split($num);
+        $count = count($num_arr);
+        foreach ($num_arr as $key => $val) {
+            // echo $count." ".$val." ".$key."</br>";
+            if ($count > 1 && $val == 1 && $key == ($count - 1)) {
+                $return_str .= "เอ็ด";
+            } else if ($count > 1 && $val == 1 && $key == 2) {
+                $return_str .= $txtnum2[$val];
+            } else if ($count > 1 && $val == 2 && $key == ($count - 2)) {
+                $return_str .= "ยี่" . $txtnum2[$count - $key - 1];
+            } else if ($count > 1 && $val == 0) {
+            } else {
+                $return_str .= $txtnum1[$val] . $txtnum2[$count - $key - 1];
+            }
+        }
+        return $return_str;
+    }
 }

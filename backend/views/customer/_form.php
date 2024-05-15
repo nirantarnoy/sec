@@ -64,7 +64,28 @@ $group_assign_list = [];
             <?= $form->field($model, 'payment_term_id')->widget(\kartik\select2\Select2::className(),
                 ['data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentterm::find()->all(), 'id', 'name'),
                     'options' => [
-                            'placeholder' => 'เลือก',
+                        'placeholder' => 'เลือก',
+                    ],
+                    'pluginOptions' => ['allowClear' => true]])->label() ?>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-lg-1"></div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'payment_method_id')->widget(\kartik\select2\Select2::className(),
+                ['data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentmethod::find()->all(), 'id', 'name'),
+                    'options' => [
+                        'placeholder' => 'เลือก',
+                    ],
+                    'pluginOptions' => ['allowClear' => true]])->label() ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'vat_per_id')->widget(\kartik\select2\Select2::className(),
+                ['data' => \yii\helpers\ArrayHelper::map(\backend\helpers\VatperType::asArrayObject(), 'id', 'name'),
+                    'options' => [
+                        'placeholder' => 'เลือก',
                     ],
                     'pluginOptions' => ['allowClear' => true]])->label() ?>
         </div>

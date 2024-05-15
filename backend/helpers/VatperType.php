@@ -9,6 +9,7 @@ class VatperType
         '3' => '3%',
         '5' => '5%',
         '7' => '7%',
+        '10' => '10%',
     ];
 
     private static $dataobj = [
@@ -16,6 +17,7 @@ class VatperType
         ['id' => '3', 'name' => '3%'],
         ['id' => '5', 'name' => '5%'],
         ['id' => '7', 'name' => '7%'],
+        ['id' => '10', 'name' => '10%'],
     ];
 
     public static function asArray()
