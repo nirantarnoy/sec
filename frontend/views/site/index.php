@@ -84,7 +84,7 @@ if (isset($_SESSION['cart'])) {
         <?php foreach ($model as $value): ?>
             <?php
                $sale_price = $value->sale_price;
-               $new_name = substr(0,30);
+               $new_name = substr($value->name,0,30);
                if($value->customer_id !=null){
                    $sale_price = $value->customer_sale_price;
                }
@@ -94,7 +94,7 @@ if (isset($_SESSION['cart'])) {
                     <div class="card" style="margin-top: 20px;">
                         <img class="card-img-top"
                              src="<?= \Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $value->photo ?>"
-                             alt="Card image">
+                             alt="Card image" style="max-width: 50px;">
                         <div class="card-body">
                             <h4 class="card-title" style="font-size: 16px;"><b
                                         style="color: red;">&#3647 <?= $sale_price ?></b></h4>
