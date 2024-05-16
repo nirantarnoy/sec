@@ -30,9 +30,9 @@ $x_address2 = $model_delivery_address == null ? '' : $model_delivery_address->ad
 $x_street2 = $model_delivery_address == null ? '' : $model_delivery_address->street;
 $x_zipcode2 = $model_delivery_address == null ? '' : $model_delivery_address->zipcode;
 
-$district_chk2 = 0; // $model_delivery_address->district_id;
-$city_chk2 = 0;//$model_delivery_address->city_id;
-$province_chk2 = 0;// $model_delivery_address->province_id;
+$district_chk2 = $model_delivery_address == null ? 0: $model_delivery_address->district_id;
+$city_chk2 = $model_delivery_address == null ? 0:$model_delivery_address->city_id;
+$province_chk2 = $model_delivery_address == null ? 0: $model_delivery_address->province_id;
 
 $group_assign_list = [];
 
