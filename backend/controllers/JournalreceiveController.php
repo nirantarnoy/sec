@@ -115,7 +115,7 @@ class JournalreceiveController extends Controller
                                 $model_trans->trans_date = date('Y-m-d H:i:s');
                                 $model_trans->product_id = $line_item_id[$i];
                                 $model_trans->qty = (float)$line_qty[$i];
-                                $model_trans->activity_type_id = 5; // 5 is receive
+                                $model_trans->activity_type_id = 4; // 5 is receive
                                 $model_trans->stock_type_id = 1; // 1 = in , 2 = out
                                 $model_trans->warehouse_id = $line_warehouse_id[$i];
                                 $model_trans->trans_ref_id = $model->id;

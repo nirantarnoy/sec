@@ -30,7 +30,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'journal_no',
             'trans_date',
             [
-                'attribute' => 'item_id',
+                'attribute' => 'product_id',
+                'value' => function ($data) {
+                    return \backend\models\Product::findSku($data->product_id);
+                }
+            ],
+            [
+                'attribute' => 'product_id',
                 'value' => function ($data) {
                     return \backend\models\Product::findName($data->product_id);
                 }
@@ -70,6 +76,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'created_by',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
+                'label'=>'ผู้ใช้งาน',
                 'value' => function ($data) {
                     return \backend\models\User::findName($data->created_by);
                 }
