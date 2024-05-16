@@ -73,11 +73,11 @@ if($model->customer_id !=null && $model->customer_id == $customer_id){
                         เพิ่มสินค้าใส่ตะกร้า
                     </div>
                 </div>
-                <div class="col-lg-6" style="text-align: left;">
-                    <div class="btn btn-outline-success">
-                        ซื้อสินค้า
-                    </div>
-                </div>
+<!--                <div class="col-lg-6" style="text-align: left;">-->
+<!--                    <div class="btn btn-outline-success">-->
+<!--                        ซื้อสินค้า-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
         </div>
     </div>
