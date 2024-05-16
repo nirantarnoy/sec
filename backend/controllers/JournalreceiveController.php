@@ -216,7 +216,7 @@ class JournalreceiveController extends Controller
            $model_line = \common\models\JouranlReceiveLine::find()->where(['journal_rec_id'=>$receive_id])->all();
             if($model_line){
                 foreach($model_line as $value){
-                    $product_code = \backend\models\Product::findCode($value->product_id);
+                    $product_code = \backend\models\Product::findSku($value->product_id);
                     $product_name = \backend\models\Product::findName($value->product_id);
 
                     $journal_detail.= $product_code.' '.$product_name.' '.number_format($value->qty)."\n";

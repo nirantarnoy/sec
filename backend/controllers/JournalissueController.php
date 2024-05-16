@@ -291,6 +291,7 @@ class JournalissueController extends Controller
 
                 if(\common\models\JournalIssue::updateAll(['status' => 100], ['id' => $model->id])){
                     $this->createDeliveryorder($id);
+                    $this->notifymessage($model->id,$model->journal_no,$model->created_by);
                 }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -424,5 +425,58 @@ class JournalissueController extends Controller
 
             }
         }
+    }
+    public function notifymessage($issue_id,$journal_no,$user_id)
+    {
+        if($issue_id > 0){
+            //$message = "This is test send request from camel paperless";
+            $line_api = 'https://notify-api.line.me/api/notify';
+            $line_token = '';
+
+            $b_token = '8H8dtjz5QWvWWBFrMAwYrglYhkwu3Pw7rnXeBK9vYFK';
+            $line_token = trim($b_token);
+
+
+            $journal_detail = '';
+            $user_name = \backend\models\User::findName($user_id);
+            $model_line = \common\models\JouranlIssueLine::find()->where(['journal_issue_id'=>$issue_id])->all();
+            if($model_line){
+                foreach($model_line as $value){
+                    $product_code = \backend\models\Product::findSku($value->product_id);
+                    $product_name = \backend\models\Product::findName($value->product_id);
+
+                    $journal_detail.= $product_code.' '.$product_name.' '.number_format($value->qty)."\n";
+                }
+            }
+
+            $message = '' . "\n";
+            $message .= 'แจ้งเตือนรับเข้าสินค้า' . "\n";
+            $message .= 'พนักงาน:' . $user_name . "\n";
+            //   $message .= 'User:' . \backend\models\User::findName($user_id) . "\n";
+            $message .= "วันที่:" . date('Y-m-d') . "(" . date('H:i:s') . ")" . "\n";
+
+            $message .= 'เลขที่รับเบิก: ' .$journal_no. "\n";
+            $message .= "รายละเอียด: \n " . $journal_detail. "\n";
+
+            //  $message .= 'สามารถดูรายละเอียดได้ที่ http:///103.253.73.108/icesystemdindang/backend/web/index.php?r=dailysum/indexnew' . "\n"; // bkt
+
+
+            $queryData = array('message' => $message);
+            $queryData = http_build_query($queryData, '', '&');
+            $headerOptions = array(
+                'http' => array(
+                    'method' => 'POST',
+                    'header' => "Content-Type: application/x-www-form-urlencoded\r\n"
+                        . "Authorization: Bearer " . $line_token . "\r\n"
+                        . "Content-Length: " . strlen($queryData) . "\r\n",
+                    'content' => $queryData
+                )
+            );
+            $context = stream_context_create($headerOptions);
+            $result = file_get_contents($line_api, FALSE, $context);
+            $res = json_decode($result);
+            return $res;
+        }
+
     }
 }
