@@ -12,7 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'invioce_no')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'invoice_no')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'trans_date')->textInput() ?>
 

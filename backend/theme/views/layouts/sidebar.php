@@ -257,12 +257,12 @@
                         </li>
                         <?php //endif; ?>
                         <?php //if (\Yii::$app->user->can('position/index')): ?>
-                        <li class="nav-item">
-                            <a href="index.php?r=customerinvoice/index" class="nav-link customerinvoice">
-                                <i class="far fa-circlez nav-icon"></i>
-                                <p>ใบกำกับภาษี</p>
-                            </a>
-                        </li>
+<!--                        <li class="nav-item">-->
+<!--                            <a href="index.php?r=customerinvoice/index" class="nav-link customerinvoice">-->
+<!--                                <i class="far fa-circlez nav-icon"></i>-->
+<!--                                <p>ใบกำกับภาษี</p>-->
+<!--                            </a>-->
+<!--                        </li>-->
                         <?php //endif; ?>
                     </ul>
                 </li>
