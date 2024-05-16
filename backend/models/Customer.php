@@ -141,7 +141,21 @@ class Customer extends \common\models\Customer
     public static function findFullAddress($customer_id)
     {
         $address_name = '';
-        $model = AddressInfo::find()->where(['party_type_id' => 2, 'party_id' => $customer_id])->one();
+        $model = AddressInfo::find()->where(['party_type_id' => 2, 'party_id' => $customer_id,'address_type_id' => 1])->one();
+        if($model){
+            $address_name = $model->address;
+            $address_name .= ' '.$model->street;
+            $address_name .= ' '.District::find()->where(['DISTRICT_ID' => $model->district_id])->one()->DISTRICT_NAME;
+            $address_name .= ' '.Amphur::find()->where(['AMPHUR_ID' => $model->city_id])->one()->AMPHUR_NAME;
+            $address_name .= ' '.Province::find()->where(['PROVINCE_ID' => $model->province_id])->one()->PROVINCE_NAME;
+            $address_name .= ' '.$model->zipcode;
+        }
+        return $address_name;
+    }
+    public static function findFullAddress2($customer_id)
+    {
+        $address_name = '';
+        $model = AddressInfo::find()->where(['party_type_id' => 2, 'party_id' => $customer_id,'address_type_id' => 2])->one();
         if($model){
             $address_name = $model->address;
             $address_name .= ' '.$model->street;
