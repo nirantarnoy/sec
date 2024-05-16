@@ -31,12 +31,12 @@ if ($modelissue) {
                 <tr>
                     <td style="border: 1px solid lightgrey;padding: 10px;width: 50%;">
                         <h6>ที่อยู่:</h6>
-                        <p><?= \backend\models\CUstomer::findFullAddress($customer_id) ?></p>
+                        <p><?= \backend\models\Customer::findFullAddress($customer_id) ?></p>
 
                     </td>
                     <td style="border: 1px solid lightgrey;padding: 10px;">
                         <h6>สถานที่จัดส่ง:</h6>
-                        <p><?= \backend\models\CUstomer::findFullAddress2($customer_id) ?></p>
+                        <p><?= \backend\models\Customer::findFullAddress2($customer_id) ?></p>
                     </td>
                 </tr>
             </table>
