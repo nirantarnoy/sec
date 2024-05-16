@@ -216,7 +216,7 @@
                                 </p>
                             </a>
                         </li>
-
+                        <?php if (\Yii::$app->user->can('journalissue/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=journalissue" class="nav-link journalissue">
                                 <i class="far fa-circlez nav-icon"></i>
@@ -227,7 +227,7 @@
                             </a>
                         </li>
 
-                        <?php //endif; ?>
+                        <?php endif; ?>
 
                     </ul>
                 </li>
