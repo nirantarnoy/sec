@@ -96,13 +96,21 @@ class CustomerController extends Controller
                 $customer_payment_tax_branch = \Yii::$app->request->post('customer_tax_branch');
                 $customer_payment_tax_email = \Yii::$app->request->post('customer_tax_email');
 
+
+                $address2 = \Yii::$app->request->post('cus_address2');
+                $street2 = \Yii::$app->request->post('cus_street2');
+                $district_id2 = \Yii::$app->request->post('district_id2');
+                $city_id2 = \Yii::$app->request->post('city_id2');
+                $province_id2 = \Yii::$app->request->post('province_id2');
+                $zipcode2 = \Yii::$app->request->post('zipcode2');
+
 //                print_r($line_contact_name);return ;
 
                 if ($model->save(false)) {
                     if ($party_type) {
 //                        echo $address;
 //                        echo $zipcode; return ;
-                        $address_chk = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type' => $party_type])->one();
+                        $address_chk = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type' => $party_type, 'address_type_id' => 1])->one();
                         if ($address_chk) {
                             $address_chk->address = $address;
                             $address_chk->street = $street;
@@ -116,7 +124,7 @@ class CustomerController extends Controller
                             }
                         } else {
                             $cus_address = new \common\models\AddressInfo();
-                            $cus_address->party_type = $party_type;
+                            $cus_address->party_type_id = $party_type;
                             $cus_address->party_id = $model->id;
                             $cus_address->address = $address;
                             $cus_address->street = $street;
@@ -125,43 +133,73 @@ class CustomerController extends Controller
                             $cus_address->province_id = $province_id;
                             $cus_address->zipcode = $zipcode;
                             $cus_address->status = 1;
-                            if ($cus_address->save()) {
+                            $cus_address->address_type_id = 1; // 1 = invoice
+                            if ($cus_address->save(false)) {
+
+                            }
+                        }
+
+                        $address_chk2 = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type_id' => $party_type, 'address_type_id' => 2])->one();
+                        if ($address_chk2) {
+                            $address_chk2->address = $address;
+                            $address_chk2->street = $street;
+                            $address_chk2->district_id = $district_id;
+                            $address_chk2->city_id = $city_id;
+                            $address_chk2->province_id = $province_id;
+                            $address_chk2->zipcode = $zipcode;
+                            $address_chk2->status = 1;
+                            if ($address_chk2->save(false)) {
+
+                            }
+                        } else {
+                            $cus_address2 = new \common\models\AddressInfo();
+                            $cus_address2->party_type_id = $party_type;
+                            $cus_address2->party_id = $model->id;
+                            $cus_address2->address = $address2;
+                            $cus_address2->street = $street2;
+                            $cus_address2->district_id = $district_id2;
+                            $cus_address2->city_id = $city_id2;
+                            $cus_address2->province_id = $province_id2;
+                            $cus_address2->zipcode = $zipcode2;
+                            $cus_address2->status = 1;
+                            $cus_address2->address_type_id = 2; // 2 = delivery
+                            if ($cus_address2->save(false)) {
 
                             }
                         }
                     }
-                    if (count($line_contact_name)) {
-//                        echo count($line_contact_name);return ;
-                        for ($i = 0; $i <= count($line_contact_name) - 1; $i++) {
-//                            print_r($line_contact_name);return ;
-                            if ($line_contact_name[$i]) {
-//                              print_r($line_contact_name);return ;
-                                $contact_chk = \common\models\ContactInfo::find()->where(['party_id' => $model->id, 'contact_name' => $line_contact_name[$i]])->one();
-                                if ($contact_chk) {
+//                    if (count($line_contact_name)) {
+////                        echo count($line_contact_name);return ;
+//                        for ($i = 0; $i <= count($line_contact_name) - 1; $i++) {
+////                            print_r($line_contact_name);return ;
+//                            if ($line_contact_name[$i]) {
+////                              print_r($line_contact_name);return ;
+//                                $contact_chk = \common\models\ContactInfo::find()->where(['party_id' => $model->id, 'contact_name' => $line_contact_name[$i]])->one();
+//                                if ($contact_chk) {
+////                                    $contact_chk->type_id = $line_type_id[$i];
+//                                    $contact_chk->contact_name = trim($line_contact_name[$i]);
 //                                    $contact_chk->type_id = $line_type_id[$i];
-                                    $contact_chk->contact_name = trim($line_contact_name[$i]);
-                                    $contact_chk->type_id = $line_type_id[$i];
-                                    $contact_chk->contact_no = trim($line_contact_no[$i]);
-                                    if ($contact_chk->save(false)) {
-
-                                    }
-                                } else {
-                                    $new_contact = new \common\models\ContactInfo();
-                                    $new_contact->party_type = $party_type;
-                                    $new_contact->party_id = $model->id;
-                                    $new_contact->type_id = $line_type_id[$i];
-                                    $new_contact->contact_name = trim($line_contact_name[$i]);
-                                    $new_contact->contact_no = trim($line_contact_no[$i]);
-                                    if ($new_contact->save(false)) {
-
-                                    }
-                                }
-                            }
-//                            print_r($line_contact_name);return ;
-
-                        }
-
-                    }
+//                                    $contact_chk->contact_no = trim($line_contact_no[$i]);
+//                                    if ($contact_chk->save(false)) {
+//
+//                                    }
+//                                } else {
+//                                    $new_contact = new \common\models\ContactInfo();
+//                                    $new_contact->party_type = $party_type;
+//                                    $new_contact->party_id = $model->id;
+//                                    $new_contact->type_id = $line_type_id[$i];
+//                                    $new_contact->contact_name = trim($line_contact_name[$i]);
+//                                    $new_contact->contact_no = trim($line_contact_no[$i]);
+//                                    if ($new_contact->save(false)) {
+//
+//                                    }
+//                                }
+//                            }
+////                            print_r($line_contact_name);return ;
+//
+//                        }
+//
+//                    }
 
                     $model_tax = new \common\models\CustomerInvoiceInfo();
                     $model_tax->customer_id = $model->id;
@@ -204,6 +242,7 @@ class CustomerController extends Controller
         $model = $this->findModel($id);
 
         $model_line = \common\models\AddressInfo::find()->where(['party_id' => $id])->all();
+        $model_delivery_address = \common\models\AddressInfo::find()->where(['party_id' => $id, 'address_type_id' => 2])->one();
 
         //$model_contact_line = \common\models\ContactInfo::find()->where(['party_id' => $id])->all();
 
@@ -220,12 +259,19 @@ class CustomerController extends Controller
             $province_id = \Yii::$app->request->post('province_id');
             $zipcode = \Yii::$app->request->post('zipcode');
 
+            $address2 = \Yii::$app->request->post('cus_address2');
+            $street2 = \Yii::$app->request->post('cus_street2');
+            $district_id2 = \Yii::$app->request->post('district_id2');
+            $city_id2 = \Yii::$app->request->post('city_id2');
+            $province_id2 = \Yii::$app->request->post('province_id2');
+            $zipcode2 = \Yii::$app->request->post('zipcode2');
+
 
 //            print_r($removelist); return;
             if ($model->save(false)) {
                 if ($party_type) {
 //                    echo 'dd'; return
-                    $address_chk = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type_id' => $party_type])->one();
+                    $address_chk = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type_id' => $party_type, 'address_type_id' => 1])->one();
 //                    echo 'dd'; return;
                     if ($address_chk) {
                         $address_chk->party_type_id = $party_type;
@@ -254,8 +300,36 @@ class CustomerController extends Controller
 
                         }
                     }
-                }
 
+                    $address_chk2 = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type_id' => $party_type, 'address_type_id' => 2])->one();
+                    if ($address_chk2) {
+                        $address_chk2->address = $address;
+                        $address_chk2->street = $street;
+                        $address_chk2->district_id = $district_id;
+                        $address_chk2->city_id = $city_id;
+                        $address_chk2->province_id = $province_id;
+                        $address_chk2->zipcode = $zipcode;
+                        $address_chk2->status = 1;
+                        if ($address_chk2->save(false)) {
+
+                        }
+                    } else {
+                        $cus_address2 = new \common\models\AddressInfo();
+                        $cus_address2->party_type_id = $party_type;
+                        $cus_address2->party_id = $model->id;
+                        $cus_address2->address = $address2;
+                        $cus_address2->street = $street2;
+                        $cus_address2->district_id = $district_id2;
+                        $cus_address2->city_id = $city_id2;
+                        $cus_address2->province_id = $province_id2;
+                        $cus_address2->zipcode = $zipcode2;
+                        $cus_address2->status = 1;
+                        $cus_address2->address_type_id = 2; // 2 = delivery
+                        if ($cus_address2->save(false)) {
+
+                        }
+                    }
+                }
 
 
             }
@@ -264,6 +338,7 @@ class CustomerController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'model_delivery_address' => $model_delivery_address,
 //            'model_line' => $model_line,
 //            'model_contact_line' => $model_contact_line,
 //            'model_customer_tax_info' => $model_customer_tax_info,

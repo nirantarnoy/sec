@@ -1,4 +1,15 @@
 <?php
+
+
+$customer_id = 0;
+$modelissue = \backend\models\Journalissue::find()->select(['issue_for_id'])->where(['id' => $model->issue_ref_id])->one();
+if ($modelissue) {
+    $modelorder = \backend\models\Order::find()->select(['customer_id'])->where(['id' => $modelissue->issue_for_id])->one();
+    if ($modelorder) {
+        $customer_id = $modelorder->customer_id;
+    }
+}
+
 ?>
 <div id="div1">
     <div class="row">
@@ -20,8 +31,8 @@
                 <tr>
                     <td style="border: 1px solid lightgrey;padding: 10px;">
                         <h6>ที่อยู่:</h6>
-                        <p>99/99 บ.ทดสอบ จำกัด ถ.เพชรเกษม</p>
-                        <p>ต.ไร่ขิง อ.สามพราน จ.นครปฐม 73000</p>
+                        <p><?= \backend\models\CUstomer::findFullAddress($customer_id) ?></p>
+
                     </td>
                     <td style="border: 1px solid lightgrey;padding: 10px;">
                         <h6>สถานที่จัดส่ง:</h6>
@@ -32,7 +43,7 @@
             </table>
         </div>
     </div>
-    <br />
+    <br/>
     <div class="row">
         <div class="col-lg-12">
             <table style="width: 100%;border-collapse: collapse;border: 1px solid lightgrey" id="table-data">

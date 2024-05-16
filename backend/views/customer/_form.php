@@ -7,11 +7,12 @@ use yii\widgets\ActiveForm;
 /** @var backend\models\Customer $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$address_chk = \backend\models\AddressInfo::find()->where(['party_id' => $model->id])->one();
+$address_chk = \backend\models\AddressInfo::find()->where(['party_id' => $model->id,'address_type_id' => 1])->one();
 
 $district_data = \backend\models\District::find()->all();
 $city_data = \backend\models\Amphur::find()->all();
 $province_data = \backend\models\Province::find()->all();
+
 $district_chk = \backend\models\AddressInfo::findDistrictId($model->id);
 $city_chk = \backend\models\AddressInfo::findAmphurId($model->id);
 $province_chk = \backend\models\AddressInfo::findProvinceId($model->id);
@@ -24,6 +25,14 @@ $contactcat_data = \backend\helpers\ContactcatType::asArrayObject();
 $x_address = $address_chk == null ? '' : $address_chk->address;
 $x_street = $address_chk == null ? '' : $address_chk->street;
 $x_zipcode = $address_chk == null ? '' : $address_chk->zipcode;
+
+$x_address2 = $model_delivery_address == null ? '' : $model_delivery_address->address;
+$x_street2 = $model_delivery_address == null ? '' : $model_delivery_address->street;
+$x_zipcode2 = $model_delivery_address == null ? '' : $model_delivery_address->zipcode;
+
+$district_chk2 = $model_delivery_address->district_id;
+$city_chk2 = $model_delivery_address->city_id;
+$province_chk2 = $model_delivery_address->province_id;
 
 $group_assign_list = [];
 
@@ -93,88 +102,191 @@ $group_assign_list = [];
     </div>
 
     <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-4">
-            <label for="">ที่อยู่</label>
-            <input type="text" class="form-control cus-address" id="cus-address"
-                   value="<?= $model->isNewRecord ? '' : $x_address ?>" name="cus_address">
-        </div>
+        <div class="col-lg-6">
+            <br/>
+            <div class="row">
+                <div class="co-lg-8" style="text-align: center;">
+                    <label for="">ที่อยู่สำหรับวางบิล</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">ที่อยู่</label>
+                    <input type="text" class="form-control cus-address" id="cus-address"
+                           value="<?= $model->isNewRecord ? '' : $x_address ?>" name="cus_address">
+                </div>
 
-    </div>
-    <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-4">
-            <label for="">ถนน</label>
-            <input type="text" class="form-control cus-street" id="cus-street"
-                   value="<?= $model->isNewRecord ? '' : $x_street ?>" name="cus_street">
-        </div>
-    </div>
-    <br/>
-    <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-4">
-            <label for="">ตำบล/แขวง</label>
-            <select name="district_id" class="form-control district-id" id="district"
-                    onchange="">
-                <option value="0">--ตำบล/แขวง--</option>
-                <?php foreach ($district_data as $val): ?>
-                    <?php
-                    $selected = '';
-                    if ($val->DISTRICT_ID == $district_chk)
-                        $selected = 'selected';
+            </div>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">ถนน</label>
+                    <input type="text" class="form-control cus-street" id="cus-street"
+                           value="<?= $model->isNewRecord ? '' : $x_street ?>" name="cus_street">
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">ตำบล/แขวง</label>
+                    <select name="district_id" class="form-control district-id" id="district"
+                            onchange="">
+                        <option value="0">--ตำบล/แขวง--</option>
+                        <?php foreach ($district_data as $val): ?>
+                            <?php
+                            $selected = '';
+                            if ($val->DISTRICT_ID == $district_chk)
+                                $selected = 'selected';
 //                    ?>
-                    <option value="<?= $val->DISTRICT_ID ?>" <?= $selected ?>><?= $val->DISTRICT_NAME ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-    </div>
-    <br/>
-    <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-4">
-            <label for="">อำเภอ/เขต</label>
-            <select name="city_id" class="form-control city-id" id="city"
-                    onchange="getDistrict($(this))">
-                <option value="0">--อำเภอ/เขต--</option>
-                <?php foreach ($city_data as $val2): ?>
-                    <?php
-                    $selected = '';
-                    if ($val2->AMPHUR_ID == $city_chk)
-                        $selected = 'selected';
+                            <option value="<?= $val->DISTRICT_ID ?>" <?= $selected ?>><?= $val->DISTRICT_NAME ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">อำเภอ/เขต</label>
+                    <select name="city_id" class="form-control city-id" id="city"
+                            onchange="getDistrict($(this))">
+                        <option value="0">--อำเภอ/เขต--</option>
+                        <?php foreach ($city_data as $val2): ?>
+                            <?php
+                            $selected = '';
+                            if ($val2->AMPHUR_ID == $city_chk)
+                                $selected = 'selected';
 //                    ?>
-                    <option value="<?= $val2->AMPHUR_ID ?>" <?= $selected ?>><?= $val2->AMPHUR_NAME ?></option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-    </div>
-    <br/>
-    <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-4">
-            <label for="">จังหวัด</label>
-            <select name="province_id" class="form-control province-id" id=""
-                    onchange="getCity($(this))">
-                <option value="0">--จังหวัด--</option>
-                <?php foreach ($province_data as $val3): ?>
-                    <?php
-                    $selected = '';
-                    if ($val3->PROVINCE_ID == $province_chk)
-                        $selected = 'selected';
+                            <option value="<?= $val2->AMPHUR_ID ?>" <?= $selected ?>><?= $val2->AMPHUR_NAME ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">จังหวัด</label>
+                    <select name="province_id" class="form-control province-id" id=""
+                            onchange="getCity($(this))">
+                        <option value="0">--จังหวัด--</option>
+                        <?php foreach ($province_data as $val3): ?>
+                            <?php
+                            $selected = '';
+                            if ($val3->PROVINCE_ID == $province_chk)
+                                $selected = 'selected';
 //                    ?>
-                    <option value="<?= $val3->PROVINCE_ID ?>" <?= $selected ?>><?= $val3->PROVINCE_NAME ?></option>
-                <?php endforeach; ?>
-            </select>
+                            <option value="<?= $val3->PROVINCE_ID ?>" <?= $selected ?>><?= $val3->PROVINCE_NAME ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">รหัสไปรษณีย์</label>
+                    <input type="text" class="form-control zipcode" id="zipcode"
+                           value="<?= $model->isNewRecord ? '' : $x_zipcode ?>" name="zipcode" readonly>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <br/>
+            <div class="row">
+                <div class="co-lg-8" style="text-align: center;">
+                    <label for="">ที่อยู่สำหรับส่งของ</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">ที่อยู่</label>
+                    <input type="text" class="form-control cus-address2" id="cus-address2"
+                           value="<?= $model->isNewRecord ? '' : $x_address2 ?>" name="cus_address2">
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">ถนน</label>
+                    <input type="text" class="form-control cus-street2" id="cus-street2"
+                           value="<?= $model->isNewRecord ? '' : $x_street2 ?>" name="cus_street2">
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">ตำบล/แขวง</label>
+                    <select name="district_id2" class="form-control district-id2" id="district2"
+                            onchange="">
+                        <option value="0">--ตำบล/แขวง--</option>
+                        <?php foreach ($district_data as $val): ?>
+                            <?php
+                            $selected = '';
+                            if ($val->DISTRICT_ID == $district_chk2)
+                                $selected = 'selected';
+//                    ?>
+                            <option value="<?= $val->DISTRICT_ID ?>" <?= $selected ?>><?= $val->DISTRICT_NAME ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">อำเภอ/เขต</label>
+                    <select name="city_id2" class="form-control city-id2" id="city2"
+                            onchange="getDistrict2($(this))">
+                        <option value="0">--อำเภอ/เขต--</option>
+                        <?php foreach ($city_data as $val2): ?>
+                            <?php
+                            $selected = '';
+                            if ($val2->AMPHUR_ID == $city_chk2)
+                                $selected = 'selected';
+//                    ?>
+                            <option value="<?= $val2->AMPHUR_ID ?>" <?= $selected ?>><?= $val2->AMPHUR_NAME ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">จังหวัด</label>
+                    <select name="province_id2" class="form-control province-id2" id=""
+                            onchange="getCity2($(this))">
+                        <option value="0">--จังหวัด--</option>
+                        <?php foreach ($province_data as $val3): ?>
+                            <?php
+                            $selected = '';
+                            if ($val3->PROVINCE_ID == $province_chk2)
+                                $selected = 'selected';
+//                    ?>
+                            <option value="<?= $val3->PROVINCE_ID ?>" <?= $selected ?>><?= $val3->PROVINCE_NAME ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+            <br/>
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-8">
+                    <label for="">รหัสไปรษณีย์</label>
+                    <input type="text" class="form-control zipcode2" id="zipcode2"
+                           value="<?= $model->isNewRecord ? '' : $x_zipcode2 ?>" name="zipcode2" readonly>
+                </div>
+            </div>
         </div>
     </div>
-    <br/>
-    <div class="row">
-        <div class="col-lg-1"></div>
-        <div class="col-lg-4">
-            <label for="">รหัสไปรษณีย์</label>
-            <input type="text" class="form-control zipcode" id="zipcode"
-                   value="<?= $model->isNewRecord ? '' : $x_zipcode ?>" name="zipcode" readonly>
-        </div>
-    </div>
+
+
     <br/>
     <div class="row">
         <div class="col-lg-1"></div>
@@ -273,6 +385,24 @@ function getAddres(e){
         $("#city").html(data);
         $("select#city").prop("disabled","");
     });
+}
+
+function getCity2(e){
+    $.post("$url_to_getcity"+"&id="+e.val(),function(data){
+        $("select#city2").html(data);
+        $("select#city2").prop("disabled","");
+    });
+}
+
+function getDistrict2(e){
+    $.post("$url_to_getdistrict"+"&id="+e.val(),function(data){
+                                          $("select#district2").html(data);
+                                          $("select#district2").prop("disabled","");
+
+                                        });
+                                           $.post("$url_to_getzipcode"+"&id="+e.val(),function(data){
+                                                $("#zipcode2").val(data);
+                                              });
 }
 
 JS;

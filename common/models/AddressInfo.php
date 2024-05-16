@@ -34,7 +34,7 @@ class AddressInfo extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['party_type_id', 'party_id', 'district_id', 'city_id', 'province_id', 'status'], 'integer'],
+            [['party_type_id', 'party_id', 'district_id', 'city_id', 'province_id','address_type_id','address_same', 'status'], 'integer'],
             [['address', 'street', 'zipcode'], 'string', 'max' => 255],
         ];
     }
