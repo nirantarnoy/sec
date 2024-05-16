@@ -2,10 +2,19 @@
 $this->title = 'รายละเอียดสินค้า';
 $this->params['breadcrumbs'][] = $this->title;
 
+$include_vat_text = '';
 $new_sale_price = $model->sale_price;
 if($model->customer_id !=null && $model->customer_id == $customer_id){
     $new_sale_price = $model->customer_sale_price;
+
+    if($model->include_vat == 1){
+        $include_vat_text = '( รวม Vat )';
+    }else{
+        $include_vat_text = '( ไม่รวม Vat )';
+    }
 }
+
+
 ?>
 
 <div class="row">
@@ -34,6 +43,7 @@ if($model->customer_id !=null && $model->customer_id == $customer_id){
             <h5><?=$model->sku?></h5>
             <div><b>ราคา</b></div>
             <div style="color: red;">&#3647 <b><?=$new_sale_price?></b></div>
+            <div style="margin-top: 10px;"><i style="color: red;">  <?=$include_vat_text?> </i></div>
             <hr />
             <div><b>รายละเอียดสินค้า</b></div>
             <div class="product-detail">

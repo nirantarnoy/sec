@@ -8,6 +8,8 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 $data_warehouse = \backend\models\Warehouse::find()->all();
 $data_customer = \backend\models\Customer::find()->all();
+
+$yesno = [['id'=>1,'YES'],['id'=>0,'NO']];
 ?>
 
 <div class="product-form">
@@ -223,6 +225,7 @@ $data_customer = \backend\models\Customer::find()->all();
                 <tr>
                     <th style="text-align: center;">ลูกค้า</th>
                     <th style="text-align: center;">ราคา</th>
+                    <th style="text-align: center;">รวม VAT</th>
                     <th>-</th>
                 </tr>
                 </thead>
@@ -249,6 +252,18 @@ $data_customer = \backend\models\Customer::find()->all();
                                 <input type="text" class="form-control line-customer-price" name="line_customer_price[]" value="<?=$valuex->sale_price?>">
                             </td>
                             <td>
+                                <select name="line_include_vat[]" class="form-control" id="">
+                                    <?php
+                                    $selected = '';
+                                    if($valuex->include_vat == 1){
+                                        $selected = 'selected';
+                                    }
+                                    ?>
+                                    <option value="0" <?=$selected?>>No</option>
+                                    <option value="1" <?=$selected?>>YES</option>
+                                </select>
+                            </td>
+                            <td>
                                 <div class="btn btn-danger" onclick="removecustomerpriceline($(this))"><i class="fa fa-trash"></i></div>
                             </td>
 
@@ -270,6 +285,12 @@ $data_customer = \backend\models\Customer::find()->all();
                         </td>
                         <td>
                             <input type="text" class="form-control line-customer-price" name="line_customer_price[]" value="">
+                        </td>
+                        <td>
+                            <select name="line_include_vat[]" class="form-control" id="">
+                                <option value="0">No</option>
+                                <option value="1">YES</option>
+                            </select>
                         </td>
                         <td>
                             <div class="btn btn-danger" onclick="removecustomerpriceline($(this))"><i class="fa fa-trash"></i></div>

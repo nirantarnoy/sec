@@ -194,6 +194,7 @@ class ProductController extends Controller
             $line_customer_rec_id = \Yii::$app->request->post('line_customer_rec_id');
             $line_product_customer_id = \Yii::$app->request->post('line_product_customer_id');
             $line_customer_price = \Yii::$app->request->post('line_customer_price');
+            $line_include_vat = \Yii::$app->request->post('line_include_vat');
             $removecustomerlist = \Yii::$app->request->post('remove_customer_list');
 
             //  print_r($line_customer_rec_id);return;
@@ -263,12 +264,14 @@ class ProductController extends Controller
                         if($model_check){
                             $model_check->customer_id = $line_product_customer_id[$i];
                             $model_check->sale_price = $line_customer_price[$i];
+                            $model_check->include_vat = $line_include_vat[$i];
                             $model_check->save(false);
                         }else{
                             $model_customer = new \common\models\CustomerProductPrice();
                             $model_customer->product_id = $model->id;
                             $model_customer->customer_id = $line_product_customer_id[$i];
                             $model_customer->sale_price = $line_customer_price[$i];
+                            $model_customer->include_vat = $line_include_vat[$i];
                             $model_customer->status = 0;
                             $model_customer->price_date = date('Y-m-d H:i:s');
                             $model_customer->save(false);

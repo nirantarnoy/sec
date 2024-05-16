@@ -30,7 +30,7 @@ class CustomerProductPrice extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['customer_id', 'product_id', 'status'], 'integer'],
+            [['customer_id', 'product_id', 'status','include_vat'], 'integer'],
             [['sale_price'], 'number'],
             [['price_date'], 'safe'],
         ];
