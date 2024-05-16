@@ -86,7 +86,8 @@
             <table style="width: 100%">
                 <tr>
                     <td style="padding: 50px;border: 1px solid lightgrey">
-                        <b>หมายเหตุ : </b>
+                        <span><b>หมายเหตุ :  </b><?= $model->remark; ?></span>
+
                     </td>
                 </tr>
             </table>

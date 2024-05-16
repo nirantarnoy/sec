@@ -112,6 +112,12 @@ use yii\widgets\ActiveForm;
             </table>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <label for="">หมายเหตุ</label>
+            <?= $form->field($model, 'remark')->textarea()->label(false) ?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

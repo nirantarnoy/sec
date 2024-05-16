@@ -35,7 +35,7 @@ class DeliveryOrder extends \yii\db\ActiveRecord
         return [
             [['trans_date','issue_ref_id'], 'safe'],
             [[ 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['order_no'], 'string', 'max' => 255],
+            [['order_no','remark'], 'string', 'max' => 255],
         ];
     }
 
@@ -50,6 +50,7 @@ class DeliveryOrder extends \yii\db\ActiveRecord
             'trans_date' => 'วันที่',
             'issue_ref_id' => 'เลขที่ใบเบิก',
             'status' => 'สถานะ',
+            'remark' => 'หมายเหตุ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
