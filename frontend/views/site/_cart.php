@@ -153,10 +153,7 @@ $model_account = \backend\models\Bankaccount::find()->where(['status' => 1])->on
                     <div class="col text-right">&#3647 <?= number_format($total_amount, 2) ?></div>
                 </div>
 
-                <p>วิธีจัดส่ง</p>
-                <select class="form-control">
-                    <option class="text-muted">Standard-Delivery- &#3647 5.00</option>
-                </select>
+                <br />
                 <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                     <div class="col">ราคารวมทั้งหมด</div>
                     <div class="col text-right">&#3647 <?= number_format($total_amount, 2) ?></div>

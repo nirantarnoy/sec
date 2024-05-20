@@ -14,6 +14,21 @@ if($model->customer_id !=null && $model->customer_id == $customer_id){
     }
 }
 
+$select_qty = 1;
+
+
+
+if (isset($_SESSION['cart'])) {
+    $session_array_id = array_column($_SESSION['cart'], 'product_id');
+    //  print_r($session_array_id);
+    if (in_array($model->id, $session_array_id)) {
+        $index = array_search($model->id, $session_array_id);
+        //                 if (in_array($product_id, $session_array_id)) {
+        $select_qty = $_SESSION['cart'][$index]['qty'];
+    }
+
+}
+
 
 ?>
 
@@ -61,7 +76,7 @@ if($model->customer_id !=null && $model->customer_id == $customer_id){
             <div style="max-width: 180px;padding: 15px 15px 15px 0px;">
                 <div class="input-group">
                     <div class="btn btn-success" style="font-size: 20px;" onclick="decreaseitem()">-</div>
-                    <input type="text" class="form-control cart-selected-qty" style="text-align: center;" name="cart_selected_qty" value="1" pattern="[0-9]" onkeypress="return /[0-9]/i.test(event.key)" onchange="checkonhand()" >
+                    <input type="text" class="form-control cart-selected-qty" style="text-align: center;" name="cart_selected_qty" value="<?=$select_qty?>" pattern="[0-9]" onkeypress="return /[0-9]/i.test(event.key)" onchange="checkonhand()" >
                     <div class="btn btn-success" style="font-size: 20px;" onclick="increaseitem()">+</div>
                 </div>
 

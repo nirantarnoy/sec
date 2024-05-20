@@ -607,4 +607,71 @@ class SiteController extends Controller
         }
         return $this->redirect(['site/index']);
     }
+    public function actionAddcart2()
+    {
+        $product_id = \Yii::$app->request->post('product_id');
+
+        $customer_id = 0;
+        if (isset($_SESSION['user_customer_id'])) {
+            $customer_id = $_SESSION['user_customer_id'];
+        }
+
+        $product_name = '';
+        $qty = 1;
+        $price = 0;
+        $sku = '';
+        $photo = '';
+
+        if ($product_id) {
+
+            $model_prod = \common\models\ViewProductPage::find()->where(['id' => $product_id])->one();
+            if($model_prod){
+                $product_name = $model_prod->name;
+                $sku = $model_prod->sku;
+                $photo = $model_prod->photo;
+
+                if ($model_prod->customer_id != null && $model_prod->customer_id == $customer_id) {
+                    $price = $model_prod->customer_sale_price;
+                }else{
+                    $price = $model_prod->sale_price;
+                }
+            }
+
+            //if (isset($_POST['add_to_cart'])) {
+            if (isset($_SESSION['cart'])) {
+                $session_array_id = array_column($_SESSION['cart'], 'product_id');
+              //  print_r($session_array_id);
+                if (!in_array($product_id, $session_array_id)) {
+                    $session_array = array(
+                        'product_id' => $product_id,
+                        'sku' => $sku,
+                        'product_name' => $product_name, // $_POST['name'],
+                        'price' => $price, //$_POST['price'],
+                        'qty' => (float)$qty, //$_POST['qty']
+                        'photo' => $photo, //$_POST['qty']
+                    );
+                    //  echo 1;
+                    $_SESSION['cart'][] = $session_array;
+                } else {
+                    $index = array_search($product_id, $session_array_id);
+                    //                 if (in_array($product_id, $session_array_id)) {
+                    $_SESSION['cart'][$index]['qty'] = $_SESSION['cart'][$index]['qty'] + $qty;
+                }
+
+            } else {
+                $session_array = array(
+                    'product_id' => $product_id,
+                    'sku' => $sku,
+                    'product_name' => $product_name, // $_POST['name'],
+                    'price' => $price, //$_POST['price'],
+                    'qty' => (float)$qty, //$_POST['qty']
+                    'photo' => $photo,
+                );
+                //  echo 2;
+                $_SESSION['cart'][] = $session_array;
+            }
+            //}
+        }
+        return $this->redirect(['site/index']);
+    }
 }

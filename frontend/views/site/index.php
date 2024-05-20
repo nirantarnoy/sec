@@ -40,7 +40,7 @@ if (isset($_SESSION['cart'])) {
 //unset($_SESSION['cart']);
 
 ?>
-<br />
+<br/>
 <div class="container-cart-index">
     <form action="index.php?r=site/index" method="get">
         <div class="row">
@@ -66,8 +66,12 @@ if (isset($_SESSION['cart'])) {
                 <button class="btn btn-outline-secondary">ค้นหา</button>
             </div>
             <div class="col-lg-2">
-<!--                <div class="btn icon-cart" style="color: red;">สินค้า --><?php //= $cart_item_count ?><!--</div>-->
-                <a href="index.php?r=site/yourcart" style="color: red;text-decoration: none">ตะกร้าสินค้า <div class="badge" style="font-size: 20px;background-color: black;color:white;"><?= $cart_item_count ?></div></a>
+                <!--                <div class="btn icon-cart" style="color: red;">สินค้า -->
+                <?php //= $cart_item_count ?><!--</div>-->
+                <a href="index.php?r=site/yourcart" style="color: red;text-decoration: none">ตะกร้าสินค้า
+                    <div class="badge"
+                         style="font-size: 20px;background-color: black;color:white;"><?= $cart_item_count ?></div>
+                </a>
             </div>
         </div>
     </form>
@@ -83,26 +87,33 @@ if (isset($_SESSION['cart'])) {
     <div class="row">
         <?php foreach ($model as $value): ?>
             <?php
-               $sale_price = $value->sale_price;
-               $new_name = substr($value->name,0,120);
-               if($value->customer_id !=null && $value->customer_id == $customer_id){
-                   $sale_price = $value->customer_sale_price;
-               }
+            $sale_price = $value->sale_price;
+            $new_name = substr($value->name, 0, 120);
+            if ($value->customer_id != null && $value->customer_id == $customer_id) {
+                $sale_price = $value->customer_sale_price;
+            }
             ?>
             <div class="col-lg-2">
                 <div class="card-product">
                     <div class="card" style="margin-top: 20px;">
-                        <img class="card-img-top"
-                             src="<?= \Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $value->photo ?>"
-                             alt="Card image" style="max-width: 200px;">
-                        <div class="card-body">
-                            <h4 class="card-title" style="font-size: 16px;"><b
-                                        style="color: red;">&#3647 <?= $sale_price ?></b></h4>
-                            <h4 class="card-title" style="font-size: 16px;">SKU: <b><?= $value->sku ?></b></h4>
-                            <p class="" style="font-size: 14px;"><?= $new_name ?></p>
-                            <a style="text-decoration: none;" href="index.php?r=site/productdetail&id=<?= $value->id ?>"
-                               target="_parent" class="btn btn-sm btn-outline-success"><i class="fas fa-cubes"></i>
-                                เพิ่มสินค้า</a>
+                        <a style="text-decoration: none;color: black;" href="index.php?r=site/productdetail&id=<?= $value->id ?>"
+                           target="_parent">
+                            <img class="card-img-top"
+                                 src="<?= \Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $value->photo ?>"
+                                 alt="Card image" style="max-width: 200px;">
+                            <div class="card-body">
+                                <h4 class="card-title" style="font-size: 16px;"><b
+                                            style="color: red;">&#3647 <?= $sale_price ?></b></h4>
+                                <h4 class="card-title" style="font-size: 16px;">SKU: <b><?= $value->sku ?></b></h4>
+                                <p class="" style="font-size: 14px;"><?= $new_name ?></p>
+                                <h4 class="card-title" style="font-size: 16px;"><span
+                                            style="color: red;font-size: 12px;">สต๊อก <?= number_format($value->qty) ?></span></h4>
+                            </div>
+                        </a>
+                        <div class="card-footer" style="text-align: center;">
+                            <div class="btn btn-outline-success btn-add-to-cart" onclick="addtocart($(this))" data-var="<?= $value->id ?>">
+                                เพิ่มใส่ตะกร้า
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -160,4 +171,28 @@ if (isset($_SESSION['cart'])) {
 $uri = Url::base();
 //$this->registerCssFile("{$uri}/js/bootstrap.css", ['depends' => JqueryAsset::class]);
 $this->registerJsFile("{$uri}/js/cart.js", ['depends' => JqueryAsset::class]);
+$url_to_add_cart2 = \yii\helpers\Url::to(['site/addcart2'], true);
+$js = <<<JS
+$(function(){
+    $(".alert-over-qty").hide();
+});
+
+function addtocart(e){
+        var id = e.attr("data-var");
+        if(id){
+            $.ajax({
+            url:'$url_to_add_cart2',
+            type:'post',
+            dataType:'html',
+            data:{
+                'product_id':id
+            },
+            success:function(data){
+                 alert(data);
+            }
+        });
+        }
+}
+JS;
+$this->registerJs($js, static::POS_END);
 ?>
