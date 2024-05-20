@@ -5,23 +5,25 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "delivery_order_line".
+ * This is the model class for table "delivery_order_cal".
  *
  * @property int $id
  * @property int|null $delivery_order_id
+ * @property int|null $delivery_line_id
  * @property int|null $product_id
- * @property string|null $name
- * @property float|null $qty
+ * @property float|null $qty_per_pack
+ * @property float|null $total_pack
+ * @property float|null $left_qty
  * @property int|null $status
  */
-class DeliveryOrderLine extends \yii\db\ActiveRecord
+class DeliveryOrderCal extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'delivery_order_line';
+        return 'delivery_order_cal';
     }
 
     /**
@@ -30,9 +32,8 @@ class DeliveryOrderLine extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['delivery_order_id', 'product_id', 'status'], 'integer'],
-            [['qty'], 'number'],
-            [['name','description'], 'string', 'max' => 255],
+            [['delivery_order_id', 'delivery_line_id', 'product_id', 'status'], 'integer'],
+            [['qty_per_pack', 'total_pack', 'left_qty'], 'number'],
         ];
     }
 
@@ -44,9 +45,11 @@ class DeliveryOrderLine extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'delivery_order_id' => 'Delivery Order ID',
+            'delivery_line_id' => 'Delivery Line ID',
             'product_id' => 'Product ID',
-            'name' => 'Name',
-            'qty' => 'Qty',
+            'qty_per_pack' => 'Qty Per Pack',
+            'total_pack' => 'Total Pack',
+            'left_qty' => 'Left Qty',
             'status' => 'Status',
         ];
     }

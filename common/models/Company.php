@@ -34,7 +34,7 @@ class Company extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by','show_expired_date'], 'integer'],
             [['name', 'description', 'address', 'taxid'], 'string', 'max' => 255],
         ];
     }
@@ -49,6 +49,7 @@ class Company extends \yii\db\ActiveRecord
             'name' => 'Name',
             'description' => 'Description',
             'status' => 'Status',
+            'show_expired_date' => 'แสดงวันที่หมดอายุ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

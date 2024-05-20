@@ -20,96 +20,10 @@ use yii\widgets\ActiveForm;
 
 
         <!-- <?= $form->field($model, 'status')->textInput() ?> -->
+        <?php echo $form->field($model, 'show_expired_date')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
         <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
 
-        <?php if ($model_line_doc == null): ?>
 
-            <div class="row">
-                <div class="col-lg-12">
-                    <table class="table table-striped table-bordered" id="table-list">
-                        <tbody>
-                        <tr>
-                            <td>
-                                <input type="hidden" class="rec-id" name="rec_id[]" value="0">
-                                <input type="text" class="form-control line-doc-name" name="line_doc_name[]" value="">
-                            </td>
-                            <td>
-                                <input type="file" class="line-file-name" name="line_file_name[]">
-                            </td>
-                            <td>
-                                <div class="btn btn-danger" onclick="removeline($(this))">ลบ</div>
-                            </td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td>
-                                <div class="btn btn-primary" onclick="addline($(this))">เพิ่ม</div>
-                            </td>
-                            <td colspan="2"></td>
-                        </tr>
-                        </tfoot>
-
-                    </table>
-                </div>
-            </div>
-        <?php else: ?>
-            <div class="row">
-                <div class="col-lg-12">
-                    <table class="table table-striped table-bordered" id="table-list">
-                        <tbody>
-                        <?php foreach ($model_line_doc as $val): ?>
-                            <tr data-var="<?=$val->id?>">
-                                <td>
-                                    <input type="hidden" class="rec-id" name="rec_id[]" value="<?= $val->id ?>">
-                                    <input type="text" class="form-control line-doc-name" name="line_doc_name[]"
-                                           value="<?= $val->description ?>">
-                                </td>
-                                <td>
-                                    <a href="<?= \Yii::$app->getUrlManager()->getBaseUrl() . '/uploads/company_doc/' . $val->doc_name ?>"
-                                       target="_blank">ดูเอกสาร</a></td>
-                                </td>
-                                <td>
-                                    <div class="btn btn-danger" onclick="removeline($(this))">ลบ</div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                        <tr>
-                            <td>
-                                <input type="hidden" class="rec-id" name="rec_id[]" value="0">
-                                <input type="text" class="form-control line-doc-name" name="line_doc_name[]" value="">
-                            </td>
-                            <td>
-                                <input type="file" class="line-file-name" name="line_file_name[]">
-                            </td>
-                            <td>
-                                <div class="btn btn-danger" onclick="removeline($(this))">ลบ</div>
-                            </td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td>
-                                <div class="btn btn-primary" onclick="addline($(this))">เพิ่ม</div>
-                            </td>
-                            <td colspan="2"></td>
-                        </tr>
-                        </tfoot>
-
-                    </table>
-                </div>
-            </div>
-
-        <?php endif; ?>
-
-
-        <!-- <?= $form->field($model, 'created_at')->textInput() ?>
-
-    <?= $form->field($model, 'created_by')->textInput() ?>
-
-    <?= $form->field($model, 'updated_at')->textInput() ?>
-
-    <?= $form->field($model, 'updated_by')->textInput() ?> -->
 
         <div class="form-group">
             <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

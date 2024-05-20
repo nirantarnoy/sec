@@ -11,7 +11,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3"><h6>ชื่อลูกค้า <span style="font-weight: bold;"><?= $model->journal_no; ?></span>
+        <div class="col-lg-3"><h6>ชื่อลูกค้า <span style="font-weight: bold;"><?= \backend\models\Customer::findCusName($model->customer_id); ?></span>
             </h6></div>
     </div>
     <div class="row">
@@ -20,13 +20,12 @@
                 <tr>
                     <td style="border: 1px solid lightgrey;padding: 10px;">
                         <h6>ที่อยู่:</h6>
-                        <p>99/99 บ.ทดสอบ จำกัด ถ.เพชรเกษม</p>
-                        <p>ต.ไร่ขิง อ.สามพราน จ.นครปฐม 73000</p>
+                        <p><?=\backend\models\CUstomer::findFullAddress($model->customer_id)?></p>
+
                     </td>
                     <td style="border: 1px solid lightgrey;padding: 10px;">
                         <h6>สถานที่จัดส่ง:</h6>
-                        <p>99/99 บ.ทดสอบ จำกัด ถ.เพชรเกษม</p>
-                        <p>ต.ไร่ขิง อ.สามพราน จ.นครปฐม 73000</p>
+                        <p><?=\backend\models\CUstomer::findFullAddress($model->customer_id)?></p>
                     </td>
                 </tr>
             </table>

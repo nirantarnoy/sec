@@ -82,34 +82,7 @@ class CompanyController extends Controller
 
             if ($model->load($this->request->post())) {
 
-                $line_doc_name = \Yii::$app->request->post('line_doc_name');
-                // $line_file_name = \Yii::$app->request->post('line_file_name');
-                $uploaded = UploadedFile::getInstancesByName('line_file_name');
-
-                $model->social_base_price = $model->social_base_price == null ? 0 : $model->social_base_price;
-                if ($model->save()) {
-                    if ($line_doc_name != null) {
-                        for ($i = 0; $i <= count($line_doc_name) - 1; $i++) {
-
-                            foreach ($uploaded as $key => $value) {
-                                if ($key == $i) {
-                                    if (!empty($value)) {
-                                        $upfiles = time() . "." . $value->getExtension();
-                                        // if ($uploaded->saveAs(Yii::$app->request->baseUrl . '/uploads/files/' . $upfiles)) {
-                                        if ($value->saveAs('../web/uploads/company_doc/' . $upfiles)) {
-                                            $model_doc = new \common\models\CompanyDoc();
-                                            $model_doc->company_id = $model->id;
-                                            $model_doc->doc_name = $upfiles;
-                                            $model_doc->description = $line_doc_name[$i];
-                                            $model_doc->save(false);
-                                        }
-                                    }
-                                }
-                            }
-
-
-                        }
-                    }
+                if ($model->save(false)) {
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
 
@@ -134,74 +107,9 @@ class CompanyController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model_line_doc = \common\models\CompanyDoc::find()->where(['company_id' => $id])->all();
 
         if ($this->request->isPost && $model->load($this->request->post())) {
-//            $uploaded = UploadedFile::getInstance($model, 'doc');
-            $removelist = \Yii::$app->request->post('remove_list');
-            $line_doc_name = \Yii::$app->request->post('line_doc_name');
-            // $line_file_name = \Yii::$app->request->post('line_file_name');
-            $uploaded = UploadedFile::getInstancesByName('line_file_name');
-             $line_id = \Yii::$app->request->post('rec_id');
-
-
-             $update_social_date = date('Y-m-d H:i:s');
-             // print_r($line_id);return;
-            $model->social_base_price = $model->social_base_price == null ? 0 : $model->social_base_price;
-            if ($model->save()) {
-                if ($line_id != null) {
-                    // echo count($uploaded);return;
-                    for ($i = 0; $i <= count($line_id) - 1; $i++) {
-                        $model_check = \common\models\CompanyDoc::find()->where(['id' => $line_id[$i]])->one();
-                        if ($model_check) {
-                            $model_check->description = $line_doc_name[$i];
-                            $model_check->save(false);
-                        } else {
-                            foreach ($uploaded as $key => $value) {
-
-                                if (!empty($value)) {
-                                    $upfiles = time() + 2 . "." . $value->getExtension();
-                                    // if ($uploaded->saveAs(Yii::$app->request->baseUrl . '/uploads/files/' . $upfiles)) {
-                                    if ($value->saveAs('../web/uploads/company_doc/' . $upfiles)) {
-                                        $model_doc = new \common\models\CompanyDoc();
-                                        $model_doc->company_id = $model->id;
-                                        $model_doc->doc_name = $upfiles;
-                                        $model_doc->description = $line_doc_name[$i];
-                                        $model_doc->save(false);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-                $delete_rec = explode(",", $removelist);
-                if (count($delete_rec)) {
-                    $model_find_doc_delete = \common\models\CompanyDoc::find()->where(['id' => $delete_rec])->one();
-                    if ($model_find_doc_delete) {
-                        if (file_exists(\Yii::getAlias('@backend') . '/web/uploads/company_doc/' . $model_find_doc_delete->doc_name)) {
-                            if (unlink(\Yii::getAlias('@backend') . '/web/uploads/company_doc/' . $model_find_doc_delete->doc_name)) {
-                                \common\models\CompanyDoc::deleteAll(['id' => $delete_rec]);
-                            }
-                        }
-                    }
-
-                }
-
-                // update social per rate
-
-                $model_social_per = \common\models\SocialPerTrans::find()->where(['company_id'=>$id,'month(trans_date)'=>date('m'),'year(trans_date)'=>date('Y')])->one();
-                if($model_social_per){
-                    $model_social_per->trans_date = date('Y-m-d H:i:s');
-                    $model_social_per->social_per = $model->social_deduct_per;
-                    $model_social_per->save(false);
-                }else{
-                    $model_new_social_per = new \common\models\SocialPerTrans();
-                    $model_new_social_per->company_id = $id;
-                    $model_new_social_per->trans_date = $update_social_date;
-                    $model_new_social_per->social_per = $model->social_deduct_per;
-                    $model_new_social_per->save(false);
-                }
+            if ($model->save(false)) {
 
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -209,7 +117,6 @@ class CompanyController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'model_line_doc' => $model_line_doc,
         ]);
     }
 

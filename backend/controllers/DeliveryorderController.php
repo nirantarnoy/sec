@@ -114,15 +114,18 @@ class DeliveryorderController extends Controller
 
         $model_line = \common\models\DeliveryOrderLine::find()->where(['delivery_order_id' => $id])->all();
 
+        $model_cal_line = \common\models\DeliveryOrderCal::find()->where(['delivery_order_id' => $id])->all();
+
         if ($this->request->isPost && $model->load($this->request->post())) {
             $line_rec_id = \Yii::$app->request->post('line_rec_id');
             $line_name = \Yii::$app->request->post('line_product_name');
             $line_qty = \Yii::$app->request->post('line_qty');
+            $line_description = \Yii::$app->request->post('line_product_name_description');
 
             if($model->save(false)){
                 if($line_rec_id!=null){
                     for($i=0;$i<count($line_rec_id);$i++) {
-                        \common\models\DeliveryOrderLine::updateAll(['name' => $line_name[$i], 'qty' => $line_qty[$i]], ['id' => $line_rec_id[$i]]);
+                        \common\models\DeliveryOrderLine::updateAll(['name' => $line_name[$i],'description'=>$line_description[$i], 'qty' => $line_qty[$i]], ['id' => $line_rec_id[$i]]);
                     }
                 }
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -132,7 +135,8 @@ class DeliveryorderController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'model_line' => $model_line
+            'model_line' => $model_line,
+            'model_cal_line' => $model_cal_line,
         ]);
     }
 
@@ -168,8 +172,8 @@ class DeliveryorderController extends Controller
     public function actionPrint($id)
     {
         //if($id != null){
-        $model = \backend\models\Journalissue::find()->where(['id' => $id])->one();
-        $model_line = \common\models\JouranlIssueLine::find()->where(['journal_issue_id' => $id])->all();
+        $model = \backend\models\Order::find()->where(['id' => $id])->one();
+        $model_line = \common\models\OrderLine::find()->where(['order_id' => $id])->all();
         return $this->render('_print', [
             'model' => $model,
             'model_line' => $model_line

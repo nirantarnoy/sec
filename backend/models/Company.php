@@ -32,7 +32,7 @@ class Company extends \common\models\Company
     public function rules()
     {
         return [
-            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by','show_expired_date'], 'integer'],
             [['name', 'description','doc','address'], 'string', 'max' => 255],
             [['taxid'], 'string', 'max' => 13],
             [['social_deduct_per'],'number'],
@@ -54,6 +54,7 @@ class Company extends \common\models\Company
             'status' => 'สถานะ',
             'doc' => 'เอกสารแนบ',
             'taxid' => 'เลขที่ผู้เสียภาษี',
+            'show_expired_date' => 'แสดงวันที่สินค้าหมดอายุ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',
@@ -64,6 +65,11 @@ class Company extends \common\models\Company
     {
         $model = Company::find()->where(['id' => $id])->one();
         return $model != null ? $model->name : '';
+    }
+    public static function enableshowexpiredate()
+    {
+        $model = Company::find()->one();
+        return $model != null ? $model->show_expired_date : 0;
     }
     public static function findAddress($id)
     {
