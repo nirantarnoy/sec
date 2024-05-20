@@ -54,6 +54,12 @@
                         </a>
                         <ul class="nav nav-treeview">
                             <li class="nav-item">
+                                <a href="index.php?r=company" class="nav-link company">
+                                    <i class="far fa-file-import nav-icon"></i>
+                                    <p>ข้อมูลบริษัท</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="index.php?r=paymentmethod" class="nav-link paymentmethod">
                                     <i class="far fa-file-import nav-icon"></i>
                                     <p>วิธีชำระเงิน</p>
