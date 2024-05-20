@@ -203,6 +203,7 @@ class OrderController extends Controller
                         $model_line = new \common\models\DeliveryOrderLine();
                         $model_line->delivery_order_id = $model->id;
                         $model_line->product_id = $value->product_id;
+                        $model_line->name = \backend\models\Product::findName($value->product_id);
                         $model_line->qty = $value->qty;
                         $model_line->status = 0;
                         $model_line->save(false);

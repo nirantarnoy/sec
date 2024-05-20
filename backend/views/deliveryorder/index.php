@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'issue_ref_id',
                 'value' => function ($data) {
-                    return \backend\models\Journalissue::findJournalno($data->issue_ref_id);
+                    return \backend\models\Order::findNo($data->issue_ref_id);
                 }],
 
             [

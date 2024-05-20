@@ -41,7 +41,7 @@ class DeliveryorderController extends Controller
     {
         $viewstatus = 1;
 
-        if(\Yii::$app->request->get('viewstatus')!=null){
+        if (\Yii::$app->request->get('viewstatus') != null) {
             $viewstatus = \Yii::$app->request->get('viewstatus');
         }
 
@@ -62,7 +62,7 @@ class DeliveryorderController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'perpage' => $pageSize,
-            'viewstatus'=>$viewstatus,
+            'viewstatus' => $viewstatus,
         ]);
     }
 
@@ -122,10 +122,10 @@ class DeliveryorderController extends Controller
             $line_qty = \Yii::$app->request->post('line_qty');
             $line_description = \Yii::$app->request->post('line_product_name_description');
 
-            if($model->save(false)){
-                if($line_rec_id!=null){
-                    for($i=0;$i<count($line_rec_id);$i++) {
-                        \common\models\DeliveryOrderLine::updateAll(['name' => $line_name[$i],'description'=>$line_description[$i], 'qty' => $line_qty[$i]], ['id' => $line_rec_id[$i]]);
+            if ($model->save(false)) {
+                if ($line_rec_id != null) {
+                    for ($i = 0; $i < count($line_rec_id); $i++) {
+                        \common\models\DeliveryOrderLine::updateAll(['name' => $line_name[$i], 'description' => $line_description[$i], 'qty' => $line_qty[$i]], ['id' => $line_rec_id[$i]]);
                     }
                 }
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -169,6 +169,7 @@ class DeliveryorderController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
     public function actionPrint($id)
     {
         //if($id != null){
@@ -180,6 +181,7 @@ class DeliveryorderController extends Controller
         ]);
         //}
     }
+
     public function actionPrintdo($id)
     {
         //if($id != null){
@@ -191,6 +193,7 @@ class DeliveryorderController extends Controller
         ]);
         //}
     }
+
     public function actionPrintreciept($id)
     {
         //if($id != null){
@@ -202,6 +205,7 @@ class DeliveryorderController extends Controller
         ]);
         //}
     }
+
     public function actionPrinttaxinvoice($id)
     {
         //if($id != null){
@@ -212,5 +216,40 @@ class DeliveryorderController extends Controller
             'model_line' => $model_line
         ]);
         //}
+    }
+
+    public function actionFindstock()
+    {
+        $do_id = \Yii::$app->request->post('do_id');
+        // $customer_id =  \Yii::$app->request->post('customer_id');
+        $html = '';
+        if ($do_id > 0) {
+            $model_do = \common\models\DeliveryOrderLine::find()->select(['product_id'])->where(['delivery_order_id' => $do_id])->all();
+            if($model_do){
+                foreach ($model_do as $value) {
+                    $model = \backend\models\Stocksum::find()->select(['id', 'product_id', 'expired_date', 'qty'])->where(['product_id' => $value->product_id])->orderBy(['expired_date' => SORT_ASC])->all();
+                    if ($model) {
+                        foreach ($model as $x_value) {
+
+                            $html .= '<tr>';
+                            $html .= '<td style="text-align: center">
+                            <div class="btn btn-outline-success btn-sm" onclick="addselecteditem($(this))" data-var="' . $x_value->id . '">เลือก</div>
+                         
+                            <input type="hidden" class="line-find-product-id" value="' . $x_value->product_id . '">
+                            <input type="hidden" class="line-find-qty" value="' . $x_value->qty . '">
+                            <input type="hidden" class="line-find-product-name" value="' . \backend\models\Product::findName($x_value->product_id) . '">
+                           </td>';
+                            $html .= '<td style="text-align: center">' . date('d-m-Y', strtotime($x_value->expired_date)) . '</td>';
+                            $html .= '<td style="text-align: center">' . \backend\models\Product::findSku($x_value->product_id) . '</td>';
+                            $html .= '<td style="text-align: left">' . \backend\models\Product::findName($x_value->product_id) . '</td>';
+                            $html .= '<td style="text-align: right">' . number_format($x_value->qty, 1) . '</td>';
+                            $html .= '</tr>';
+                        }
+                    }
+                }
+            }
+
+        }
+        echo $html;
     }
 }

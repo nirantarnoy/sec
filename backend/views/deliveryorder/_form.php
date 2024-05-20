@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 <div class="deliveryorder-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
+    <input type="hidden" class="current-order-id" value="<?=$model->id?>">
     <div class="row">
         <div class="col-lg-3">
             <?= $form->field($model, 'order_no')->textInput(['maxlength' => true]) ?>
@@ -40,9 +40,10 @@ use yii\widgets\ActiveForm;
                 <thead>
                 <tr>
                     <th style="width: 5%">#</th>
-                    <th style="width: 25%;">รหัสสินค้า</th>
+                    <th style="width: 15%;">รหัสสินค้า</th>
                     <th>ชื่อสินค้า</th>
                     <th style="width: 10%;">จำนวนเบิก</th>
+                    <th style="width: 10%;">ExpDate</th>
                     <th style="width: 10%;">จำนวน/กล่อง</th>
                     <th style="width: 10%;">จำนวนกล่อง</th>
                     <th style="width: 10%;">จำนวนเศษ</th>
@@ -75,6 +76,10 @@ use yii\widgets\ActiveForm;
                                 <input type="number" class="form-control line-qty" name="line_qty[]"
                                        value="<?= $value_cal->qty ?>"
                                        onchange="linecalx($(this))">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control line-exp-date" name="line_exp_date[]"
+                                       value="" readonly>
                             </td>
                             <td>
                                 <input type="number" class="form-control line-qty" name="line_qty[]"
@@ -119,6 +124,10 @@ use yii\widgets\ActiveForm;
                                    onchange="linecalx($(this))">
                         </td>
                         <td>
+                            <input type="text" class="form-control line-exp-date" name="line_exp_date[]"
+                                   value="" readonly>
+                        </td>
+                        <td>
                             <input type="number" class="form-control line-qty" name="line_qty[]"
                                    value="0"
                                    onchange="linecalx($(this))">
@@ -140,7 +149,7 @@ use yii\widgets\ActiveForm;
                 <tr>
 
                     <td colspan="3">
-                        <button type="button" class="btn btn-info btn-sm" onclick="addline()">จัดสินค้า</button>
+                        <button type="button" class="btn btn-info btn-sm" onclick="addproductmodal()">จัดสินค้า</button>
                     </td>
                     <td></td>
                     <td></td>
@@ -259,3 +268,88 @@ use yii\widgets\ActiveForm;
     <?php ActiveForm::end(); ?>
 
 </div>
+
+
+<div id="findModal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-xl">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <b>เลือกรายการสินค้า <span class="checkseleted"></span></b>
+                    </div>
+                </div>
+            </div>
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-lg-12" style="text-align: right">
+                        <button class="btn btn-outline-success btn-emp-selected" data-dismiss="modalx" disabled><i
+                                    class="fa fa-check"></i> ตกลง
+                        </button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                                    class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                        </button>
+                    </div>
+                </div>
+                <div style="height: 10px;"></div>
+                <input type="hidden" name="line_qc_product" class="line_qc_product" value="">
+                <table class="table table-bordered table-striped table-find-list" width="100%">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center;width: 10%">เลือก</th>
+                        <th style="width: 15%;text-align: center;">วันหมดอายุ</th>
+                        <th style="width: 15%;text-align: center;">รหัสสินค้า</th>
+                        <th style="text-align: center;">ชื่อสินค้า</th>
+                        <th style="text-align: right;width: 15%">จำนวนคงเหลือ</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-success btn-emp-selected" data-dismiss="modalx" disabled><i
+                            class="fa fa-check"></i> ตกลง
+                </button>
+                <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                            class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<?php
+$url_to_find_stock = \yii\helpers\Url::to(['deliveryorder/findstock'], true);
+$js=<<<JS
+function addproductmodal(){
+   // $('#findModal').modal('show');
+    var order_id = $('.current-order-id').val();
+  // alert(customer_id);
+    $.ajax({
+      type: 'post',
+      dataType: 'html',
+      url:'$url_to_find_stock',
+      async: false,
+      data: {'do_id': order_id},
+      success: function(data){
+       //   alert(data);
+          $(".table-find-list tbody").html(data);
+          $("#findModal").modal("show");
+      },
+      error: function(err){
+          alert(err);
+      }
+      
+    });
+}
+JS;
+$this->registerJs($js,static::POS_END);
+?>
