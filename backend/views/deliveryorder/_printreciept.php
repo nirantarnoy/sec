@@ -1,4 +1,9 @@
 <?php
+$company_address = '';
+$model_data = \backend\models\Company::find()->select(['address'])->one();
+if($model_data){
+    $company_address = $model_data->address;
+}
 ?>
 <div id="div1">
 <div class="row">
@@ -24,8 +29,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <p style="font-size: 12px;">78/24 หมู่บ้าน เดอะคอนเนค 50 ม.3 ต.บ้านฉาง อ.เมือง จ.ปทุมธานี
-                                        12000(สำนักงานใหญ่)</p>
+                                    <p style="font-size: 12px;"><?= $company_address ?></p>
                                 </div>
                             </div>
                         </div>

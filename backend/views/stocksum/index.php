@@ -51,6 +51,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($data) {
                     return date('d/m/Y',strtotime($data->expired_date));
                 }
+            ],
+            [
+                    'label' => 'หมดอายุในอีก(วัน)',
+                'contentOptions' => ['style' => 'text-align: center;'],
+                'format' => 'html',
+                    'value' => function($data){
+                        $left_date = 0;
+                        $date1 = date_create(date('Y-m-d'));
+                        $date2 = date_create(date('Y-m-d', strtotime($data->expired_date)));
+
+                        if($data->expired_date != null){
+                            $left_date = date_diff( $date1,$date2);
+                        }
+                        $show_color = 'green';
+                        if(date('Y-m-d',strtotime($data->expired_date)) < date('Y-m-d')){
+                            $show_color = 'red';
+                        }
+                       // return $date1->format('d-m-Y');
+                        return '<span style="color: '.$show_color.'">'.$left_date->format('%a').'</span>';
+                    }
             ]
             //'last_update',
         ],
