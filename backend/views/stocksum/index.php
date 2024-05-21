@@ -4,7 +4,7 @@ use backend\models\Stocksum;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
-use Kartik\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
 
 /** @var yii\web\View $this */
