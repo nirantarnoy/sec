@@ -102,10 +102,10 @@ if (isset($_SESSION['cart'])) {
                                  src="<?= \Yii::$app->urlManagerBackend->getBaseUrl() . '/uploads/product_photo/' . $value->photo ?>"
                                  alt="Card image" style="max-width: 200px;">
                             <div class="card-body">
-                                <h4 class="card-title" style="font-size: 16px;"><b
-                                            style="color: red;">&#3647 <?= $sale_price ?></b></h4>
                                 <h4 class="card-title" style="font-size: 16px;">SKU: <b><?= $value->sku ?></b></h4>
                                 <p class="" style="font-size: 14px;"><?= $new_name ?></p>
+                                <h4 class="card-title" style="font-size: 16px;"><b
+                                            style="color: red;">&#3647 <?= $sale_price ?></b></h4>
                                 <h4 class="card-title" style="font-size: 16px;"><span
                                             style="color: red;font-size: 12px;">สต๊อก <?= number_format($value->qty) ?></span></h4>
                             </div>

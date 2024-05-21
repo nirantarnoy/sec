@@ -57,7 +57,7 @@ use yii\widgets\ActiveForm;
                         <tr data-var="<?= $value_cal->id ?>">
                             <td style="text-align: center;"><?= $line_num_cal; ?></td>
                             <td>
-                                <input type="hidden" name="line_rec_id[]" value="<?= $value_cal->id ?>">
+                                <input type="hidden" name="line_rec_idx[]" value="<?= $value_cal->id ?>">
                                 <input type="hidden" class="line-product-id" name="line_product_id[]"
                                        value="<?= $value_cal->product_id ?>">
                                 <input type="text" class="form-control line-product-code"
@@ -67,7 +67,7 @@ use yii\widgets\ActiveForm;
                             </td>
                             <td>
                                 <input type="text" class="form-control line-product-name"
-                                       name="line_product_name[]"
+                                       name="line_product_namex[]"
                                        value="<?= $value_cal->name?>"
                                 >
                             </td>
@@ -103,7 +103,7 @@ use yii\widgets\ActiveForm;
                     <tr data-var="0">
                         <td style="text-align: center;"></td>
                         <td>
-                            <input type="hidden" name="line_rec_id[]" value="0">
+                            <input type="hidden" name="line_rec_idx[]" value="0">
                             <input type="hidden" class="line-product-id" name="line_product_id[]"
                                    value="">
                             <input type="text" class="form-control line-product-code"
@@ -113,7 +113,7 @@ use yii\widgets\ActiveForm;
                         </td>
                         <td>
                             <input type="text" class="form-control line-product-name"
-                                   name="line_product_name[]"
+                                   name="line_product_namex[]"
                                    value=""
                             >
                         </td>

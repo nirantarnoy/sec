@@ -69,7 +69,7 @@ if ($modelissue) {
                         <tr>
                             <td style="text-align: center;border:1px solid lightgrey;padding: 10px;"><?= $loop_no ?></td>
                             <td style="text-align: center;border:1px solid lightgrey;padding: 5px;"><?= \backend\models\Product::findCode($value->product_id) ?></td>
-                            <td style="text-align: left;border:1px solid lightgrey;padding: 5px;"><?= $value->name ?></td>
+                            <td style="text-align: left;border:1px solid lightgrey;padding: 5px;"><?= $value->name."<br />".$value->description ?></td>
                             <td style="text-align: center;border:1px solid lightgrey;">ชิ้น</td>
                             <td style="text-align: right;border:1px solid lightgrey;padding: 5px;"><?= number_format($value->qty, 0) ?></td>
                             <td style="text-align: center;border:1px solid lightgrey;">-</td>
