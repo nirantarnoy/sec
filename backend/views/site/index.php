@@ -98,8 +98,8 @@ $model_stock = \backend\models\Stocksum::find()->where(['>','qty',0])->andFilter
                         <tr>
                             <td style="text-align: center"><?= \backend\models\Product::findSku($value->product_id) ?></td>
                             <td style="text-align: left"><?= \backend\models\Product::findName($value->product_id) ?></td>
-                            <td style="text-align: center;color:<?=$show_color?>"><?= date('d/m/Y',strtotime($value->expired_date)) ?></td>
-                            <td style="text-align: right;color:<?=$show_color?>"><?= number_format($value->qty) ?></td>
+                            <td style="text-align: center;"><?= date('d/m/Y',strtotime($value->expired_date)) ?></td>
+                            <td style="text-align: right;"><?= number_format($value->qty) ?></td>
                             <td style="text-align: right;color:<?=$show_color?>"><?= number_format($left_date->format('%a')). ' วัน' ?></td>
                         </tr>
                     <?php endforeach; ?>
