@@ -193,6 +193,7 @@ function addtocart(e){
         });
         }
 }
+
 JS;
 $this->registerJs($js, static::POS_END);
 ?>

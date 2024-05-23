@@ -53,48 +53,53 @@ use yii\widgets\ActiveForm;
                 <?php if ($model_cal_line != null): ?>
                     <?php $line_num_cal = 0; ?>
                     <?php foreach ($model_cal_line as $value_cal): ?>
-                        <?php $line_num_cal += 1; ?>
+                        <?php
+                        $line_num_cal += 1;
+                        $line_exp_date = '';
+                        $model_exp_date = \backend\models\Stocksum::findExpDate($value_cal->stock_sum_id);
+                        ?>
                         <tr data-var="<?= $value_cal->id ?>">
                             <td style="text-align: center;"><?= $line_num_cal; ?></td>
                             <td>
-                                <input type="hidden" name="line_rec_idx[]" value="<?= $value_cal->id ?>">
-                                <input type="hidden" class="line-product-id" name="line_product_id[]"
-                                       value="<?= $value_cal->product_id ?>">
-                                <input type="text" class="form-control line-product-code"
-                                       name="line_product_code[]"
-                                       value="<?= \backend\models\Product::findCode($value_cal->product_id) ?>"
+                                <input type="hidden" class="line-rec-idx" name="line_rec_idx[]" value="<?=$value_cal->id ?>">
+                                <input type="hidden" class="line-stock-sum-idx" name="line_stock_sum_idx[]" value="<?=$value_cal->stock_sum_id?>">
+                                <input type="hidden" class="line-product-idx" name="line_product_idx[]"
+                                       value="<?=$value_cal->product_id?>">
+                                <input type="text" class="form-control line-product-codex"
+                                       name="line_product_codex[]"
+                                       value="<?=\backend\models\Product::findSku($value_cal->product_id)?>"
                                        readonly>
                             </td>
                             <td>
-                                <input type="text" class="form-control line-product-name"
+                                <input type="text" class="form-control line-product-namex"
                                        name="line_product_namex[]"
-                                       value="<?= $value_cal->name?>"
+                                       value="<?=\backend\models\Product::findName($value_cal->product_id)?>" readonly
                                 >
                             </td>
 
                             <td>
-                                <input type="number" class="form-control line-qty" name="line_qty[]"
-                                       value="<?= $value_cal->qty ?>"
-                                       onchange="linecalx($(this))">
+                                <input type="number" class="form-control line-issue-qtyx" name="line_issue_qtyx[]"
+                                       value="<?=$value_cal->issue_qty?>"
+                                       onchange="linecalissueqty($(this))">
                             </td>
                             <td>
-                                <input type="text" class="form-control line-exp-date" name="line_exp_date[]"
-                                       value="" readonly>
+                                <input type="text" class="form-control line-exp-datex" name="line_exp_datex[]"
+                                       value="<?=$model_exp_date?>" readonly>
                             </td>
                             <td>
-                                <input type="number" class="form-control line-qty" name="line_qty[]"
-                                       value="<?= $value_cal->qty ?>"
-                                       onchange="linecalx($(this))">
+                                <input type="number" class="form-control line-per-box-qtyx" name="line_per_box_qtyx[]"
+                                       value="<?=$value_cal->qty_per_pack?>"
+                                       onchange="linecaldoperbox($(this))">
                             </td>
                             <td>
-                                <input type="number" class="form-control line-qty" name="line_qty[]"
-                                       value="<?= $value_cal->qty ?>"
-                                       onchange="linecalx($(this))">
+                                <input type="number" class="form-control line-box-qtyx" name="line_box_qtyx[]"
+                                       value="<?=$value_cal->total_pack?>"
+                                       onchange="" readonly>
                             </td>
                             <td>
-                                <input type="number" class="form-control line-qty" name="line_qty[]"
-                                       value="<?= $value_cal->qty ?>"
-                                       onchange="linecalx($(this))">
+                                <input type="number" class="form-control line-diff-qtyx" name="line_diff_qtyx[]"
+                                       value="<?=$value_cal->left_qty?>"
+                                       onchange="" readonly>
                             </td>
 
                         </tr>
@@ -103,44 +108,46 @@ use yii\widgets\ActiveForm;
                     <tr data-var="0">
                         <td style="text-align: center;"></td>
                         <td>
-                            <input type="hidden" name="line_rec_idx[]" value="0">
-                            <input type="hidden" class="line-product-id" name="line_product_id[]"
+                            <input type="hidden" class="line-rec-idx" name="line_rec_idx[]" value="0">
+                            <input type="hidden" class="line-stock-sum-idx" name="line_stock_sum_idx[]" value="0">
+                            <input type="hidden" class="line-product-idx" name="line_product_idx[]"
                                    value="">
-                            <input type="text" class="form-control line-product-code"
-                                   name="line_product_code[]"
+                            <input type="text" class="form-control line-product-codex"
+                                   name="line_product_codex[]"
                                    value=""
                                    readonly>
                         </td>
                         <td>
-                            <input type="text" class="form-control line-product-name"
+                            <input type="text" class="form-control line-product-namex"
                                    name="line_product_namex[]"
-                                   value=""
+                                   value="" readonly
                             >
                         </td>
 
                         <td>
-                            <input type="number" class="form-control line-qty" name="line_qty[]"
+                            <input type="number" class="form-control line-issue-qtyx" name="line_issue_qtyx[]"
                                    value="0"
-                                   onchange="linecalx($(this))">
+                                   onchange="linecalissueqty($(this))">
                         </td>
                         <td>
-                            <input type="text" class="form-control line-exp-date" name="line_exp_date[]"
+                            <input type="text" class="form-control line-exp-datex" name="line_exp_datex[]"
                                    value="" readonly>
                         </td>
                         <td>
-                            <input type="number" class="form-control line-qty" name="line_qty[]"
+                            <input type="number" class="form-control line-per-box-qtyx" name="line_per_box_qtyx[]"
                                    value="0"
-                                   onchange="linecalx($(this))">
+                                   onchange="linecaldoperbox($(this))">
                         </td>
                         <td>
-                            <input type="number" class="form-control line-qty" name="line_qty[]"
+                            <input type="number" class="form-control line-box-qtyx" name="line_box_qtyx[]"
                                    value="0"
-                                   onchange="linecalx($(this))">
+                                   onchange="" readonly>
+                            <input type="hidden" class="line-onhand-qtyx" name="line_onhand_qtyx[]" value="">
                         </td>
                         <td>
-                            <input type="number" class="form-control line-qty" name="line_qty[]"
+                            <input type="number" class="form-control line-diff-qtyx" name="line_diff_qtyx[]"
                                    value="0"
-                                   onchange="linecalx($(this))">
+                                   onchange="" readonly>
                         </td>
                     </tr>
                 <?php endif; ?>
@@ -166,7 +173,7 @@ use yii\widgets\ActiveForm;
     </div>
     <div class="row">
         <div class="col-lg-12">
-            <table class="table table-striped table-bordered">
+            <table class="table table-striped table-bordered" id="table-list-main">
                 <thead>
                 <tr>
                     <th style="width: 5%">#</th>
@@ -196,7 +203,7 @@ use yii\widgets\ActiveForm;
                             <td>
                                 <input type="text" class="form-control line-product-name"
                                        name="line_product_name[]"
-                                       value="<?= $value->name?>"
+                                       value="<?= $value->name?>" readonly
                                 >
                             </td>
                             <td>
@@ -231,7 +238,7 @@ use yii\widgets\ActiveForm;
                         <td>
                             <input type="text" class="form-control line-product-name"
                                    name="line_product_name[]"
-                                   value=""
+                                   value="" readonly
                             >
                         </td>
                         <td>
@@ -301,9 +308,9 @@ use yii\widgets\ActiveForm;
                     <thead>
                     <tr>
                         <th style="text-align: center;width: 10%">เลือก</th>
-                        <th style="width: 15%;text-align: center;">วันหมดอายุ</th>
                         <th style="width: 15%;text-align: center;">รหัสสินค้า</th>
                         <th style="text-align: center;">ชื่อสินค้า</th>
+                        <th style="width: 15%;text-align: center;">วันหมดอายุ</th>
                         <th style="text-align: right;width: 15%">จำนวนคงเหลือ</th>
                     </tr>
                     </thead>
@@ -329,6 +336,91 @@ use yii\widgets\ActiveForm;
 <?php
 $url_to_find_stock = \yii\helpers\Url::to(['deliveryorder/findstock'], true);
 $js=<<<JS
+var selecteditem = [];
+$(function(){
+   $(".btn-emp-selected").click(function () {
+        var line_count = 0;
+        
+        $("#table-list-top tbody tr").each(function () {
+            if($(this).closest('tr').find('.line-car-emp-code').val()  != ''){
+                // alert($(this).closest('tr').find('.line-car-emp-code').val());
+             line_count += 1;   
+            }
+        });
+        
+        if (selecteditem.length > 0) {
+           
+            for (var i = 0; i <= selecteditem.length - 1; i++) {
+                var product_id = selecteditem[i]['product_id'];
+                var sku = selecteditem[i]['sku'];
+                var product_name = selecteditem[i]['product_name'];
+                var issue_qty = selecteditem[i]['issue_qty'];
+                var qty = selecteditem[i]['qty'];
+                var exp_date = selecteditem[i]['expired_date'];
+                var line_id = selecteditem[i]['do_line_id'];
+                
+                var tr = $("#table-list-top tbody tr:last");
+                
+                if (tr.closest("tr").find(".line-product-idx").val() == "") {
+                  //  alert(line_prod_code);
+                    tr.closest("tr").find(".line-product-idx").val(product_id);
+                    tr.closest("tr").find(".line-product-codex").val(sku);
+                    tr.closest("tr").find(".line-product-namex").val(product_name);
+                    tr.closest("tr").find(".line-issue-qtyx").val(issue_qty);
+                    tr.closest("tr").find(".line-exp-datex").val(exp_date);
+                    tr.closest("tr").find(".line-issue-qtyx").val(issue_qty);
+                    tr.closest("tr").find(".line-onhand-qtyx").val(qty);
+                    tr.closest("tr").find(".line-stock-sum-idx").val(line_id);
+                //    tr.closest("tr").find(".line").val(exp_date);
+                    //console.log(line_prod_code);
+                } else {
+                    //alert("dd");
+                   // console.log(line_prod_code);
+                    //tr.closest("tr").find(".line_code").css({'border-color': ''});
+                    var has_record = 0;
+                    $("#table-list-top tbody tr").each(function () {
+                        if($(this).closest('tr').find('.line-stock-sum-idx').val() == line_id){
+                            has_record = 1;
+                        }
+                    })
+                    
+                    if(has_record == 0){
+                          var clone = tr.clone();
+                        clone.find(":text").val("");
+                        clone.closest("tr").find(".line-rec-idx").val(0);
+                        clone.closest("tr").find(".line-per-box-qtyx").val("");
+                        clone.closest("tr").find(".line-box-qtyx").val("");
+                        clone.closest("tr").find(".line-diff-qtyx").val("");
+                        clone.closest("tr").find(".line-product-idx").val(product_id);
+                        clone.closest("tr").find(".line-product-codex").val(sku);
+                        clone.closest("tr").find(".line-product-namex").val(product_name);
+                        clone.closest("tr").find(".line-issue-qtyx").val(issue_qty);
+                        clone.closest("tr").find(".line-exp-datex").val(exp_date);
+                        clone.closest("tr").find(".line-issue-qtyx").val(issue_qty);
+                        clone.closest("tr").find(".line-onhand-qtyx").val(qty);
+                        clone.closest("tr").find(".line-stock-sum-idx").val(line_id);
+                        tr.after(clone);
+                    }
+
+                    
+                    //cal_num();
+                }
+            }
+         
+        }
+       
+        selecteditem = [];
+
+        $("#table-find-list tbody tr").each(function () {
+            $(this).closest("tr").find(".btn-line-select").removeClass('btn-success');
+            $(this).closest("tr").find(".btn-line-select").addClass('btn-outline-success');
+        });
+        
+        $(".btn-emp-selected").removeClass('btn-success');
+        $(".btn-emp-selected").addClass('btn-outline-success');
+        $("#findModal").modal('hide');
+    }); 
+});
 function addproductmodal(){
    // $('#findModal').modal('show');
     var order_id = $('.current-order-id').val();
@@ -350,6 +442,158 @@ function addproductmodal(){
       
     });
 }
+function addselecteditem(e) {
+        var id = e.attr('data-var');
+        var do_line_id = e.closest('tr').find('.line-find-do-line-id').val();
+        var product_id = e.closest('tr').find('.line-find-product-id').val();
+        var product_sku = e.closest('tr').find('.line-find-product-sku').val();
+        var product_name = e.closest('tr').find('.line-find-product-name').val();
+        var expired_date = e.closest('tr').find('.line-find-product-expired-date').val();
+        var issue_qty = e.closest('tr').find('.line-find-product-issue-qty').val();
+        var qty = e.closest('tr').find('.line-find-product-qty').val();
+        
+        ///////
+        if (id) {
+            // if(checkhasempdaily(id)){
+            //     alert("คุณได้ทำการจัดรถให้พนักงานคนนี้ไปแล้ว");
+            //     return false;
+            // }
+            if (e.hasClass('btn-outline-success')) {
+                var obj = {};
+                obj['id'] = id;
+                obj['sku'] = product_sku;
+                obj['product_id'] = product_id;
+                obj['product_name'] = product_name;
+                obj['issue_qty'] = issue_qty;
+                obj['qty'] = qty;
+                obj['expired_date'] = expired_date;
+                obj['do_line_id'] = do_line_id;
+                selecteditem.push(obj);
+            
+             
+                e.removeClass('btn-outline-success');
+                e.addClass('btn-success');
+                disableselectitem();
+                console.log(selecteditem);
+            } else {
+                //selecteditem.pop(id);
+                $.each(selecteditem, function (i, el) {
+                    if (this.id == id) {
+                        selecteditem.splice(i, 1);
+                        console.log(selecteditem);
+                    }
+                });
+                e.removeClass('btn-success');
+                e.addClass('btn-outline-success');
+                
+                disableselectitem();
+                console.log(selecteditem);
+            }
+        }
+      
+        
+}
+ function disableselectitem() {
+        if (selecteditem.length > 0) {
+            $(".btn-emp-selected").prop("disabled", "");
+            $(".btn-emp-selected").removeClass('btn-outline-success');
+            $(".btn-emp-selected").addClass('btn-success');
+        } else {
+            $(".btn-emp-selected").prop("disabled", "disabled");
+            $(".btn-emp-selected").removeClass('btn-success');
+            $(".btn-emp-selected").addClass('btn-outline-success');
+        }
+    }
+    
+ function linecaldoperbox(e){
+    // var boxqty = e.val();
+    // var issue_qty = e.closest('tr').find('.line-issue-qtyx').val();
+    // var total = (issue_qty/ boxqty);
+    // e.closest('tr').find('.line-box-qtyx').val(total);
+    // e.closest('tr').find('.line-diff-qtyx').val(0);
+     var product_id = e.closest('tr').find('.line-product-idx').val();
+    var qty = e.closest('tr').find('.line-issue-qtyx').val();
+    var boxqty = e.val();
+    var total = parseFloat(qty) / parseFloat(boxqty);
+    var diff_qty = 0;
+    //alert(Math.floor(parseFloat(total)));
+    var convert_qty = Math.floor(parseFloat(total)) * parseFloat(boxqty);
+    diff_qty = qty - convert_qty;
+    
+    if(parseFloat(qty)< parseFloat(boxqty)){
+        diff_qty= qty;
+    }
+    
+    e.closest('tr').find('.line-box-qtyx').val(Math.floor(parseFloat(total)));
+     e.closest('tr').find('.line-diff-qtyx').val(diff_qty);
+     
+     var text_desc = '';
+        if(Math.floor(parseFloat(total))>0){
+            text_desc = Math.floor(parseFloat(total)) + " กล่อง"; 
+        }
+        if(diff_qty > 0){
+            text_desc += " เศษ "+ diff_qty + " ชิ้น";
+        }
+       
+        updateDescriptionline(product_id,text_desc);
+ }  
+ function linecalissueqty(e){
+    var qty = e.val();
+    var product_id = e.closest('tr').find('.line-product-idx').val();
+    
+    if(product_id != ''){
+      //  alert(product_id);
+        checkOverqty(product_id,qty);
+    
+        var boxqty = e.closest('tr').find('.line-per-box-qtyx').val();
+        var total = parseFloat(qty) / parseFloat(boxqty);
+        var diff_qty = 0;
+        //alert(Math.floor(parseFloat(total)));
+        var convert_qty = Math.floor(parseFloat(total)) * parseFloat(boxqty);
+        diff_qty = qty - convert_qty;
+        
+        if(parseFloat(qty)< parseFloat(boxqty)){
+            diff_qty= qty;
+        }
+        
+        e.closest('tr').find('.line-box-qtyx').val(Math.floor(parseFloat(total)));
+        e.closest('tr').find('.line-diff-qtyx').val(diff_qty);
+        
+        var text_desc = '';
+        if(Math.floor(parseFloat(total))>0){
+            text_desc = Math.floor(parseFloat(total)) + "กล่อง"; 
+        }
+        if(diff_qty > 0){
+            text_desc += " เศษ "+ diff_qty + " ชิ้น";
+        }
+       
+        updateDescriptionline(product_id,text_desc);
+    }
+    
+ }
+ 
+ function checkOverqty(product_id,qty){
+    if(product_id !=''){
+        $("#table-list-main tbody tr").each(function(){
+           if($(this).find('.line-product-id').val()==product_id){
+               if($(this).find('.line-qty').val()<qty){
+                   alert('จำนวนสินค้าเกินจำนวนที่ต้องการเบิก');
+                   return false;
+               }
+           } 
+        });
+    }
+ }
+ 
+ function updateDescriptionline(product_id,text){
+    if(product_id !=''){
+        $("#table-list-main tbody tr").each(function(){
+           if($(this).find('.line-product-id').val() == product_id){
+               $(this).closest("tr").find(".line-product-name-description").val(text);
+           } 
+        });
+    }
+ }
 JS;
 $this->registerJs($js,static::POS_END);
 ?>

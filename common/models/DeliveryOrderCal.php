@@ -32,8 +32,8 @@ class DeliveryOrderCal extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['delivery_order_id', 'delivery_line_id', 'product_id', 'status'], 'integer'],
-            [['qty_per_pack', 'total_pack', 'left_qty'], 'number'],
+            [['delivery_order_id', 'delivery_line_id', 'product_id', 'status','stock_sum_id'], 'integer'],
+            [['qty_per_pack', 'total_pack', 'left_qty','issue_qty'], 'number'],
         ];
     }
 

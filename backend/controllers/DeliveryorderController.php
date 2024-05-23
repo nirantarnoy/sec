@@ -122,10 +122,56 @@ class DeliveryorderController extends Controller
             $line_qty = \Yii::$app->request->post('line_qty');
             $line_description = \Yii::$app->request->post('line_product_name_description');
 
+            $line_stock_sum_id = \Yii::$app->request->post('line_stock_sum_idx');
+            $line_rec_idx = \Yii::$app->request->post('line_rec_idx');
+            $line_product_idx = \Yii::$app->request->post('line_product_idx');
+            $line_issue_qtyx = \Yii::$app->request->post('line_issue_qtyx');
+            $line_per_box_qtyx = \Yii::$app->request->post('line_per_box_qtyx');
+            $line_box_qtyx = \Yii::$app->request->post('line_box_qtyx');
+            $line_diff_qtyx = \Yii::$app->request->post('line_diff_qtyx');
+
+
             if ($model->save(false)) {
                 if ($line_rec_id != null) {
                     for ($i = 0; $i < count($line_rec_id); $i++) {
                         \common\models\DeliveryOrderLine::updateAll(['name' => $line_name[$i], 'description' => $line_description[$i], 'qty' => $line_qty[$i]], ['id' => $line_rec_id[$i]]);
+                    }
+                }
+
+                if($line_stock_sum_id !=null){
+                    for($x = 0; $x < count($line_stock_sum_id); $x++){
+                        $model_cal_check = \common\models\DeliveryOrderCal::find()->where(['id'=>$line_rec_idx[$x]])->one();
+                        if($model_cal_check){
+                            $model_cal_check->delivery_order_id = $model->id;
+                            $model_cal_check->delivery_line_id = $line_rec_idx[$x];
+                            $model_cal_check->product_id = $line_product_idx[$x];
+                            $model_cal_check->qty_per_pack = $line_per_box_qtyx[$x];
+                            $model_cal_check->total_pack = $line_box_qtyx[$x];
+                            $model_cal_check->left_qty = $line_diff_qtyx[$x];
+                            $model_cal_check->issue_qty = $line_issue_qtyx[$x];
+                            $model_cal_check->stock_sum_id = $line_stock_sum_id[$x];
+                            $model_cal_check->save(false);
+                        }else{
+                            $model_cal = new \common\models\DeliveryOrderCal();
+                            $model_cal->delivery_order_id = $model->id;
+                            $model_cal->delivery_line_id = $line_rec_idx[$x];
+                            $model_cal->product_id = $line_product_idx[$x];
+                            $model_cal->qty_per_pack = $line_per_box_qtyx[$x];
+                            $model_cal->total_pack = $line_box_qtyx[$x];
+                            $model_cal->left_qty = $line_diff_qtyx[$x];
+                            $model_cal->issue_qty = $line_issue_qtyx[$x];
+                            $model_cal->stock_sum_id = $line_stock_sum_id[$x];
+                            if($model_cal->save(false)){
+                                $model_update_stock = \backend\models\Stocksum::find()->where(['id'=>$line_stock_sum_id[$x]])->one();
+//                                if($model_update_stock){
+//                                    if($model_update_stock->qty >= $line_issue_qtyx[$x]){
+//                                        $model_update_stock->qty = $model_update_stock->qty - $line_issue_qtyx[$x];
+//                                        $model_update_stock->save(false);
+//                                    }
+//                                }
+                            }
+                        }
+
                     }
                 }
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -224,24 +270,29 @@ class DeliveryorderController extends Controller
         // $customer_id =  \Yii::$app->request->post('customer_id');
         $html = '';
         if ($do_id > 0) {
-            $model_do = \common\models\DeliveryOrderLine::find()->select(['product_id'])->where(['delivery_order_id' => $do_id])->all();
+            $model_do = \common\models\DeliveryOrderLine::find()->select(['id','product_id','qty'])->where(['delivery_order_id' => $do_id])->all();
             if($model_do){
                 foreach ($model_do as $value) {
                     $model = \backend\models\Stocksum::find()->select(['id', 'product_id', 'expired_date', 'qty'])->where(['product_id' => $value->product_id])->orderBy(['expired_date' => SORT_ASC])->all();
                     if ($model) {
                         foreach ($model as $x_value) {
-
+                            $line_sku =  \backend\models\Product::findSku($x_value->product_id);
+                            $line_name =  \backend\models\Product::findName($x_value->product_id);
                             $html .= '<tr>';
                             $html .= '<td style="text-align: center">
-                            <div class="btn btn-outline-success btn-sm" onclick="addselecteditem($(this))" data-var="' . $x_value->id . '">เลือก</div>
-                         
+                            <div class="btn btn-outline-success btn-sm" onclick="addselecteditem($(this))" data-var="' . $x_value->id . '">เลือก</div>                        
+                            <input type="hidden" class="line-find-do-id" value="' . $do_id. '">
+                            <input type="hidden" class="line-find-do-line-id" value="' . $value->id. '">
                             <input type="hidden" class="line-find-product-id" value="' . $x_value->product_id . '">
-                            <input type="hidden" class="line-find-qty" value="' . $x_value->qty . '">
-                            <input type="hidden" class="line-find-product-name" value="' . \backend\models\Product::findName($x_value->product_id) . '">
+                            <input type="hidden" class="line-find-product-qty" value="' . $x_value->qty . '">
+                            <input type="hidden" class="line-find-product-issue-qty" value="' . $value->qty . '">
+                            <input type="hidden" class="line-find-product-sku" value="' . $line_sku . '">
+                            <input type="hidden" class="line-find-product-name" value="' . $line_name . '">
+                            <input type="hidden" class="line-find-product-expired-date" value="' . date('d-m-Y', strtotime($x_value->expired_date)) . '">
                            </td>';
+                            $html .= '<td style="text-align: center">' .$line_sku . '</td>';
+                            $html .= '<td style="text-align: left">' . $line_name . '</td>';
                             $html .= '<td style="text-align: center">' . date('d-m-Y', strtotime($x_value->expired_date)) . '</td>';
-                            $html .= '<td style="text-align: center">' . \backend\models\Product::findSku($x_value->product_id) . '</td>';
-                            $html .= '<td style="text-align: left">' . \backend\models\Product::findName($x_value->product_id) . '</td>';
                             $html .= '<td style="text-align: right">' . number_format($x_value->qty, 1) . '</td>';
                             $html .= '</tr>';
                         }

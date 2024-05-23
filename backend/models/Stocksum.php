@@ -73,6 +73,11 @@ class Stocksum extends \common\models\StockSum
         return $model != null ?$model->description:'';
     }
 
+    static function findExpDate($id){
+        $model = Stocksum::find()->where(['id'=>$id])->one();
+        return $model != null ?date('d/m/Y',strtotime($model->expired_date)):'';
+    }
+
 //    public static function findName($id){
 //        $model = \common\models\RoutePlan::find()->where(['id'=>$id])->one();
 //        return $model!= null?$model->name:'';
