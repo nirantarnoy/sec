@@ -16,7 +16,7 @@ $model_stock = \backend\models\Stocksum::find()->where(['>','qty',0])->andFilter
 $model_sale_top_product = \common\models\ViewOrderAmount::find()->select(['product_id','sku','name','sum(qty) as qty'])->groupBy(['product_id'])->orderBy(['sum(qty)' => SORT_DESC])->limit(5)->all();
 $model_sale_compare = \common\models\ViewOrderAmount::find()->select(['year','month','sum(cost_amt) as cost_amt','sum(sale_amt) as sale_amt'])->groupBy(['year','month'])->orderBy(['month'=>SORT_ASC])->all();
 //$model_sale_compare = \common\models\ViewOrderAmount::find()->orderBy(['month(order_date)'=>SORT_ASC])->all();
-print_r($model_sale_compare);
+//print_r($model_sale_compare);
 ?>
 <br/>
 <br/>
