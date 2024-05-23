@@ -11,7 +11,7 @@ $customer_count = \backend\models\Customer::find()->where(['status' => 1])->coun
 
 $model_stock = \backend\models\Stocksum::find()->where(['>','qty',0])->andFilterWhere(['!=','year(expired_date)',1970])->groupBy(['product_id'])->orderBy(['expired_date' => SORT_ASC])->limit(10)->all();
 
-$model_sale_top_product = \common\models\ViewOrderAmount::find()->select(['sum(qty) as qty'])->groupBy(['product_id'])->orderBy(['sum(qty)' => SORT_DESC])->limit(5)->all();
+$model_sale_top_product = \common\models\ViewOrderAmount::find()->select(['product_id','sku','name','sum(qty) as qty'])->groupBy(['product_id'])->orderBy(['sum(qty)' => SORT_DESC])->limit(5)->all();
 
 ?>
 <br/>
