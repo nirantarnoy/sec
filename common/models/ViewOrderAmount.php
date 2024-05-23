@@ -23,6 +23,10 @@ use Yii;
  * @property float|null $sale_price
  * @property float|null $qty
  * @property float|null $price
+ * @property int|null $year
+ * @property int|null $month
+ * @property float|null $cost_amt
+ * @property float|null $sale_amt
  */
 class ViewOrderAmount extends \yii\db\ActiveRecord
 {
@@ -40,9 +44,9 @@ class ViewOrderAmount extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'customer_id', 'status', 'product_id', 'unit_id'], 'integer'],
+            [['id', 'customer_id', 'status', 'product_id', 'unit_id', 'year', 'month'], 'integer'],
             [['order_date'], 'safe'],
-            [['total_amount', 'cost_price', 'sale_price', 'qty', 'price'], 'number'],
+            [['total_amount', 'cost_price', 'sale_price', 'qty', 'price', 'cost_amt', 'sale_amt'], 'number'],
             [['order_no', 'customer_name', 'sku', 'name', 'barcode'], 'string', 'max' => 255],
         ];
     }
@@ -69,6 +73,10 @@ class ViewOrderAmount extends \yii\db\ActiveRecord
             'sale_price' => 'Sale Price',
             'qty' => 'Qty',
             'price' => 'Price',
+            'year' => 'Year',
+            'month' => 'Month',
+            'cost_amt' => 'Cost Amt',
+            'sale_amt' => 'Sale Amt',
         ];
     }
 }

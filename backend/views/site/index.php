@@ -5,6 +5,8 @@ use miloschuman\highcharts\Highcharts;
 
 $this->title = 'ภาพรวมระบบ';
 
+$m_data = [['id' => 1, 'name' => 'มกราคม'], ['id' => 2, 'name' => 'กุมภาพันธ์'], ['id' => 3, 'name' => 'มีนาคม'], ['id' => 4, 'name' => 'เมษายน'], ['id' => 5, 'name' => 'พฤษภาคม'], ['id' => 6, 'name' => 'มิถุนายน'], ['id' => 7, 'name' => 'กรกฎาคม'], ['id' => 8, 'name' => 'สิงหาคม'], ['id' => 9, 'name' => 'กันยายน'], ['id' => 10, 'name' => 'ตุลาคม'], ['id' => 11, 'name' => 'พฤศจิกายน'], ['id' => 12, 'name' => 'ธันวาคม']];
+
 $product_count = \backend\models\Product::find()->where(['status' => 1])->count();
 $order_count = \backend\models\Order::find()->count();
 $customer_count = \backend\models\Customer::find()->where(['status' => 1])->count();
@@ -12,7 +14,9 @@ $customer_count = \backend\models\Customer::find()->where(['status' => 1])->coun
 $model_stock = \backend\models\Stocksum::find()->where(['>','qty',0])->andFilterWhere(['!=','year(expired_date)',1970])->groupBy(['product_id'])->orderBy(['expired_date' => SORT_ASC])->limit(10)->all();
 
 $model_sale_top_product = \common\models\ViewOrderAmount::find()->select(['product_id','sku','name','sum(qty) as qty'])->groupBy(['product_id'])->orderBy(['sum(qty)' => SORT_DESC])->limit(5)->all();
-
+$model_sale_compare = \common\models\ViewOrderAmount::find()->select(['year','month','sum(cost_amt) as cost_amt','sum(sale_amt) as sale_amt'])->groupBy(['year','month'])->orderBy(['month'=>SORT_ASC])->all();
+//$model_sale_compare = \common\models\ViewOrderAmount::find()->orderBy(['month(order_date)'=>SORT_ASC])->all();
+print_r($model_sale_compare);
 ?>
 <br/>
 <br/>
@@ -136,6 +140,41 @@ $model_sale_top_product = \common\models\ViewOrderAmount::find()->select(['produ
                 </table>
             </div>
         </div>
-
+        <br />
+        <label for="">เปรียบเทียบทุนกำไร</label>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">เดือน</th>
+                        <th style="text-align: right">ราคาทุน</th>
+                        <th style="text-align: right">ราคาขาย</th>
+                        <th style="text-align: right">กำไร</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($model_sale_compare as $value): ?>
+                        <?php
+                          $m_name = '';
+                          for($x = 1; $x <= $m_data; $x++){
+                              if($m_data[$x]['id'] == $value->month){
+                                  $m_name = $m_data[$x]['name'];
+                                  break;
+                              }
+                          }
+                        ?>
+                        <tr>
+                            <td style="text-align: center"><?= $m_name ?></td>
+                            <td style="text-align: right"><?= number_format($value->cost_amt) ?></td>
+                            <td style="text-align: right;"><?= number_format($value->sale_amt) ?></td>
+                            <td style="text-align: right;"><?= number_format($value->sale_amt-$value->cost_amt) ?></td>
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br />
     </div>
 </div>
