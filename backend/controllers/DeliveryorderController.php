@@ -276,6 +276,7 @@ class DeliveryorderController extends Controller
                     $model = \backend\models\Stocksum::find()->select(['id', 'product_id', 'expired_date', 'qty'])->where(['product_id' => $value->product_id])->orderBy(['expired_date' => SORT_ASC])->all();
                     if ($model) {
                         foreach ($model as $x_value) {
+                            if($x_value->qty <= 0) continue;
                             $line_sku =  \backend\models\Product::findSku($x_value->product_id);
                             $line_name =  \backend\models\Product::findName($x_value->product_id);
                             $html .= '<tr>';

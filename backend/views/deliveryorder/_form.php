@@ -458,6 +458,19 @@ function addselecteditem(e) {
             //     alert("คุณได้ทำการจัดรถให้พนักงานคนนี้ไปแล้ว");
             //     return false;
             // }
+             var total_selected_qty = 0;
+            $("#table-list-top tbody tr").each(function (){
+                if($(this).closest('tr').find('.line-product-idx').val() == product_id){
+                    total_selected_qty += parseFloat($(this).closest('tr').find('.line-issue-qtyx').val());
+                }  
+            });
+            
+            if(parseFloat(total_selected_qty)>=parseFloat(issue_qty)){
+                alert("เลือกจำนวนสำหรับเบิกครบแล้ว");
+                return false;
+            }
+            
+            
             if (e.hasClass('btn-outline-success')) {
                 var obj = {};
                 obj['id'] = id;
