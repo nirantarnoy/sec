@@ -10,6 +10,9 @@ $order_count = \backend\models\Order::find()->count();
 $customer_count = \backend\models\Customer::find()->where(['status' => 1])->count();
 
 $model_stock = \backend\models\Stocksum::find()->where(['>','qty',0])->andFilterWhere(['!=','year(expired_date)',1970])->groupBy(['product_id'])->orderBy(['expired_date' => SORT_ASC])->limit(10)->all();
+
+$model_sale_top_product = \common\models\ViewOrderAmount::find()->select(['sum(qty) as qty'])->groupBy(['product_id'])->orderBy(['sum(qty)' => SORT_DESC])->limit(5)->all();
+
 ?>
 <br/>
 <br/>
@@ -65,6 +68,32 @@ $model_stock = \backend\models\Stocksum::find()->where(['>','qty',0])->andFilter
 
         </div>
         <br />
+        <label for="">สินค้ายอดขายสูงสุด 5 อันดับ</label>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th style="text-align: center">SKU</th>
+                        <th style="text-align: center">ชื่อสินค้า</th>
+                        <th style="text-align: right">จำนวน</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php foreach ($model_sale_top_product as $key => $value): ?>
+
+                        <tr>
+                            <td style="text-align: center"><?= \backend\models\Product::findSku($value->product_id) ?></td>
+                            <td style="text-align: left"><?= \backend\models\Product::findName($value->product_id) ?></td>
+                            <td style="text-align: right;"><?= number_format($value->qty) ?></td>
+
+                        </tr>
+                    <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <br />
         <label for="">รายการสินค้าใกล้หมดอายุ</label>
         <div class="row">
             <div class="col-lg-12">
@@ -80,7 +109,7 @@ $model_stock = \backend\models\Stocksum::find()->where(['>','qty',0])->andFilter
                     </thead>
                     <tbody>
                     <?php foreach ($model_stock as $key => $value): ?>
-                    <?php
+                        <?php
                         $left_date = 0;
                         $date1 = date_create(date('Y-m-d'));
                         $date2 = date_create(date('Y-m-d', strtotime($value->expired_date)));
@@ -93,8 +122,8 @@ $model_stock = \backend\models\Stocksum::find()->where(['>','qty',0])->andFilter
                             $show_color = 'red';
                         }
                         // return $date1->format('d-m-Y');
-                       // return '<span style="color: '.$show_color.'">'.$left_date->format('%a').'</span>';
-                    ?>
+                        // return '<span style="color: '.$show_color.'">'.$left_date->format('%a').'</span>';
+                        ?>
                         <tr>
                             <td style="text-align: center"><?= \backend\models\Product::findSku($value->product_id) ?></td>
                             <td style="text-align: left"><?= \backend\models\Product::findName($value->product_id) ?></td>

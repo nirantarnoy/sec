@@ -46,7 +46,9 @@ $yesno = [['id'=>1,'YES'],['id'=>0,'NO']];
             ]) ?>
         </div>
         <div class="col-lg-3">
+            <?php if (\backend\models\User::checkhasrole(\Yii::$app->user->id, 'Owner')): ?>
             <?= $form->field($model, 'cost_price')->textInput() ?>
+            <?php endif;?>
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'sale_price')->textInput() ?>
