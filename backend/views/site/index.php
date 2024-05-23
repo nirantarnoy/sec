@@ -9,7 +9,7 @@ $product_count = \backend\models\Product::find()->where(['status' => 1])->count(
 $order_count = \backend\models\Order::find()->count();
 $customer_count = \backend\models\Customer::find()->where(['status' => 1])->count();
 
-$model_stock = \backend\models\Stocksum::find()->where(['>','qty',0])->groupBy(['product_id'])->orderBy(['expired_date' => SORT_ASC])->limit(10)->all();
+$model_stock = \backend\models\Stocksum::find()->where(['>','qty',0])->andFilterWhere(['!=','year(expired_date)',1970])->groupBy(['product_id'])->orderBy(['expired_date' => SORT_ASC])->limit(10)->all();
 ?>
 <br/>
 <br/>
