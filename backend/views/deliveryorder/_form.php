@@ -666,11 +666,11 @@ function addselecteditem(e) {
         //     text += " เศษ "+ diff_qty + " ชิ้น";  
         // }
         
-         if(box_qty>0){
-            text = 'Pack Size '+ box_qty + "X"  + qty_per_box;
+        if(box_qty>0){
+            text = 'Pack Size '+ box_qty + "x"  + qty_per_box;
         }
         if(diff_qty>0){
-            text += " + "+ diff_qty + " = "+ (box_qty*qty_per_box+diff_qty);  
+            text += "+"+ diff_qty + " = "+ (box_qty*qty_per_box+diff_qty);  
         }else{
             text += " = "+ (box_qty*qty_per_box);
         }
