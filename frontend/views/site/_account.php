@@ -7,7 +7,7 @@ $this->title = 'บัญชีของฉัน';
 $this->params['breadcrumbs'][] = $this->title;
 
 if($model!=null){
-    echo "ok";
+    echo $model->id;
 }
 ?>
 <div class="row">
