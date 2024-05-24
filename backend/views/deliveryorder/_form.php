@@ -589,6 +589,8 @@ function addselecteditem(e) {
     if(product_id !=''){
         $("#table-list-main tbody tr").each(function(){
            if($(this).find('.line-product-id').val()==product_id){
+               alert('main qty is '+$(this).find('.line-qty').val());
+               alert('qty is '+qty);
                if($(this).find('.line-qty').val()<qty){
                    alert('จำนวนสินค้าเกินจำนวนที่ต้องการเบิก');
                    return false;
