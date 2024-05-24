@@ -86,8 +86,10 @@ if (isset($_SESSION['cart'])) {
                         <div>
                             <b style="color: red;"><?= $product_exp_date != null ? date('d/m/Y', strtotime($product_exp_date)) : '' ?></b>
                         </div>
-                        <br/>
+                        <?php else:?>
+                         <b>-</b>
                     <?php endif; ?>
+                    <br/>
                 <?php endif; ?>
                 <div><b>จำนวน</b></div>
                 <div style="max-width: 180px;padding: 15px 15px 15px 0px;">
