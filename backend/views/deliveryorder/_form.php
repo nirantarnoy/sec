@@ -555,6 +555,7 @@ function addselecteditem(e) {
  }  
  function linecalissueqty(e){
     var qty = e.val();
+    var origin_qty = e.closest('tr').find('.line-issue-qtyx').val();
     var product_id = e.closest('tr').find('.line-product-idx').val();
     var current_stock_qty = e.closest('tr').find('.line-onhand-qtyx').val();
     
@@ -563,7 +564,7 @@ function addselecteditem(e) {
       
         if(parseFloat(qty) > parseFloat(current_stock_qty)){
             alert("จำนวนสำหรับเบิกเกินจำนวนคงเหลือ");
-            e.val(current_stock_qty);
+            e.val(origin_qty);
             return false;
         }else{
             checkOverqty(product_id,qty,e);
