@@ -78,6 +78,7 @@ use yii\widgets\ActiveForm;
                             </td>
 
                             <td>
+                                <input type="hidden" class="line-issue-origin-qtyx" value="">
                                 <input type="number" class="form-control line-issue-qtyx" name="line_issue_qtyx[]"
                                        value="<?=$value_cal->issue_qty?>"
                                        onchange="linecalissueqty($(this))">
@@ -95,6 +96,7 @@ use yii\widgets\ActiveForm;
                                 <input type="number" class="form-control line-box-qtyx" name="line_box_qtyx[]"
                                        value="<?=$value_cal->total_pack?>"
                                        onchange="" readonly>
+                                <input type="hidden" class="line-onhand-qtyx" name="line_onhand_qtyx[]" value="">
                             </td>
                             <td>
                                 <input type="number" class="form-control line-diff-qtyx" name="line_diff_qtyx[]"
@@ -369,6 +371,7 @@ $(function(){
                     tr.closest("tr").find(".line-issue-qtyx").val(issue_qty);
                     tr.closest("tr").find(".line-exp-datex").val(exp_date);
                     tr.closest("tr").find(".line-issue-qtyx").val(issue_qty);
+                    tr.closest("tr").find(".line-issue-origin-qtyx").val(issue_qty);
                     tr.closest("tr").find(".line-onhand-qtyx").val(qty);
                     tr.closest("tr").find(".line-stock-sum-idx").val(line_id);
                 //    tr.closest("tr").find(".line").val(exp_date);
@@ -553,39 +556,48 @@ function addselecteditem(e) {
  function linecalissueqty(e){
     var qty = e.val();
     var product_id = e.closest('tr').find('.line-product-idx').val();
+    var current_stock_qty = e.closest('tr').find('.line-onhand-qtyx').val();
     
     if(product_id != ''){
       //  alert(product_id);
-        checkOverqty(product_id,qty);
+      
+        if(parseFloat(qty) > parseFloat(current_stock_qty)){
+            alert("จำนวนสำหรับเบิกเกินจำนวนคงเหลือ");
+            e.val(current_stock_qty);
+            return false;
+        }else{
+            checkOverqty(product_id,qty,e);
     
-        var boxqty = e.closest('tr').find('.line-per-box-qtyx').val();
-        var total = parseFloat(qty) / parseFloat(boxqty);
-        var diff_qty = 0;
-        //alert(Math.floor(parseFloat(total)));
-        var convert_qty = Math.floor(parseFloat(total)) * parseFloat(boxqty);
-        diff_qty = qty - convert_qty;
-        
-        if(parseFloat(qty)< parseFloat(boxqty)){
-            diff_qty= qty;
+            var boxqty = e.closest('tr').find('.line-per-box-qtyx').val();
+            var total = parseFloat(qty) / parseFloat(boxqty);
+            var diff_qty = 0;
+            //alert(Math.floor(parseFloat(total)));
+            var convert_qty = Math.floor(parseFloat(total)) * parseFloat(boxqty);
+            diff_qty = qty - convert_qty;
+            
+            if(parseFloat(qty)< parseFloat(boxqty)){
+                diff_qty= qty;
+            }
+            
+            e.closest('tr').find('.line-box-qtyx').val(Math.floor(parseFloat(total)));
+            e.closest('tr').find('.line-diff-qtyx').val(diff_qty);
+            
+            var text_desc = '';
+            if(Math.floor(parseFloat(total))>0){
+                text_desc = Math.floor(parseFloat(total)) + "กล่อง"; 
+            }
+            if(diff_qty > 0){
+                text_desc += " เศษ "+ diff_qty + " ชิ้น";
+            }
+           
+            updateDescriptionline(product_id,text_desc);
         }
         
-        e.closest('tr').find('.line-box-qtyx').val(Math.floor(parseFloat(total)));
-        e.closest('tr').find('.line-diff-qtyx').val(diff_qty);
-        
-        var text_desc = '';
-        if(Math.floor(parseFloat(total))>0){
-            text_desc = Math.floor(parseFloat(total)) + "กล่อง"; 
-        }
-        if(diff_qty > 0){
-            text_desc += " เศษ "+ diff_qty + " ชิ้น";
-        }
-       
-        updateDescriptionline(product_id,text_desc);
     }
     
  }
  
- function checkOverqty(product_id,qty){
+ function checkOverqty(product_id,qty,e){
     if(product_id !=''){
         $("#table-list-main tbody tr").each(function(){
            if($(this).find('.line-product-id').val()==product_id){
