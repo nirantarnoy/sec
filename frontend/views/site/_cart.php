@@ -41,7 +41,7 @@ $model_account = \backend\models\Bankaccount::find()->where(['status' => 1])->on
                                         <input type="text" class="form-control cart-selected-qty"
                                                style="text-align: center;" name="cart_selected_qty"
                                                value="<?= $value['qty'] ?>" pattern="[0-9]"
-                                               onkeypress="return /[0-9]/i.test(event.key)">
+                                               onkeypress="return /[0-9]/i.test(event.key)" onchange="updatecartqty($(this))">
                                         <div class="btn btn-success" style="font-size: 20px;"
                                              onclick="increaseitem($(this))">+
                                         </div>
@@ -218,6 +218,12 @@ function decreaseitem(e){
     updateCart(product_id,qty);
 }
 
+function updatecartqty(e){
+    var qty = e.val();
+    var product_id = e.parent().find(".line-product-id").val();
+    updateCart(product_id,qty);
+}
+
 function updateCart(id,qty){
     $.ajax({
             url:'$url_to_update_cart',
@@ -232,6 +238,20 @@ function updateCart(id,qty){
             }
       });
 }
+//function updateCart2(id,qty){
+//    $.ajax({
+//            url:'$url_to_update_cart2',
+//            type:'post',
+//            dataType:'html',
+//            data:{
+//                'product_id':id,              
+//                'qty':qty
+//            },
+//            success:function(data){
+//               location.reload();
+//            }
+//      });
+//}
 function removeitem(e){
     var product_id = e.attr('data-var');
     if(confirm("ต้องการลบสินค้านี้ใช่หรือไม่")){
