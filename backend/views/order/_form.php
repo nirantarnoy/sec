@@ -45,7 +45,7 @@ if ($model_do) {
             <?= $form->field($model, 'total_amount')->textInput(['readonly' => 'readonly']) ?>
         </div>
         <div class="col-lg-6">
-            <?= $form->field($model, 'order_tracking_no')->textInput() ?>
+<!--            --><?php //= $form->field($model, 'order_tracking_no')->textInput() ?>
         </div>
     </div>
 
@@ -217,7 +217,7 @@ if ($model_do) {
                 <?php if ($delivery_id > 0): ?>
 
                     <a href="index.php?r=deliveryorder/print&id=<?= $model->id ?>"
-                       class="btn btn-warning">พิมพ์ใบเบิก</a>
+                       class="btn btn-primary">พิมพ์ใบเบิก</a>
 
                 <?php endif; ?>
                 <?php if ($delivery_id > 0): ?>
