@@ -171,6 +171,7 @@ class SiteController extends Controller
         }
         if ($model->load(\Yii::$app->request->post())) {
             $model->party_type_id = 2;
+            $model->address_type_id = 1;
             $model->status = 1;
             if ($model->save(false)) {
                 return $this->redirect(['addressinfo', 'id' => $model->party_id]);
