@@ -110,7 +110,7 @@ class CustomerController extends Controller
                     if ($party_type) {
 //                        echo $address;
 //                        echo $zipcode; return ;
-                        $address_chk = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type' => $party_type, 'address_type_id' => 1])->one();
+                        $address_chk = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type_id' => $party_type, 'address_type_id' => 1])->one();
                         if ($address_chk) {
                             $address_chk->address = $address;
                             $address_chk->street = $street;
