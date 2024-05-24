@@ -605,18 +605,18 @@ function addselecteditem(e) {
                     e.closest('tr').find('.line-box-qtyx').val(Math.floor(parseFloat(total)));
                     e.closest('tr').find('.line-diff-qtyx').val(diff_qty);
                     
-                    var text_desc = '';
-                    if(Math.floor(parseFloat(total))>0){
-                        text_desc = Math.floor(parseFloat(total)) + "กล่อง"; 
-                    }
-                    if(diff_qty > 0){
-                        text_desc += " เศษ "+ diff_qty + " ชิ้น";
-                    }
+                    // var text_desc = '';
+                    // if(Math.floor(parseFloat(total))>0){
+                    //     text_desc = Math.floor(parseFloat(total)) + "กล่อง"; 
+                    // }
+                    // if(diff_qty > 0){
+                    //     text_desc += " เศษ "+ diff_qty + " ชิ้น";
+                    // }
                    
-                    updateDescriptionline(product_id,text_desc); 
+                    updateDescriptionline(product_id); 
                }else{
                    e.val(origin_qty);
-                   updateDescriptionline(product_id,'');
+                   updateDescriptionline(product_id);
                }
                 
             }
@@ -645,8 +645,25 @@ function addselecteditem(e) {
     return res;
  }
  
- function updateDescriptionline(product_id,text){
+ function updateDescriptionline(product_id){
     if(product_id !=''){
+        var box_qty = 0;
+        var diff_qty = 0;
+        var text = '';
+        $("#table-list-top tbody tr").each(function(){
+           if($(this).find('.line-product-idx').val() == product_id){
+               box_qty += parseFloat($(this).find('.line-box-qtyx').val());
+               diff_qty += parseFloat($(this).find('.line-diff-qtyx').val());
+           } 
+        });
+        
+        if(box_qty>0){
+            text = box_qty + " กล่อง ";
+        }
+        if(diff_qty>0){
+            text += " เศษ "+ diff_qty + " ชิ้น";  
+        }
+        
         $("#table-list-main tbody tr").each(function(){
            if($(this).find('.line-product-id').val() == product_id){
                $(this).closest("tr").find(".line-product-name-description").val(text);
