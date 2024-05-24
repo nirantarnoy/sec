@@ -138,10 +138,10 @@ class DeliveryorderController extends Controller
                     }
                 }
 
-                if($line_stock_sum_id !=null){
-                    for($x = 0; $x < count($line_stock_sum_id); $x++){
-                        $model_cal_check = \common\models\DeliveryOrderCal::find()->where(['id'=>$line_rec_idx[$x]])->one();
-                        if($model_cal_check){
+                if ($line_stock_sum_id != null) {
+                    for ($x = 0; $x < count($line_stock_sum_id); $x++) {
+                        $model_cal_check = \common\models\DeliveryOrderCal::find()->where(['id' => $line_rec_idx[$x]])->one();
+                        if ($model_cal_check) {
                             $model_cal_check->delivery_order_id = $model->id;
                             $model_cal_check->delivery_line_id = $line_rec_idx[$x];
                             $model_cal_check->product_id = $line_product_idx[$x];
@@ -151,7 +151,7 @@ class DeliveryorderController extends Controller
                             $model_cal_check->issue_qty = $line_issue_qtyx[$x];
                             $model_cal_check->stock_sum_id = $line_stock_sum_id[$x];
                             $model_cal_check->save(false);
-                        }else{
+                        } else {
                             $model_cal = new \common\models\DeliveryOrderCal();
                             $model_cal->delivery_order_id = $model->id;
                             $model_cal->delivery_line_id = $line_rec_idx[$x];
@@ -161,14 +161,26 @@ class DeliveryorderController extends Controller
                             $model_cal->left_qty = $line_diff_qtyx[$x];
                             $model_cal->issue_qty = $line_issue_qtyx[$x];
                             $model_cal->stock_sum_id = $line_stock_sum_id[$x];
-                            if($model_cal->save(false)){
-                                $model_update_stock = \backend\models\Stocksum::find()->where(['id'=>$line_stock_sum_id[$x]])->one();
+                            if ($model_cal->save(false)) {
+                                $warehouse_id = \backend\models\Stocksum::find()->where(['id' => $line_stock_sum_id[$x]])->one()->warehouse_id;
+                                $model_trans = new \backend\models\Stocktrans();
+                                $model_trans->trans_date = date('Y-m-d H:i:s');
+                                $model_trans->activity_type_id = 2; // issue reduce stock
+                                $model_trans->product_id = $line_product_idx[$x];
+                                $model_trans->qty = $line_issue_qtyx[$x];
+                                $model_trans->trans_ref_id = $model->id;
+                                $model_trans->stock_type_id = 2; // 2 = out
+                                $model_trans->warehouse_id = $warehouse_id;
+                                if ($model_trans->save(false)) {
+                                    //$model_update_stock = \backend\models\Stocksum::find()->where(['id'=>$line_stock_sum_id[$x]])->one();
 //                                if($model_update_stock){
 //                                    if($model_update_stock->qty >= $line_issue_qtyx[$x]){
 //                                        $model_update_stock->qty = $model_update_stock->qty - $line_issue_qtyx[$x];
 //                                        $model_update_stock->save(false);
 //                                    }
 //                                }
+                                }
+
                             }
                         }
 
@@ -270,20 +282,20 @@ class DeliveryorderController extends Controller
         // $customer_id =  \Yii::$app->request->post('customer_id');
         $html = '';
         if ($do_id > 0) {
-            $model_do = \common\models\DeliveryOrderLine::find()->select(['id','product_id','qty'])->where(['delivery_order_id' => $do_id])->all();
-            if($model_do){
+            $model_do = \common\models\DeliveryOrderLine::find()->select(['id', 'product_id', 'qty'])->where(['delivery_order_id' => $do_id])->all();
+            if ($model_do) {
                 foreach ($model_do as $value) {
                     $model = \backend\models\Stocksum::find()->select(['id', 'product_id', 'expired_date', 'qty'])->where(['product_id' => $value->product_id])->orderBy(['expired_date' => SORT_ASC])->all();
                     if ($model) {
                         foreach ($model as $x_value) {
-                            if($x_value->qty <= 0) continue;
-                            $line_sku =  \backend\models\Product::findSku($x_value->product_id);
-                            $line_name =  \backend\models\Product::findName($x_value->product_id);
+                            if ($x_value->qty <= 0) continue;
+                            $line_sku = \backend\models\Product::findSku($x_value->product_id);
+                            $line_name = \backend\models\Product::findName($x_value->product_id);
                             $html .= '<tr>';
                             $html .= '<td style="text-align: center">
                             <div class="btn btn-outline-success btn-sm" onclick="addselecteditem($(this))" data-var="' . $x_value->id . '">เลือก</div>                        
-                            <input type="hidden" class="line-find-do-id" value="' . $do_id. '">
-                            <input type="hidden" class="line-find-do-line-id" value="' . $value->id. '">
+                            <input type="hidden" class="line-find-do-id" value="' . $do_id . '">
+                            <input type="hidden" class="line-find-do-line-id" value="' . $value->id . '">
                             <input type="hidden" class="line-find-product-id" value="' . $x_value->product_id . '">                          
                             <input type="hidden" class="line-find-product-qty" value="' . $x_value->qty . '">
                             <input type="hidden" class="line-find-product-issue-qty" value="' . $value->qty . '">
@@ -291,7 +303,7 @@ class DeliveryorderController extends Controller
                             <input type="hidden" class="line-find-product-name" value="' . $line_name . '">
                             <input type="hidden" class="line-find-product-expired-date" value="' . date('d-m-Y', strtotime($x_value->expired_date)) . '">
                            </td>';
-                            $html .= '<td style="text-align: center">' .$line_sku . '</td>';
+                            $html .= '<td style="text-align: center">' . $line_sku . '</td>';
                             $html .= '<td style="text-align: left">' . $line_name . '</td>';
                             $html .= '<td style="text-align: center">' . date('d-m-Y', strtotime($x_value->expired_date)) . '</td>';
                             $html .= '<td style="text-align: right">' . number_format($x_value->qty, 1) . '</td>';
