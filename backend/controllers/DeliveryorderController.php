@@ -284,7 +284,7 @@ class DeliveryorderController extends Controller
                             <div class="btn btn-outline-success btn-sm" onclick="addselecteditem($(this))" data-var="' . $x_value->id . '">เลือก</div>                        
                             <input type="hidden" class="line-find-do-id" value="' . $do_id. '">
                             <input type="hidden" class="line-find-do-line-id" value="' . $value->id. '">
-                            <input type="hidden" class="line-find-product-id" value="' . $x_value->product_id . '">
+                            <input type="hidden" class="line-find-product-id" value="' . $x_value->product_id . '">                          
                             <input type="hidden" class="line-find-product-qty" value="' . $x_value->qty . '">
                             <input type="hidden" class="line-find-product-issue-qty" value="' . $value->qty . '">
                             <input type="hidden" class="line-find-product-sku" value="' . $line_sku . '">

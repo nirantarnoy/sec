@@ -360,7 +360,7 @@ $(function(){
                 var issue_qty = selecteditem[i]['issue_qty'];
                 var qty = selecteditem[i]['qty'];
                 var exp_date = selecteditem[i]['expired_date'];
-                var line_id = selecteditem[i]['do_line_id'];
+                var line_id = selecteditem[i]['id'];
                 
                 var tr = $("#table-list-top tbody tr:last");
                 
