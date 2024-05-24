@@ -73,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 //            'status',
-            'order_tracking_no',
+            //'order_tracking_no',
             [
                 'attribute' => 'status',
                 'format' => 'raw',
