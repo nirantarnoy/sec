@@ -25,7 +25,7 @@ class DeliveryorderController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'delete' => ['POST'],
+                        'delete' => ['POST','GET'],
                     ],
                 ],
             ]
@@ -207,6 +207,7 @@ class DeliveryorderController extends Controller
      */
     public function actionDelete($id)
     {
+        \common\models\OrderLine::deleteAll(['order_id' => $id]);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
