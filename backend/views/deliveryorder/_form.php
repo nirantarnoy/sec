@@ -555,7 +555,7 @@ function addselecteditem(e) {
  }  
  function linecalissueqty(e){
     var qty = e.val();
-    var origin_qty = e.closest('tr').find('.line-issue-qtyx').val();
+    var origin_qty = e.closest('tr').find('.line-issue-origin-qtyx').val();
     var product_id = e.closest('tr').find('.line-product-idx').val();
     var current_stock_qty = e.closest('tr').find('.line-onhand-qtyx').val();
     
