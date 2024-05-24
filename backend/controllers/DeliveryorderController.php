@@ -173,13 +173,13 @@ class DeliveryorderController extends Controller
                                 $model_trans->stock_type_id = 2; // 2 = out
                                 $model_trans->warehouse_id = $warehouse_id;
                                 if ($model_trans->save(false)) {
-                                    //$model_update_stock = \backend\models\Stocksum::find()->where(['id'=>$line_stock_sum_id[$x]])->one();
-//                                if($model_update_stock){
-//                                    if($model_update_stock->qty >= $line_issue_qtyx[$x]){
-//                                        $model_update_stock->qty = $model_update_stock->qty - $line_issue_qtyx[$x];
-//                                        $model_update_stock->save(false);
-//                                    }
-//                                }
+                                    $model_update_stock = \backend\models\Stocksum::find()->where(['id' => $line_stock_sum_id[$x]])->one();
+                                    if ($model_update_stock) {
+                                        if ($model_update_stock->qty >= $line_issue_qtyx[$x]) {
+                                            $model_update_stock->qty = $model_update_stock->qty - $line_issue_qtyx[$x];
+                                            $model_update_stock->save(false);
+                                        }
+                                    }
                                 }
 
                             }
