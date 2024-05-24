@@ -78,7 +78,7 @@ use yii\widgets\ActiveForm;
                             </td>
 
                             <td>
-                                <input type="hidden" class="line-issue-origin-qtyx" value="">
+                                <input type="hidden" class="line-issue-origin-qtyx" value="" name="line_issue_origin_qtyx[]">
                                 <input type="number" class="form-control line-issue-qtyx" name="line_issue_qtyx[]"
                                        value="<?=$value_cal->issue_qty?>"
                                        onchange="linecalissueqty($(this))">
@@ -127,6 +127,7 @@ use yii\widgets\ActiveForm;
                         </td>
 
                         <td>
+                            <input type="hidden" class="line-issue-origin-qtyx" value="">
                             <input type="number" class="form-control line-issue-qtyx" name="line_issue_qtyx[]"
                                    value="0"
                                    onchange="linecalissueqty($(this))">
