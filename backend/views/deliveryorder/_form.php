@@ -649,19 +649,30 @@ function addselecteditem(e) {
     if(product_id !=''){
         var box_qty = 0;
         var diff_qty = 0;
+        var qty_per_box = 0;
         var text = '';
         $("#table-list-top tbody tr").each(function(){
            if($(this).find('.line-product-idx').val() == product_id){
                box_qty += parseFloat($(this).find('.line-box-qtyx').val());
                diff_qty += parseFloat($(this).find('.line-diff-qtyx').val());
+               qty_per_box = parseFloat($(this).find('.line-per-box-qtyx').val());
            } 
         });
         
-        if(box_qty>0){
-            text = box_qty + " กล่อง ";
+        // if(box_qty>0){
+        //     text = 'Pack Size '+ box_qty + " กล่อง ";
+        // }
+        // if(diff_qty>0){
+        //     text += " เศษ "+ diff_qty + " ชิ้น";  
+        // }
+        
+         if(box_qty>0){
+            text = 'Pack Size '+ box_qty + "X"  + qty_per_box;
         }
         if(diff_qty>0){
-            text += " เศษ "+ diff_qty + " ชิ้น";  
+            text += " + "+ diff_qty + " = "+ (box_qty*qty_per_box+diff_qty);  
+        }else{
+            text += " = "+ (box_qty*qty_per_box);
         }
         
         $("#table-list-main tbody tr").each(function(){
