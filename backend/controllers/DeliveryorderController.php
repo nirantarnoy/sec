@@ -14,7 +14,8 @@ use yii\filters\VerbFilter;
  */
 class DeliveryorderController extends Controller
 {
-    /**
+    public $enableCsrfValidation = false;
+    /*
      * @inheritDoc
      */
     public function behaviors()
