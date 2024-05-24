@@ -398,6 +398,7 @@ $(function(){
                         clone.closest("tr").find(".line-product-codex").val(sku);
                         clone.closest("tr").find(".line-product-namex").val(product_name);
                         clone.closest("tr").find(".line-issue-qtyx").val(issue_qty);
+                        clone.closest("tr").find(".line-issue-origin-qtyx").val(issue_qty);
                         clone.closest("tr").find(".line-exp-datex").val(exp_date);
                         clone.closest("tr").find(".line-issue-qtyx").val(issue_qty);
                         clone.closest("tr").find(".line-onhand-qtyx").val(qty);
