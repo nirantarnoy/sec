@@ -457,13 +457,13 @@ function addselecteditem(e) {
         var issue_qty = e.closest('tr').find('.line-find-product-issue-qty').val();
         var qty = e.closest('tr').find('.line-find-product-qty').val();
         
-        var old_qty = 0;
-        $("#table-list-top tbody tr").each(function () {
-            if($(this).closest('tr').find('.line-product-idx').val() == product_id){
-                old_qty += parseFloat($(this).closest('tr').find('.line-issue-qtyx').val());
-            }
-        }
-        issue_qty = parseFloat(issue_qty) - parseFloat(old_qty);
+        // var old_qty = 0;
+        // $("#table-list-top tbody tr").each(function () {
+        //     if($(this).closest('tr').find('.line-product-idx').val() == product_id){
+        //         old_qty += parseFloat($(this).closest('tr').find('.line-issue-qtyx').val());
+        //     }
+        // }
+        //issue_qty = parseFloat(issue_qty) - parseFloat(old_qty);
         
         
         
@@ -480,9 +480,12 @@ function addselecteditem(e) {
                 }  
             });
             
+            
             if(parseFloat(total_selected_qty)>=parseFloat(issue_qty)){
                 alert("เลือกจำนวนสำหรับเบิกครบแล้ว");
                 return false;
+            }else{
+                issue_qty = parseFloat(issue_qty) - parseFloat(total_selected_qty);
             }
             
             
