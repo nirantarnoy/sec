@@ -572,7 +572,7 @@ function addselecteditem(e) {
                 e.val(origin_qty);
                 return false;
             }else{
-                checkOverqty(product_id,qty,e);
+                checkOverqty(product_id,qty,e,origin_qty);
     
                 var boxqty = e.closest('tr').find('.line-per-box-qtyx').val();
                 var total = parseFloat(qty) / parseFloat(boxqty);
@@ -605,7 +605,7 @@ function addselecteditem(e) {
     
  }
  
- function checkOverqty(product_id,qty,e){
+ function checkOverqty(product_id,qty,e,origin_qty){
     if(product_id !=''){
         $("#table-list-main tbody tr").each(function(){
            if($(this).find('.line-product-id').val()==product_id){
@@ -613,6 +613,8 @@ function addselecteditem(e) {
                // alert('qty is '+qty);
                if(parseFloat($(this).find('.line-qty').val()) < parseFloat(qty)){
                    alert('จำนวนสินค้าเกินจำนวนที่ต้องการเบิก');
+                   e.closest('re').find('.line-issue-qtyx').val(origin_qty);
+                   $(this).closest("tr").find(".line-product-name-description").val('');
                    return false;
                }
            } 
