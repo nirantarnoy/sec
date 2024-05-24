@@ -75,12 +75,19 @@ if (isset($_SESSION['cart'])) {
                 <div class="alert alert-danger alert-over-qty">จำนวนสินค้าไม่พอ</div>
                 <br/>
                 <?php if ($show_expired_date == 1): ?>
-                <?php
-                   $product_exp_date = getProductExpiredDate($model->id);
-                ?>
+                    <?php
+                    $product_exp_date = getProductExpiredDate($model->id);
+                    ?>
                     <div><b>วันหมดอายุ</b></div>
-                    <div><b style="color: red;"><?= $product_exp_date!=null ? date('d/m/Y', strtotime($product_exp_date)) : '' ?></b></div>
-                    <br/>
+                    <?php
+                    $y = date('Y', strtotime($product_exp_date));
+                    ?>
+                    <?php if ($y != 1970): ?>
+                        <div>
+                            <b style="color: red;"><?= $product_exp_date != null ? date('d/m/Y', strtotime($product_exp_date)) : '' ?></b>
+                        </div>
+                        <br/>
+                    <?php endif; ?>
                 <?php endif; ?>
                 <div><b>จำนวน</b></div>
                 <div style="max-width: 180px;padding: 15px 15px 15px 0px;">
@@ -116,14 +123,16 @@ if (isset($_SESSION['cart'])) {
     <input type="hidden" class="sku" value="<?= $model->sku ?>">
     <input type="hidden" class="photo" value="<?= $model->photo ?>">
 <?php
-  function getProductExpiredDate($product_id){
-      $exp_date = null;
-      if($product_id){
-          $exp_date = \backend\models\Stocksum::find()->where(['product_id' => $product_id])->min('expired_date');
+function getProductExpiredDate($product_id)
+{
+    $exp_date = null;
+    if ($product_id) {
+        $exp_date = \backend\models\Stocksum::find()->where(['product_id' => $product_id])->min('expired_date');
 
-      }
-      return $exp_date;
-  }
+    }
+    return $exp_date;
+}
+
 ?>
 <?php
 $url_to_add_cart = \yii\helpers\Url::to(['site/addcart'], true);
