@@ -240,7 +240,7 @@ function updateCart(id,qty){
 }
 //function updateCart2(id,qty){
 //    $.ajax({
-//            url:'$url_to_update_cart2',
+//            url:'',
 //            type:'post',
 //            dataType:'html',
 //            data:{
