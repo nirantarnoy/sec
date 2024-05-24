@@ -472,7 +472,7 @@ function addselecteditem(e) {
             if(parseFloat(issue_qty) > parseFloat(qty)){
                 alert("จำนวนสำหรับเบิกมากกว่าจำนวนคงเหลือ");
                 return false;
-                
+               
             }
             // if(checkhasempdaily(id)){
             //     alert("คุณได้ทำการจัดรถให้พนักงานคนนี้ไปแล้ว");

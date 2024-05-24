@@ -5,6 +5,10 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'บัญชีของฉัน';
 $this->params['breadcrumbs'][] = $this->title;
+
+if($model!=null){
+    echo "ok";
+}
 ?>
 <div class="row">
     <div class="col-lg-3">
