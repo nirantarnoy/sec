@@ -4,8 +4,10 @@ use yii\helpers\Url;
 use miloschuman\highcharts\Highcharts;
 
 $this->title = 'ภาพรวมระบบ';
-
+$m_data_gharp = [];
 $m_data = [['id' => 1, 'name' => 'มกราคม'], ['id' => 2, 'name' => 'กุมภาพันธ์'], ['id' => 3, 'name' => 'มีนาคม'], ['id' => 4, 'name' => 'เมษายน'], ['id' => 5, 'name' => 'พฤษภาคม'], ['id' => 6, 'name' => 'มิถุนายน'], ['id' => 7, 'name' => 'กรกฎาคม'], ['id' => 8, 'name' => 'สิงหาคม'], ['id' => 9, 'name' => 'กันยายน'], ['id' => 10, 'name' => 'ตุลาคม'], ['id' => 11, 'name' => 'พฤศจิกายน'], ['id' => 12, 'name' => 'ธันวาคม']];
+$m_category = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+$m_category_show = [];
 
 $product_count = \backend\models\Product::find()->where(['status' => 1])->count();
 $order_count = \backend\models\Order::find()->count();
@@ -17,6 +19,32 @@ $model_sale_top_product = \common\models\ViewOrderAmount::find()->select(['produ
 $model_sale_compare = \common\models\ViewOrderAmount::find()->select(['year','month','sum(cost_amt) as cost_amt','sum(sale_amt) as sale_amt'])->groupBy(['year','month'])->orderBy(['month'=>SORT_ASC])->all();
 //$model_sale_compare = \common\models\ViewOrderAmount::find()->orderBy(['month(order_date)'=>SORT_ASC])->all();
 //print_r($model_sale_compare);
+
+$m_loop_data = [];
+$total = [];
+$total_for_gharp = [];
+
+$sql = "SELECT month(order_date) as month,sum(cost_amt) as cost_amt,sum(sale_amt) as sale_amt  from view_order_amount ";
+$sql .= " GROUP BY month(order_date)";
+$sql .= " ORDER BY month(order_date) asc";
+$sql .= " LIMIT 2";
+$query = \Yii::$app->db->createCommand($sql);
+$model = $query->queryAll();
+if ($model) {
+    $sale_price_amount = [];
+    $cost_price_amount = [];
+    for ($i = 0; $i <= count($model) - 1; $i++) {
+       // $benefit_amount = (float)$model[$i]['sale_amt'] - (float)$model[$i]['cost_amt'];
+        array_push($cost_price_amount, (float)$model[$i]['cost_amt']);
+        array_push($sale_price_amount, (float)$model[$i]['sale_amt']);
+        array_push($m_category_show, $m_category[(int)$model[$i]['month']-1]);
+    }
+
+    array_push($total_for_gharp, ['name' => 'ราคาทุน', 'data' => $cost_price_amount,'color'=>'#f39c12']);
+    array_push($total_for_gharp, ['name' => 'ราคาขาย', 'data' => $sale_price_amount,'color'=>'#00a65a']);
+}
+
+$data_series = $total_for_gharp;
 ?>
 <br/>
 <br/>
@@ -143,7 +171,7 @@ $model_sale_compare = \common\models\ViewOrderAmount::find()->select(['year','mo
         <br />
         <label for="">เปรียบเทียบทุนกำไร</label>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-6">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -154,6 +182,9 @@ $model_sale_compare = \common\models\ViewOrderAmount::find()->select(['year','mo
                     </tr>
                     </thead>
                     <tbody>
+                    <?php
+                    $colors = ['#FF530D', '#E82C0C', '#FF0000', '#E80C7A', '#E80C7A'];
+                    ?>
                     <?php foreach ($model_sale_compare as $value): ?>
                         <?php
                           $m_name = '';
@@ -173,6 +204,23 @@ $model_sale_compare = \common\models\ViewOrderAmount::find()->select(['year','mo
                     <?php endforeach; ?>
                     </tbody>
                 </table>
+            </div>
+            <div class="col-lg-6">
+                <?php
+                echo Highcharts::widget([
+                    'options' => [
+                        'colors' => $colors,
+                        'title' => ['text' => 'กราฟเปรียบเทียบทุนกำไร'],
+                        'xAxis' => [
+                            'categories' => $m_category_show
+                        ],
+                        'yAxis' => [
+                            'title' => ['text' => 'จำนวน']
+                        ],
+                        'series' => $data_series
+                    ]
+                ]);
+                ?>
             </div>
         </div>
         <br />
