@@ -575,7 +575,7 @@ function addselecteditem(e) {
     var current_stock_qty = e.closest('tr').find('.line-onhand-qtyx').val();
     
     if(product_id != ''){
-        alert(current_stock_qty +' '+ origin_qty);
+      //  alert(current_stock_qty +' '+ origin_qty);
       
         if(parseFloat(qty) > parseFloat(current_stock_qty)){
             alert("จำนวนสำหรับเบิกเกินจำนวนคงเหลือ");
