@@ -567,31 +567,38 @@ function addselecteditem(e) {
             e.val(origin_qty);
             return false;
         }else{
-            checkOverqty(product_id,qty,e);
+            if(parseFloat(qty) > parseFloat(origin_qty)){
+                alert("จำนวนสำหรับเบิกเกินจำนวนที่ต้องการเบิก");
+                e.val(origin_qty);
+                return false;
+            }else{
+                checkOverqty(product_id,qty,e);
     
-            var boxqty = e.closest('tr').find('.line-per-box-qtyx').val();
-            var total = parseFloat(qty) / parseFloat(boxqty);
-            var diff_qty = 0;
-            //alert(Math.floor(parseFloat(total)));
-            var convert_qty = Math.floor(parseFloat(total)) * parseFloat(boxqty);
-            diff_qty = qty - convert_qty;
-            
-            if(parseFloat(qty)< parseFloat(boxqty)){
-                diff_qty= qty;
+                var boxqty = e.closest('tr').find('.line-per-box-qtyx').val();
+                var total = parseFloat(qty) / parseFloat(boxqty);
+                var diff_qty = 0;
+                //alert(Math.floor(parseFloat(total)));
+                var convert_qty = Math.floor(parseFloat(total)) * parseFloat(boxqty);
+                diff_qty = qty - convert_qty;
+                
+                if(parseFloat(qty)< parseFloat(boxqty)){
+                    diff_qty= qty;
+                }
+                
+                e.closest('tr').find('.line-box-qtyx').val(Math.floor(parseFloat(total)));
+                e.closest('tr').find('.line-diff-qtyx').val(diff_qty);
+                
+                var text_desc = '';
+                if(Math.floor(parseFloat(total))>0){
+                    text_desc = Math.floor(parseFloat(total)) + "กล่อง"; 
+                }
+                if(diff_qty > 0){
+                    text_desc += " เศษ "+ diff_qty + " ชิ้น";
+                }
+               
+                updateDescriptionline(product_id,text_desc);
             }
             
-            e.closest('tr').find('.line-box-qtyx').val(Math.floor(parseFloat(total)));
-            e.closest('tr').find('.line-diff-qtyx').val(diff_qty);
-            
-            var text_desc = '';
-            if(Math.floor(parseFloat(total))>0){
-                text_desc = Math.floor(parseFloat(total)) + "กล่อง"; 
-            }
-            if(diff_qty > 0){
-                text_desc += " เศษ "+ diff_qty + " ชิ้น";
-            }
-           
-            updateDescriptionline(product_id,text_desc);
         }
         
     }
@@ -602,8 +609,8 @@ function addselecteditem(e) {
     if(product_id !=''){
         $("#table-list-main tbody tr").each(function(){
            if($(this).find('.line-product-id').val()==product_id){
-               alert('main qty is '+$(this).find('.line-qty').val());
-               alert('qty is '+qty);
+               // alert('main qty is '+$(this).find('.line-qty').val());
+               // alert('qty is '+qty);
                if(parseFloat($(this).find('.line-qty').val()) < parseFloat(qty)){
                    alert('จำนวนสินค้าเกินจำนวนที่ต้องการเบิก');
                    return false;
