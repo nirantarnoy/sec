@@ -142,6 +142,7 @@ class OrderController extends Controller
      */
     public function actionDelete($id)
     {
+        \common\models\OrderLine::deleteAll(['order_id' => $id]);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

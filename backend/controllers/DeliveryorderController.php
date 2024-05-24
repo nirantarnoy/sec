@@ -208,7 +208,7 @@ class DeliveryorderController extends Controller
      */
     public function actionDelete($id)
     {
-        \common\models\OrderLine::deleteAll(['order_id' => $id]);
+        \common\models\DeliveryOrderLine::deleteAll(['delivery_order_id' => $id]);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
