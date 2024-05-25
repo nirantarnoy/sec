@@ -6,17 +6,17 @@ use miloschuman\highcharts\Highcharts;
 $this->title = 'ภาพรวมระบบ';
 $m_data_gharp = [];
 $m_data = [['id' => 1, 'name' => 'มกราคม'], ['id' => 2, 'name' => 'กุมภาพันธ์'], ['id' => 3, 'name' => 'มีนาคม'], ['id' => 4, 'name' => 'เมษายน'], ['id' => 5, 'name' => 'พฤษภาคม'], ['id' => 6, 'name' => 'มิถุนายน'], ['id' => 7, 'name' => 'กรกฎาคม'], ['id' => 8, 'name' => 'สิงหาคม'], ['id' => 9, 'name' => 'กันยายน'], ['id' => 10, 'name' => 'ตุลาคม'], ['id' => 11, 'name' => 'พฤศจิกายน'], ['id' => 12, 'name' => 'ธันวาคม']];
-$m_category = ['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+$m_category = ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'];
 $m_category_show = [];
 
 $product_count = \backend\models\Product::find()->where(['status' => 1])->count();
 $order_count = \backend\models\Order::find()->count();
 $customer_count = \backend\models\Customer::find()->where(['status' => 1])->count();
 
-$model_stock = \backend\models\Stocksum::find()->where(['>','qty',0])->andFilterWhere(['!=','year(expired_date)',1970])->groupBy(['product_id'])->orderBy(['expired_date' => SORT_ASC])->limit(10)->all();
+$model_stock = \backend\models\Stocksum::find()->where(['>', 'qty', 0])->andFilterWhere(['!=', 'year(expired_date)', 1970])->groupBy(['product_id'])->orderBy(['expired_date' => SORT_ASC])->limit(10)->all();
 
-$model_sale_top_product = \common\models\ViewOrderAmount::find()->select(['product_id','sku','name','sum(qty) as qty'])->groupBy(['product_id'])->orderBy(['sum(qty)' => SORT_DESC])->limit(5)->all();
-$model_sale_compare = \common\models\ViewOrderAmount::find()->select(['year','month','sum(cost_amt) as cost_amt','sum(sale_amt) as sale_amt'])->groupBy(['year','month'])->orderBy(['month'=>SORT_ASC])->all();
+$model_sale_top_product = \common\models\ViewOrderAmount::find()->select(['product_id', 'sku', 'name', 'sum(qty) as qty'])->groupBy(['product_id'])->orderBy(['sum(qty)' => SORT_DESC])->limit(5)->all();
+$model_sale_compare = \common\models\ViewOrderAmount::find()->select(['year', 'month', 'sum(cost_amt) as cost_amt', 'sum(sale_amt) as sale_amt'])->groupBy(['year', 'month'])->orderBy(['month' => SORT_ASC])->all();
 //$model_sale_compare = \common\models\ViewOrderAmount::find()->orderBy(['month(order_date)'=>SORT_ASC])->all();
 //print_r($model_sale_compare);
 
@@ -34,17 +34,27 @@ if ($model) {
     $sale_price_amount = [];
     $cost_price_amount = [];
     for ($i = 0; $i <= count($model) - 1; $i++) {
-       // $benefit_amount = (float)$model[$i]['sale_amt'] - (float)$model[$i]['cost_amt'];
+        // $benefit_amount = (float)$model[$i]['sale_amt'] - (float)$model[$i]['cost_amt'];
         array_push($cost_price_amount, (float)$model[$i]['cost_amt']);
         array_push($sale_price_amount, (float)$model[$i]['sale_amt']);
-        array_push($m_category_show, $m_category[(int)$model[$i]['month']-1]);
+        array_push($m_category_show, $m_category[(int)$model[$i]['month'] - 1]);
     }
 
-    array_push($total_for_gharp, ['name' => 'ราคาทุน', 'data' => $cost_price_amount,'color'=>'#f39c12']);
-    array_push($total_for_gharp, ['name' => 'ราคาขาย', 'data' => $sale_price_amount,'color'=>'#00a65a']);
+    array_push($total_for_gharp, ['name' => 'ราคาทุน', 'data' => $cost_price_amount, 'color' => '#f39c12']);
+    array_push($total_for_gharp, ['name' => 'ราคาขาย', 'data' => $sale_price_amount, 'color' => '#00a65a']);
 }
 
 $data_series = $total_for_gharp;
+
+$cost_stock_amt = 0;
+$sqlx = "SELECT sum(t1.qty * t2.cost_price) as cost_amt from stock_sum as t1 inner join product as t2 on t1.product_id = t2.id ";
+$queryx = \Yii::$app->db->createCommand($sqlx);
+$modelx = $queryx->queryAll();
+if ($modelx) {
+    for ($i = 0; $i <= count($modelx) - 1; $i++) {
+        $cost_stock_amt =  (float)$modelx[$i]['cost_amt'];
+    }
+}
 ?>
 <br/>
 <br/>
@@ -52,7 +62,23 @@ $data_series = $total_for_gharp;
     <div class="body-content">
 
         <div class="row">
-            <div class="col-lg-4 col-6">
+            <div class="col-lg-3 col-6">
+                <!-- small box -->
+                <div class="small-box bg-secondary">
+                    <div class="inner">
+                        <h3><?= number_format($cost_stock_amt,2) ?></h3>
+                        <p>มูลค่าคงคลัง</p>
+                    </div>
+                    <div class="icon">
+                        <i class="ion ion-bag"></i>
+                    </div>
+                    <!--                    <a href="-->
+                    <?php //= Url::to(['product/index'], true) ?><!--" class="small-box-footer">ไปยังสินค้า <i-->
+                    <!--                                class="fas fa-arrow-circle-right"></i></a>-->
+                </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
@@ -67,7 +93,7 @@ $data_series = $total_for_gharp;
                 </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-4 col-6">
+            <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
@@ -83,7 +109,7 @@ $data_series = $total_for_gharp;
                 </div>
             </div>
             <!-- ./col -->
-            <div class="col-lg-4 col-6">
+            <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-warning">
                     <div class="inner">
@@ -99,7 +125,7 @@ $data_series = $total_for_gharp;
             </div>
 
         </div>
-        <br />
+        <br/>
         <label for="">สินค้ายอดขายสูงสุด 5 อันดับ</label>
         <div class="row">
             <div class="col-lg-12">
@@ -125,7 +151,7 @@ $data_series = $total_for_gharp;
                 </table>
             </div>
         </div>
-        <br />
+        <br/>
         <label for="">รายการสินค้าใกล้หมดอายุ</label>
         <div class="row">
             <div class="col-lg-12">
@@ -146,11 +172,11 @@ $data_series = $total_for_gharp;
                         $date1 = date_create(date('Y-m-d'));
                         $date2 = date_create(date('Y-m-d', strtotime($value->expired_date)));
 
-                        if($value->expired_date != null){
-                            $left_date = date_diff( $date1,$date2);
+                        if ($value->expired_date != null) {
+                            $left_date = date_diff($date1, $date2);
                         }
                         $show_color = 'green';
-                        if(date('Y-m-d',strtotime($value->expired_date)) < date('Y-m-d')){
+                        if (date('Y-m-d', strtotime($value->expired_date)) < date('Y-m-d')) {
                             $show_color = 'red';
                         }
                         // return $date1->format('d-m-Y');
@@ -159,16 +185,16 @@ $data_series = $total_for_gharp;
                         <tr>
                             <td style="text-align: center"><?= \backend\models\Product::findSku($value->product_id) ?></td>
                             <td style="text-align: left"><?= \backend\models\Product::findName($value->product_id) ?></td>
-                            <td style="text-align: center;"><?= date('d/m/Y',strtotime($value->expired_date)) ?></td>
+                            <td style="text-align: center;"><?= date('d/m/Y', strtotime($value->expired_date)) ?></td>
                             <td style="text-align: right;"><?= number_format($value->qty) ?></td>
-                            <td style="text-align: right;color:<?=$show_color?>"><?= number_format($left_date->format('%a')). ' วัน' ?></td>
+                            <td style="text-align: right;color:<?= $show_color ?>"><?= number_format($left_date->format('%a')) . ' วัน' ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
         </div>
-        <br />
+        <br/>
         <label for="">เปรียบเทียบทุนกำไร</label>
         <div class="row">
             <div class="col-lg-6">
@@ -187,19 +213,19 @@ $data_series = $total_for_gharp;
                     ?>
                     <?php foreach ($model_sale_compare as $value): ?>
                         <?php
-                          $m_name = '';
-                          for($x = 1; $x <= $m_data; $x++){
-                              if($m_data[$x]['id'] == $value->month){
-                                  $m_name = $m_data[$x]['name'];
-                                  break;
-                              }
-                          }
+                        $m_name = '';
+                        for ($x = 1; $x <= $m_data; $x++) {
+                            if ($m_data[$x]['id'] == $value->month) {
+                                $m_name = $m_data[$x]['name'];
+                                break;
+                            }
+                        }
                         ?>
                         <tr>
                             <td style="text-align: center"><?= $m_name ?></td>
                             <td style="text-align: right"><?= number_format($value->cost_amt) ?></td>
                             <td style="text-align: right;"><?= number_format($value->sale_amt) ?></td>
-                            <td style="text-align: right;"><?= number_format($value->sale_amt-$value->cost_amt) ?></td>
+                            <td style="text-align: right;"><?= number_format($value->sale_amt - $value->cost_amt) ?></td>
                         </tr>
                     <?php endforeach; ?>
                     </tbody>
@@ -223,6 +249,6 @@ $data_series = $total_for_gharp;
                 ?>
             </div>
         </div>
-        <br />
+        <br/>
     </div>
 </div>
