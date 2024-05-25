@@ -48,6 +48,7 @@ $data_series = $total_for_gharp;
 
 $cost_stock_amt = 0;
 $sqlx = "SELECT sum(t1.qty * t2.cost_price) as cost_amt from stock_sum as t1 inner join product as t2 on t1.product_id = t2.id ";
+$sqlx .= " where t1.qty > 0";
 $queryx = \Yii::$app->db->createCommand($sqlx);
 $modelx = $queryx->queryAll();
 if ($modelx) {
@@ -73,7 +74,7 @@ if ($modelx) {
                         <i class="ion ion-bag"></i>
                     </div>
                     <a href="
-                    <?= Url::to(['product/index'], true) ?>" class="small-box-footer"></a>
+                    <?= Url::to(['product/index'], true) ?>" class="small-box-footer">รายละเอียด</a>
                 </div>
             </div>
             <!-- ./col -->
