@@ -87,10 +87,18 @@ if (isset($_SESSION['cart'])) {
     <div class="row">
         <?php foreach ($model as $value): ?>
             <?php
+            $include_vat_text  = '';
             $sale_price = $value->sale_price;
             $new_name = substr($value->name, 0, 120);
             if ($value->customer_id != null && $value->customer_id == $customer_id) {
                 $sale_price = $value->customer_sale_price;
+            }
+            if ($value->customer_id != null && $value->customer_id == $customer_id) {
+                if ($value->include_vat == 1) {
+                    $include_vat_text = '( รวม Vat )';
+                } else {
+                    $include_vat_text = '( ไม่รวม Vat )';
+                }
             }
             ?>
             <div class="col-lg-2">
@@ -105,7 +113,7 @@ if (isset($_SESSION['cart'])) {
                                 <h4 class="card-title" style="font-size: 16px;">SKU: <b><?= $value->sku ?></b></h4>
                                 <p class="" style="font-size: 14px;"><?= $new_name ?></p>
                                 <h4 class="card-title" style="font-size: 16px;"><b
-                                            style="color: red;">&#3647 <?= $sale_price ?></b></h4>
+                                            style="color: red;">&#3647 <?= $sale_price ?> <span><?= $include_vat_text ?></span></b></h4>
                                 <h4 class="card-title" style="font-size: 16px;"><span
                                             style="color: red;font-size: 12px;">สต๊อก <?= number_format($value->qty) ?></span></h4>
                             </div>
