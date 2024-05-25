@@ -63,6 +63,7 @@ if ($modelx) {
     <div class="body-content">
 
         <div class="row">
+            <?php if (\Yii::$app->user->identity->username =='annadmin'): ?>
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-secondary">
@@ -77,6 +78,7 @@ if ($modelx) {
                     <?= Url::to(['product/index'], true) ?>" class="small-box-footer">รายละเอียด</a>
                 </div>
             </div>
+            <?php endif;?>
             <!-- ./col -->
             <div class="col-lg-3 col-6">
                 <!-- small box -->

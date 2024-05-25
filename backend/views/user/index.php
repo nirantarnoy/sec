@@ -98,16 +98,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align:center;', 'class' => 'activity-view-link',],
                 'class' => 'yii\grid\ActionColumn',
                 'contentOptions' => ['style' => 'text-align: center'],
-                'template' => '{view} {update}{delete}',
+                'template' => '{updatecustomer} {update} {delete}',
                 'buttons' => [
-                    'view' => function ($url, $data, $index) {
+//                    'view' => function ($url, $data, $index) {
+//                        $options = [
+//                            'title' => Yii::t('yii', 'View'),
+//                            'aria-label' => Yii::t('yii', 'View'),
+//                            'data-pjax' => '0',
+//                        ];
+//                        return Html::a(
+//                            '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, $options);
+//                    },
+                    'updatecustomer' => function ($url, $data, $index) {
                         $options = [
                             'title' => Yii::t('yii', 'View'),
                             'aria-label' => Yii::t('yii', 'View'),
                             'data-pjax' => '0',
                         ];
                         return Html::a(
-                            '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, $options);
+                            '<span class="fas fa-user btn btn-xs btn-default"></span>', $url, $options);
                     },
                     'update' => function ($url, $data, $index) {
                         $options = array_merge([

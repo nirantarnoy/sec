@@ -94,6 +94,15 @@ class UserController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
+    public function actionUpdatecustomer($id)
+    {
+        $customer_id = 0;
+        $model = $this->findModel($id);
+        if($model){
+            $customer_id = $model->customer_ref_id;
+        }
+       return $this->redirect(['customer/update', 'id' => $customer_id]);
+    }
 
     /**
      * Creates a new User model.
