@@ -113,7 +113,7 @@ if (isset($_SESSION['cart'])) {
                                 <h4 class="card-title" style="font-size: 16px;">SKU: <b><?= $value->sku ?></b></h4>
                                 <p class="" style="font-size: 14px;"><?= $new_name ?></p>
                                 <h4 class="card-title" style="font-size: 16px;"><b
-                                            style="color: red;">&#3647 <?= $sale_price ?> <span><?= $include_vat_text ?></span></b></h4>
+                                            style="color: red;">&#3647 <?= $sale_price ?> <span style="font-size: 10px;"><?= $include_vat_text ?></span></b></h4>
                                 <h4 class="card-title" style="font-size: 16px;"><span
                                             style="color: red;font-size: 12px;">สต๊อก <?= number_format($value->qty) ?></span></h4>
                             </div>
