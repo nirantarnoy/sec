@@ -52,7 +52,7 @@ $queryx = \Yii::$app->db->createCommand($sqlx);
 $modelx = $queryx->queryAll();
 if ($modelx) {
     for ($i = 0; $i <= count($modelx) - 1; $i++) {
-        $cost_stock_amt =  (float)$modelx[$i]['cost_amt'];
+        $cost_stock_amt = (float)$modelx[$i]['cost_amt'];
     }
 }
 ?>
@@ -66,15 +66,14 @@ if ($modelx) {
                 <!-- small box -->
                 <div class="small-box bg-secondary">
                     <div class="inner">
-                        <h3><?= number_format($cost_stock_amt,2) ?></h3>
+                        <h3><?= number_format($cost_stock_amt, 2) ?></h3>
                         <p>มูลค่าคงคลัง</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-bag"></i>
                     </div>
-                    <!--                    <a href="-->
-                    <?php //= Url::to(['product/index'], true) ?><!--" class="small-box-footer">ไปยังสินค้า <i-->
-                    <!--                                class="fas fa-arrow-circle-right"></i></a>-->
+                    <a href="
+                    <?= Url::to(['product/index'], true) ?>" class="small-box-footer"></a>
                 </div>
             </div>
             <!-- ./col -->
