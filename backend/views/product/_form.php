@@ -282,7 +282,7 @@ $yesno = [['id'=>1,'YES'],['id'=>0,'NO']];
                                     <?php
                                     $selected = '';
                                     ?>
-                                    <option value="<?=$value_cus->id?>" <?=$selected?>><?=$value_cus->name?></option>
+                                    <option value="<?=$value_cus->id?>" <?=$selected?>><?=$value_cus->first_name.' '.$value_cus->last_name?></option>
                                 <?php endforeach;?>
                             </select>
                         </td>
