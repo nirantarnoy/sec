@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'product_id',
+                'label' => 'ชื่อสินค้า',
                 'value' => function ($data) {
                     return \backend\models\Product::findName($data->product_id);
                 }
