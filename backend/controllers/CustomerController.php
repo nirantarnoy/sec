@@ -201,23 +201,23 @@ class CustomerController extends Controller
 //
 //                    }
 
-                    $model_tax = new \common\models\CustomerInvoiceInfo();
-                    $model_tax->customer_id = $model->id;
-                    $model_tax->tax_id = $customer_payment_tax_id;
-                    $model_tax->branch = $customer_payment_tax_branch;
-                    $model_tax->email = $customer_payment_tax_email;
-                    $model_tax->status = 1;
-                    $model_tax->save(false);
-
-
-                    if ($model->customer_group_id) {
-                        for ($m = 0; $m <= count($model->customer_group_id) - 1; $m++) {
-                            $model_group_assign = new \common\models\CustomerAssignList();
-                            $model_group_assign->customer_id = $model->id;
-                            $model_group_assign->group_id = $model->customer_group_id[$m];
-                            $model_group_assign->save(false);
-                        }
-                    }
+//                    $model_tax = new \common\models\CustomerInvoiceInfo();
+//                    $model_tax->customer_id = $model->id;
+//                    $model_tax->tax_id = $customer_payment_tax_id;
+//                    $model_tax->branch = $customer_payment_tax_branch;
+//                    $model_tax->email = $customer_payment_tax_email;
+//                    $model_tax->status = 1;
+//                    $model_tax->save(false);
+//
+//
+//                    if ($model->customer_group_id) {
+//                        for ($m = 0; $m <= count($model->customer_group_id) - 1; $m++) {
+//                            $model_group_assign = new \common\models\CustomerAssignList();
+//                            $model_group_assign->customer_id = $model->id;
+//                            $model_group_assign->group_id = $model->customer_group_id[$m];
+//                            $model_group_assign->save(false);
+//                        }
+//                    }
                 }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
