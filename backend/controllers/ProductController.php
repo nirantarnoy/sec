@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\web\ForbiddenHttpException;
+use yii\filters\AccessControl;
 
 /**
  * ProductController implements the CRUD actions for Product model.
