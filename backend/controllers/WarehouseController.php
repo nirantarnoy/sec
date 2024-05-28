@@ -8,6 +8,7 @@ use backend\models\WarehouseSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\ForbiddenHttpException;
 
 /**
  * WarehouseController implements the CRUD actions for Warehouse model.
@@ -28,6 +29,24 @@ class WarehouseController extends Controller
                     'actions' => [
                         'delete' => ['POST','GET'],
                     ],
+                ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'denyCallback' => function ($rule, $action) {
+                        throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+                    },
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function ($rule, $action) {
+                                $currentRoute = \Yii::$app->controller->getRoute();
+                                if (\Yii::$app->user->can($currentRoute)) {
+                                    return true;
+                                }
+                            }
+                        ]
+                    ]
                 ],
             ]
         );

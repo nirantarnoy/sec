@@ -26,29 +26,29 @@ class DbbackupController extends Controller
     public function behaviors()
     {
         return [
-//            'access'=>[
-//                'class'=>AccessControl::className(),
-//                'denyCallback' => function ($rule, $action) {
-//                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
-//                },
-//                'rules'=>[
-////                    [
-////                        'allow'=>true,
-////                        'actions'=>['index','create','update','delete','view'],
-////                        'roles'=>['@'],
-////                    ]
+            'access'=>[
+                'class'=>AccessControl::className(),
+                'denyCallback' => function ($rule, $action) {
+                    throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+                },
+                'rules'=>[
 //                    [
 //                        'allow'=>true,
+//                        'actions'=>['index','create','update','delete','view'],
 //                        'roles'=>['@'],
-//                        'matchCallback'=>function($rule,$action){
-//                            $currentRoute = Yii::$app->controller->getRoute();
-//                            if(Yii::$app->user->can($currentRoute)){
-//                                return true;
-//                            }
-//                        }
 //                    ]
-//                ]
-//            ],
+                    [
+                        'allow'=>true,
+                        'roles'=>['@'],
+                        'matchCallback'=>function($rule,$action){
+                            $currentRoute = Yii::$app->controller->getRoute();
+                            if(Yii::$app->user->can($currentRoute)){
+                                return true;
+                            }
+                        }
+                    ]
+                ]
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

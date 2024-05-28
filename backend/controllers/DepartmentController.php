@@ -8,7 +8,7 @@ use backend\models\DepartmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use yii\web\ForbiddenHttpException;
 /**
  * DepartmentController implements the CRUD actions for Department model.
  */
@@ -27,6 +27,24 @@ class DepartmentController extends Controller
                     'actions' => [
                         'delete' => ['POST'],
                     ],
+                ],
+                'access' => [
+                    'class' => AccessControl::className(),
+                    'denyCallback' => function ($rule, $action) {
+                        throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
+                    },
+                    'rules' => [
+                        [
+                            'allow' => true,
+                            'roles' => ['@'],
+                            'matchCallback' => function ($rule, $action) {
+                                $currentRoute = \Yii::$app->controller->getRoute();
+                                if (\Yii::$app->user->can($currentRoute)) {
+                                    return true;
+                                }
+                            }
+                        ]
+                    ]
                 ],
             ]
         );
