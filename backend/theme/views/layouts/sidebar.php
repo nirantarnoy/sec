@@ -15,6 +15,7 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
+                <<?php if(\Yii::$app->user->can('site/index')):?>
                 <li class="nav-item">
                     <a href="index.php?r=site/index" class="nav-link site">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -24,6 +25,7 @@
                         </p>
                     </a>
                 </li>
+                <?php endif;?>
 <!--                <li class="nav-item has-treeview has-sub">-->
 <!--                    <a href="#" class="nav-link">-->
 <!--                        <i class="nav-icon fas fa-building"></i>-->
@@ -43,7 +45,7 @@
 <!--                        --><?php ////endif; ?>
 <!--                    </ul>-->
 <!--                </li>-->
-                <?php if (1>0): ?>
+                <?php if (\Yii::$app->user->can('company/index')): ?>
                     <li class="nav-item has-treeview has-sub">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-cog"></i>
@@ -96,14 +98,14 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <?php //if (\Yii::$app->user->can('customergroup/index')): ?>
+                        <?php if (\Yii::$app->user->can('customergroup/index')): ?>
                             <li class="nav-item">
                                 <a href="index.php?r=customergroup/index" class="nav-link customergroup">
                                     <i class="far fa-circlez nav-icon"></i>
                                     <p>กลุ่มลูกค้า</p>
                                 </a>
                             </li>
-                        <?php //endif; ?>
+                        <?php endif; ?>
                         <?php //if (\Yii::$app->user->can('customertype/index')): ?>
 <!--                            <li class="nav-item">-->
 <!--                                <a href="index.php?r=customertype/index" class="nav-link customertype">-->
@@ -112,7 +114,7 @@
 <!--                                </a>-->
 <!--                            </li>-->
                         <?php //endif; ?>
-                        <?php //if (\Yii::$app->user->can('customers/index')): ?>
+                        <?php if (\Yii::$app->user->can('customers/index')): ?>
                             <li class="nav-item">
                                 <a href="index.php?r=customer" class="nav-link customer">
                                     <i class="far fa-circlez nav-icon"></i>
@@ -122,7 +124,7 @@
                                     </p>
                                 </a>
                             </li>
-                        <?php //endif; ?>
+                        <?php endif; ?>
 
                     </ul>
                 </li>
@@ -135,30 +137,30 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <?php //if (\Yii::$app->user->can('position/index')): ?>
+                        <?php if (\Yii::$app->user->can('department/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=department/index" class="nav-link department">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>แผนก</p>
                             </a>
                         </li>
-                        <?php //endif; ?>
-                        <?php //if (\Yii::$app->user->can('position/index')): ?>
+                        <?php endif; ?>
+                        <?php if (\Yii::$app->user->can('position/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=position/index" class="nav-link position">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>ตำแหน่ง</p>
                             </a>
                         </li>
-                        <?php //endif; ?>
-                        <?php //if (\Yii::$app->user->can('employee/index')): ?>
+                        <?php endif; ?>
+                        <?php if (\Yii::$app->user->can('employee/index')): ?>
                             <li class="nav-item">
                                 <a href="index.php?r=employee/index" class="nav-link employee">
                                     <i class="far fa-circlez nav-icon"></i>
                                     <p>พนักงาน</p>
                                 </a>
                             </li>
-                        <?php //endif; ?>
+                        <?php endif; ?>
                     </ul>
                 </li>
 
@@ -171,30 +173,30 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <?php //if (\Yii::$app->user->can('customergroup/index')): ?>
+                        <?php if (\Yii::$app->user->can('productgroup/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=productgroup/index" class="nav-link productgroup">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>กลุ่มสินค้า</p>
                             </a>
                         </li>
-                        <?php //endif; ?>
-                        <?php //if (\Yii::$app->user->can('customergroup/index')): ?>
+                        <?php endif; ?>
+                        <?php if (\Yii::$app->user->can('product/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=product" class="nav-link product">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>สินค้า</p>
                             </a>
                         </li>
-                        <?php //endif; ?>
-                        <?php //if (\Yii::$app->user->can('customergroup/index')): ?>
+                        <?php endif; ?>
+                        <?php if (\Yii::$app->user->can('warehouse/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=warehouse" class="nav-link warehouse">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>คลังสินค้า</p>
                             </a>
                         </li>
-                        <?php //endif; ?>
+                        <?php endif; ?>
                         <?php //if (\Yii::$app->user->can('customertype/index')): ?>
                         <!--                            <li class="nav-item">-->
                         <!--                                <a href="index.php?r=customertype/index" class="nav-link customertype">-->
@@ -203,7 +205,7 @@
                         <!--                                </a>-->
                         <!--                            </li>-->
                         <?php //endif; ?>
-                        <?php //if (\Yii::$app->user->can('customers/index')): ?>
+                        <?php if (\Yii::$app->user->can('stocksum/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=stocksum" class="nav-link stocksum">
                                 <i class="far fa-circlez nav-icon"></i>
@@ -213,6 +215,8 @@
                                 </p>
                             </a>
                         </li>
+                        <?php endif;?>
+                        <?php if (\Yii::$app->user->can('stocktrans/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=stocktrans" class="nav-link stocktrans">
                                 <i class="far fa-circlez nav-icon"></i>
@@ -222,6 +226,7 @@
                                 </p>
                             </a>
                         </li>
+                        <?php endif;?>
                         <?php if (\Yii::$app->user->can('journalissue/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=journalissue" class="nav-link journalissue">
@@ -246,22 +251,22 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <?php //if (\Yii::$app->user->can('position/index')): ?>
+                        <?php if (\Yii::$app->user->can('order/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=order/index" class="nav-link order">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>ใบสั่งซื้อ</p>
                             </a>
                         </li>
-                        <?php //endif; ?>
-                        <?php //if (\Yii::$app->user->can('position/index')): ?>
+                        <?php endif; ?>
+                        <?php if (\Yii::$app->user->can('deliveryorder/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=deliveryorder/index" class="nav-link deliveryorder">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>ใบส่งของ</p>
                             </a>
                         </li>
-                        <?php //endif; ?>
+                        <?php endif; ?>
                         <?php //if (\Yii::$app->user->can('position/index')): ?>
 <!--                        <li class="nav-item">-->
 <!--                            <a href="index.php?r=customerinvoice/index" class="nav-link customerinvoice">-->
@@ -343,7 +348,7 @@
 <!--                </li>-->
                 <?php // if (isset($_SESSION['user_group_id'])): ?>
                 <?php //if ($_SESSION['user_group_id'] == 1): ?>
-                <?php //if (\Yii::$app->user->identity->username == 'iceadmin'): ?>
+                <?php if (\Yii::$app->user->can('user/index')): ?>
                     <li class="nav-item has-treeview has-sub">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-user"></i>
@@ -354,14 +359,14 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <?php //if (\Yii::$app->user->can('usergroup/index')): ?>
+                            <?php if (\Yii::$app->user->can('usergroup/index')): ?>
                                 <li class="nav-item">
                                     <a href="index.php?r=usergroup" class="nav-link usergroup">
                                         <i class="far fa-circlez nav-icon"></i>
                                         <p>กลุ่มผู้ใช้งาน</p>
                                     </a>
                                 </li>
-                            <?php //endif; ?>
+                            <?php endif; ?>
                             <?php //if (\Yii::$app->user->can('user/index')): ?>
                                 <li class="nav-item">
                                     <a href="index.php?r=user" class="nav-link user">
@@ -406,7 +411,7 @@
                             </li>
                         </ul>
                     </li>
-                <?php //endif;?>
+                <?php endif;?>
                 <?php //endif; ?>
                 <?php //endif; ?>
             </ul>
