@@ -202,35 +202,37 @@ if ($model_do) {
 
     <div class="row">
         <div class="col-lg-2">
+        <?php if (\Yii::$app->user->can('order/create')||\Yii::$app->user->can('order/create')): ?>
             <div class="form-group">
                 <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
             </div>
+            <?php endif; ?>
         </div>
         <div class="col-lg-2"></div>
         <div class="col-lg-2"></div>
         <div class="col-lg-6" style="text-align: right;">
             <div class="input-group">
-                <?php if ($model_do == null): ?>
+                <?php if ($model_do == null && \Yii::$app->user->can('order/createdo')): ?>
                     <a href="index.php?r=order/createdo&order_id=<?= $model->id ?>" class="btn btn-info">สร้างใบส่งสินค้า</a>
 
                 <?php endif; ?>
-                <?php if ($delivery_id > 0): ?>
+                <?php if ($delivery_id > 0 && \Yii::$app->user->can('deliveryorder/print')): ?>
 
                     <a href="index.php?r=deliveryorder/print&id=<?= $model->id ?>"
                        class="btn btn-primary">พิมพ์ใบเบิก</a>
 
                 <?php endif; ?>
-                <?php if ($delivery_id > 0): ?>
+                <?php if ($delivery_id > 0 && \Yii::$app->user->can('deliveryorder/printdo')): ?>
 
                     <a href="index.php?r=deliveryorder/printdo&id=<?= $delivery_id ?>" class="btn btn-warning">พิมพ์ใบส่งของ</a>
 
                 <?php endif; ?>
-                <?php if ($delivery_id > 0): ?>
+                <?php if ($delivery_id > 0 && \Yii::$app->user->can('deliveryorder/pricereciept')): ?>
 
                     <a href="index.php?r=deliveryorder/printreciept&id=<?= $model->id ?>" class="btn btn-secondary">พิมพ์ใบเสร็จ</a>
 
                 <?php endif; ?>
-                <?php if ($delivery_id > 0): ?>
+                <?php if ($delivery_id > 0 && \Yii::$app->user->can('deliveryorder/printtaxinvoice')): ?>
 
                     <a href="index.php?r=deliveryorder/printtaxinvoice&id=<?= $model->id ?>" class="btn btn-info">พิมพ์ใบกำกับ</a>
 

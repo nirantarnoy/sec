@@ -108,8 +108,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'aria-label' => Yii::t('yii', 'View'),
                             'data-pjax' => '0',
                         ];
-                        return Html::a(
-                            '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, $options);
+                        if( \Yii::$app->user->can('order/view'))  {
+                            return Html::a(
+                                '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, $options);
+                        }
+
                     },
                     'update' => function ($url, $data, $index) {
                         $options = array_merge([
@@ -118,15 +121,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-pjax' => '0',
                             'id' => 'modaledit',
                         ]);
-                        return Html::a(
-                            '<span class="fas fa-edit btn btn-xs btn-default"></span>', $url, [
-                            'id' => 'activity-view-link',
-                            //'data-toggle' => 'modal',
-                            // 'data-target' => '#modal',
-                            'data-id' => $index,
-                            'data-pjax' => '0',
-                            // 'style'=>['float'=>'rigth'],
-                        ]);
+                        if( \Yii::$app->user->can('order/update')) {
+                            return Html::a(
+                                '<span class="fas fa-edit btn btn-xs btn-default"></span>', $url, [
+                                'id' => 'activity-view-link',
+                                //'data-toggle' => 'modal',
+                                // 'data-target' => '#modal',
+                                'data-id' => $index,
+                                'data-pjax' => '0',
+                                // 'style'=>['float'=>'rigth'],
+                            ]);
+                        }
                     },
                     'delete' => function ($url, $data, $index) {
                         $options = array_merge([
@@ -139,7 +144,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-var' => $data->id,
                             'onclick' => 'recDelete($(this));'
                         ]);
-                        return Html::a('<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
+                        if( \Yii::$app->user->can('order/delete')) {
+                            return Html::a('<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
+                        }
                     }
                 ]
             ],
