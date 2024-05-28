@@ -89,6 +89,7 @@
                     </li>
                 <?php endif; ?>
 
+                <?php if(\Yii::$app->user->can('customergroup/index') || \Yii::$app->user->can('customer/index')):?>
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
@@ -128,6 +129,7 @@
 
                     </ul>
                 </li>
+                <?php endif;?>
                 <?php if(\Yii::$app->user->can('department/index') || \Yii::$app->user->can('position/index') || \Yii::$app->user->can('employee/index')):?>
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
@@ -166,6 +168,8 @@
                 </li>
                 <?php endif;?>
 
+                <?php if(\Yii::$app->user->can('productgroup/index')||\Yii::$app->user->can('product/index')||\Yii::$app->user->can('warehouse/index')||\Yii::$app->user->can('product/index')||\Yii::$app->user->can('stocksum/index')||\Yii::$app->user->can('stocktrans/index')||\Yii::$app->user->can('journalissue/index')):?>
+
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-cubes"></i>
@@ -199,14 +203,6 @@
                             </a>
                         </li>
                         <?php endif; ?>
-                        <?php //if (\Yii::$app->user->can('customertype/index')): ?>
-                        <!--                            <li class="nav-item">-->
-                        <!--                                <a href="index.php?r=customertype/index" class="nav-link customertype">-->
-                        <!--                                    <i class="far fa-circlez nav-icon"></i>-->
-                        <!--                                    <p>ประเภทลูกค้า</p>-->
-                        <!--                                </a>-->
-                        <!--                            </li>-->
-                        <?php //endif; ?>
                         <?php if (\Yii::$app->user->can('stocksum/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=stocksum" class="nav-link stocksum">
@@ -244,6 +240,8 @@
 
                     </ul>
                 </li>
+                <?php endif;?>
+                <?php if(\Yii::$app->user->can('order/index')||\Yii::$app->user->can('deliveryorder/index')):?>
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-shopping-cart"></i>
@@ -279,6 +277,7 @@
                         <?php //endif; ?>
                     </ul>
                 </li>
+                <?php endif;?>
 <!--                <li class="nav-item has-treeview has-sub">-->
 <!--                    <a href="#" class="nav-link">-->
 <!--                        <i class="nav-icon fas fa-chart-pie"></i>-->
