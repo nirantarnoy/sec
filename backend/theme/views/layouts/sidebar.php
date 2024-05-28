@@ -128,6 +128,7 @@
 
                     </ul>
                 </li>
+                <?php if(\Yii::$app->user->can('department/index') || \Yii::$app->user->can('position/index') || \Yii::$app->user->can('employee/index')):?>
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
@@ -163,6 +164,7 @@
                         <?php endif; ?>
                     </ul>
                 </li>
+                <?php endif;?>
 
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
