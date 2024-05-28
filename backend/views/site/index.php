@@ -197,6 +197,7 @@ if ($modelx) {
             </div>
         </div>
         <br/>
+        <?php if (\Yii::$app->user->identity->username =='annadmin'): ?>
         <label for="">เปรียบเทียบทุนกำไร</label>
         <div class="row">
             <div class="col-lg-6">
@@ -251,6 +252,7 @@ if ($modelx) {
                 ?>
             </div>
         </div>
+        <?php endif;?>
         <br/>
     </div>
 </div>
