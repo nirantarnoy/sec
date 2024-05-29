@@ -82,7 +82,12 @@ class Customer extends \common\models\Customer
     public static function findCusFullName($id)
     {
         $model = Customer::find()->where(['id' => $id])->one();
-        return $model != null ? $model->first_name.' '.$model->last_name : '';
+        $full_name = '';
+        if($model){
+            $full_name = $model->first_name.' '.$model->last_name == '-'?'':$model->last_name;
+        }
+
+        return $full_name;
     }
     public static function findEmail($id)
     {
