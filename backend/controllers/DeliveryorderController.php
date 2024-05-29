@@ -208,7 +208,8 @@ class DeliveryorderController extends Controller
                     }
                 }
                 $this->notifymessage($model->id,$model->order_no,$model->created_by);
-                return $this->redirect(['view', 'id' => $model->id]);
+               // return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['deliveryorder/printdo','id' => $model->id]);
             }
 
         }
