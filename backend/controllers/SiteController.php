@@ -85,6 +85,12 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             //echo "login ok"; return;
             // return $this->goBack();
+            $model_user_info = \backend\models\User::find()->where(['id' => \Yii::$app->user->id])->one();
+            if($model_user_info){
+                if($model_user_info->user_group_id == 3){
+                    return $this->goHome();
+                }
+            }
             return $this->redirect(['site/index']);
         }
 
@@ -100,65 +106,7 @@ class SiteController extends Controller
     }
 
 
-    public function actionDriverlogin()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
 
-        $this->layout = 'blank';
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            //echo "login ok"; return;
-            // return $this->goBack();
-//            return $this->redirect(['site/index']);
-            $_SESSION['driver_login']=\Yii::$app->user->id;
-
-            return $this->redirect(['carsummaryreport/indexnew']);
-        }
-
-        //   $model->password = '';
-        $model->password = '';
-        $this->layout = 'main_login';
-        $model->password = '';
-        return $this->render('login_new1', [
-            'model' => $model,
-        ]);
-
-
-    }
-
-    public function actionLogindriver()
-    {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
-        }
-
-        $this->layout = 'blank';
-
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            //echo "login ok"; return;
-            // return $this->goBack();
-//            return $this->redirect(['workqueuereceive/index']);
-
-            $_SESSION['driver_login']=\Yii::$app->user->id;
-
-            return $this->redirect(['carsummaryreport/indexnew']);
-
-        }
-
-        //   $model->password = '';
-        $model->password = '';
-        $this->layout = 'main_login';
-        $model->password = '';
-        return $this->render('login_emp_car', [
-            'model' => $model,
-        ]);
-
-
-    }
 
     /**
      * Logout action.
