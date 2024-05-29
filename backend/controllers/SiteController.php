@@ -88,7 +88,9 @@ class SiteController extends Controller
             $model_user_info = \backend\models\User::find()->where(['id' => \Yii::$app->user->id])->one();
             if($model_user_info){
                 if($model_user_info->user_group_id == 3){
-                    return $this->goHome();
+                    return $this->render('login_new', [
+                        'model' => $model,
+                    ]);
                 }
             }
             return $this->redirect(['site/index']);
