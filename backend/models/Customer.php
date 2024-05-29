@@ -84,7 +84,12 @@ class Customer extends \common\models\Customer
         $model = Customer::find()->where(['id' => $id])->one();
         $full_name = '';
         if($model){
-            $full_name = $model->first_name.' '.$model->last_name == '-'?'':$model->last_name;
+            $full_name = $model->first_name;
+        }
+        if($model->last_name =='-'){
+            $full_name .= ' ';
+        }else{
+            $full_name .= ' '.$model->last_name;
         }
 
         return $full_name;
