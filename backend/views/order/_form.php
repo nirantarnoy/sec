@@ -212,10 +212,10 @@ if ($model_do) {
         <div class="col-lg-2"></div>
         <div class="col-lg-6" style="text-align: right;">
             <div class="input-group">
-                <?php if ($model_do == null && \Yii::$app->user->can('order/createdo')): ?>
+                <?php //if ($model_do == null && \Yii::$app->user->can('order/createdo')): ?>
                     <a href="index.php?r=order/createdo&order_id=<?= $model->id ?>" class="btn btn-info">สร้างใบส่งสินค้า</a>
 
-                <?php endif; ?>
+                <?php //endif; ?>
                 <?php if ($delivery_id > 0 && \Yii::$app->user->can('deliveryorder/print')): ?>
 
                     <a href="index.php?r=deliveryorder/print&id=<?= $model->id ?>"
