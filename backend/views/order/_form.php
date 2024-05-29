@@ -140,25 +140,25 @@ if ($model_do) {
                 <tr>
                     <td>ชื่อลูกค้า</td>
                     <td>
-                        <?= \backend\models\Customer::findCusFullName(1) ?>
+                        <?= \backend\models\Customer::findCusFullName($model->customer_id) ?>
                     </td>
                 </tr>
                 <tr>
                     <td>Email</td>
                     <td>
-                        <?= \backend\models\Customer::findEmail(1) ?>
+                        <?= \backend\models\Customer::findEmail($model->customer_id) ?>
                     </td>
                 </tr>
                 <tr>
                     <td>เบอร์โทร</td>
                     <td>
-                        <?= \backend\models\Customer::findPhone(1) ?>
+                        <?= \backend\models\Customer::findPhone($model->customer_id) ?>
                     </td>
                 </tr>
                 <tr>
                     <td>ที่อยู่ในการจัดส่ง</td>
                     <td>
-                        <p><?= \backend\models\Customer::findFullAddress(1) ?></p>
+                        <p><?= \backend\models\Customer::findFullAddress($model->customer_id) ?></p>
                     </td>
                 </tr>
                 <tr>
