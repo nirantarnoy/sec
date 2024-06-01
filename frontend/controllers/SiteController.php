@@ -578,6 +578,8 @@ class SiteController extends Controller
         }
         if (isset($_SESSION['cart'])) {
             if (!empty($_SESSION['cart'])) {
+
+                $order_amount = 0;
                 $model_order = new \backend\models\Order();
                 $model_order->order_no = $model_order::getLastNo();
                 $model_order->order_date = date('Y-m-d H:i:s');
@@ -590,6 +592,7 @@ class SiteController extends Controller
                 if ($model_order->save(false)) {
                     $total_amount = 0;
                     foreach ($_SESSION['cart'] as $key => $value) {
+                        $order_amount+=((float)$value['qty'] * (float)$value['price']);
                         $total_amount = $total_amount + (float)$value['qty'] * (float)$value['price'];
                         $model_line = new \common\models\OrderLine();
                         $model_line->order_id = $model_order->id;
@@ -602,6 +605,8 @@ class SiteController extends Controller
                     }
                     \backend\models\Order::updateAll(['total_amount' => $total_amount], ['id' => $model_order->id]);
                     unset($_SESSION['cart']);
+
+                    $this->notifymessage($model_order->order_no,$order_amount);
                 }
 
             }
@@ -674,5 +679,51 @@ class SiteController extends Controller
             //}
         }
         return $this->redirect(['site/index']);
+    }
+
+    public function notifymessage($order_no,$total_amount)
+    {
+        if($order_no != null || $order_no != ''){
+            //$message = "This is test send request from camel paperless";
+            $line_api = 'https://notify-api.line.me/api/notify';
+            $line_token = '';
+
+            $b_token = '8H8dtjz5QWvWWBFrMAwYrglYhkwu3Pw7rnXeBK9vYFK';
+            $line_token = trim($b_token);
+
+
+            $journal_detail = '';
+         //   $user_name = \backend\models\User::findName($user_id);
+
+
+            $message = '' . "\n";
+            $message .= 'แจ้งเตือนมีคำสั่งซื้อใหม่' . "\n";
+            $message .= 'เลขที่คำสั่งซื้อ:' . $order_no . "\n";
+            //   $message .= 'User:' . \backend\models\User::findName($user_id) . "\n";
+            $message .= "วันที่:" . date('Y-m-d') . "(" . date('H:i:s') . ")" . "\n";
+
+            $message .= 'ยอดเงินสั่งซื้อ: ' .number_format($total_amount,2). "\n";
+//            $message .= "รายละเอียด: \n " . $journal_detail. "\n";
+
+            //  $message .= 'สามารถดูรายละเอียดได้ที่ http:///103.253.73.108/icesystemdindang/backend/web/index.php?r=dailysum/indexnew' . "\n"; // bkt
+
+
+            $queryData = array('message' => $message);
+            $queryData = http_build_query($queryData, '', '&');
+            $headerOptions = array(
+                'http' => array(
+                    'method' => 'POST',
+                    'header' => "Content-Type: application/x-www-form-urlencoded\r\n"
+                        . "Authorization: Bearer " . $line_token . "\r\n"
+                        . "Content-Length: " . strlen($queryData) . "\r\n",
+                    'content' => $queryData
+                )
+            );
+            $context = stream_context_create($headerOptions);
+            $result = file_get_contents($line_api, FALSE, $context);
+            $res = json_decode($result);
+            return $res;
+        }
+
     }
 }
