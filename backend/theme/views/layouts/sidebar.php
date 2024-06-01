@@ -168,7 +168,7 @@
                 </li>
                 <?php endif;?>
 
-                <?php if(\Yii::$app->user->can('productgroup/index')||\Yii::$app->user->can('product/index')||\Yii::$app->user->can('warehouse/index')||\Yii::$app->user->can('product/index')||\Yii::$app->user->can('stocksum/index')||\Yii::$app->user->can('stocktrans/index')||\Yii::$app->user->can('journalissue/index')):?>
+                <?php if(\Yii::$app->user->can('productgroup/index')||\Yii::$app->user->can('product/index')||\Yii::$app->user->can('warehouse/index')||\Yii::$app->user->can('product/index')||\Yii::$app->user->can('stocksum/index')||\Yii::$app->user->can('stocktrans/index')||\Yii::$app->user->can('journalissue/index')||\Yii::$app->user->can('journalreceive/index')):?>
 
                 <li class="nav-item has-treeview has-sub">
                     <a href="#" class="nav-link">
@@ -235,6 +235,18 @@
                                 </p>
                             </a>
                         </li>
+
+                        <?php endif; ?>
+                        <?php if (\Yii::$app->user->can('journalreceive/index')): ?>
+                            <li class="nav-item">
+                                <a href="index.php?r=journalreceive" class="nav-link journalreceive">
+                                    <i class="far fa-circlez nav-icon"></i>
+                                    <p>
+                                        รับสินค้า
+                                        <!--                                <span class="right badge badge-danger">New</span>-->
+                                    </p>
+                                </a>
+                            </li>
 
                         <?php endif; ?>
 
