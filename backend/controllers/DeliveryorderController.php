@@ -364,7 +364,7 @@ class DeliveryorderController extends Controller
             }
 
             $message = '' . "\n";
-            $message .= 'แจ้งเตือนรับเข้าสินค้า' . "\n";
+            $message .= 'แจ้งเตือนตัดสต๊อกสินค้า' . "\n";
             $message .= 'พนักงาน:' . $user_name . "\n";
             //   $message .= 'User:' . \backend\models\User::findName($user_id) . "\n";
             $message .= "วันที่:" . date('Y-m-d') . "(" . date('H:i:s') . ")" . "\n";
