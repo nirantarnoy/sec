@@ -92,7 +92,7 @@ class SiteController extends Controller
             $query->andFilterWhere(['product_group_id' => $product_cat_search]);
         }
         if (!empty($product_search)) {
-            $query->andFilterWhere(['like', 'name', $product_search])->orFilterWhere(['like', 'sku', $product_search])->orFilterWhere(['like', 'code', $product_search]);
+            $query->andFilterWhere(['like', 'name', $product_search])->orFilterWhere(['like', 'sku', $product_search])->orFilterWhere(['like', 'code', $product_search])->orFilterWhere(['like', 'bar_code', $product_search]);
         }
 
         $query->orderBy(['id' => SORT_ASC]);
