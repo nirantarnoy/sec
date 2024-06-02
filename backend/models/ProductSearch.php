@@ -69,7 +69,7 @@ class ProductSearch extends Product
             $query->orFilterWhere(['like', 'code', $this->globalSearch])
                 ->orFilterWhere(['like', 'sku', $this->globalSearch])
                 ->orFilterWhere(['like', 'name', $this->globalSearch])
-                ->orFilterWhere(['like', 'bar_code', $this->globalSearch])
+                ->orFilterWhere(['like', 'barcode', $this->globalSearch])
                 ->orFilterWhere(['like', 'description', $this->globalSearch]);
         }
 
