@@ -129,7 +129,7 @@ function getProductExpiredDate($product_id)
 {
     $exp_date = null;
     if ($product_id) {
-        $exp_date = \backend\models\Stocksum::find()->where(['product_id' => $product_id])->min('expired_date');
+        $exp_date = \backend\models\Stocksum::find()->where(['product_id' => $product_id])->max('expired_date');
 
     }
     return $exp_date;
