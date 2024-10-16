@@ -85,29 +85,8 @@ class SiteController extends Controller
             $customer_id = $_SESSION['user_customer_id'];
         }
 
-        $product_cat_search = \Yii::$app->request->get('product_cat_search');
-        $product_search = \Yii::$app->request->get('product_search');
-        $query = \common\models\ViewProductPage::find()->where(['status' => 1]);
-        if (!empty($product_cat_search)) {
-            $query->andFilterWhere(['product_group_id' => $product_cat_search]);
-        }
-        if (!empty($product_search)) {
-            $query->andFilterWhere(['like', 'name', $product_search])->orFilterWhere(['like', 'sku', $product_search])->orFilterWhere(['like', 'code', $product_search])->orFilterWhere(['like', 'barcode', $product_search]);
-        }
 
-        $query->orderBy(['id' => SORT_ASC]);
-        $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(), 'pageSize' => 18]);
-        $model = $query->offset($pages->offset)
-            ->limit($pages->limit)
-            ->all();
-        return $this->render('index', [
-            'model' => $model,
-            'pages' => $pages,
-            'product_cat_search' => $product_cat_search,
-            'product_search' => $product_search,
-            'customer_id' => $customer_id,
-        ]);
+        return $this->render('index');
     }
 
     public function actionYourcart()

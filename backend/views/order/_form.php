@@ -33,19 +33,19 @@ if ($model_do) {
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-3">
             <?= $form->field($model, 'order_no')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-3">
             <?= $form->field($model, 'order_date')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($model, 'customer_id')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-3">
             <?= $form->field($model, 'total_amount')->textInput(['readonly' => 'readonly']) ?>
-        </div>
-        <div class="col-lg-6">
-<!--            --><?php //= $form->field($model, 'order_tracking_no')->textInput() ?>
         </div>
     </div>
 
@@ -57,7 +57,7 @@ if ($model_do) {
     </div>
     <br/>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
             <table class="table table-bordered table-striped">
                 <thead>
                 <tr>
@@ -110,94 +110,7 @@ if ($model_do) {
                 </tfoot>
             </table>
         </div>
-        <div class="col-lg-6">
-            <table class="table table-striped table-bordered">
-                <!--               <tr>-->
-                <!--                   <td style="width: 25%">สถานะชำระเงิน</td>-->
-                <!--                   <td>-->
-                <!--                       --><?php //if($model->pay_status == 1):?>
-                <!--                           <div class="badge badge-success">ชำระแล้ว</div>-->
-                <!--                       --><?php //else:?>
-                <!--                           <div class="badge badge-secondary">ยังไม่ชำระ</div>-->
-                <!--                       --><?php //endif;?>
-                <!--                   </td>-->
-                <!--               </tr>-->
-                <!--               <tr>-->
-                <!--                   <td style="width: 25%">หลักฐานการชำระเงิน</td>-->
-                <!--                   <td>-->
-                <!--                   </td>-->
-                <!--               </tr>-->
-                <!--               <tr>-->
-                <!--                   <td style="width: 25%">วิธีชำระเงิน</td>-->
-                <!--                   <td>โอนบัญชีธนาคาร</td>-->
-                <!--               </tr>-->
-                <!--               <tr>-->
-                <!--                   <td>เข้าบัญชีธนาคาร</td>-->
-                <!--                   <td>-->
-                <!---->
-                <!--                   </td>-->
-                <!--               </tr>-->
-                <tr>
-                    <td>ชื่อลูกค้า</td>
-                    <td>
-                        <?= \backend\models\Customer::findCusFullName($model->customer_id) ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Email</td>
-                    <td>
-                        <?= \backend\models\Customer::findEmail($model->customer_id) ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td>เบอร์โทร</td>
-                    <td>
-                        <?= \backend\models\Customer::findPhone($model->customer_id) ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td>ที่อยู่ในการจัดส่ง</td>
-                    <td>
-                        <p><?= \backend\models\Customer::findFullAddress($model->customer_id) ?></p>
-                    </td>
-                </tr>
-                <tr>
-                    <td>สถานะคำสั่งซื้อ</td>
-                    <?php
-                    $color_status = '';
-                    if ($model->status == 3) {
-                        $color_status = 'color: orange';
-                    } elseif ($model->status == 4) {
-                        $color_status = 'color: green';
-                    } elseif ($model->status == 5) {
-                        $color_status = 'color: red';
-                    }
-                    ?>
-                    <td style="<?= $color_status ?>"><?= \backend\helpers\OrderStatus::getTypeById($model->status) ?></td>
-                </tr>
-                <!--               <tr>-->
-                <!--                   <td>เลขที่ติดตามพัสดุ</td>-->
-                <!--                   <td style="color: green;">-->
-                <!--                       --><?php //=$model->order_tracking_no?>
-                <!--                   </td>-->
-                <!--               </tr>-->
-                <!--               <tr>-->
-                <!--                   <td>เลขที่ใบเบิก</td>-->
-                <!--                   <td>-->
-                <!--                       <a style="text-decoration: none;color: blue;" href="index.php?r=journalissue/update&id=-->
-                <?php //=$model_issue_data!=null?$model_issue_data->id:''?><!--">-->
-                <?php //=$model_issue_data!=null?$model_issue_data->journal_no:''?><!--</a>-->
-                <!--                   </td>-->
-                <!--               </tr>-->
-                <tr>
-                    <td>เลขที่ใบส่งของ</td>
-                    <td style="color: green;">
-                        <a style="text-decoration: none;color: blue;"
-                           href="index.php?r=deliveryorder/update&id=<?= $delivery_id != 0 ? $delivery_id : '' ?>"><?= $delivery_id != null ? $do_no : '' ?></a>
-                    </td>
-                </tr>
-            </table>
-        </div>
+
     </div>
 
     <div class="row">
@@ -207,38 +120,6 @@ if ($model_do) {
                 <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
             </div>
             <?php endif; ?>
-        </div>
-        <div class="col-lg-2"></div>
-        <div class="col-lg-2"></div>
-        <div class="col-lg-6" style="text-align: right;">
-            <div class="input-group">
-                <?php if ($model_do == null && \Yii::$app->user->can('order/createdo')): ?>
-                    <a href="index.php?r=order/createdo&order_id=<?= $model->id ?>" class="btn btn-info">สร้างใบส่งสินค้า</a>
-
-                <?php endif; ?>
-                <?php if ($delivery_id > 0 && \Yii::$app->user->can('deliveryorder/print')): ?>
-
-                    <a href="index.php?r=deliveryorder/print&id=<?= $model->id ?>"
-                       class="btn btn-primary">พิมพ์ใบเบิก</a>
-
-                <?php endif; ?>
-                <?php if ($delivery_id > 0 && \Yii::$app->user->can('deliveryorder/printdo')): ?>
-
-                    <a href="index.php?r=deliveryorder/printdo&id=<?= $delivery_id ?>" class="btn btn-warning">พิมพ์ใบส่งของ</a>
-
-                <?php endif; ?>
-                <?php if ($delivery_id > 0 && \Yii::$app->user->can('deliveryorder/pricereciept')): ?>
-
-                    <a href="index.php?r=deliveryorder/printreciept&id=<?= $model->id ?>" class="btn btn-secondary">พิมพ์ใบเสร็จ</a>
-
-                <?php endif; ?>
-                <?php if ($delivery_id > 0 && \Yii::$app->user->can('deliveryorder/printtaxinvoice')): ?>
-
-                    <a href="index.php?r=deliveryorder/printtaxinvoice&id=<?= $model->id ?>" class="btn btn-info">พิมพ์ใบกำกับ</a>
-
-                <?php endif; ?>
-            </div>
-
         </div>
     </div>
 

@@ -1,6 +1,6 @@
 <?php
 
-use backend\models\Order;
+use backend\models\Quotation;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -9,22 +9,22 @@ use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
 
 /** @var yii\web\View $this */
-/** @var backend\models\OrderSearch $searchModel */
+/** @var backend\models\QuotationSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'คำสั่งซื้อ';
+$this->title = 'ใบเสนอราคา';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="order-index">
+<div class="employee-index">
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
             <p>
-                <?php echo Html::a(Yii::t('app', '<i class="fa fa-plus"></i> สร้างใหม่'), ['create'], ['class' => 'btn btn-success']) ?>
+                <?= Html::a(Yii::t('app', '<i class="fa fa-plus"></i> สร้างใหม่'), ['create'], ['class' => 'btn btn-success']) ?>
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['position/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['employee/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
@@ -38,7 +38,8 @@ $this->params['breadcrumbs'][] = $this->title;
             </form>
         </div>
     </div>
-    <?php echo $this->render('_search', ['model' => $searchModel, 'viewstatus' => $viewstatus]); ?>
+    <?php  echo $this->render('_search', ['model' => $searchModel,'viewstatus'=>$viewstatus]); ?>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         // 'filterModel' => $searchModel,
@@ -51,49 +52,27 @@ $this->params['breadcrumbs'][] = $this->title;
         //    'hover' => true,
         'id' => 'product-grid',
         //'tableOptions' => ['class' => 'table table-hover'],
-        'emptyText' => '<div style="color: red;text-align: center;"> <b>ยังไม่มีคำสั่งซื้อ</b></div>',
+        'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
         'columns' => [
             [
                 'class' => 'yii\grid\SerialColumn',
-                'headerOptions' => ['style' => 'text-align: center'],
+                'headerOptions' => ['style' => 'text-align:center;'],
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
-            'order_no',
-            ['attribute' => 'order_date','value' => function ($model) {
-                return date('d/m/Y H:i:s', strtotime($model->order_date));
-            }],
-//            'customer_id',
-//            'customer_name',
-            //'customer_type',
-            'total_amount',
-            [
-                    'attribute' => 'transfer_bank_account_id',
-                'value' => function ($model) {
-                    return \backend\models\Bank::findName($model->transfer_bank_account_id);
-                }
-            ],
-//            'status',
-            //'order_tracking_no',
-            [
-                'attribute' => 'status',
-                'format' => 'raw',
-                'value' => function ($data) {
-                    $color_status = '';
-                    if ($data->status == 3) {
-                        $color_status = 'color: orange;';
-                    } elseif ($data->status == 4) {
-                        $color_status = 'color: green;';
-                    } elseif ($data->status == 5) {
-                        $color_status = 'color: red';
-                    }
-                    return '<div style="'.$color_status.'">'.\backend\helpers\OrderStatus::getTypeById($data->status).'</div>';
-                   // return $data->status;
-                },
-            ],
+          //  'id',
+            'quotation_no',
+            'quotation_date',
+            'customer_id',
+            'customer_name',
+            //'attn',
+            //'from',
+            'status',
             //'created_at',
             //'created_by',
             //'updated_at',
             //'updated_by',
+            //'remark',
+            //'description',
             [
 
                 'header' => 'ตัวเลือก',
@@ -108,11 +87,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'aria-label' => Yii::t('yii', 'View'),
                             'data-pjax' => '0',
                         ];
-                        if( \Yii::$app->user->can('order/view'))  {
-                            return Html::a(
-                                '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, $options);
-                        }
-
+                        return Html::a(
+                            '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, $options);
                     },
                     'update' => function ($url, $data, $index) {
                         $options = array_merge([
@@ -121,17 +97,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-pjax' => '0',
                             'id' => 'modaledit',
                         ]);
-                        if( \Yii::$app->user->can('order/update')) {
-                            return Html::a(
-                                '<span class="fas fa-edit btn btn-xs btn-default"></span>', $url, [
-                                'id' => 'activity-view-link',
-                                //'data-toggle' => 'modal',
-                                // 'data-target' => '#modal',
-                                'data-id' => $index,
-                                'data-pjax' => '0',
-                                // 'style'=>['float'=>'rigth'],
-                            ]);
-                        }
+                        return Html::a(
+                            '<span class="fas fa-edit btn btn-xs btn-default"></span>', $url, [
+                            'id' => 'activity-view-link',
+                            //'data-toggle' => 'modal',
+                            // 'data-target' => '#modal',
+                            'data-id' => $index,
+                            'data-pjax' => '0',
+                            // 'style'=>['float'=>'rigth'],
+                        ]);
                     },
                     'delete' => function ($url, $data, $index) {
                         $options = array_merge([
@@ -144,9 +118,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-var' => $data->id,
                             'onclick' => 'recDelete($(this));'
                         ]);
-                        if( \Yii::$app->user->can('order/delete')) {
-                            return Html::a('<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
-                        }
+                        return Html::a('<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
                     }
                 ]
             ],
@@ -157,4 +129,3 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::end(); ?>
 
 </div>
-

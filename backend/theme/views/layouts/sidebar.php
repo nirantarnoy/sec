@@ -1,9 +1,8 @@
 <aside class="main-sidebar sidebar-dark-blue elevation-4">
     <!-- Brand Logo -->
     <a href="index.php?r=site/index" class="brand-link">
-        <img src="<?php echo Yii::$app->request->baseUrl; ?>/uploads/logo/ab_logo.jpg" alt="Narono" class="brand-image">
-        <span class="brand-text font-weight-light">ANNAB</span>
-<!--        <span class="brand-text font-weight-light">NARONO</span>-->
+<!--        <img src="--><?php //echo Yii::$app->request->baseUrl; ?><!--/uploads/logo/ab_logo.jpg" alt="Narono" class="brand-image">-->
+        <span class="brand-text font-weight-light">MMC</span>
     </a>
 
     <!-- Sidebar -->
@@ -15,7 +14,7 @@
                 data-accordion="false">
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
-                <<?php if(\Yii::$app->user->can('site/index')):?>
+                <?php if(\Yii::$app->user->can('site/index')):?>
                 <li class="nav-item">
                     <a href="index.php?r=site/index" class="nav-link site">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -271,14 +270,6 @@
                             </a>
                         </li>
                         <?php endif; ?>
-                        <?php if (\Yii::$app->user->can('deliveryorder/index')): ?>
-                        <li class="nav-item">
-                            <a href="index.php?r=deliveryorder/index" class="nav-link deliveryorder">
-                                <i class="far fa-circlez nav-icon"></i>
-                                <p>ใบส่งของ</p>
-                            </a>
-                        </li>
-                        <?php endif; ?>
                         <?php //if (\Yii::$app->user->can('position/index')): ?>
 <!--                        <li class="nav-item">-->
 <!--                            <a href="index.php?r=customerinvoice/index" class="nav-link customerinvoice">-->
@@ -289,6 +280,25 @@
                         <?php //endif; ?>
                     </ul>
                 </li>
+                    <li class="nav-item has-treeview has-sub">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-list"></i>
+                            <p>
+                                เสนอราคา
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <?php if (\Yii::$app->user->can('order/index')): ?>
+                                <li class="nav-item">
+                                    <a href="index.php?r=quotation/index" class="nav-link quotation">
+                                        <i class="far fa-circlez nav-icon"></i>
+                                        <p>ใบเสนอราคา</p>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </li>
                 <?php endif;?>
 <!--                <li class="nav-item has-treeview has-sub">-->
 <!--                    <a href="#" class="nav-link">-->
@@ -361,7 +371,7 @@
 <!--                </li>-->
                 <?php // if (isset($_SESSION['user_group_id'])): ?>
                 <?php //if ($_SESSION['user_group_id'] == 1): ?>
-                <?php if (\Yii::$app->user->can('user/index')): ?>
+                <?php // if (\Yii::$app->user->can('user/index')): ?>
                     <li class="nav-item has-treeview has-sub">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-user"></i>
@@ -424,7 +434,7 @@
                             </li>
                         </ul>
                     </li>
-                <?php endif;?>
+                <?php // endif;?>
                 <?php //endif; ?>
                 <?php //endif; ?>
             </ul>

@@ -15,8 +15,8 @@ $customer_count = \backend\models\Customer::find()->where(['status' => 1])->coun
 
 $model_stock = \backend\models\Stocksum::find()->where(['>', 'qty', 0])->andFilterWhere(['!=', 'year(expired_date)', 1970])->groupBy(['product_id'])->orderBy(['expired_date' => SORT_ASC])->limit(10)->all();
 
-$model_sale_top_product = \common\models\ViewOrderAmount::find()->select(['product_id', 'sku', 'name', 'sum(qty) as qty'])->groupBy(['product_id'])->orderBy(['sum(qty)' => SORT_DESC])->limit(5)->all();
-$model_sale_compare = \common\models\ViewOrderAmount::find()->select(['year', 'month', 'sum(cost_amt) as cost_amt', 'sum(sale_amt) as sale_amt'])->groupBy(['year', 'month'])->orderBy(['month' => SORT_ASC])->all();
+$model_sale_top_product = null; // \common\models\ViewOrderAmount::find()->select(['product_id', 'sku', 'name', 'sum(qty) as qty'])->groupBy(['product_id'])->orderBy(['sum(qty)' => SORT_DESC])->limit(5)->all();
+$model_sale_compare = null; // \common\models\ViewOrderAmount::find()->select(['year', 'month', 'sum(cost_amt) as cost_amt', 'sum(sale_amt) as sale_amt'])->groupBy(['year', 'month'])->orderBy(['month' => SORT_ASC])->all();
 //$model_sale_compare = \common\models\ViewOrderAmount::find()->orderBy(['month(order_date)'=>SORT_ASC])->all();
 //print_r($model_sale_compare);
 
@@ -24,38 +24,10 @@ $m_loop_data = [];
 $total = [];
 $total_for_gharp = [];
 
-$sql = "SELECT month(order_date) as month,sum(cost_amt) as cost_amt,sum(sale_amt) as sale_amt  from view_order_amount ";
-$sql .= " GROUP BY month(order_date)";
-$sql .= " ORDER BY month(order_date) asc";
-$sql .= " LIMIT 2";
-$query = \Yii::$app->db->createCommand($sql);
-$model = $query->queryAll();
-if ($model) {
-    $sale_price_amount = [];
-    $cost_price_amount = [];
-    for ($i = 0; $i <= count($model) - 1; $i++) {
-        // $benefit_amount = (float)$model[$i]['sale_amt'] - (float)$model[$i]['cost_amt'];
-        array_push($cost_price_amount, (float)$model[$i]['cost_amt']);
-        array_push($sale_price_amount, (float)$model[$i]['sale_amt']);
-        array_push($m_category_show, $m_category[(int)$model[$i]['month'] - 1]);
-    }
-
-    array_push($total_for_gharp, ['name' => 'ราคาทุน', 'data' => $cost_price_amount, 'color' => '#f39c12']);
-    array_push($total_for_gharp, ['name' => 'ราคาขาย', 'data' => $sale_price_amount, 'color' => '#00a65a']);
-}
-
 $data_series = $total_for_gharp;
 
 $cost_stock_amt = 0;
-$sqlx = "SELECT sum(t1.qty * t2.cost_price) as cost_amt from stock_sum as t1 inner join product as t2 on t1.product_id = t2.id ";
-$sqlx .= " where t1.qty > 0";
-$queryx = \Yii::$app->db->createCommand($sqlx);
-$modelx = $queryx->queryAll();
-if ($modelx) {
-    for ($i = 0; $i <= count($modelx) - 1; $i++) {
-        $cost_stock_amt = (float)$modelx[$i]['cost_amt'];
-    }
-}
+
 ?>
 <br/>
 <br/>
@@ -127,132 +99,6 @@ if ($modelx) {
             </div>
 
         </div>
-        <br/>
-        <label for="">สินค้ายอดขายสูงสุด 5 อันดับ</label>
-        <div class="row">
-            <div class="col-lg-12">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th style="text-align: center">SKU</th>
-                        <th style="text-align: center">ชื่อสินค้า</th>
-                        <th style="text-align: right">จำนวน</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach ($model_sale_top_product as $key => $value): ?>
-
-                        <tr>
-                            <td style="text-align: center"><?= \backend\models\Product::findSku($value->product_id) ?></td>
-                            <td style="text-align: left"><?= \backend\models\Product::findName($value->product_id) ?></td>
-                            <td style="text-align: right;"><?= number_format($value->qty) ?></td>
-
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <br/>
-        <label for="">รายการสินค้าใกล้หมดอายุ</label>
-        <div class="row">
-            <div class="col-lg-12">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th style="text-align: center">SKU</th>
-                        <th style="text-align: center">ชื่อสินค้า</th>
-                        <th style="text-align: center">วันที่หมดอายุ</th>
-                        <th style="text-align: right">จำนวน</th>
-                        <th style="text-align: right">จะหมดอายุในอีก</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach ($model_stock as $key => $value): ?>
-                        <?php
-                        $left_date = 0;
-                        $date1 = date_create(date('Y-m-d'));
-                        $date2 = date_create(date('Y-m-d', strtotime($value->expired_date)));
-
-                        if ($value->expired_date != null) {
-                            $left_date = date_diff($date1, $date2);
-                        }
-                        $show_color = 'green';
-                        if (date('Y-m-d', strtotime($value->expired_date)) < date('Y-m-d')) {
-                            $show_color = 'red';
-                        }
-                        // return $date1->format('d-m-Y');
-                        // return '<span style="color: '.$show_color.'">'.$left_date->format('%a').'</span>';
-                        ?>
-                        <tr>
-                            <td style="text-align: center"><?= \backend\models\Product::findSku($value->product_id) ?></td>
-                            <td style="text-align: left"><?= \backend\models\Product::findName($value->product_id) ?></td>
-                            <td style="text-align: center;"><?= date('d/m/Y', strtotime($value->expired_date)) ?></td>
-                            <td style="text-align: right;"><?= number_format($value->qty) ?></td>
-                            <td style="text-align: right;color:<?= $show_color ?>"><?= number_format($left_date->format('%a')) . ' วัน' ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <br/>
-        <?php if (\Yii::$app->user->identity->username =='annadmin'): ?>
-        <label for="">เปรียบเทียบทุนกำไร</label>
-        <div class="row">
-            <div class="col-lg-6">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th style="text-align: center">เดือน</th>
-                        <th style="text-align: right">ราคาทุน</th>
-                        <th style="text-align: right">ราคาขาย</th>
-                        <th style="text-align: right">กำไร</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php
-                    $colors = ['#FF530D', '#E82C0C', '#FF0000', '#E80C7A', '#E80C7A'];
-                    ?>
-                    <?php foreach ($model_sale_compare as $value): ?>
-                        <?php
-                        $m_name = '';
-                        for ($x = 1; $x <= $m_data; $x++) {
-                            if ($m_data[$x]['id'] == $value->month) {
-                                $m_name = $m_data[$x]['name'];
-                                break;
-                            }
-                        }
-                        ?>
-                        <tr>
-                            <td style="text-align: center"><?= $m_name ?></td>
-                            <td style="text-align: right"><?= number_format($value->cost_amt) ?></td>
-                            <td style="text-align: right;"><?= number_format($value->sale_amt) ?></td>
-                            <td style="text-align: right;"><?= number_format($value->sale_amt - $value->cost_amt) ?></td>
-                        </tr>
-                    <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
-            <div class="col-lg-6">
-                <?php
-                echo Highcharts::widget([
-                    'options' => [
-                        'colors' => $colors,
-                        'title' => ['text' => 'กราฟเปรียบเทียบทุนกำไร'],
-                        'xAxis' => [
-                            'categories' => $m_category_show
-                        ],
-                        'yAxis' => [
-                            'title' => ['text' => 'จำนวน']
-                        ],
-                        'series' => $data_series
-                    ]
-                ]);
-                ?>
-            </div>
-        </div>
-        <?php endif;?>
         <br/>
     </div>
 </div>

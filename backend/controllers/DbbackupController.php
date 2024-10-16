@@ -231,9 +231,9 @@ class DbbackupController extends Controller
     {
         $host = "localhost";
         $username = "root";
-        $password = "Ax12345678#9";
+        $password = "";
       //  $database_name = "admin_icesystem";
-        $database_name = "annab_db";
+        $database_name = "mmc_db";
         $date_string = time();
 
         $cmd = '';

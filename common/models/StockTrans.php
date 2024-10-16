@@ -55,6 +55,7 @@ class StockTrans extends \yii\db\ActiveRecord
             'trans_ref_id' => 'อ้างอิง',
             'warehouse_id'=> 'คลังสินค้า',
             'status' => 'สถานะ',
+            'stock_type_id' => 'ประเภทสต๊อก',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'remark' => 'หมายเหตุ',
