@@ -64,7 +64,7 @@ class Warehouse extends \common\models\Warehouse
         ];
     }
 
-    public function findName($id){
+    static public function findName($id){
         $model = Warehouse::find()->where(['id'=>$id])->one();
         return $model != null ?$model->name:'';
     }
