@@ -1,23 +1,23 @@
 <?php
 
-use backend\models\Customergroup;
+use backend\models\Unit;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use yii\bootstrap4\LinkPager;
+use yii\widgets\LinkPager;
+
 /** @var yii\web\View $this */
-/** @var backend\models\CustomergroupSearch $searchModel */
+/** @var backend\models\UnitSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'กลุ่มลูกค้า';
+$this->title = 'หน่วยนับ';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="customergroup-index">
+<div class="unit-index">
 
-    <!-- <h1><?= Html::encode($this->title) ?></h1> -->
-
+    <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
             <p>
@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['customergroup/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['warehouse/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
@@ -39,13 +39,11 @@ $this->params['breadcrumbs'][] = $this->title;
             </form>
         </div>
     </div>
-
-    <?php Pjax::begin(); ?>
     <?php echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
+        // 'filterModel' => $searchModel,
         'emptyCell' => '-',
         'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
         'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
@@ -57,23 +55,33 @@ $this->params['breadcrumbs'][] = $this->title;
         //'tableOptions' => ['class' => 'table table-hover'],
         'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            // 'id',
+            [
+                'class' => 'yii\grid\SerialColumn',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center']],
+            'code',
             'name',
             'description',
-            // 'status',
             [
                 'attribute' => 'status',
                 'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
                     if ($data->status == 1) {
-                        return '<div class="badge badge-success" >ใช้งาน</div>';
+                        return '<div class="badge badge-success">ใช้งาน</div>';
                     } else {
-                        return '<div class="badge badge-secondary" >ไม่ใช้งาน</div>';
+                        return '<div class="badge badge-dark">ไม่ใช้งาน</div>';
                     }
                 }
             ],
+            //'company_id',
+            //'branch_id',
+            //'created_at',
+            //'updated_at',
+            //'created_by',
+            //'updated_by',
+
             [
 
                 'header' => 'ตัวเลือก',

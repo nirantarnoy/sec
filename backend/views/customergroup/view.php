@@ -44,13 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 }
             ],
-            // 'company_id',
-            [
-                'attribute' => 'company_id',
-                'value' => function ($model){
-                    return \backend\models\Company::findCompanyName($model->company_id);
-                }
-            ],
+
             // 'created_at',
             // 'created_by',
             // 'updated_at',

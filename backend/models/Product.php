@@ -80,6 +80,10 @@ class Product extends \common\models\Product
         $model = Product::find()->where(['id'=>$id])->one();
         return $model != null ?$model->name:'';
     }
+    public function findPrice($id){
+        $model = Product::find()->where(['id'=>$id])->one();
+        return $model != null ?$model->sale_price:0;
+    }
     public function findDesc($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model != null ?$model->description:'';
@@ -87,6 +91,11 @@ class Product extends \common\models\Product
     public function findPhoto($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model != null ?$model->photo:'';
+    }
+
+    public function findUnitId($product_id){
+        $model = Product::find()->where(['id'=>$product_id])->one();
+        return $model != null ?$model->unit_id:0;
     }
 
     static function getTotalQty($id){

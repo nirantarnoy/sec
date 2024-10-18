@@ -40,7 +40,7 @@ class Quotation extends \yii\db\ActiveRecord
         return [
             [['quotation_date'], 'safe'],
             [['customer_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['quotation_no', 'customer_name', 'attn', 'from', 'remark', 'description'], 'string', 'max' => 255],
+            [['quotation_no', 'customer_name', 'attn', 'from', 'remark', 'description','total_text'], 'string', 'max' => 255],
         ];
     }
 

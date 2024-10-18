@@ -156,7 +156,7 @@ class JournalreceiveController extends Controller
                             }
                         }
                     }
-                    $this->notifymessage($model->id,$model->journal_no,$model->created_by);
+                    //$this->notifymessage($model->id,$model->journal_no,$model->created_by);
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
 
@@ -226,8 +226,8 @@ class JournalreceiveController extends Controller
             //$message = "This is test send request from camel paperless";
             $line_api = 'https://notify-api.line.me/api/notify';
             $line_token = '';
-
-            $b_token = '8H8dtjz5QWvWWBFrMAwYrglYhkwu3Pw7rnXeBK9vYFK';
+            $b_token = '';
+          //      $b_token = '8H8dtjz5QWvWWBFrMAwYrglYhkwu3Pw7rnXeBK9vYFK';
             $line_token = trim($b_token);
 
 

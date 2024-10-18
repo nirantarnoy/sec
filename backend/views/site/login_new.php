@@ -44,11 +44,11 @@ use yii\helpers\Html;
 <!--                </div>-->
 
                 <div class="login-logo">
-<!--                    <a href="#">-->
-<!--                        <img src="../../backend/web/uploads/logo/ab_logo.jpg" width="70%" alt="">-->
-<!--                    </a>-->
-                    <h1 style="color: dodgerblue">MMC</h1>
-                    <h1 style="color: dodgerblue">Material</h1>
+                    <a href="#">
+                        <img src="../../backend/web/uploads/logo/mmc_new.png" width="100%" alt="">
+                    </a>
+<!--                    <h1 style="color: dodgerblue">MMC</h1>-->
+<!--                    <h1 style="color: dodgerblue">Material</h1>-->
                 </div>
                 <p class="login-box-msg">ลงชื่อเข้าเพื่อเข้าใช้งานระบบของคุณ</p>
                 <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>

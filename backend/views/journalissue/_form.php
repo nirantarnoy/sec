@@ -222,7 +222,7 @@ $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all
                     <tfoot>
                     <tr>
                         <td style="text-align: center;">
-                            <!--                            <div class="btn btn-sm btn-primary" onclick="finditem();"><i class="fa fa-plus"></i></div>-->
+                                                        <div class="btn btn-sm btn-primary" onclick="finditem();"><i class="fa fa-plus"></i></div>
                         </td>
                         <td colspan="5" style="text-align: right">รวม</td>
                         <td>

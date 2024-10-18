@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -46,10 +47,12 @@ $yesno = [['id'=>1,'YES'],['id'=>0,'NO']];
             ]) ?>
         </div>
         <div class="col-lg-3">
-<!--            --><?php //if (\backend\models\User::checkhasrole(\Yii::$app->user->id, 'Owner')): ?>
-    <?php if (\Yii::$app->user->identity->username =='annadmin'): ?>
-        <?= $form->field($model, 'cost_price')->textInput() ?>
-            <?php endif;?>
+        <?= $form->field($model, 'unit_id')->widget(\kartik\select2\Select2::className(),[
+                'data'=>ArrayHelper::map(\backend\models\Unit::find()->all(), 'id', 'name'),
+                'options' => [
+                        'placeholder'=>'-- เลือกหน่วยนับ --',
+                ]
+        ]) ?>
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'sale_price')->textInput() ?>
@@ -143,7 +146,6 @@ $yesno = [['id'=>1,'YES'],['id'=>0,'NO']];
                 <tr>
                     <th style="text-align: center;">ที่จัดเก็บ</th>
                     <th style="text-align: center;">จำนวนคงเหลือ</th>
-                    <th style="text-align: center;">วันหมดอายุ</th>
                     <th>-</th>
                 </tr>
                 </thead>
@@ -170,9 +172,6 @@ $yesno = [['id'=>1,'YES'],['id'=>0,'NO']];
                             <input type="text" class="form-control line-qty" name="line_qty[]" value="<?=$value->qty?>">
                         </td>
                         <td>
-                            <input type="text" class="form-control line-exp-date" name="line_exp_date[]" value="<?=date('d/m/Y',strtotime($value->expired_date))?>">
-                        </td>
-                        <td>
                             <div class="btn btn-danger" onclick="removeline($(this))"><i class="fa fa-trash"></i></div>
                         </td>
 
@@ -193,9 +192,6 @@ $yesno = [['id'=>1,'YES'],['id'=>0,'NO']];
                         <td>
                             <input type="text" class="form-control line-qty" name="line_qty[]" value="">
                         </td>
-                        <td>
-                            <input type="text" class="form-control line-exp-date" name="line_exp_date[]" value="">
-                        </td>
                          <td>
                              <div class="btn btn-danger" onclick="removeline($(this))"><i class="fa fa-trash"></i></div>
                          </td>
@@ -215,104 +211,6 @@ $yesno = [['id'=>1,'YES'],['id'=>0,'NO']];
     </div>
     <br />
 
-    <br />
-    <div class="row">
-        <div class="col-lg-12">
-            <h4>ราคาสินค้าระบุลูกค้า</h4>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <table class="table table-bordered table-striped" id="table-list2">
-                <thead>
-                <tr>
-                    <th style="text-align: center;">ลูกค้า</th>
-                    <th style="text-align: center;">ราคา</th>
-                    <th style="text-align: center;">รวม VAT</th>
-                    <th>-</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php if($model_customer_line != null):?>
-                    <?php foreach($model_customer_line as $valuex):?>
-                        <tr data-var="<?=$valuex->id;?>">
-                            <td>
-                                <input type="hidden" class="form-control line-customer-rec-id" name="line_customer_rec_id[]" value="<?=$valuex->id?>">
-                                <select name="line_product_customer_id[]" id="" class="form-control line-product-customer-id">
-                                    <option value="-1">--เลือก-</option>
-                                    <?php foreach($data_customer as $value_cus):?>
-                                        <?php
-                                        $selected = '';
-                                        if($valuex->customer_id == $value_cus->id){
-                                            $selected = 'selected';
-                                        }
-                                        ?>
-                                        <option value="<?=$value_cus->id?>" <?=$selected?>><?=$value_cus->first_name.' '.$value_cus->last_name?></option>
-                                    <?php endforeach;?>
-                                </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control line-customer-price" name="line_customer_price[]" value="<?=$valuex->sale_price?>">
-                            </td>
-                            <td>
-                                <select name="line_include_vat[]" class="form-control" id="">
-                                    <?php
-                                    $selected = '';
-                                    if($valuex->include_vat == 1){
-                                        $selected = 'selected';
-                                    }
-                                    ?>
-                                    <option value="0" <?=$selected?>>No</option>
-                                    <option value="1" <?=$selected?>>YES</option>
-                                </select>
-                            </td>
-                            <td>
-                                <div class="btn btn-danger" onclick="removecustomerpriceline($(this))"><i class="fa fa-trash"></i></div>
-                            </td>
-
-                        </tr>
-                    <?php endforeach;?>
-                <?php else:?>
-                    <tr data-var="">
-                        <td>
-                            <input type="hidden" class="form-control line-customer-rec-id" name="line_customer_rec_id[]" value="0">
-                            <select name="line_product_customer_id[]" id="" class="form-control line-product-customer-id">
-                                <option value="-1">--เลือก-</option>
-                                <?php foreach($data_customer as $value_cus):?>
-                                    <?php
-                                    $selected = '';
-                                    ?>
-                                    <option value="<?=$value_cus->id?>" <?=$selected?>><?=$value_cus->first_name.' '.$value_cus->last_name?></option>
-                                <?php endforeach;?>
-                            </select>
-                        </td>
-                        <td>
-                            <input type="text" class="form-control line-customer-price" name="line_customer_price[]" value="">
-                        </td>
-                        <td>
-                            <select name="line_include_vat[]" class="form-control" id="">
-                                <option value="0">No</option>
-                                <option value="1">YES</option>
-                            </select>
-                        </td>
-                        <td>
-                            <div class="btn btn-danger" onclick="removecustomerpriceline($(this))"><i class="fa fa-trash"></i></div>
-                        </td>
-                    </tr>
-                <?php endif;?>
-
-                </tbody>
-                <tfoot>
-                <tr>
-                    <td colspan="3" style="text-align: left;">
-                        <div class="btn btn-sm btn-primary" onclick="addcustomerpriceline($(this))">เพิ่ม</div>
-                    </td>
-                </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-    <br />
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

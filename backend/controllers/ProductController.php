@@ -141,11 +141,6 @@ class ProductController extends Controller
                             if($line_qty[$i] == 0){
                                 continue;
                             }
-                            $xdate = explode('/',$line_exp_date[$i]);
-                            $exp_date = date('Y-m-d');
-                            if($xdate!=null){
-                                $exp_date = $xdate[2].'/'.$xdate[1].'/'.$xdate[0];
-                            }
 
                             $model_trans = new \backend\models\Stocktrans();
                             $model_trans->product_id = $model->id;
@@ -154,7 +149,7 @@ class ProductController extends Controller
                             $model_trans->qty = $line_qty[$i];
                             $model_trans->status = 1;
                             if($model_trans->save(false)){
-                                $model_sum = \backend\models\Stocksum::find()->where(['product_id'=>$model->id,'warehouse_id'=>$line_warehouse[$i],'expired_date'=>date('Y-m-d',strtotime($exp_date))])->one();
+                                $model_sum = \backend\models\Stocksum::find()->where(['product_id'=>$model->id,'warehouse_id'=>$line_warehouse[$i]])->one();
                                 if($model_sum){
                                     $model_sum->qty = $line_qty[$i];
                                     $model_sum->save(false);
@@ -163,7 +158,6 @@ class ProductController extends Controller
                                     $model_sum->product_id = $model->id;
                                     $model_sum->warehouse_id = $line_warehouse[$i];
                                     $model_sum->qty = $line_qty[$i];
-                                    $model_sum->expired_date = date('Y-m-d',strtotime($exp_date));
                                     $model_sum->save(false);
                                 }
                             }
@@ -238,11 +232,7 @@ class ProductController extends Controller
                     if($line_qty[$i] == 0){
                         continue;
                     }
-                    $xdate = explode('/',$line_exp_date[$i]);
-                    $exp_date = date('Y-m-d');
-                    if($xdate!=null){
-                        $exp_date = $xdate[2].'/'.$xdate[1].'/'.$xdate[0];
-                    }
+
                     $model_trans = new \backend\models\Stocktrans();
                     $model_trans->product_id = $model->id;
                     $model_trans->trans_date = date('Y-m-d H:i:s');
@@ -256,7 +246,6 @@ class ProductController extends Controller
                            $model_sum = \backend\models\Stocksum::find()->where(['product_id'=>$model->id,'id'=>$line_rec_id[$i]])->one();
                            if($model_sum){
                                $model_sum->warehouse_id = $line_warehouse[$i];
-                               $model_sum->expired_date = date('Y-m-d',strtotime($exp_date));
                                $model_sum->qty = $line_qty[$i];
                                $model_sum->save(false);
                            }
@@ -265,7 +254,6 @@ class ProductController extends Controller
                            $model_sum_new->product_id = $model->id;
                            $model_sum_new->warehouse_id = $line_warehouse[$i];
                            $model_sum_new->qty = $line_qty[$i];
-                           $model_sum_new->expired_date = date('Y-m-d',strtotime($exp_date));
                            $model_sum_new->save(false);
                        }
 

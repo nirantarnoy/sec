@@ -50,7 +50,7 @@ $product_data = \backend\models\Product::find()->all();
                     <th style="width: 15%">รหัสสินค้า</th>
                     <th>รายละเอียด</th>
                     <th style="width: 10%;text-align: left;">คลังสินค้า</th>
-                    <th style="width: 10%;text-align: right;">วันหมดอายุ</th>
+
                     <th style="width: 10%;text-align: right;">จำนวนรับ</th>
                     <th style="width: 15%;text-align: left;">หมายเหตุ</th>
                     <th style="width: 5%;text-align: center;">-</th>
@@ -90,9 +90,7 @@ $product_data = \backend\models\Product::find()->all();
                             </select>
 
                         </td>
-                        <td>
-                            <input type="text" class="form-control line-expire-date" name="line_expire_date[]" value="">
-                        </td>
+
                         <td>
                             <input type="number" class="form-control line-qty" name="line_qty[]" min="0" value=""
                                    onchange="linecal($(this))">
@@ -186,9 +184,7 @@ $product_data = \backend\models\Product::find()->all();
                                 </select>
 
                             </td>
-                            <td>
-                                <input type="text" class="form-control line-expire-date" name="line_expire_date[]" value="">
-                            </td>
+
                             <td>
                                 <input type="number" class="form-control line-qty" name="line_qty[]" min="0" value=""
                                        onchange="linecal($(this))">
@@ -211,7 +207,7 @@ $product_data = \backend\models\Product::find()->all();
                     <td style="text-align: center;">
                         <!--                            <div class="btn btn-sm btn-primary" onclick="finditem();"><i class="fa fa-plus"></i></div>-->
                     </td>
-                    <td colspan="4" style="text-align: right">รวม</td>
+                    <td colspan="3" style="text-align: right">รวม</td>
                     <td>
                         <input type="text" class="form-control qty-all-total" value="0"
                                readonly>

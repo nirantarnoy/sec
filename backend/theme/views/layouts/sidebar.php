@@ -1,8 +1,9 @@
 <aside class="main-sidebar sidebar-dark-blue elevation-4">
     <!-- Brand Logo -->
     <a href="index.php?r=site/index" class="brand-link">
-<!--        <img src="--><?php //echo Yii::$app->request->baseUrl; ?><!--/uploads/logo/ab_logo.jpg" alt="Narono" class="brand-image">-->
-        <span class="brand-text font-weight-light">MMC</span>
+<!--        <img src="--><?php //echo Yii::$app->request->baseUrl; ?><!--/uploads/logo/ab_logo.jpg" alt="mmc" class="brand-image">-->
+        <img src="<?php echo Yii::$app->request->baseUrl; ?>/uploads/logo/mmc_new.png" alt="mmc" width="100%">
+        <!--        <span style="margin-left: 20px; " class="brand-text font-weight-light">MMC MATERIAL</span>-->
     </a>
 
     <!-- Sidebar -->
