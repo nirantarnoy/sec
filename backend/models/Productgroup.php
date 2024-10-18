@@ -64,7 +64,7 @@ class Productgroup extends \common\models\ProductGroup
         ];
     }
 
-    public function findName($id){
+    static public function findName($id){
         $model = Productgroup::find()->where(['id'=>$id])->one();
         return $model != null ?$model->name:'';
     }
