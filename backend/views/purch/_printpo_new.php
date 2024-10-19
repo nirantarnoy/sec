@@ -184,7 +184,7 @@ function numtothai($num)
                                 <table style="width: 100%;border: 1px;">
                                     <tr>
                                         <td style="border: 1px solid grey;border-bottom: none;padding: 5px;"><b>กำหนดส่ง
-                                                :</b><span> <?= $model->vendor_id; ?></span></td>
+                                                :</b><span> -</span></td>
                                     </tr>
                                     <tr>
                                         <td style="border: 1px solid grey;border-bottom: none;border-top: none;padding: 5px;">
