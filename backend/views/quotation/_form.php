@@ -1,5 +1,6 @@
 <?php
 
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -10,24 +11,28 @@ use yii\widgets\ActiveForm;
 
 <div class="quotation-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['id' => 'form-quotation']); ?>
     <input type="hidden" name="removelist" class="remove-list" value="">
     <div class="row">
         <div class="col-lg-3">
-            <?= $form->field($model, 'quotation_no')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
+            <?= $form->field($model, 'quotation_no')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
         </div>
         <div class="col-lg-3">
-            <?php $model->quotation_date = $model->isNewRecord ? date('d-m-Y') : date('d-m-Y',strtotime($model->quotation_date)); ?>
-            <?= $form->field($model, 'quotation_date')->widget(\kartik\date\DatePicker::className(),[
-                    'type' => \kartik\date\DatePicker::TYPE_COMPONENT_PREPEND,
-                    'pluginOptions' => [
-                            'autoclose'=>true,
-                            'format' => 'dd-mm-yyyy',
-                    ]
+            <?php $model->quotation_date = $model->isNewRecord ? date('d-m-Y') : date('d-m-Y', strtotime($model->quotation_date)); ?>
+            <?= $form->field($model, 'quotation_date')->widget(\kartik\date\DatePicker::className(), [
+                'type' => \kartik\date\DatePicker::TYPE_COMPONENT_PREPEND,
+                'pluginOptions' => [
+                    'autoclose' => true,
+                    'format' => 'dd-mm-yyyy',
+                ]
             ]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'customer_name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'customer_id')->widget(\kartik\select2\Select2::className(), [
+                'data' => ArrayHelper::map(common\models\Customer::find()->all(), 'id', 'first_name'),
+                'options' => ['placeholder' => '--เลือกลูกค้า--'],
+                'pluginOptions' => ['allowClear' => true],
+            ]) ?>
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'attn')->textInput(['maxlength' => true]) ?>
@@ -38,8 +43,9 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'from')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-3">
-
-            <?= $form->field($model, 'status')->textInput() ?>
+            <label for="">สถานะ</label>
+            <input type="text" class="form-control" readonly value="">
+            <?= $form->field($model, 'status')->hiddenInput()->label(false) ?>
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'remark')->textInput(['maxlength' => true]) ?>
@@ -48,7 +54,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
-    <br />
+    <br/>
     <div class="row">
         <div class="col-lg-12">
             <table class="table table-bordered table-striped" id="table-list">
@@ -65,119 +71,152 @@ use yii\widgets\ActiveForm;
                 </tr>
                 </thead>
                 <tbody>
-                <?php if($model->isNewRecord):?>
+                <?php if ($model->isNewRecord): ?>
                     <tr>
                         <td style="text-align: center;">
                             <input type="text" class="form-control" readonly>
                         </td>
                         <td>
                             <input type="hidden" class="line-product-id" name="line_product_id[]" value="">
-                            <input type="text" class="form-control line-product-code" name="line_product_code[]" value="" readonly>
+                            <input type="text" class="form-control line-product-code" name="line_product_code[]"
+                                   value="" readonly>
                         </td>
                         <td>
-                            <input type="text" class="form-control line-product-name" name="line_product_name[]" value="">
+                            <input type="text" class="form-control line-product-name" name="line_product_name[]"
+                                   value="">
                         </td>
                         <td style="text-align: right;">
-                            <input type="number" class="form-control line-qty" name="line_qty[]" min="0" onchange="linecal($(this))">
+                            <input type="number" class="form-control line-qty" name="line_qty[]" min="0"
+                                   onchange="linecal($(this))">
                         </td>
                         <td style="text-align: center;">
                             <input type="hidden" class="line-product-unit-id" value="" name="line_unit_id[]">
-                            <input type="text" class="form-control line-product-unit-name" name="line_unit[]" value="" readonly>
+                            <input type="text" class="form-control line-product-unit-name" name="line_unit[]" value=""
+                                   readonly>
                         </td>
                         <td style="text-align: right">
-                            <input type="text" class="form-control line-price" name="line_price[]" value="" onchange="linecal($(this))">
+                            <input type="text" class="form-control line-price" name="line_price[]" value=""
+                                   onchange="linecal($(this))">
                         </td>
                         <td style="text-align: right">
-                            <input type="text" style="text-align: right;" class="form-control line-total" name="line_total[]" value="" readonly>
+                            <input type="text" style="text-align: right;" class="form-control line-total"
+                                   name="line_total[]" value="" readonly>
                         </td>
                         <td style="text-align: center;">
                             <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
                         </td>
                     </tr>
-                <?php else:?>
-                <?php if($model_line != null):?>
-                    <?php foreach ($model_line as $value): ?>
-                            <tr data-var="<?=$value->id?>">
+                <?php else: ?>
+                    <?php if ($model_line != null): ?>
+                        <?php foreach ($model_line as $value): ?>
+                            <tr data-var="<?= $value->id ?>">
                                 <td style="text-align: center;">
                                     <input type="text" class="form-control" readonly>
                                 </td>
                                 <td>
-                                    <input type="hidden" class="line-rec-id" name="line_recid[]" value="<?=$value->id?>">
-                                    <input type="hidden" class="line-product-id" name="line_product_id[]" value="<?=$value->product_id?>">
-                                    <input type="text" class="form-control line-product-code" name="line_product_code[]" value="<?=\backend\models\Product::findCode($value->product_id)?>" readonly>
+                                    <input type="hidden" class="line-rec-id" name="line_recid[]"
+                                           value="<?= $value->id ?>">
+                                    <input type="hidden" class="line-product-id" name="line_product_id[]"
+                                           value="<?= $value->product_id ?>">
+                                    <input type="text" class="form-control line-product-code" name="line_product_code[]"
+                                           value="<?= \backend\models\Product::findCode($value->product_id) ?>"
+                                           readonly>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control line-product-name" name="line_product_name[]" value="<?=\backend\models\Product::findName($value->product_id)?>">
+                                    <input type="text" class="form-control line-product-name" name="line_product_name[]"
+                                           value="<?= \backend\models\Product::findName($value->product_id) ?>">
                                 </td>
                                 <td style="text-align: right;">
-                                    <input type="number" class="form-control line-qty" name="line_qty[]" min="0" onchange="linecal($(this))" value="<?=$value->qty?>">
+                                    <input type="number" class="form-control line-qty" name="line_qty[]" min="0"
+                                           onchange="linecal($(this))" value="<?= $value->qty ?>">
                                 </td>
                                 <td style="text-align: center;">
-                                    <input type="hidden" class="line-product-unit-id" value="<?=$value->unit_id?>" name="line_unit_id[]">
-                                    <input type="text" class="form-control line-product-unit-name" name="line_unit[]" value="<?=\backend\models\Unit::findName($value->unit_id)?>" readonly>
+                                    <input type="hidden" class="line-product-unit-id" value="<?= $value->unit_id ?>"
+                                           name="line_unit_id[]">
+                                    <input type="text" class="form-control line-product-unit-name" name="line_unit[]"
+                                           value="<?= \backend\models\Unit::findName($value->unit_id) ?>" readonly>
                                 </td>
                                 <td style="text-align: right">
-                                    <input type="text" class="form-control line-price" name="line_price[]" value="<?=$value->line_price?>" onchange="linecal($(this))">
+                                    <input type="text" class="form-control line-price" name="line_price[]"
+                                           value="<?= $value->line_price ?>" onchange="linecal($(this))">
                                 </td>
                                 <td style="text-align: right">
-                                    <input type="text" style="text-align: right;" class="form-control line-total" name="line_total[]" value="<?=$value->line_total?>" readonly>
+                                    <input type="text" style="text-align: right;" class="form-control line-total"
+                                           name="line_total[]" value="<?= $value->line_total ?>" readonly>
                                 </td>
                                 <td style="text-align: center;">
                                     <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
                                 </td>
                             </tr>
-                    <?php endforeach;?>
-                <?php else:?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
                         <tr>
                             <td style="text-align: center;">
                                 <input type="text" class="form-control" readonly>
                             </td>
                             <td>
                                 <input type="hidden" class="line-product-id" name="line_product_id[]" value="">
-                                <input type="text" class="form-control line-product-code" name="line_product_code[]" value="" readonly>
+                                <input type="text" class="form-control line-product-code" name="line_product_code[]"
+                                       value="" readonly>
                             </td>
                             <td>
-                                <input type="text" class="form-control line-product-name" name="line_product_name[]" value="">
+                                <input type="text" class="form-control line-product-name" name="line_product_name[]"
+                                       value="">
                             </td>
                             <td style="text-align: right;">
-                                <input type="number" class="form-control line-qty" name="line_qty[]" min="0" onchange="linecal($(this))">
+                                <input type="number" class="form-control line-qty" name="line_qty[]" min="0"
+                                       onchange="linecal($(this))">
                             </td>
                             <td style="text-align: center;">
                                 <input type="hidden" class="line-product-unit-id" value="" name="line_unit_id[]">
-                                <input type="text" class="form-control line-product-unit-name" name="line_unit[]" value="" readonly>
+                                <input type="text" class="form-control line-product-unit-name" name="line_unit[]"
+                                       value="" readonly>
                             </td>
                             <td style="text-align: right">
-                                <input type="text" class="form-control line-price" name="line_price[]" value="" onchange="linecal($(this))">
+                                <input type="text" class="form-control line-price" name="line_price[]" value=""
+                                       onchange="linecal($(this))">
                             </td>
                             <td style="text-align: right">
-                                <input type="text" style="text-align: right;" class="form-control line-total" name="line_total[]" value="" readonly>
+                                <input type="text" style="text-align: right;" class="form-control line-total"
+                                       name="line_total[]" value="" readonly>
                             </td>
                             <td style="text-align: center;">
                                 <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
                             </td>
                         </tr>
-                <?php endif;?>
-                <?php endif;?>
+                    <?php endif; ?>
+                <?php endif; ?>
 
                 </tbody>
                 <tfoot>
                 <tr>
-                    <td> <div class="btn btn-sm btn-primary" onclick="finditem();"><i class="fa fa-plus"></i></div></td>
+                    <td>
+                        <div class="btn btn-sm btn-primary" onclick="finditem();"><i class="fa fa-plus"></i></div>
+                    </td>
                     <td colspan="7"></td>
                 </tr>
                 </tfoot>
-              
+
             </table>
         </div>
     </div>
     <div class="row">
         <div class="col-lg-6">
             <div class="form-group">
-                <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+                <!--                --><?php //= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+                <?php if (check_has_order($model->id) == 0): ?>
+                    <div class="btn btn-success" onclick="submitForm()">Save</div>
+                <?php endif; ?>
             </div>
         </div>
         <div class="col-lg-6" style="text-align: right">
-            <div class="btn btn-secondary">พิมพ์ใบเสนอราคา</div>
+            <?php if (!$model->isNewRecord): ?>
+                <a class="btn btn-secondary"
+                   href="index.php?r=quotation/print&id=<?= $model->id; ?>">พิมพ์ใบเสนอราคา</a>
+                <?php if (check_has_order($model->id) == 0): ?>
+                    <a class="btn btn-warning" href="index.php?r=quotation/converttoso&id=<?= $model->id; ?>">สร้างใบสั่งซื้อลูกค้า</a>
+                <?php endif; ?>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -228,6 +267,14 @@ use yii\widgets\ActiveForm;
 </div>
 
 <?php
+function check_has_order($id)
+{
+    return \backend\models\Order::find()->where(['quotation_id' => $id])->count();
+}
+
+?>
+
+<?php
 //$url_to_find_workqueue = \yii\helpers\Url::to(['preinvoice/findworkqueue'], true);
 $url_to_find_item = \yii\helpers\Url::to(['journalissue/finditem'], true);
 $url_to_find_exp_date = \yii\helpers\Url::to(['journalissue/findexpdate'], true);
@@ -241,6 +288,20 @@ var removelist = [];
 $(function(){
     calall();
 });
+function submitForm(){
+    var check_data = 0;
+    $("#table-list tbody tr").each(function(){
+          if($(this).closest("tr").find(".line-product-id").val() == '' || $(this).closest("tr").find(".line-total").val() == ''){
+            check_data +=1;
+          } 
+       });
+    if(check_data > 0){
+         alert('กรุณาเลือกรายละเอียดก่อนทำรายการ');
+              return false;
+    }else{
+        $("form#form-quotation").submit();
+    }
+}
 function checkcustomer(e){
   //  alert(e.val());
     if(e.val()!=null){

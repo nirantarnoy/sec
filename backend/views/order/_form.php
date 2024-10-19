@@ -40,7 +40,13 @@ if ($model_do) {
             <?= $form->field($model, 'order_date')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'customer_id')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
+            <label for="">ลูกค้า</label>
+            <input type="text" class="form-control" value="<?=\backend\models\Customer::findCusFullName($model->customer_id)?>" readonly>
+            <?= $form->field($model, 'customer_id')->hiddenInput(['maxlength' => true, 'readonly' => 'readonly'])->label(false) ?>
+        </div>
+        <div class="col-lg-3">
+            <label for="">เลขที่เสนอราคา</label>
+            <input type="text" class="form-control" value="<?=\backend\models\Quotation::findNo($model->quotation_id)?>" readonly>
         </div>
     </div>
     <div class="row">

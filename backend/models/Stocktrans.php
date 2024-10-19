@@ -64,11 +64,11 @@ class Stocktrans extends \common\models\StockTrans
         ];
     }
 
-    public function findName($id){
+    public static function findName($id){
         $model = Warehouse::find()->where(['id'=>$id])->one();
         return $model != null ?$model->name:'';
     }
-    public function findDesc($id){
+    public static function findDesc($id){
         $model = Warehouse::find()->where(['id'=>$id])->one();
         return $model != null ?$model->description:'';
     }

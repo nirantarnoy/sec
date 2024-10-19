@@ -10,6 +10,25 @@
                         <td style="width: 40%">
                             <table>
                                 <tr>
+                                    <td><b>M M C Material Co.,Ltd.</b></td>
+                                </tr>
+                                <tr>
+                                    <td>61/12 Moo 6, Taling Chan - Suphanburi Rd.</td>
+                                </tr>
+                                <tr>
+                                    <td>Bang Mae Nang, Bang Yai, Nonthaburi 11140</td>
+                                </tr>
+                                <tr>
+                                    <td><b>Thailand.</b></td>
+                                </tr>
+                                <tr>
+                                    <td><b>Phone</b>: 0-2157-2949 /<b>Fax</b>: 0-2157-2950</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td style="width: 40%">
+                            <table>
+                                <tr>
                                     <td><b>บริษัท เอ็ม-เอ็ม-ซี แมตทีเรียล จำกัด</b></td>
                                 </tr>
                                 <tr>
@@ -26,25 +45,7 @@
                                 </tr>
                             </table>
                         </td>
-                        <td style="width: 40%">
-                            <table>
-                                <tr>
-                                    <td><b>M M C Material Co.,Ltd.</b></td>
-                                </tr>
-                                <tr>
-                                    <td>61/12 Mu 6 Tahlingshun-Supunburee Road.</td>
-                                </tr>
-                                <tr>
-                                    <td>Bang Mae Nang,Bangyhi,Nonthaburee 11140</td>
-                                </tr>
-                                <tr>
-                                    <td><b>Thailand.</b></td>
-                                </tr>
-                                <tr>
-                                    <td><b>Phone</b>: 0-2157-2949 /<b>Fax</b>: 0-2157-2950</td>
-                                </tr>
-                            </table>
-                        </td>
+
                     </tr>
                 </table>
             </div>
@@ -73,37 +74,44 @@
                     <td style="width: 60%;vertical-align: top;">
                        <table style="width: 100%;">
                            <tr>
-                               <td colspan="2"><b>ชื่อ/ที่อยู่ลูกค้า Cust.Name / Address</b></td>
-                           </tr>
-                           <tr>
-                               <td colspan="2"><?= \backend\models\Customer::findFullAddress($model->customer_id) ?></td>
-                           </tr>
-                           <tr>
-                               <td><b></b></td>
+                               <td><b>ชื่อลูกค้า / Customer Name:</b><span> <?=\backend\models\Customer::findCusFullName($model->customer_id)?></span></td>
                                <td></td>
                            </tr>
                            <tr>
-                               <td><b>เรียน/Attn:</b></td>
+                               <td><b>ที่อยู่ / Address:</b><span> <?=\backend\models\Customer::findFullAddress($model->customer_id)?></span></td>
                                <td></td>
                            </tr>
+                           <tr>
+                               <td><b>เรียน/Attn:</b><span> <?=$model->attn?></span></td>
+                               <td></td>
+                           </tr>
+                           <tr>
+                               <td><b>เบอร์โทร / Tel:</b><span> <?=\backend\models\Customer::findPhone($model->customer_id)?></span></td>
+                               <td></td>
+                           </tr>
+                           <tr>
+                               <td><b>Email:</b><span> <?=\backend\models\Customer::findEmail($model->customer_id)?></span></td>
+                               <td></td>
+                           </tr>
+
                        </table>
                     </td>
-                    <td style="width: 40%">
+                    <td style="width: 40%;vertical-align: top;">
                         <table style="width: 100%">
                             <tr>
-                                <td><b>เลขที่/No: </b></td>
+                                <td><b>เลขที่/No:</b><span> <?=$model->quotation_no?></span></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td><b>วันที่/Date: </b></td>
+                                <td><b>วันที่/Date:</b><span> <?=date('d-m-Y',strtotime($model->quotation_date))?></span></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td><b>Email: </b></td>
+                                <td></td>
                                 <td></td>
                             </tr>
                             <tr>
-                                <td><b>From: </b></td>
+                                <td></td>
                                 <td></td>
                             </tr>
                         </table>
@@ -138,15 +146,23 @@
                 </tr>
                 </thead>
                 <tbody>
+                <?php $num_row =0;$total = 0;$disc_amount=0;$vat_amount=0;$all_total=0;?>
+                <?php foreach ($model_line as $value):?>
+                <?php $num_row++;
+                      $total += ($value->qty * $value->line_price);
+                ?>
                 <tr>
-                    <td style="text-align: center;border:1px solid lightgrey;padding: 5px;">1</td>
-                    <td style="border:1px solid lightgrey;">fdfdfdfd</td>
-                    <td style="text-align: center;border:1px solid lightgrey;width: 10%">1</td>
-                    <td style="text-align: center;border:1px solid lightgrey;">PCS</td>
-                    <td style="text-align: center;border:1px solid lightgrey;">100</td>
-                    <td style="text-align: center;border:1px solid lightgrey;">100</td>
+                    <td style="text-align: center;border:1px solid lightgrey;padding: 5px;"><?=$num_row?></td>
+                    <td style="border:1px solid lightgrey;padding-left: 5px;"><?=\backend\models\Product::findName($value->product_id)?></td>
+                    <td style="text-align: center;border:1px solid lightgrey;width: 10%"><?=$value->qty?></td>
+                    <td style="text-align: center;border:1px solid lightgrey;"><?=\backend\models\Unit::findName($value->unit_id)?></td>
+                    <td style="text-align: center;border:1px solid lightgrey;"><?=number_format($value->line_price,2)?></td>
+                    <td style="text-align: center;border:1px solid lightgrey;"><?=number_format($value->qty * $value->line_price,2)?></td>
                 </tr>
-                <?php for($i=1;$i<=5;$i++):?>
+                <?php endforeach;?>
+                <?php if($model_line != null):?>
+                <?php if(count($model_line) < 10):?>
+                <?php for($i=1;$i<=10-count($model_line);$i++):?>
                 <tr>
                     <td style="text-align: center;border:1px solid lightgrey;padding: 5px;color: transparent">1</td>
                     <td style="border:1px solid lightgrey;"></td>
@@ -156,32 +172,39 @@
                     <td style="text-align: center;border:1px solid lightgrey;"></td>
                 </tr>
                 <?php endfor;?>
+                <?php endif;?>
+                <?php endif;?>
                 </tbody>
                 <tfoot>
+                <?php
+                  $vat_amount = (($total-$disc_amount)*7) / 100;
+                  $all_total = ($total - $disc_amount) + $vat_amount;
+                ?>
                 <tr>
                     <td colspan="2" style="border:1px solid lightgrey;border-top:none;border-bottom: none;"></td>
-                    <td colspan="3" style="border:1px solid lightgrey;padding:5px;">ราคารวมทั้งสิ้น/Total</td>
-                    <td style="border:1px solid lightgrey;"></td>
+                    <td colspan="3" style="border:1px solid lightgrey;padding:5px;text-align: right">ราคารวม/Total</td>
+                    <td style="border:1px solid lightgrey;text-align: center;"><?=number_format($total,2)?></td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="border:1px solid lightgrey;border-top:none;border-bottom: none;text-align: center;">ทางบริษัทฯ ขอขอบคุณที่ให้ความสนใจ และรับไว้พิจารณา</td>
-                    <td colspan="3" style="border:1px solid lightgrey;padding:5px;">ส่วนลด/Discount</td>
-                    <td style="border:1px solid lightgrey;"></td>
+                    <td colspan="2" style="border:1px solid lightgrey;border-top:none;border-bottom: none;text-align: center;">บริษัทมีความยินดีเสนอราคาตามเงื่อนไขดังนี้
+                        </td>
+                    <td colspan="3" style="border:1px solid lightgrey;padding:5px;text-align: right">ส่วนลด/Discount</td>
+                    <td style="border:1px solid lightgrey;text-align: center;"><?=number_format($disc_amount,2)?></td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="border:1px solid lightgrey;border-top:none;border-bottom: none;text-align: center">Thanks for yours interest and consideration</td>
-                    <td colspan="3" style="border:1px solid lightgrey;padding:5px;">มูลค่าสินค้า/Net Total</td>
-                    <td style="border:1px solid lightgrey;"></td>
+                    <td colspan="2" style="border:1px solid lightgrey;border-top:none;border-bottom: none;text-align: center;">Company pleased to submit our price quotation for your consideration.</td>
+                    <td colspan="3" style="border:1px solid lightgrey;padding:5px;text-align: right">ภาษีมูลค่าเพิ่ม/VAT 7%</td>
+                    <td style="border:1px solid lightgrey;text-align: center;"><?=number_format($vat_amount,2)?></td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="border:1px solid lightgrey;border-top:none;border-bottom: none;"></td>
-                    <td colspan="3" style="border:1px solid lightgrey;padding:5px;">ภาษีมูลค่าเพิ่ม/VAT 7%</td>
-                    <td style="border:1px solid lightgrey;"></td>
+                    <td colspan="2" style="border:1px solid lightgrey;border-top:none;border-bottom: none;text-align: center"></td>
+                    <td colspan="3" style="border:1px solid lightgrey;padding:5px;text-align: right">ยอดรวมสุทธิ/Net Total</td>
+                    <td style="border:1px solid lightgrey;text-align: center;"><b><?=number_format($all_total,2)?></b></td>
                 </tr>
                 <tr>
-                    <td colspan="3" style="border:1px solid lightgrey;padding: 5px;text-align: center">()</td>
+                    <td colspan="3" style="border:1px solid lightgrey;padding: 5px;text-align: center"><b><span class="show-total-string"></span></b></td>
                     <td colspan="2" style="border:1px solid lightgrey;padding:5px;"></td>
-                    <td style="border:1px solid lightgrey;"></td>
+                    <td style="border:1px solid lightgrey;"><input type="hidden" class="all-total-amt" value="<?=$all_total?>"></td>
                 </tr>
 
                 </tfoot>
@@ -195,8 +218,8 @@
             <table style="width: 100%">
                 <tr>
                     <td style="padding: 10px;">
-                        <span><b>หมายเหตุ :  </b><?= $model->remark; ?></span>
-
+                      <p>1. ระยะเวลาการผลิต 15 วันหลังรับใบสั่งซื้อ</p>
+                      <p>2. ระยะเวลาการชำระเงิน 30 วันจากวันส่งมอบสินค้า</p>
                     </td>
                 </tr>
             </table>
@@ -236,7 +259,29 @@
 
 <?php
 $this->registerJsFile(\Yii::$app->request->baseUrl . '/js/jquery.table2excel.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+$url_to_convert_num = \yii\helpers\Url::to(['order/convertnumtostring'], true);
 $js = <<<JS
+$(function(){
+    var total_amt = $(".all-total-amt").val();
+    if(total_amt != null){
+        converNumToStr(total_amt);
+    }
+});
+function converNumToStr(num){
+    $.ajax({
+          type: 'post',
+          dataType: 'html',
+          url:'$url_to_convert_num',
+          async: false,
+          data: {"amount": num},
+          success: function(data){
+            $(".show-total-string").html(data);
+          },
+          error: function(err){
+              alert(err);
+          }
+        });
+}
  $("#btn-export-excel").click(function(){
   $("#table-data").table2excel({
     // exclude CSS class

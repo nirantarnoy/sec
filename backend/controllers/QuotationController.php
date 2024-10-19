@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
  */
 class QuotationController extends Controller
 {
+    public $enableCsrfValidation = false;
     /**
      * @inheritDoc
      */
@@ -102,7 +103,9 @@ class QuotationController extends Controller
                 $line_unit_id = \Yii::$app->request->post('line_unit_id');
                 $line_total = \Yii::$app->request->post('line_total');
 
-
+                $model->quotation_no = $model::getLastNo();
+                $model->quotation_date = date('Y-m-d',strtotime($t_date));
+                $model->status = 0;
                 if($model->save(false)){
                     $total_all = 0;
                     if($line_product_id!=null){
@@ -160,7 +163,7 @@ class QuotationController extends Controller
             $line_recid = \Yii::$app->request->post('line_recid');
             $removelist = \Yii::$app->request->post('removelist');
 
-
+            $model->quotation_date = date('Y-m-d',strtotime($t_date));
             if($model->save(false)){
                 $total_all = 0;
                 if($line_product_id!=null){
@@ -232,6 +235,7 @@ class QuotationController extends Controller
      */
     public function actionDelete($id)
     {
+        \common\models\QuotationLine::deleteAll(['quotation_id'=>$id]);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -251,6 +255,46 @@ class QuotationController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionConverttoso($id){
+        $total_all = 0;
+        $order_new_id = 0;
+        if($id){
+            $model = \common\models\Quotation::findOne($id);
+            $model_line = \common\models\QuotationLine::find()->where(['quotation_id'=>$id])->all();
+            if($model){
+                $model_order = new \backend\models\Order();
+                $model_order->order_no = $model_order::getLastNo();
+                $model_order->order_date = date('Y-m-d');
+                $model_order->customer_id = $model->customer_id;
+                $model_order->customer_name = $model->customer_name;
+                $model_order->status = 0;
+                $model_order->quotation_id = $model->id;
+                if($model_order->save(false)){
+                  $order_new_id = $model_order->id;
+                    foreach($model_line as $line){
+                        $model_order_line = new \common\models\OrderLine();
+                        $model_order_line->order_id = $model_order->id;
+                        $model_order_line->product_id = $line->product_id;
+                        $model_order_line->qty = $line->qty;
+                        $model_order_line->price = $line->line_price;
+                        $model_order_line->line_total = $line->line_total;
+                        if($model_order_line->save(false)){
+                            $total_all += $model_order_line->line_total;
+                        }
+                    }
+
+                    $model_order->total_amount = $total_all;
+                    $model_order->save(false);
+                }
+            }
+        }
+        if($total_all){
+            $model->status = 2; // close this quotation
+            $model->save(false);
+            return $this->redirect(['order/update', 'id' => $order_new_id]);
+        }
     }
 
     public function numtothai($num)

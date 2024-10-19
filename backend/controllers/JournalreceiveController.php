@@ -117,11 +117,11 @@ class JournalreceiveController extends Controller
                     if ($line_item_id != null) {
                         for ($i = 0; $i <= count($line_item_id) - 1; $i++) {
 
-                            $xdate = explode('/',$line_exp_date[$i]);
-                            $exp_date = date('Y-m-d');
-                            if($xdate!=null){
-                                $exp_date = $xdate[2].'/'.$xdate[1].'/'.$xdate[0];
-                            }
+//                            $xdate = explode('/',$line_exp_date[$i]);
+//                            $exp_date = date('Y-m-d');
+//                            if($xdate!=null){
+//                                $exp_date = $xdate[2].'/'.$xdate[1].'/'.$xdate[0];
+//                            }
 
                             $model_line = new \common\models\JouranlReceiveLine();
                             $model_line->journal_rec_id = $model->id;
@@ -140,7 +140,7 @@ class JournalreceiveController extends Controller
                                 $model_trans->warehouse_id = $line_warehouse_id[$i];
                                 $model_trans->trans_ref_id = $model->id;
                                 if ($model_trans->save(false)) {
-                                    $model_stock = \backend\models\Stocksum::find()->where(['product_id' => $line_item_id[$i], 'warehouse_id' => $line_warehouse_id[$i],'date(expired_date)'=>date('Y-m-d',strtotime($exp_date))])->one();
+                                    $model_stock = \backend\models\Stocksum::find()->where(['product_id' => $line_item_id[$i], 'warehouse_id' => $line_warehouse_id[$i]])->one();
                                     if ($model_stock) {
                                         $model_stock->qty = (float)$model_stock->qty + (float)$line_qty[$i];
                                         $model_stock->save(false);
@@ -149,7 +149,6 @@ class JournalreceiveController extends Controller
                                         $model_new->product_id = $line_item_id[$i];
                                         $model_new->warehouse_id = $line_warehouse_id[$i];
                                         $model_new->qty = (float)$line_qty[$i];
-                                        $model_new->expired_date = date('Y-m-d', strtotime($exp_date));
                                         $model_new->save(false);
                                     }
                                 }
@@ -180,6 +179,7 @@ class JournalreceiveController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model_line = \common\models\JouranlReceiveLine::find()->where(['journal_rec_id' => $id])->all();
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -187,6 +187,7 @@ class JournalreceiveController extends Controller
 
         return $this->render('update', [
             'model' => $model,
+            'model_line' => $model_line,
         ]);
     }
 

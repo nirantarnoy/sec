@@ -64,41 +64,41 @@ class Product extends \common\models\Product
         ];
     }
 
-    public function findCode($id){
+    public static function findCode($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model != null ?$model->code:'';
     }
-    public function findSku($id){
+    public static function findSku($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model != null ?$model->sku:'';
     }
-    public function findBarCode($id){
+    public static function findBarCode($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model != null ?$model->barcode:'';
     }
-    public function findName($id){
+    public static function findName($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model != null ?$model->name:'';
     }
-    public function findPrice($id){
+    public static function findPrice($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model != null ?$model->sale_price:0;
     }
-    public function findDesc($id){
+    public static function findDesc($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model != null ?$model->description:'';
     }
-    public function findPhoto($id){
+    public static function findPhoto($id){
         $model = Product::find()->where(['id'=>$id])->one();
         return $model != null ?$model->photo:'';
     }
 
-    public function findUnitId($product_id){
+    public static function findUnitId($product_id){
         $model = Product::find()->where(['id'=>$product_id])->one();
         return $model != null ?$model->unit_id:0;
     }
 
-    static function getTotalQty($id){
+    public static function getTotalQty($id){
         $model = \backend\models\Stocksum::find()->where(['product_id'=>$id])->sum('qty');
         return $model;
     }

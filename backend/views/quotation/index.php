@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </form>
         </div>
     </div>
-    <?php  echo $this->render('_search', ['model' => $searchModel,'viewstatus'=>$viewstatus]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel, 'viewstatus' => $viewstatus]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -59,14 +59,28 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align:center;'],
                 'contentOptions' => ['style' => 'text-align: center'],
             ],
-          //  'id',
+            //  'id',
             'quotation_no',
-            'quotation_date',
-            'customer_id',
-            'customer_name',
-            //'attn',
+            [
+                'attribute' => 'quotation_date',
+                'value' => function ($model) {
+                    return date('d-m-Y', strtotime($model->quotation_date));
+                }
+            ],
+            [
+                'attribute' => 'customer_id',
+                'value' => function ($model) {
+                    return \backend\models\Customer::findCusFullName($model->customer_id);
+                }
+            ],
+            'attn',
             //'from',
-            'status',
+            [
+                'attribute' => 'status',
+                'value' => function ($model) {
+                    return \backend\helpers\QuotationStatus::getTypeById($model->status);
+                }
+            ],
             //'created_at',
             //'created_by',
             //'updated_at',

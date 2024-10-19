@@ -2,26 +2,21 @@
 
 namespace backend\helpers;
 
-class OrderStatus
+class QuotationStatus
 {
-    const STATUS_OPEN = 1;
-    const STATUS_CLOSE = 2;
-    const STATUS_CANCEL = 3;
-
     private static $data = [
         '0' => 'Open',
-        '1' => 'Completed',
-        '2' => 'Canceled',
+        '1' => 'Approved',
+        '2' => 'Closed',
+        '3' => 'Cancel'
     ];
 
-    /**
-     * @var \string[][]
-     */
-    private static $dataobj = array(
-        array('id' => '0', 'name' => 'Open'),
-        array('id' => '1', 'name' => 'Completed'),
-        array('id' => '2', 'name' => 'Canceled')
-    );
+    private static $dataobj = [
+        ['id' => '0', 'name' => 'Open'],
+        ['id' => '1', 'name' => 'Approved'],
+        ['id' => '2', 'name' => 'Closed'],
+        ['id' => '3', 'name' => 'Cancel'],
+    ];
 
     public static function asArray()
     {
@@ -39,7 +34,7 @@ class OrderStatus
             return self::$data[$idx];
         }
 
-        return 'Unknown';
+        return 'Unknown Type';
     }
 
     public static function getTypeByName($idx)
@@ -48,6 +43,6 @@ class OrderStatus
             return self::$data[$idx];
         }
 
-        return 'Unknown';
+        return 'Unknown Type';
     }
 }

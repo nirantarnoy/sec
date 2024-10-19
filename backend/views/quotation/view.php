@@ -6,7 +6,7 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var backend\models\Quotation $model */
 
-$this->title = $model->id;
+$this->title = $model->quotation_no;
 $this->params['breadcrumbs'][] = ['label' => 'ใบเสนอราคา', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -30,15 +30,30 @@ $this->params['breadcrumbs'][] = $this->title;
           //  'id',
             'quotation_no',
             'quotation_date',
-            'customer_id',
-            'customer_name',
+            [
+                'attribute' => 'quotation_date',
+                'value' => function ($model) {
+                    return date('d-m-Y', strtotime($model->quotation_date));
+                }
+            ],
+            [
+                'attribute' => 'customer_id',
+                'value' => function ($model) {
+                    return \backend\models\Customer::findCusFullName($model->customer_id);
+                }
+            ],
             'attn',
-            'from',
-            'status',
-            'created_at',
-            'created_by',
-            'updated_at',
-            'updated_by',
+            //'from',
+            [
+                'attribute' => 'status',
+                'value' => function ($model) {
+                    return \backend\helpers\QuotationStatus::getTypeById($model->status);
+                }
+            ],
+//            'created_at',
+//            'created_by',
+//            'updated_at',
+//            'updated_by',
             'remark',
             'description',
         ],

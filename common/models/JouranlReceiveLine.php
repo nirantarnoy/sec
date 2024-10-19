@@ -32,7 +32,7 @@ class JouranlReceiveLine extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['journal_rec_id', 'product_id', 'status'], 'integer'],
+            [['journal_rec_id', 'product_id', 'status','warehouse_id'], 'integer'],
             [['qty', 'price', 'line_total'], 'number'],
             [['remark'], 'string', 'max' => 255],
         ];
@@ -50,6 +50,7 @@ class JouranlReceiveLine extends \yii\db\ActiveRecord
             'qty' => 'Qty',
             'price' => 'Price',
             'line_total' => 'Line Total',
+            'warehouse_id' => 'Warehouse ID',
             'status' => 'Status',
             'remark' => 'Remark',
         ];
