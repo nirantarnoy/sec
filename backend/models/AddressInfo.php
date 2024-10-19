@@ -166,4 +166,13 @@ class AddressInfo extends \common\models\AddressInfo
             return $model != null ? $model->AMPHUR_NAME : '-';
 
     }
+
+    public static function findVendorAddress($id)
+    {
+        $c_address = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $model = District::find()->where(['DISTRICT_ID' => $c_address->district_id])->one();
+        $model_2 = Amphur::find()->where(['AMPHUR_ID' => $c_address->city_id])->one();
+        $model_3 = Province::find()->where(['PROVINCE_ID' => $c_address->province_id])->one();
+        return $model != null ? $model->DISTRICT_NAME .' '.$model_2->AMPHUR_NAME.' '.$model_3->PROVINCE_NAME : '';
+    }
 }

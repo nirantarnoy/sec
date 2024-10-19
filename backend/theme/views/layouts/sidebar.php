@@ -188,12 +188,20 @@
                         </li>
                         <?php endif; ?>
                         <?php if (\Yii::$app->user->can('product/index')): ?>
-                        <li class="nav-item">
-                            <a href="index.php?r=product" class="nav-link product">
-                                <i class="far fa-circlez nav-icon"></i>
-                                <p>สินค้า</p>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a href="index.php?r=product" class="nav-link product">
+                                    <i class="far fa-circlez nav-icon"></i>
+                                    <p>สินค้า</p>
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if (\Yii::$app->user->can('product/index')): ?>
+                            <li class="nav-item">
+                                <a href="index.php?r=unit" class="nav-link unit">
+                                    <i class="far fa-circlez nav-icon"></i>
+                                    <p>หน่วยนับ</p>
+                                </a>
+                            </li>
                         <?php endif; ?>
                         <?php if (\Yii::$app->user->can('warehouse/index')): ?>
                         <li class="nav-item">
@@ -253,34 +261,42 @@
                     </ul>
                 </li>
                 <?php endif;?>
-                <?php if(\Yii::$app->user->can('order/index')||\Yii::$app->user->can('deliveryorder/index')):?>
-                <li class="nav-item has-treeview has-sub">
-                    <a href="#" class="nav-link">
-                        <i class="nav-icon fas fa-shopping-cart"></i>
-                        <p>
-                            คำสั่งซื้อ
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <?php if (\Yii::$app->user->can('order/index')): ?>
-                        <li class="nav-item">
-                            <a href="index.php?r=order/index" class="nav-link order">
-                                <i class="far fa-circlez nav-icon"></i>
-                                <p>ใบสั่งซื้อ</p>
-                            </a>
-                        </li>
-                        <?php endif; ?>
-                        <?php //if (\Yii::$app->user->can('position/index')): ?>
-<!--                        <li class="nav-item">-->
-<!--                            <a href="index.php?r=customerinvoice/index" class="nav-link customerinvoice">-->
-<!--                                <i class="far fa-circlez nav-icon"></i>-->
-<!--                                <p>ใบกำกับภาษี</p>-->
-<!--                            </a>-->
-<!--                        </li>-->
-                        <?php //endif; ?>
-                    </ul>
-                </li>
+                <?php if(\Yii::$app->user->can('order/index')||\Yii::$app->user->can('deliveryorder/index') ||\Yii::$app->user->can('purch/index')):?>
+                    <li class="nav-item has-treeview has-sub">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-shopping-cart"></i>
+                            <p>
+                                คำสั่งซื้อ
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <?php if (\Yii::$app->user->can('vendor/index')): ?>
+                                <li class="nav-item">
+                                    <a href="index.php?r=vendor/index" class="nav-link vendor">
+                                        <i class="far fa-circlez nav-icon"></i>
+                                        <p>ผู้ขาย</p>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if (\Yii::$app->user->can('purch/index')): ?>
+                                <li class="nav-item">
+                                    <a href="index.php?r=purch/index" class="nav-link purch">
+                                        <i class="far fa-circlez nav-icon"></i>
+                                        <p>ใบสั่งซ์้อ</p>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            <?php //if (\Yii::$app->user->can('position/index')): ?>
+                            <!--                        <li class="nav-item">-->
+                            <!--                            <a href="index.php?r=customerinvoice/index" class="nav-link customerinvoice">-->
+                            <!--                                <i class="far fa-circlez nav-icon"></i>-->
+                            <!--                                <p>ใบกำกับภาษี</p>-->
+                            <!--                            </a>-->
+                            <!--                        </li>-->
+                            <?php //endif; ?>
+                        </ul>
+                    </li>
                     <li class="nav-item has-treeview has-sub">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-list"></i>
@@ -298,6 +314,34 @@
                                     </a>
                                 </li>
                             <?php endif; ?>
+                        </ul>
+                    </li>
+                    <li class="nav-item has-treeview has-sub">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-money-check"></i>
+                            <p>
+                                คำสั่งขาย
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+
+                            <?php if (\Yii::$app->user->can('order/index')): ?>
+                                <li class="nav-item">
+                                    <a href="index.php?r=order/index" class="nav-link order">
+                                        <i class="far fa-circlez nav-icon"></i>
+                                        <p>ใบขาย</p>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                            <?php //if (\Yii::$app->user->can('position/index')): ?>
+                            <!--                        <li class="nav-item">-->
+                            <!--                            <a href="index.php?r=customerinvoice/index" class="nav-link customerinvoice">-->
+                            <!--                                <i class="far fa-circlez nav-icon"></i>-->
+                            <!--                                <p>ใบกำกับภาษี</p>-->
+                            <!--                            </a>-->
+                            <!--                        </li>-->
+                            <?php //endif; ?>
                         </ul>
                     </li>
                 <?php endif;?>

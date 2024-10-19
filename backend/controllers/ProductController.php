@@ -414,4 +414,50 @@ class ProductController extends Controller
             echo "ok";
         }
     }
+
+    public function actionFinditem()
+    {
+        $html = '';
+        $has_data = 0;
+        //$model = \backend\models\Workqueue::find()->where(['is_invoice' => 0])->all();
+        // $model = \backend\models\Stocksum::find()->where(['warehouse_id' => 7])->all();
+        $model = \backend\models\Product::find()->all();
+        if ($model) {
+            $has_data = 1;
+            foreach ($model as $value) {
+                $onhand_qty = $this->getProductOnhand($value->id);
+                $code = $value->code;
+                $name = $value->name;
+                $price = 0;
+                $unit_id = $value->unit_id;
+                $unit_name = \backend\models\Unit::findName($unit_id);
+                $html .= '<tr>';
+                $html .= '<td style="text-align: center">
+                            <div class="btn btn-outline-success btn-sm" onclick="addselecteditem($(this))" data-var="' . $value->id . '">เลือก</div>
+                            <input type="hidden" class="line-find-item-id" value="' . $value->id . '">
+                            <input type="hidden" class="line-find-item-code" value="' . $code . '">
+                            <input type="hidden" class="line-find-item-name" value="' . $name . '">
+                            <input type="hidden" class="line-find-price" value="' . $price . '">
+                            <input type="hidden" class="line-find-unit-id" value="' . $unit_id . '">
+                            <input type="hidden" class="line-find-unit-name" value="' . $unit_name . '">
+                           </td>';
+                $html .= '<td style="text-align: left">' . $code . '</td>';
+                $html .= '<td style="text-align: left">' . $name . '</td>';
+                $html .= '<td style="text-align: left">' . $unit_name . '</td>';
+                $html .= '<td style="text-align: left">' . $onhand_qty . '</td>';
+                $html .= '</tr>';
+            }
+        }
+
+        if ($has_data == 0) {
+            $html .= '<tr>';
+            $html .= '<td colspan="5" style="text-align: center;color: red;">ไม่พบข้อมูล</td>';
+            $html .= '</tr>';
+        }
+        echo $html;
+    }
+
+    function getProductOnhand($product_id){
+        return \common\models\StockSum::find()->where(['product_id' => $product_id])->sum('qty');
+    }
 }
