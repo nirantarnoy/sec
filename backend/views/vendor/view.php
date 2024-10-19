@@ -47,6 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'location',
+            'phone',
+            'email',
             [
                 'attribute' => 'status',
                 'format' => 'raw',

@@ -57,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
            // ['attribute' => 'vendor_group_id','value'=>function($data){return \backend\models\Vendorgroup::findName($data->vendor_group_id);}],
             'description',
+            'phone',
             [
                 'attribute' => 'status',
                 'format' => 'raw',
