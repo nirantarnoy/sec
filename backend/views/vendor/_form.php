@@ -37,6 +37,8 @@ use toxor88\switchery\Switchery;
             ]) ?>
 
             <?= $form->field($model, 'location')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className())->label(false) ?>
 
