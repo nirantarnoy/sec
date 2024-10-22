@@ -274,6 +274,7 @@ class PurchController extends Controller
                 $model->trans_module_id = 2; // ซื้อ
                 $model->activity_type_id = 5; // กิจกกรรมรับเข้า
                 $model->stock_type_id = 1; // 1 in 2 out
+                $model->warehouse_id = 1;
                 if ($model->save(false)) {
                     $model_check_stock = \backend\models\Stocksum::find()->where(['product_id' => $line_product_id[$i]])->one();
                     if ($model_check_stock) {
@@ -313,7 +314,7 @@ class PurchController extends Controller
             $po_qty = \common\models\PurchLine::find()->where(['purch_id' => $id])->sum('qty');
             $rec_qty = \common\models\StockTrans::find()->where(['trans_module_id' => 2, 'ref_id' => $id])->sum('qty');
             if ($rec_qty >= $po_qty) {
-                $res = \backend\models\Purch::updateAll(['status'=>5],['id'=>$id]); // po completed
+                $res = \backend\models\Purch::updateAll(['status'=>2],['id'=>$id]); // po completed
             }
         }
 

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\OrderSearch;
 use backend\models\Quotation;
 use backend\models\QuotationSearch;
+use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -15,6 +16,7 @@ use yii\filters\VerbFilter;
 class QuotationController extends Controller
 {
     public $enableCsrfValidation = false;
+
     /**
      * @inheritDoc
      */
@@ -42,7 +44,7 @@ class QuotationController extends Controller
     {
         $viewstatus = 1;
 
-        if(\Yii::$app->request->get('viewstatus')!=null){
+        if (\Yii::$app->request->get('viewstatus') != null) {
             $viewstatus = \Yii::$app->request->get('viewstatus');
         }
 
@@ -63,7 +65,7 @@ class QuotationController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'perpage' => $pageSize,
-            'viewstatus'=>$viewstatus,
+            'viewstatus' => $viewstatus,
         ]);
     }
 
@@ -104,12 +106,12 @@ class QuotationController extends Controller
                 $line_total = \Yii::$app->request->post('line_total');
 
                 $model->quotation_no = $model::getLastNo();
-                $model->quotation_date = date('Y-m-d',strtotime($t_date));
+                $model->quotation_date = date('Y-m-d', strtotime($t_date));
                 $model->status = 0;
-                if($model->save(false)){
+                if ($model->save(false)) {
                     $total_all = 0;
-                    if($line_product_id!=null){
-                        for($i=0;$i<count($line_product_id);$i++){
+                    if ($line_product_id != null) {
+                        for ($i = 0; $i < count($line_product_id); $i++) {
                             $model_line = new \common\models\QuotationLine();
                             $model_line->quotation_id = $model->id;
                             $model_line->product_id = $line_product_id[$i];
@@ -117,7 +119,7 @@ class QuotationController extends Controller
                             $model_line->unit_id = $line_unit_id[$i];
                             $model_line->line_price = $line_price[$i];
                             $model_line->line_total = $line_total[$i];
-                            if($model_line->save(false)){
+                            if ($model_line->save(false)) {
                                 $total_all += $model_line->line_total;
                             }
                         }
@@ -146,7 +148,7 @@ class QuotationController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $model_detail = \common\models\QuotationLine::find()->where(['quotation_id'=>$id])->all();
+        $model_detail = \common\models\QuotationLine::find()->where(['quotation_id' => $id])->all();
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
             $xdate = explode('-', $model->quotation_date);
@@ -163,12 +165,12 @@ class QuotationController extends Controller
             $line_recid = \Yii::$app->request->post('line_recid');
             $removelist = \Yii::$app->request->post('removelist');
 
-            $model->quotation_date = date('Y-m-d',strtotime($t_date));
-            if($model->save(false)){
+            $model->quotation_date = date('Y-m-d', strtotime($t_date));
+            if ($model->save(false)) {
                 $total_all = 0;
-                if($line_product_id!=null){
-                    for($i=0;$i<count($line_product_id);$i++){
-                        if($line_recid[$i] == 0){
+                if ($line_product_id != null) {
+                    for ($i = 0; $i < count($line_product_id); $i++) {
+                        if ($line_recid[$i] == 0) {
                             $model_line = new \common\models\QuotationLine();
                             $model_line->quotation_id = $model->id;
                             $model_line->product_id = $line_product_id[$i];
@@ -176,17 +178,17 @@ class QuotationController extends Controller
                             $model_line->unit_id = $line_unit_id[$i];
                             $model_line->line_price = $line_price[$i];
                             $model_line->line_total = $line_total[$i];
-                            if($model_line->save(false)){
+                            if ($model_line->save(false)) {
                                 $total_all += $model_line->line_total;
                             }
-                        }else{
-                            $model_line_update = \common\models\QuotationLine::find()->where(['id'=>$line_recid[$i]])->one();
+                        } else {
+                            $model_line_update = \common\models\QuotationLine::find()->where(['id' => $line_recid[$i]])->one();
                             $model_line_update->product_id = $line_product_id[$i];
                             $model_line_update->qty = $line_qty[$i];
                             $model_line_update->unit_id = $line_unit_id[$i];
                             $model_line_update->line_price = $line_price[$i];
                             $model_line_update->line_total = $line_total[$i];
-                            if($model_line_update->save(false)){
+                            if ($model_line_update->save(false)) {
                                 $total_all += $model_line_update->line_total;
                             }
                         }
@@ -199,9 +201,9 @@ class QuotationController extends Controller
 
                 if ($removelist != null) {
                     $x = explode(',', $removelist);
-                    if($x!=null){
-                        for($i=0;$i<count($x);$i++){
-                            \common\models\QuotationLine::deleteAll(['id'=>$x[$i]]);
+                    if ($x != null) {
+                        for ($i = 0; $i < count($x); $i++) {
+                            \common\models\QuotationLine::deleteAll(['id' => $x[$i]]);
                         }
                     }
 
@@ -212,14 +214,14 @@ class QuotationController extends Controller
 
         return $this->render('update', [
             'model' => $model,
-            'model_line'=> $model_detail
+            'model_line' => $model_detail
         ]);
     }
 
     public function actionPrint($id)
     {
         $model = \common\models\Quotation::findOne($id);
-        $model_line = \common\models\QuotationLine::find()->where(['quotation_id'=>$id])->all();
+        $model_line = \common\models\QuotationLine::find()->where(['quotation_id' => $id])->all();
         return $this->render('_print', [
             'model' => $model,
             'model_line' => $model_line
@@ -235,7 +237,7 @@ class QuotationController extends Controller
      */
     public function actionDelete($id)
     {
-        \common\models\QuotationLine::deleteAll(['quotation_id'=>$id]);
+        \common\models\QuotationLine::deleteAll(['quotation_id' => $id]);
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
@@ -257,13 +259,14 @@ class QuotationController extends Controller
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 
-    public function actionConverttoso($id){
+    public function actionConverttoso($id)
+    {
         $total_all = 0;
         $order_new_id = 0;
-        if($id){
+        if ($id) {
             $model = \common\models\Quotation::findOne($id);
-            $model_line = \common\models\QuotationLine::find()->where(['quotation_id'=>$id])->all();
-            if($model){
+            $model_line = \common\models\QuotationLine::find()->where(['quotation_id' => $id])->all();
+            if ($model) {
                 $model_order = new \backend\models\Order();
                 $model_order->order_no = $model_order::getLastNo();
                 $model_order->order_date = date('Y-m-d');
@@ -271,16 +274,32 @@ class QuotationController extends Controller
                 $model_order->customer_name = $model->customer_name;
                 $model_order->status = 0;
                 $model_order->quotation_id = $model->id;
-                if($model_order->save(false)){
-                  $order_new_id = $model_order->id;
-                    foreach($model_line as $line){
+                if ($model_order->save(false)) {
+                    $order_new_id = $model_order->id;
+                    foreach ($model_line as $line) {
                         $model_order_line = new \common\models\OrderLine();
                         $model_order_line->order_id = $model_order->id;
                         $model_order_line->product_id = $line->product_id;
                         $model_order_line->qty = $line->qty;
                         $model_order_line->price = $line->line_price;
                         $model_order_line->line_total = $line->line_total;
-                        if($model_order_line->save(false)){
+                        if ($model_order_line->save(false)) {
+                            $model_trans = new \backend\models\Stocktrans();
+                            $model_trans->journal_no = $model_trans::getIssueLastNo();
+                            $model_trans->trans_date = date('Y-m-d H:i:s');
+                            $model_trans->product_id = $line->product_id;
+                            $model_trans->qty = $line->qty;
+                            $model_trans->created_by = \Yii::$app->user->id;
+                            $model_trans->activity_type_id = 3; // 1 = quotation
+                            $model_trans->trans_stock_type = 2; //1 =in and 2 = out
+                            $model_trans->trans_ref_id = $model_order->id; // ref order id
+                            $model_trans->status = 0;
+                            $model_trans->stock_type_id = 2;
+                            $model_trans->warehouse_id = 1;
+                            if ($model_trans->save(false)) {
+                                $this->createIssueForOrder($model_order_line->product_id,$line->qty,1,$model_order->id);
+                                $this->updateStock($model_order_line->product_id, $line->qty, 1); // update stock onhand
+                            }
                             $total_all += $model_order_line->line_total;
                         }
                     }
@@ -290,12 +309,44 @@ class QuotationController extends Controller
                 }
             }
         }
-        if($total_all){
+        if ($total_all) {
             $model->status = 2; // close this quotation
             $model->save(false);
             return $this->redirect(['order/update', 'id' => $order_new_id]);
         }
     }
+
+    public function updateStock($product_id, $qty, $warehouse_id)
+    {
+        if ($product_id && $qty) {
+            $model = \common\models\StockSum::find()->where(['product_id' => $product_id, 'warehouse_id' => $warehouse_id])->one();
+            if ($model) {
+                $model->qty = ((float)$model->qty) + (float)$qty;
+                $model->save(false);
+            }
+        }
+    }
+
+    public function createIssueForOrder($product_id, $qty, $warehouse_id, $ref_id)
+    {
+        if ($product_id && $qty && $warehouse_id && $ref_id) {
+            $model = new \backend\models\Journalissue();
+            $model->journal_no = $model::getLastNo();
+            $model->trans_date = date('Y-m-d H:i:s');
+            $model->issue_for_id = $ref_id;
+            $model->status = 1;
+            if ($model->save(false)) {
+                $model_line = new \common\models\JouranlIssueLine();
+                $model_line->journal_issue_id = $model->id;
+                $model_line->product_id = $product_id;
+                $model_line->qty = $qty;
+                $model_line->warehouse_id = $warehouse_id;
+                $model_line->status = 0;
+                $model_line->save(false);
+            }
+        }
+    }
+
 
     public function numtothai($num)
     {

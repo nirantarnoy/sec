@@ -300,9 +300,9 @@ function numtothai($num)
                             <?php endif; ?>
                         <?php endif; ?>
                         <tr>
-                            <td colspan="3"
-                                style="text-align: right;border: 1px solid grey;border-bottom: none;">
-
+                            <td colspan="3" rowspan="2"
+                                style="text-align: left;padding-left: 10px;border: 1px solid grey;border-bottom: none;">
+                               <p>หมายเหตุ: <b><?=$model->note?>fdfdfd</b></p>
                             </td>
                             <td
                                     style="text-align: right;border: 1px solid grey;padding: 8px;border-bottom: none;">
@@ -315,10 +315,10 @@ function numtothai($num)
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="3"
-                                style="text-align: right;;border: 1px solid grey;border-bottom: none;border-top: none;">
-
-                            </td>
+<!--                            <td colspan="3"-->
+<!--                                style="text-align: right;;border: 1px solid grey;border-bottom: none;border-top: none;">-->
+<!---->
+<!--                            </td>-->
                             <td
                                     style="text-align: right;;border: 1px solid grey;padding: 8px;">
                                 <div class="report-f18">

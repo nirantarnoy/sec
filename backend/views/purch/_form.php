@@ -508,6 +508,12 @@ function showfind(e){
         var code = e.closest('tr').find('.line-find-item-code').val();
         var name = e.closest('tr').find('.line-find-item-name').val();
         var price = e.closest('tr').find('.line-find-price').val();
+        
+        if(checkhas(id)){
+              alert("รหัสสินค้าซ้ำ");
+              return false;
+        }
+        
         if (id) {
             if (e.hasClass('btn-outline-success')) {
                 var obj = {};
@@ -535,6 +541,16 @@ function showfind(e){
             }
         }
     }
+    function checkhas(item_id){
+    var has = 0;
+    $("#table-list tbody tr").each(function () {
+       var id = $(this).closest("tr").find(".line-prod-id").val();
+       if (id == item_id){
+           has = 1;
+       }
+    });
+    return has;
+}
      function disableselectitem() {
         if (selecteditem.length > 0) {
             $(".btn-product-selected").prop("disabled", "");

@@ -27,13 +27,14 @@ $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all
                 ]) ?>
             </div>
             <div class="col-lg-4">
-                <?= $form->field($model, 'issue_for_id')->widget(\kartik\select2\Select2::className(), [
-                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Order::find()->all(), 'id', 'order_no'),
-                    'pluginOptions' => [
-                        'allowClear' => false,
-                        'disabled' => true,
-                    ]
-                ]) ?>
+<!--                --><?php //= $form->field($model, 'issue_for_id')->widget(\kartik\select2\Select2::className(), [
+//                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Order::find()->all(), 'id', 'order_no'),
+//                    'pluginOptions' => [
+//                        'allowClear' => false,
+//                        'disabled' => true,
+//                    ]
+//                ]) ?>
+                <?= $form->field($model, 'issue_for_id')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
             </div>
         </div>
         <div class="row">
@@ -52,7 +53,6 @@ $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all
                         <th style="width: 15%">รหัสสินค้า</th>
                         <th>รายละเอียด</th>
                         <th style="width: 10%;text-align: left;">คลังสินค้า</th>
-                        <th style="width: 10%;text-align: right;">วันหมดอายุ</th>
                         <th style="width: 10%;text-align: right;">ยอดคงเหลือ</th>
                         <th style="width: 10%;text-align: right;">จำนวนเบิก</th>
                         <th style="width: 15%;text-align: left;">หมายเหตุ</th>
@@ -222,9 +222,9 @@ $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all
                     <tfoot>
                     <tr>
                         <td style="text-align: center;">
-                                                        <div class="btn btn-sm btn-primary" onclick="finditem();"><i class="fa fa-plus"></i></div>
+                               <div class="btn btn-sm btn-primary" onclick="finditem();"><i class="fa fa-plus"></i></div>
                         </td>
-                        <td colspan="5" style="text-align: right">รวม</td>
+                        <td colspan="4" style="text-align: right">รวม</td>
                         <td>
                             <input type="text" class="form-control qty-all-total" value="0"
                                    readonly>

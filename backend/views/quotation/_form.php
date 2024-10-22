@@ -415,10 +415,10 @@ function addselecteditem(e) {
          var unit_name = e.closest('tr').find('.line-find-unit-name').val();
         ///////
         if (id) {
-            // if(checkhasempdaily(id)){
-            //     alert("คุณได้ทำการจัดรถให้พนักงานคนนี้ไปแล้ว");
-            //     return false;
-            // }
+            if (checkhas(item_id)){
+                alert("รหัสสินค้าซ้ำ");
+                return false;
+            }
             if (e.hasClass('btn-outline-success')) {
                 var obj = {};
                 obj['id'] = id;
@@ -471,6 +471,17 @@ function addselecteditem(e) {
             }
         }
         $(".orderline-id-list").val(selectedorderlineid);
+}
+
+function checkhas(item_id){
+    var has = 0;
+    $("#table-list tbody tr").each(function () {
+       var id = $(this).closest("tr").find(".line-product-id").val();
+       if (id == item_id){
+           has = 1;
+       }
+    });
+    return has;
 }
 
 function disableselectitem() {

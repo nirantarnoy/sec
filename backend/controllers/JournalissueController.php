@@ -127,7 +127,7 @@ class JournalissueController extends Controller
                                 $model_trans->trans_date = date('Y-m-d H:i:s');
                                 $model_trans->product_id = $line_item_id[$i];
                                 $model_trans->qty = (float)$line_qty[$i];
-                                $model_trans->activity_type_id = 3; // 3 is issue
+                                $model_trans->activity_type_id = 2; // 2 is issue
                                 $model_trans->stock_type_id = 2; // 1 = in , 2 = out
                                 $model_trans->warehouse_id = $line_warehouse_id[$i];
                                 $model_trans->trans_ref_id = $model->id;
