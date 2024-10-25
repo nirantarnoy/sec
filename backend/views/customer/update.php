@@ -17,6 +17,7 @@ $this->params['breadcrumbs'][] = 'แก้ไข';
     <?= $this->render('_form', [
         'model' => $model,
         'model_delivery_address' => $model_delivery_address,
+        'model_contact_info'=>$model_contact_info,
 //        'model_line'=>$model_line,
 //        'model_contact_line'=>$model_contact_line,
 //        'model_customer_tax_info' => $model_customer_tax_info,

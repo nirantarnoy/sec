@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\ContactInfo;
 use Yii;
 
 /**
@@ -130,6 +131,11 @@ class Customer extends \common\models\Customer
             }
         }
         return '';
+    }
+    public static function findAttn($id)
+    {
+        $model = ContactInfo::find()->where(['party_ref_id' => $id,'party_type_id'=>2])->one();
+        return $model!=null?$model->dept_name.' '.$model->contact_name:'';
     }
     public static function findWorkTypeIdByCustomer($id)
     {

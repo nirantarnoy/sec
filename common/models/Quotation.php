@@ -39,7 +39,7 @@ class Quotation extends \yii\db\ActiveRecord
     {
         return [
             [['quotation_date'], 'safe'],
-            [['customer_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['customer_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','attn_id'], 'integer'],
             [['quotation_no', 'customer_name', 'attn', 'from', 'remark', 'description','total_text'], 'string', 'max' => 255],
         ];
     }
@@ -55,7 +55,8 @@ class Quotation extends \yii\db\ActiveRecord
             'quotation_date' => 'วันที่เสนอราคา',
             'customer_id' => 'ลูกค้า',
             'customer_name' => 'ชื่อลูกค้า',
-            'attn' => 'Attn',
+            'attn_id' => 'Attn',
+            'attn' => 'Attn Name',
             'from' => 'From',
             'status' => 'สถานะ',
             'created_at' => 'Created At',

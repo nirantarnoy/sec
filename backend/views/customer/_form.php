@@ -297,6 +297,60 @@ $group_assign_list = [];
     <br/>
     <div class="row">
         <div class="col-lg-1"></div>
+        <div class="col-lg-10">
+            <table class="table table-bordered" id="table-list">
+                <thead>
+                <tr>
+                    <th>แผนกติดต่อ</th>
+                    <th>ชื่อผู้ติดต่อ</th>
+                    <th style="width: 8%;text-align: center;">-</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php if($model_contact_info!=null):?>
+                <?php foreach ($model_contact_info as $value): ?>
+                        <tr data-var="<?=$value->id?>">
+                            <td>
+                                <input type="hidden" class="rec-id" name="rec_id[]" value="<?=$value->id?>">
+                                <input type="text" class="form-control line-dept-name" name="line_dept_name[]" value="<?=$value->dept_name?>">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control line-contact-name" name="line_contact_name[]" value="<?=$value->contact_name?>">
+                            </td>
+                            <td style="text-align: center;">
+                                <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
+                            </td>
+                        </tr>
+                <?php endforeach;?>
+                <?php else:?>
+                    <tr data-var="">
+                        <td>
+                            <input type="hidden" class="rec-id" name="rec_id[]" value="0">
+                            <input type="text" class="form-control line-dept-name" name="line_dept_name[]" value="">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control line-contact-name" name="line_contact_name[]" value="">
+                        </td>
+                        <td style="text-align: center;">
+                            <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
+                        </td>
+                    </tr>
+                <?php endif;?>
+
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td><div class="btn btn-sm btn-primary" onclick="addline($(this))">เพิ่ม</div></td>
+                    <td colspan="3"></td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-lg-1"></div>
         <div class="col-lg-4">
             <div class="form-group">
                 <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
@@ -325,23 +379,28 @@ $(function(){
     
 });
 function addline(e){
-    var tr = $("#table-list tbody tr:last");
-                    var clone = tr.clone();
-                    //clone.find(":text").val("");
-                    // clone.find("td:eq(1)").text("");
-                    clone.find(".line-name").val("");
-                    clone.find(".line-type-id").val("");
-                    clone.find(".line-contact-no").val("");
-                  
-                    clone.attr("data-var", "");
-                    clone.find('.rec-id').val("");
+    
+        var tr = $("#table-list tbody tr:last");
+        if(tr.find(".line-dept-name").val() == ""){
+            
+        }else{
+          var clone = tr.clone();
+          //clone.find(":text").val("");
+          // clone.find("td:eq(1)").text("");
+          clone.find(".line-dept-name").val("");
+          clone.find(".line-contact-name").val("");
+                 
+          clone.attr("data-var", "");
+          clone.find('.rec-id').val("0");
+          tr.after(clone);  
+        }
                     
-                    tr.after(clone);
-     
+    
 }
 function removeline(e) {
         if (confirm("ต้องการลบรายการนี้ใช่หรือไม่?")) {
             if (e.parent().parent().attr("data-var") != '') {
+               // alert(e.parent().parent().attr("data-var"));
                 removelist.push(e.parent().parent().attr("data-var"));
                 $(".remove-list").val(removelist);
             }
@@ -352,7 +411,7 @@ function removeline(e) {
                 $("#table-list tbody tr").each(function () {
                     $(this).find(":text").val("");
                    // $(this).find(".line-prod-photo").attr('src', '');
-                    $(this).find(".line-price").val(0);
+                    $(this).find(".rec-id").val("0");
                     // cal_num();
                 });
             } else {

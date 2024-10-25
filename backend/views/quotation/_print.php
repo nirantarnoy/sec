@@ -82,7 +82,7 @@
                                <td></td>
                            </tr>
                            <tr>
-                               <td><b>เรียน/Attn:</b><span> <?=$model->attn?></span></td>
+                               <td><b>เรียน/Attn:</b><span> <?=\backend\models\Customer::findAttn($model->attn_id)?></span></td>
                                <td></td>
                            </tr>
                            <tr>

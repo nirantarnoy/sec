@@ -124,6 +124,9 @@ class CustomerController extends Controller
                 $province_id2 = \Yii::$app->request->post('province_id2');
                 $zipcode2 = \Yii::$app->request->post('zipcode2');
 
+                $contact_dept_name = \Yii::$app->request->post('line_dept_name');
+                $contact_name = \Yii::$app->request->post('line_contact_name');
+
 //                print_r($line_contact_name);return ;
 
                 if ($model->save(false)) {
@@ -188,6 +191,21 @@ class CustomerController extends Controller
                             }
                         }
                     }
+
+                    if($contact_dept_name!=null){
+                        for($x=0;$x<count($contact_dept_name);$x++){
+                            $model_contact = new \common\models\ContactInfo();
+                            $model_contact->party_type_id = $party_type;
+                            $model_contact->party_ref_id = $model->id;
+                            $model_contact->contact_name = $contact_name[$x];
+                            $model_contact->dept_name = $contact_dept_name[$x];
+                            $model_contact->status = 1;
+                            if ($model_contact->save(false)) {
+
+                            }
+                        }
+                    }
+
 //                    if (count($line_contact_name)) {
 ////                        echo count($line_contact_name);return ;
 //                        for ($i = 0; $i <= count($line_contact_name) - 1; $i++) {
@@ -247,6 +265,7 @@ class CustomerController extends Controller
 
         return $this->render('create', [
             'model' => $model,
+            'model_contact_info' => null,
         ]);
     }
 
@@ -263,6 +282,7 @@ class CustomerController extends Controller
 
         $model_line = \common\models\AddressInfo::find()->where(['party_id' => $id])->all();
         $model_delivery_address = \common\models\AddressInfo::find()->where(['party_id' => $id, 'address_type_id' => 2])->one();
+        $model_contact_info = \common\models\ContactInfo::find()->where(['party_ref_id' => $id,'party_type_id'=>2])->all();
 
         //$model_contact_line = \common\models\ContactInfo::find()->where(['party_id' => $id])->all();
 
@@ -286,8 +306,13 @@ class CustomerController extends Controller
             $province_id2 = \Yii::$app->request->post('province_id2');
             $zipcode2 = \Yii::$app->request->post('zipcode2');
 
+            $contact_dept_name = \Yii::$app->request->post('line_dept_name');
+            $contact_name = \Yii::$app->request->post('line_contact_name');
+            $line_rec_id = \Yii::$app->request->post('rec_id');
+            $removelist = \Yii::$app->request->post('remove_list');
 
-//            print_r($removelist); return;
+
+      //      print_r($removelist); return;
             if ($model->save(false)) {
                 if ($party_type) {
 //                    echo 'dd'; return
@@ -351,6 +376,39 @@ class CustomerController extends Controller
                     }
                 }
 
+                if($contact_dept_name!=null){
+                    for($x=0;$x<count($contact_dept_name);$x++){
+                        $model_check = \common\models\ContactInfo::find()->where(['id'=>$line_rec_id[$x]])->one();
+                        if($model_check){
+                            $model_check->dept_name = $contact_dept_name[$x];
+                            $model_check->contact_name = $contact_name[$x];
+                            $model_check->save(false);
+                        }else{
+                            $model_contact = new \common\models\ContactInfo();
+                            $model_contact->party_type_id = $party_type;
+                            $model_contact->party_ref_id = $model->id;
+                            $model_contact->contact_name = $contact_name[$x];
+                            $model_contact->dept_name = $contact_dept_name[$x];
+                            $model_contact->status = 1;
+                            if ($model_contact->save(false)) {
+
+                            }
+                        }
+                    }
+                }
+
+                if($removelist!=null){
+                  //  print_r($removelist); return;
+                    $delx = explode(",",$removelist);
+                    if($delx!=null){
+                        for($x=0;$x<=count($delx)-1;$x++){
+                            \common\models\ContactInfo::deleteAll(['id'=>$delx[$x]]);
+                        }
+                    }else{
+                        \common\models\ContactInfo::deleteAll(['id'=>$removelist]);
+                    }
+                }
+
 
             }
             return $this->redirect(['view', 'id' => $model->id]);
@@ -359,6 +417,7 @@ class CustomerController extends Controller
         return $this->render('update', [
             'model' => $model,
             'model_delivery_address' => $model_delivery_address,
+            'model_contact_info' => $model_contact_info,
 //            'model_line' => $model_line,
 //            'model_contact_line' => $model_contact_line,
 //            'model_customer_tax_info' => $model_customer_tax_info,
@@ -448,6 +507,21 @@ class CustomerController extends Controller
             echo "";
         }
 //        echo '111';
+    }
+
+    public function actionFindattn(){
+        $html = '';
+        $id = \Yii::$app->request->post('id');
+        if($id){
+            $model = \common\models\ContactInfo::find()->where(['party_ref_id'=>$id,'party_type_id'=>2])->all();
+            if($model){
+                foreach ($model as $value) {
+                    $html .= "<option value='".$value->id."'>".$value->dept_name." " . $value->contact_name."</option>";
+                }
+            }
+        }
+
+        echo $html;
     }
 
 

@@ -30,12 +30,21 @@ use yii\widgets\ActiveForm;
         <div class="col-lg-3">
             <?= $form->field($model, 'customer_id')->widget(\kartik\select2\Select2::className(), [
                 'data' => ArrayHelper::map(common\models\Customer::find()->all(), 'id', 'first_name'),
-                'options' => ['placeholder' => '--เลือกลูกค้า--'],
+                'options' => ['placeholder' => '--เลือกลูกค้า--','onchange'=>'getAttn($(this))'],
                 'pluginOptions' => ['allowClear' => true],
             ]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'attn')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'attn_id')->widget(\kartik\select2\Select2::className(), [
+                'data' => ArrayHelper::map(\common\models\ContactInfo::find()->all(), 'id', function($data){
+                    return $data->dept_name.' '.$data->contact_name;
+                }),
+                'pluginOptions' => ['allowClear' => true],
+                'options' => [
+                    'placeholder' => '--เลือก--',
+                    'id'=>'select-attn-id'
+                ]
+            ]) ?>
         </div>
     </div>
     <div class="row">
@@ -276,6 +285,7 @@ function check_has_order($id)
 
 <?php
 //$url_to_find_workqueue = \yii\helpers\Url::to(['preinvoice/findworkqueue'], true);
+$url_to_find_attn = \yii\helpers\Url::to(['customer/findattn'], true);
 $url_to_find_item = \yii\helpers\Url::to(['journalissue/finditem'], true);
 $url_to_find_exp_date = \yii\helpers\Url::to(['journalissue/findexpdate'], true);
 $js = <<<JS
@@ -326,6 +336,23 @@ function finditem(){
              // alert(data);
               $(".table-find-list tbody").html(data);
               $("#findModal").modal("show");
+          },
+          error: function(err){
+              alert(err);
+              alert('error na ja');
+          }
+        });
+}
+
+function getAttn(e){
+     $.ajax({
+          type: 'post',
+          dataType: 'html',
+          url:'$url_to_find_attn',
+          async: false,
+          data: {'id': e.val()},
+          success: function(data){
+            $("#select-attn-id").html(data);
           },
           error: function(err){
               alert(err);
