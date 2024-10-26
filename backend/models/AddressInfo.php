@@ -147,14 +147,25 @@ class AddressInfo extends \common\models\AddressInfo
     public static function findCustomerAddress($id,$type)
     {
         $model = null;
+        $city_name = null;
+        $province_name = null;
+        $zipcode = null;
         $c_address = \common\models\AddressInfo::find()->where(['party_id'=>$id,'party_type_id'=>$type])->one();
         if($c_address!=null){
             $model = District::find()->where(['DISTRICT_ID' => $c_address->district_id])->one();
             $model_2 = Amphur::find()->where(['AMPHUR_ID' => $c_address->city_id])->one();
             $model_3 = Province::find()->where(['PROVINCE_ID' => $c_address->province_id])->one();
+            $zipcode = $c_address->zipcode;
         }
 
-        return $model != null ? $model->DISTRICT_NAME .' '.$model_2->AMPHUR_NAME.' '.$model_3->PROVINCE_NAME : '';
+        if($model_2!=null){
+            $city_name = $model_2->AMPHUR_NAME;
+        }
+        if($model_3!=null){
+            $province_name = $model_3->AMPHUR_NAME;
+        }
+
+        return $model != null ? $model->DISTRICT_NAME .' '.$city_name.' '.$province_name.' '.$zipcode : '';
     }
 
     public static function findProvinceShowname($id)
@@ -175,6 +186,8 @@ class AddressInfo extends \common\models\AddressInfo
     {
         $model = null;
         $zipcode = '';
+        $city_name = "";
+        $province_name = "";
         $c_address = \common\models\AddressInfo::find()->where(['party_id'=>$id,'party_type_id'=>$type])->one();
         if($c_address!=null){
             $model = District::find()->where(['DISTRICT_ID' => $c_address->district_id])->one();
@@ -182,6 +195,12 @@ class AddressInfo extends \common\models\AddressInfo
             $model_3 = Province::find()->where(['PROVINCE_ID' => $c_address->province_id])->one();
             $zipcode = $c_address->zipcode;
         }
-        return $model != null ? $model->DISTRICT_NAME .' '.$model_2->AMPHUR_NAME.' '.$model_3->PROVINCE_NAME.' '.$zipcode : '';
+        if($model_2!=null){
+            $city_name = $model_2->AMPHUR_NAME;
+        }
+        if($model_3!=null){
+            $province_name = $model_3->AMPHUR_NAME;
+        }
+        return $model != null ? $model->DISTRICT_NAME .' '.$city_name.' '.$province_name.' '.$zipcode : '';
     }
 }
