@@ -56,7 +56,7 @@ class Vendor extends \yii\db\ActiveRecord
             'description' => 'รายละเอียด',
             'payment_method_id' => 'วิธีชำระเงิน',
             'payment_term_id' => 'เงื่อนไขชำระเงิน',
-            'location' => 'Location',
+            'location' => 'สาขา',
             'status' => 'สถานะ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',

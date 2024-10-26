@@ -162,7 +162,7 @@ function numtothai($num)
                                     </tr>
                                     <tr>
                                         <td style="border: 1px solid grey;border-bottom: none;border-top: none;padding: 5px;">
-                                            <b>สาขา :</b><span> <?= '-' ?></span></td>
+                                            <b>สาขา :</b><span> <?= \backend\models\Vendor::findVendorlocation($model->vendor_id); ?></span></td>
                                     </tr>
                                     <tr>
                                         <td style="border: 1px solid grey;border-bottom: none;border-top: none;padding: 5px;">
