@@ -199,7 +199,7 @@ class AddressInfo extends \common\models\AddressInfo
             $city_name = $model_2->AMPHUR_NAME;
         }
         if($model_3!=null){
-            $province_name = $model_3->AMPHUR_NAME;
+            $province_name = $model_3->PROVINCE_NAME;
         }
         return $model != null ? $model->DISTRICT_NAME .' '.$city_name.' '.$province_name.' '.$zipcode : '';
     }
