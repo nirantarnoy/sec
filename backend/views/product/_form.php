@@ -30,8 +30,11 @@ $yesno = [['id'=>1,'YES'],['id'=>0,'NO']];
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-6">
             <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
+        </div>
+        <div class="col-lg-6">
+            <?= $form->field($model, 'customer_remark')->textarea(['maxlength' => true]) ?>
         </div>
     </div>
     <div class="row">

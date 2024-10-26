@@ -238,7 +238,7 @@ $warehouse_data = \backend\models\Warehouse::find()->where(['status' => 1])->all
         <div class="row">
             <div class="col-lg-2">
                 <div class="form-group">
-                    <?php if ($model->status != 100): ?>
+                    <?php if($model->isNewRecord):?>
                         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
                     <?php endif; ?>
                 </div>

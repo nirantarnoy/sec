@@ -117,6 +117,8 @@ class ProductController extends Controller
                 $line_qty = \Yii::$app->request->post('line_qty');
                 $line_exp_date = \Yii::$app->request->post('line_exp_date');
 
+
+                 $model->code = $model->sku;
                 if ($model->save(false)) {
                     $uploaded = UploadedFile::getInstanceByName('product_photo');
                     $uploaded2 = UploadedFile::getInstanceByName('product_photo_2');
@@ -212,7 +214,7 @@ class ProductController extends Controller
             $removecustomerlist = \Yii::$app->request->post('remove_customer_list');
 
             //  print_r($line_customer_rec_id);return;
-
+            $model->code = $model->sku;
             if ($model->save(false)) {
                 if (!empty($uploaded)) {
                     $upfiles = "photo_" . time() . "." . $uploaded->getExtension();

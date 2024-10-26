@@ -128,6 +128,7 @@ class JournalreceiveController extends Controller
                             $model_line->product_id = $line_item_id[$i];
                             $model_line->qty = $line_qty[$i];
                             $model_line->status = 0;
+                            $model_line->warehouse_id = $line_warehouse_id[$i];
                             $model_line->remark = $line_remark[$i];
                             if ($model_line->save(false)) {
                                 $model_trans = new \backend\models\Stocktrans();

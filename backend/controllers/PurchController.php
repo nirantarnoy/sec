@@ -291,7 +291,7 @@ class PurchController extends Controller
                         $model_stock_sum->product_id = $line_product_id[$i];
                         $model_stock_sum->qty = $line_qty[$i];
                         $model_stock_sum->warehouse_id = 1;
-                        $model_stock_sum->location_id = 1;
+                    //    $model_stock_sum->location_id = 1;
                         $model_stock_sum->status = 1;
                         if ($model_stock_sum->save()) {
                             $update_remain = \backend\models\Purchline::find()->where(['id' => $line_id[$i]])->one();
