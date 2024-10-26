@@ -166,7 +166,7 @@ function numtothai($num)
                                     </tr>
                                     <tr>
                                         <td style="border: 1px solid grey;border-bottom: none;border-top: none;padding: 5px;">
-                                            <b>ผู้ติดต่อ:</b><span> <?=$model->contact_name?></span></td>
+                                            <b>ผู้ติดต่อ:</b><span> <?=\backend\models\Vendor::findContactName($model->vendor_id);?></span></td>
                                     </tr>
                                     <tr>
                                         <td style="border: 1px solid grey;border-bottom: none;border-top: none;padding: 5px;">

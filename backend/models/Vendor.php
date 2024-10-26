@@ -118,6 +118,11 @@ class Vendor extends \common\models\Vendor
         $model = Vendor::find()->where(['id' => $id])->one();
         return $model != null ? $model->phone : 0;
     }
+    public static function findContactName($id){
+        $model = Vendor::find()->where(['id' => $id])->one();
+        return $model != null ? $model->contact_name : "";
+    }
+
     public static function findVendorlocation($id)
     {
         $model = Vendor::find()->where(['id' => $id])->one();
