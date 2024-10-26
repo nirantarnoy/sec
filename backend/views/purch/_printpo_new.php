@@ -157,7 +157,7 @@ function numtothai($num)
                                 <table style="width: 100%;border: 1px;">
                                     <tr>
                                         <td style="border: 1px solid grey;border-bottom: none;padding: 5px;"><b>ชื่อผู้ขาย
-                                                :</b><span> <?= \backend\models\Customer::findCusFullName($model->vendor_id); ?></span>
+                                                :</b><span> <?= \backend\models\Vendor::findName($model->vendor_id); ?></span>
                                         </td>
                                     </tr>
                                     <tr>
@@ -302,7 +302,7 @@ function numtothai($num)
                         <tr>
                             <td colspan="3" rowspan="2"
                                 style="text-align: left;padding-left: 10px;border: 1px solid grey;border-bottom: none;">
-                               <p>หมายเหตุ: <b><?=$model->note?>fdfdfd</b></p>
+                               <p>หมายเหตุ: <b><?=$model->note?></b></p>
                             </td>
                             <td
                                     style="text-align: right;border: 1px solid grey;padding: 8px;border-bottom: none;">
