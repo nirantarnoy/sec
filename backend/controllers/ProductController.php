@@ -428,7 +428,7 @@ class ProductController extends Controller
             $has_data = 1;
             foreach ($model as $value) {
                 $onhand_qty = $this->getProductOnhand($value->id);
-                $code = $value->code;
+                $code = $value->sku;
                 $name = $value->name;
                 $price = 0;
                 $unit_id = $value->unit_id;
