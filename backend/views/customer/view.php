@@ -136,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'zipcode',
                         'label' => 'รหัสไปรษณีย์',
                         'value' => function ($model) {
-                            return \backend\models\AddressInfo::findZipcode($model->id);
+                            return \backend\models\AddressInfo::findZipcode($model->id,2);
                         }
                     ],
 
