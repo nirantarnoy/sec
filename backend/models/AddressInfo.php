@@ -31,14 +31,14 @@ class AddressInfo extends \common\models\AddressInfo
     /**
      * {@inheritdoc}
      */
-    public function rules()
-    {
-        return [
-            [['address', 'district_id','city_id', 'province_id', 'zipcode'], 'required'],
-            [['party_type', 'party_id', 'district_id', 'city_id', 'province_id', 'status'], 'integer'],
-            [['address', 'street', 'zipcode'], 'string', 'max' => 255],
-        ];
-    }
+//    public function rules()
+//    {
+//        return [
+//            [['address', 'district_id','city_id', 'province_id', 'zipcode'], 'required'],
+//            [['party_type', 'party_id', 'district_id', 'city_id', 'province_id', 'status'], 'integer'],
+//            [['address', 'street', 'zipcode'], 'string', 'max' => 255],
+//        ];
+//    }
 
     /**
      * {@inheritdoc}
@@ -61,7 +61,7 @@ class AddressInfo extends \common\models\AddressInfo
 
     public static function findDistrict($id)
     {
-        $c_district = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $c_district = \common\models\AddressInfo::find()->where(['party_id'=>$id])->one();
         if ($c_district){
             $model = District::find()->where(['DISTRICT_ID' => $c_district->district_id])->one();
             return $model != null ? $model->DISTRICT_NAME : '-';
@@ -73,7 +73,7 @@ class AddressInfo extends \common\models\AddressInfo
 
     public static function findDistrictId($id)
     {
-        $c_district = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $c_district = \common\models\AddressInfo::find()->where(['party_id'=>$id])->one();
         if ($c_district){
             return $c_district != null ? $c_district->district_id : 0;
         }else{
@@ -84,7 +84,7 @@ class AddressInfo extends \common\models\AddressInfo
 
     public static function findAmphur($id)
     {
-        $c_amphur = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $c_amphur = \common\models\AddressInfo::find()->where(['party_id'=>$id])->one();
         if ($c_amphur){
             $model = Amphur::find()->where(['AMPHUR_ID' => $c_amphur->city_id])->one();
             return $model != null ? $model->AMPHUR_NAME : '-';
@@ -96,7 +96,7 @@ class AddressInfo extends \common\models\AddressInfo
 
     public static function findAmphurId($id)
     {
-        $c_district = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $c_district = \common\models\AddressInfo::find()->where(['party_id'=>$id])->one();
         if ($c_district){
             return $c_district != null ? $c_district->city_id : 0;
         }else {
@@ -107,7 +107,7 @@ class AddressInfo extends \common\models\AddressInfo
 
     public static function findProvince($id)
     {
-        $c_province = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $c_province = \common\models\AddressInfo::find()->where(['party_id'=>$id])->one();
         if ($c_province){
             $model = Province::find()->where(['PROVINCE_ID' => $c_province->province_id])->one();
             return $model != null ? $model->PROVINCE_NAME : '-';
@@ -118,7 +118,7 @@ class AddressInfo extends \common\models\AddressInfo
 
     public static function findProvinceId($id)
     {
-        $c_province = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $c_province = \common\models\AddressInfo::find()->where(['party_id'=>$id])->one();
         if ($c_province){
             return $c_province != null ? $c_province->province_id : 0;
         }else{
@@ -128,25 +128,25 @@ class AddressInfo extends \common\models\AddressInfo
 
     public static function findZipcode($id)
     {
-        $model = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $model = \common\models\AddressInfo::find()->where(['party_id'=>$id])->one();
         return $model != null ? $model->zipcode : '-';
     }
 
     public static function findStreet($id)
     {
-        $model = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $model = \common\models\AddressInfo::find()->where(['party_id'=>$id])->one();
         return $model != null ? $model->street : '-';
     }
 
     public static function findAddress($id)
     {
-        $model = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $model = \common\models\AddressInfo::find()->where(['party_id'=>$id])->one();
         return $model != null ? $model->address : '-';
     }
 
     public static function findCustomerAddress($id)
     {
-        $c_address = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $c_address = \common\models\AddressInfo::find()->where(['party_id'=>$id])->one();
         $model = District::find()->where(['DISTRICT_ID' => $c_address->district_id])->one();
         $model_2 = Amphur::find()->where(['AMPHUR_ID' => $c_address->city_id])->one();
         $model_3 = Province::find()->where(['PROVINCE_ID' => $c_address->province_id])->one();
@@ -169,7 +169,7 @@ class AddressInfo extends \common\models\AddressInfo
 
     public static function findVendorAddress($id)
     {
-        $c_address = AddressInfo::find()->where(['party_id'=>$id])->one();
+        $c_address = \common\models\AddressInfo::find()->where(['party_id'=>$id])->one();
         $model = District::find()->where(['DISTRICT_ID' => $c_address->district_id])->one();
         $model_2 = Amphur::find()->where(['AMPHUR_ID' => $c_address->city_id])->one();
         $model_3 = Province::find()->where(['PROVINCE_ID' => $c_address->province_id])->one();
