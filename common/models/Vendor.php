@@ -39,7 +39,7 @@ class Vendor extends \yii\db\ActiveRecord
         return [
             [['code', 'name'], 'string'],
             [['vendor_group_id', 'payment_method_id', 'payment_term_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['code', 'name', 'description', 'location','phone','email'], 'string', 'max' => 255],
+            [['code', 'name', 'description', 'location','phone','email','contact_name'], 'string', 'max' => 255],
         ];
     }
 
@@ -58,6 +58,7 @@ class Vendor extends \yii\db\ActiveRecord
             'payment_term_id' => 'เงื่อนไขชำระเงิน',
             'location' => 'สาขา',
             'status' => 'สถานะ',
+            'contact_name' => 'ผู้ติดต่อ',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

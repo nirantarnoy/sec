@@ -58,6 +58,7 @@ $x_zipcode = $address_chk == null ? '' : $address_chk->zipcode;
             <?php echo $form->field($model, 'location')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'contact_name')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className())->label(false) ?>
             <br />
