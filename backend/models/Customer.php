@@ -162,9 +162,9 @@ class Customer extends \common\models\Customer
         if($model){
             $address_name = $model->address;
             $address_name .= ' '.$model->street;
-            $address_name .= ' '. $model->district_id == null ? '' : District::find()->where(['DISTRICT_ID' => $model->district_id])->one()->DISTRICT_NAME;
-            $address_name .= ' '. $model->city_id == null ? '' : Amphur::find()->where(['AMPHUR_ID' => $model->city_id])->one()->AMPHUR_NAME;
-            $address_name .= ' '. $model->province_id == null ? '' : Province::find()->where(['PROVINCE_ID' => $model->province_id])->one()->PROVINCE_NAME;
+            $address_name .= ' '. $model->district_id == 0 ? '' : District::find()->where(['DISTRICT_ID' => $model->district_id])->one()->DISTRICT_NAME;
+            $address_name .= ' '. $model->city_id == 0 ? '' : Amphur::find()->where(['AMPHUR_ID' => $model->city_id])->one()->AMPHUR_NAME;
+            $address_name .= ' '. $model->province_id == 0 ? '' : Province::find()->where(['PROVINCE_ID' => $model->province_id])->one()->PROVINCE_NAME;
             $address_name .= ' '.$model->zipcode;
         }
         return $address_name;
