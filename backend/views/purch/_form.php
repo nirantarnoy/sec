@@ -708,7 +708,7 @@ function showfind(e){
                 e.parent().parent().remove();
             }
             cal_linenum();
-            cal_all();
+           // cal_all();
         }
     }
     
