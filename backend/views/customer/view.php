@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'address',
                         'label' => 'ที่อยู่',
                         'value' => function ($model) {
-                            return \backend\models\AddressInfo::findAddress($model->id);
+                            return \backend\models\AddressInfo::findAddress($model->id,2);
                         }
                     ],
                 ]]) ?>
@@ -83,7 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'street',
                         'label' => 'ถนน',
                         'value' => function ($model) {
-                            return \backend\models\AddressInfo::findStreet($model->id);
+                            return \backend\models\AddressInfo::findStreet($model->id,2);
                         }
                     ],
                 ]]) ?>
@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'district',
                         'label' => 'ตำบล/แขวง',
                         'value' => function ($model) {
-                            return \backend\models\AddressInfo::findDistrict($model->id);
+                            return \backend\models\AddressInfo::findDistrict($model->id,2);
                         }
                     ],
                 ]]) ?>
@@ -109,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'amphur',
                         'label' => 'อำเภอ/เขต',
                         'value' => function ($model) {
-                            return \backend\models\AddressInfo::findAmphur($model->id);
+                            return \backend\models\AddressInfo::findAmphur($model->id,2);
                         }
                     ],
                 ]]) ?>
@@ -122,7 +122,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'province',
                         'label' => 'จังหวัด',
                         'value' => function ($model) {
-                            return \backend\models\AddressInfo::findProvince($model->id);
+                            return \backend\models\AddressInfo::findProvince($model->id,2);
                         }
                     ],
                 ]]) ?>
