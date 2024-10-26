@@ -170,7 +170,7 @@ function numtothai($num)
                                     </tr>
                                     <tr>
                                         <td style="border: 1px solid grey;border-bottom: none;border-top: none;padding: 5px;">
-                                            <b>ที่อยู่:</b><span> <?= \backend\models\AddressInfo::findVendorAddress($model->vendor_id); ?></span>
+                                            <b>ที่อยู่:</b><span> <?= \backend\models\AddressInfo::findVendorAddress($model->vendor_id,1); ?></span>
                                         </td>
                                     </tr>
                                     <tr>

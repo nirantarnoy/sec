@@ -7,15 +7,15 @@ use yii\widgets\ActiveForm;
 /** @var backend\models\Customer $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$address_chk = \backend\models\AddressInfo::find()->where(['party_id' => $model->id,'address_type_id' => 1])->one();
+$address_chk = \backend\models\AddressInfo::find()->where(['party_id' => $model->id,'party_type_id'=>2,'address_type_id' => 1])->one();
 
 $district_data = \backend\models\District::find()->all();
 $city_data = \backend\models\Amphur::find()->all();
 $province_data = \backend\models\Province::find()->all();
 
-$district_chk = \backend\models\AddressInfo::findDistrictId($model->id);
-$city_chk = \backend\models\AddressInfo::findAmphurId($model->id);
-$province_chk = \backend\models\AddressInfo::findProvinceId($model->id);
+$district_chk = \backend\models\AddressInfo::findDistrictId($model->id,2);
+$city_chk = \backend\models\AddressInfo::findAmphurId($model->id,2);
+$province_chk = \backend\models\AddressInfo::findProvinceId($model->id,2);
 
 $partycat_data = \backend\helpers\PartycatType::asArrayObject();
 //$partycat_chk1 = \backend\models\AddressInfo::find()->where(['party_id' => $model->id])->one();
