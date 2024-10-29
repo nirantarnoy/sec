@@ -6,7 +6,9 @@
             <div class="col-lg-12">
                 <table style="width: 100%">
                     <tr>
-                        <td style="width: 20%"></td>
+                        <td style="width: 20%;text-align: center;vertical-align: middle;">
+                            <img src="<?php echo Yii::$app->request->baseUrl; ?>/uploads/logo/mmc_new.png" alt="mmc" width="100%">
+                        </td>
                         <td style="width: 40%">
                             <table>
                                 <tr>
