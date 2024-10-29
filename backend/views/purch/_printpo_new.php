@@ -261,7 +261,7 @@ function numtothai($num)
                                     </div>
                                 </td>
                                 <td style="padding-left: 8px;border: 1px solid grey;">
-                                    <div class="report-f18"><?= \backend\models\Product::findName($value->product_id) ?></div>
+                                    <div class="report-f18"><?= $value->product_name != '' ? $value->product_name : \backend\models\Product::findName($value->product_id) ?></div>
                                 </td>
                                 <td style="text-align: center;border: 1px solid grey;">
                                     <div class="report-f18"><?= number_format($value->qty) ?></div>

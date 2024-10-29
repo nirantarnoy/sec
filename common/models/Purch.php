@@ -35,6 +35,7 @@ class Purch extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['vendor_id'],'required'],
             [['purch_date'], 'safe'],
             [['customer_id', 'payment_term_id', 'created_at', 'created_by', 'updated_at', 'updated_by','vendor_id'], 'integer'],
             [['purch_no', 'note'], 'string', 'max' => 255],

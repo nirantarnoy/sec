@@ -76,6 +76,7 @@ class PurchController extends Controller
         if ($this->request->isPost) {
             if ($model->load($this->request->post())) {
                 $prod_id = \Yii::$app->request->post('line_prod_id');
+                $line_product_name = \Yii::$app->request->post('line_prod_name');
                 $line_qty = \Yii::$app->request->post('line_qty');
                 $line_price = \Yii::$app->request->post('line_price');
                 $line_total = \Yii::$app->request->post('line_total');
@@ -102,6 +103,7 @@ class PurchController extends Controller
                             $model_line->remain_qty = $line_qty[$i];
                             $model_line->line_total = $line_qty[$i]*$line_price[$i];
                             $model_line->status = 1;
+                            $model_line->product_name = $line_product_name[$i];
                             $model_line->save(false);
                         }
                     }
@@ -131,6 +133,7 @@ class PurchController extends Controller
 
         if ($this->request->isPost && $model->load($this->request->post())) {
             $prod_id = \Yii::$app->request->post('line_prod_id');
+            $line_product_name = \Yii::$app->request->post('line_prod_name');
             $line_qty = \Yii::$app->request->post('line_qty');
             $line_price = \Yii::$app->request->post('line_price');
             $line_total = \Yii::$app->request->post('line_total');
@@ -154,6 +157,7 @@ class PurchController extends Controller
                             $model_check->price = $line_price[$i];
                             $model_check->line_total = $line_total[$i];
                             $model_check->remain_qty = $line_qty[$i];
+                            $model_check->product_name = $line_product_name[$i];
                             $model_check->save(false);
                         } else {
                             $model_line = new \common\models\PurchLine();
@@ -164,6 +168,7 @@ class PurchController extends Controller
                             $model_line->line_total = $line_total[$i];
                             $model_line->status = 1;
                             $model_line->remain_qty = $line_qty[$i];
+                            $model_line->product_name =  $line_product_name[$i];
                             $model_line->save(false);
                         }
 
@@ -232,15 +237,14 @@ class PurchController extends Controller
             $model = \common\models\PurchLine::find()->where(['purch_id' => $purch_id])->andFilterWhere(['>', 'remain_qty', 0])->all();
 
             foreach ($model as $value) {
+                $line_product_name = $value->product_name != ''? $value->product_name : \backend\models\Product::findName($value->product_id);
                 $html .= '<tr data-var="' . $value->id . '">';
                 $html .= '<td style="text-align: left">
                         <input type="hidden" name="line_id[]" value="' . $value->id . '">
                         <input type="hidden" name="line_product_id[]" value="' . $value->product_id . '">
                         <input type="text" class="line-code form-control" value="' . \backend\models\Product::findCode($value->product_id) . '">
                        </td>';
-                $html .= '<td style="text-align: left">
-                        <input type="text" class="line-name form-control" value="' . \backend\models\Product::findName($value->product_id) . '">
-                       </td>';
+                $html .= '<td style="text-align: left">' . $line_product_name . '</td>';
                 $html .= '<td style="text-align: right">' . $value->qty . '</td>';
                 $html .= '<td style="text-align: right">' . $value->remain_qty . '</td>';
                 $html .= '<td><input type="text" class="line-receive-qty form-control" name="line_receive_qty[]" style="text-align: right" value="0"></td>';

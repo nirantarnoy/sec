@@ -119,6 +119,7 @@ class ProductController extends Controller
 
 
                  $model->code = $model->sku;
+                 $model->is_special = 0;
                 if ($model->save(false)) {
                     $uploaded = UploadedFile::getInstanceByName('product_photo');
                     $uploaded2 = UploadedFile::getInstanceByName('product_photo_2');
@@ -423,7 +424,7 @@ class ProductController extends Controller
         $has_data = 0;
         //$model = \backend\models\Workqueue::find()->where(['is_invoice' => 0])->all();
         // $model = \backend\models\Stocksum::find()->where(['warehouse_id' => 7])->all();
-        $model = \backend\models\Product::find()->all();
+        $model = \backend\models\Product::find()->where(['status'=>1])->all();
         if ($model) {
             $has_data = 1;
             foreach ($model as $value) {
@@ -433,6 +434,7 @@ class ProductController extends Controller
                 $price = 0;
                 $unit_id = $value->unit_id;
                 $unit_name = \backend\models\Unit::findName($unit_id);
+                $is_drummy  = $value->is_special;
                 $html .= '<tr>';
                 $html .= '<td style="text-align: center">
                             <div class="btn btn-outline-success btn-sm" onclick="addselecteditem($(this))" data-var="' . $value->id . '">เลือก</div>
@@ -442,6 +444,7 @@ class ProductController extends Controller
                             <input type="hidden" class="line-find-price" value="' . $price . '">
                             <input type="hidden" class="line-find-unit-id" value="' . $unit_id . '">
                             <input type="hidden" class="line-find-unit-name" value="' . $unit_name . '">
+                            <input type="hidden" class="line-find-is-drummy" value="' . $is_drummy . '">
                            </td>';
                 $html .= '<td style="text-align: left">' . $code . '</td>';
                 $html .= '<td style="text-align: left">' . $name . '</td>';

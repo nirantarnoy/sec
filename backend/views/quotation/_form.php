@@ -133,7 +133,7 @@ use yii\widgets\ActiveForm;
                                 </td>
                                 <td>
                                     <input type="text" class="form-control line-product-name" name="line_product_name[]"
-                                           value="<?= \backend\models\Product::findName($value->product_id) ?>">
+                                           value="<?= $value->product_name != '' ? $value->product_name: \backend\models\Product::findName($value->product_id) ?>" <?=check_is_drummy($value->product_id) == 1 ?'':'readonly'?>>
                                 </td>
                                 <td style="text-align: right;">
                                     <input type="number" class="form-control line-qty" name="line_qty[]" min="0"
@@ -281,12 +281,21 @@ function check_has_order($id)
     return \backend\models\Order::find()->where(['quotation_id' => $id])->count();
 }
 
+function check_is_drummy($product_id){
+    $res = 0;
+    $model = \backend\models\Product::find()->where(['id' => $product_id])->one();
+    if($model){
+        $res = $model->is_special;
+    }
+    return $res;
+}
+
 ?>
 
 <?php
 //$url_to_find_workqueue = \yii\helpers\Url::to(['preinvoice/findworkqueue'], true);
 $url_to_find_attn = \yii\helpers\Url::to(['customer/findattn'], true);
-$url_to_find_item = \yii\helpers\Url::to(['journalissue/finditem'], true);
+$url_to_find_item = \yii\helpers\Url::to(['product/finditem'], true);
 $url_to_find_exp_date = \yii\helpers\Url::to(['journalissue/findexpdate'], true);
 $js = <<<JS
 var selecteditem = [];
@@ -435,14 +444,15 @@ function addselecteditem(e) {
          var item_code = e.closest('tr').find('.line-find-item-code').val();
          var item_name = e.closest('tr').find('.line-find-item-name').val();
          var onhand = e.closest('tr').find('.line-find-onhand-qty').val();
-         var warehouse_id = e.closest('tr').find('.line-find-warehouse-id').val();
-         var warehouse_name = e.closest('tr').find('.line-find-warehouse-name').val();
+         // var warehouse_id = e.closest('tr').find('.line-find-warehouse-id').val();
+         // var warehouse_name = e.closest('tr').find('.line-find-warehouse-name').val();
          var price = e.closest('tr').find('.line-find-price').val();
          var unit_id = e.closest('tr').find('.line-find-unit-id').val();
          var unit_name = e.closest('tr').find('.line-find-unit-name').val();
+         var is_drummy = e.closest('tr').find('.line-find-is-drummy').val();
         ///////
         if (id) {
-            if (checkhas(item_id)){
+            if (checkhas(item_id, is_drummy)){
                 alert("รหัสสินค้าซ้ำ");
                 return false;
             }
@@ -453,11 +463,12 @@ function addselecteditem(e) {
                 obj['item_code'] = item_code;
                 obj['item_name'] = item_name;
                 obj['qty'] = onhand;
-                obj['warehouse_id'] = warehouse_id;
-                obj['warehouse_name'] = warehouse_name;
+                // obj['warehouse_id'] = warehouse_id;
+                // obj['warehouse_name'] = warehouse_name;
                 obj['price'] = price;
                 obj['unit_id'] = unit_id;
                 obj['unit_name'] = unit_name;
+                obj['is_drummy'] = is_drummy;
                 
                 selecteditem.push(obj);
                 selectedorderlineid.push(obj['id']);
@@ -500,11 +511,11 @@ function addselecteditem(e) {
         $(".orderline-id-list").val(selectedorderlineid);
 }
 
-function checkhas(item_id){
+function checkhas(item_id , is_drummy){
     var has = 0;
     $("#table-list tbody tr").each(function () {
        var id = $(this).closest("tr").find(".line-product-id").val();
-       if (id == item_id){
+       if (id == item_id && is_drummy != 1){
            has = 1;
        }
     });
@@ -539,11 +550,17 @@ $(".btn-emp-selected").click(function () {
                     tr.closest("tr").find(".line-product-code").val(selecteditem[i]['item_code']);
                     tr.closest("tr").find(".line-product-name").val(selecteditem[i]['item_name']);
                     tr.closest("tr").find(".line-qty").val(0);
-                    tr.closest("tr").find(".line-product-warehouse-id").val(selecteditem[i]['warehouse_id']);
-                    tr.closest("tr").find(".line-product-warehouse-name").val(selecteditem[i]['warehouse_name']);
+                    // tr.closest("tr").find(".line-product-warehouse-id").val(selecteditem[i]['warehouse_id']);
+                    // tr.closest("tr").find(".line-product-warehouse-name").val(selecteditem[i]['warehouse_name']);
                     tr.closest("tr").find(".line-price").val(selecteditem[i]['price']);
                     tr.closest("tr").find(".line-product-unit-id").val(selecteditem[i]['unit_id']);
                     tr.closest("tr").find(".line-product-unit-name").val(selecteditem[i]['unit_name']);
+                    
+                    if(selecteditem[i]['is_drummy'] == 1){
+                        tr.closest("tr").find(".line-product-name").prop("readonly", "");
+                    }else{
+                        tr.closest("tr").find(".line-product-name").prop("readonly", "readonly");
+                    }
                     //console.log(line_prod_code);
                     } else {
                        
@@ -553,12 +570,17 @@ $(".btn-emp-selected").click(function () {
                         clone.closest("tr").find(".line-product-code").val(selecteditem[i]['item_code']);
                         clone.closest("tr").find(".line-product-name").val(selecteditem[i]['item_name']);
                         clone.closest("tr").find(".line-qty").val(0);
-                        clone.closest("tr").find(".line-product-warehouse-id").val(selecteditem[i]['warehouse_id']);
-                        clone.closest("tr").find(".line-product-warehouse-name").val(selecteditem[i]['warehouse_name']);
+                        // clone.closest("tr").find(".line-product-warehouse-id").val(selecteditem[i]['warehouse_id']);
+                        // clone.closest("tr").find(".line-product-warehouse-name").val(selecteditem[i]['warehouse_name']);
                         clone.closest("tr").find(".line-price").val(selecteditem[i]['price']);
                         clone.closest("tr").find(".line-product-unit-id").val(selecteditem[i]['unit_id']);
                         clone.closest("tr").find(".line-product-unit-name").val(selecteditem[i]['unit_name']);
-                      
+                        
+                        if(selecteditem[i]['is_drummy'] == 1){
+                            clone.closest("tr").find(".line-product-name").prop("readonly", "");
+                        }else{
+                            clone.closest("tr").find(".line-product-name").prop("readonly", "readonly");
+                        }
                         tr.after(clone);
                     } 
              }

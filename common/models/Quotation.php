@@ -38,6 +38,7 @@ class Quotation extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['customer_id'],'required'],
             [['quotation_date'], 'safe'],
             [['customer_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','attn_id'], 'integer'],
             [['quotation_no', 'customer_name', 'attn', 'from', 'remark', 'description','total_text'], 'string', 'max' => 255],

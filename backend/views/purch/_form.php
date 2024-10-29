@@ -162,8 +162,7 @@ $rec_status = checkReceive($model->id);
                                     <input type="text"
                                            class="form-control line-prod-name"
                                            name="line_prod_name[]"
-                                           readonly
-                                           value="<?= \backend\models\Product::findName($value->product_id) ?>">
+                                           value="<?= $value->product_name != '' ? $value->product_name : \backend\models\Product::findName($value->product_id) ?>" <?=check_is_drummy($value->product_id) == 1 ?'':'readonly'?>>
                                 </td>
                                 <td style="text-align: right">
                                     <input type="number"
@@ -463,6 +462,15 @@ function checkReceive($id)
     return $res;
 }
 
+function check_is_drummy($product_id){
+    $res = 0;
+    $model = \backend\models\Product::find()->where(['id' => $product_id])->one();
+    if($model){
+        $res = $model->is_special;
+    }
+    return $res;
+}
+
 ?>
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['product/finditem'], true);
@@ -508,8 +516,9 @@ function showfind(e){
         var code = e.closest('tr').find('.line-find-item-code').val();
         var name = e.closest('tr').find('.line-find-item-name').val();
         var price = e.closest('tr').find('.line-find-price').val();
+        var is_drummy = e.closest('tr').find('.line-find-is-drummy').val();
         
-        if(checkhas(id)){
+        if(checkhas(id ,is_drummy)){
               alert("รหัสสินค้าซ้ำ");
               return false;
         }
@@ -521,6 +530,7 @@ function showfind(e){
                 obj['code'] = code;
                 obj['name'] = name;
                 obj['price'] = price;
+                obj['is_drummy'] = is_drummy;
                 selecteditem.push(obj);
                 
                 e.removeClass('btn-outline-success');
@@ -541,11 +551,11 @@ function showfind(e){
             }
         }
     }
-    function checkhas(item_id){
+    function checkhas(item_id,is_drummy){
     var has = 0;
     $("#table-list tbody tr").each(function () {
        var id = $(this).closest("tr").find(".line-prod-id").val();
-       if (id == item_id){
+       if (id == item_id && is_drummy != 1){
            has = 1;
        }
     });
@@ -571,10 +581,10 @@ function showfind(e){
                 var line_prod_name = selecteditem[i]['name'];
                 var line_prod_price = selecteditem[i]['price'];
                 
-                 if(check_dup(line_prod_id) == 1){
-                        alert("รายการสินค้า " +line_prod_code+ " มีในรายการแล้ว");
-                        return false;
-                    }
+                 // if(check_dup(line_prod_id) == 1){
+                 //        alert("รายการสินค้า " +line_prod_code+ " มีในรายการแล้ว");
+                 //        return false;
+                 //    }
                 
                 var tr = $("#table-list tbody tr:last");
                 
@@ -585,6 +595,12 @@ function showfind(e){
                     tr.closest("tr").find(".line-price").val(line_prod_price);
                      tr.closest("tr").find(".line-qty").val(1);
                      tr.closest("tr").find(".line-total").val(0);
+                     
+                     if(selecteditem[i]['is_drummy'] == 1){
+                        tr.closest("tr").find(".line-prod-name").prop("readonly", "");
+                    }else{
+                        tr.closest("tr").find(".line-prod-name").prop("readonly", "readonly");
+                    }
 
                     //cal_num();
                     console.log(line_prod_code);
@@ -602,6 +618,12 @@ function showfind(e){
                     clone.find(".line-price").val(line_prod_price);
                      clone.find(".line-qty").val(1);
                      clone.find(".line-total").val(0);
+                     
+                     if(selecteditem[i]['is_drummy'] == 1){
+                        clone.closest("tr").find(".line-prod-name").prop("readonly", "");
+                    }else{
+                        clone.closest("tr").find(".line-prod-name").prop("readonly", "readonly");
+                    }
 
                     clone.attr("data-var", "");
                     clone.find('.rec-id').val("");

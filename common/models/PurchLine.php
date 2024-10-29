@@ -35,6 +35,7 @@ class PurchLine extends \yii\db\ActiveRecord
         return [
             [['purch_id', 'product_id', 'status', 'created_at', 'updated_at','purch_req_id'], 'integer'],
             [['qty', 'price', 'line_total','remain_qty'], 'number'],
+            [['product_name'],'string']
         ];
     }
 

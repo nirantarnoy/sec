@@ -100,10 +100,13 @@ class QuotationController extends Controller
                 }
 
                 $line_product_id = \Yii::$app->request->post('line_product_id');
+                $line_product_name = \Yii::$app->request->post('line_product_name');
                 $line_qty = \Yii::$app->request->post('line_qty');
                 $line_price = \Yii::$app->request->post('line_price');
                 $line_unit_id = \Yii::$app->request->post('line_unit_id');
                 $line_total = \Yii::$app->request->post('line_total');
+
+               // print_r($line_product_name);return;
 
                 $model->quotation_no = $model::getLastNo();
                 $model->quotation_date = date('Y-m-d', strtotime($t_date));
@@ -111,7 +114,7 @@ class QuotationController extends Controller
                 if ($model->save(false)) {
                     $total_all = 0;
                     if ($line_product_id != null) {
-                        for ($i = 0; $i < count($line_product_id); $i++) {
+                        for ($i = 0; $i <= count($line_product_id)-1; $i++) {
                             $model_line = new \common\models\QuotationLine();
                             $model_line->quotation_id = $model->id;
                             $model_line->product_id = $line_product_id[$i];
@@ -119,6 +122,7 @@ class QuotationController extends Controller
                             $model_line->unit_id = $line_unit_id[$i];
                             $model_line->line_price = $line_price[$i];
                             $model_line->line_total = $line_total[$i];
+                            $model_line->product_name = $line_product_name[$i];
                             if ($model_line->save(false)) {
                                 $total_all += $model_line->line_total;
                             }
@@ -158,6 +162,7 @@ class QuotationController extends Controller
             }
 
             $line_product_id = \Yii::$app->request->post('line_product_id');
+            $line_product_name = \Yii::$app->request->post('line_product_name');
             $line_qty = \Yii::$app->request->post('line_qty');
             $line_price = \Yii::$app->request->post('line_price');
             $line_unit_id = \Yii::$app->request->post('line_unit_id');
@@ -169,7 +174,7 @@ class QuotationController extends Controller
             if ($model->save(false)) {
                 $total_all = 0;
                 if ($line_product_id != null) {
-                    for ($i = 0; $i < count($line_product_id); $i++) {
+                    for ($i = 0; $i <= count($line_product_id)-1; $i++) {
                         if ($line_recid[$i] == 0) {
                             $model_line = new \common\models\QuotationLine();
                             $model_line->quotation_id = $model->id;
@@ -178,6 +183,7 @@ class QuotationController extends Controller
                             $model_line->unit_id = $line_unit_id[$i];
                             $model_line->line_price = $line_price[$i];
                             $model_line->line_total = $line_total[$i];
+                            $model_line->product_name = $line_product_name[$i];
                             if ($model_line->save(false)) {
                                 $total_all += $model_line->line_total;
                             }
@@ -188,6 +194,7 @@ class QuotationController extends Controller
                             $model_line_update->unit_id = $line_unit_id[$i];
                             $model_line_update->line_price = $line_price[$i];
                             $model_line_update->line_total = $line_total[$i];
+                            $model_line_update->product_name = $line_product_name[$i];
                             if ($model_line_update->save(false)) {
                                 $total_all += $model_line_update->line_total;
                             }
