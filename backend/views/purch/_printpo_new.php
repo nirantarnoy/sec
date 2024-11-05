@@ -83,35 +83,64 @@ function numtothai($num)
             }
             ?>
             <div class="row">
-                <div class="col-lg-12">
-                    <table style="width: 100%">
-                        <tr>
-                            <td style="width: 100%;text-align: center;">
-                                <table style="width: 100%">
-                                    <tr>
-                                        <td><b>บริษัท เอ็ม-เอ็ม-ซี แมตทีเรียล จำกัด</b></td>
-                                    </tr>
-                                    <tr>
-                                        <td>61/12 หมู่ 6 ถนนตลิ่งชัน-สุพรรบุรี</td>
-                                    </tr>
-                                    <tr>
-                                        <td>ต.บางแม่นาง อ.บางใหญ่ จ.นนทบุรี 11140</td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>โทร</b>: 0-2157-2949 /<b>แฟกซ์</b>: 0-2157-2950</td>
-                                    </tr>
-                                    <tr>
-                                        <td><b>เลขประจำตัวผู้เสียภาษี</b> <span> 0125547011486 (สำนักงานใหญ่)</span>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <table style="width: 100%">
+                            <tr>
+                                <td style="width: 20%;text-align: center;vertical-align: middle;">
+                                    <img src="<?php echo Yii::$app->request->baseUrl; ?>/uploads/logo/mmc_new.png" alt="mmc" width="100%">
+                                </td>
+                                <td style="width: 40%">
+                                    <table>
+                                        <tr>
+                                            <td><b>M M C Material Co.,Ltd.</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>61/12 Moo 6, Taling Chan - Suphanburi Rd.</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Bang Mae Nang, Bang Yai, Nonthaburi 11140</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Thailand.</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Phone</b>: 0-2157-2949 /<b>Fax</b>: 0-2157-2950</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td style="width: 40%">
+                                    <table>
+                                        <tr>
+                                            <td><b>บริษัท เอ็ม-เอ็ม-ซี แมตทีเรียล จำกัด</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td>61/12 หมู่ 6 ถนนตลิ่งชัน-สุพรรบุรี</td>
+                                        </tr>
+                                        <tr>
+                                            <td>ต.บางแม่นาง อ.บางใหญ่</td>
+                                        </tr>
+                                        <tr>
+                                            <td>จ.นนทบุรี 11140</td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>โทร</b>: 0-2157-2949 /<b>แฟกซ์</b>: 0-2157-2950</td>
+                                        </tr>
+                                    </table>
+                                </td>
 
-                        </tr>
-                    </table>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
+
             </div>
-            <br/>
+            <table style="width: 100%;margin-top: 5px;">
+                <tr>
+                    <td style="border-top: 1px solid black;"></td>
+                </tr>
+            </table>
+            <br />
             <table style="width: 100%">
                 <tr>
                     <td width="70%" style="text-align: center;">
