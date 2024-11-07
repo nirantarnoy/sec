@@ -106,6 +106,9 @@ class QuotationController extends Controller
                 $line_unit_id = \Yii::$app->request->post('line_unit_id');
                 $line_total = \Yii::$app->request->post('line_total');
 
+                $line_product_size = \Yii::$app->request->post('line_product_size');
+                $line_product_mat = \Yii::$app->request->post('line_product_mat');
+
                // print_r($line_product_name);return;
 
                 $model->quotation_no = $model::getLastNo();
@@ -123,6 +126,8 @@ class QuotationController extends Controller
                             $model_line->line_price = $line_price[$i];
                             $model_line->line_total = $line_total[$i];
                             $model_line->product_name = $line_product_name[$i];
+                            $model_line->size_desc = $line_product_size[$i];
+                            $model_line->mat_desc = $line_product_mat[$i];
                             if ($model_line->save(false)) {
                                 $total_all += $model_line->line_total;
                             }
@@ -170,6 +175,9 @@ class QuotationController extends Controller
             $line_recid = \Yii::$app->request->post('line_recid');
             $removelist = \Yii::$app->request->post('removelist');
 
+            $line_product_size = \Yii::$app->request->post('line_product_size');
+            $line_product_mat = \Yii::$app->request->post('line_product_mat');
+
             $model->quotation_date = date('Y-m-d', strtotime($t_date));
             if ($model->save(false)) {
                 $total_all = 0;
@@ -183,6 +191,8 @@ class QuotationController extends Controller
                             $model_line->unit_id = $line_unit_id[$i];
                             $model_line->line_price = $line_price[$i];
                             $model_line->line_total = $line_total[$i];
+                            $model_line->size_desc = $line_product_size[$i];
+                            $model_line->mat_desc = $line_product_mat[$i];
                             $model_line->product_name = $line_product_name[$i];
                             if ($model_line->save(false)) {
                                 $total_all += $model_line->line_total;
@@ -195,6 +205,8 @@ class QuotationController extends Controller
                             $model_line_update->line_price = $line_price[$i];
                             $model_line_update->line_total = $line_total[$i];
                             $model_line_update->product_name = $line_product_name[$i];
+                            $model_line_update->size_desc = $line_product_size[$i];
+                            $model_line_update->mat_desc = $line_product_mat[$i];
                             if ($model_line_update->save(false)) {
                                 $total_all += $model_line_update->line_total;
                             }

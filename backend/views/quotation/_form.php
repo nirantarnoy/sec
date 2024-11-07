@@ -72,6 +72,8 @@ use yii\widgets\ActiveForm;
                     <th style="width: 5%;text-align: center;">#</th>
                     <th>รหัสสินค้า</th>
                     <th>ชื่อสินค้า</th>
+                    <th>Size</th>
+                    <th>Mat</th>
                     <th style="text-align: right;">จำนวน</th>
                     <th style="text-align: center;">หน่วยนับ</th>
                     <th style="text-align: right;">ราคา</th>
@@ -92,6 +94,14 @@ use yii\widgets\ActiveForm;
                         </td>
                         <td>
                             <input type="text" class="form-control line-product-name" name="line_product_name[]"
+                                   value="">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control line-product-size" name="line_product_size[]"
+                                   value="">
+                        </td>
+                        <td>
+                            <input type="text" class="form-control line-product-mat" name="line_product_mat[]"
                                    value="">
                         </td>
                         <td style="text-align: right;">
@@ -135,6 +145,14 @@ use yii\widgets\ActiveForm;
                                     <input type="text" class="form-control line-product-name" name="line_product_name[]"
                                            value="<?= $value->product_name != '' ? $value->product_name: \backend\models\Product::findName($value->product_id) ?>" <?=check_is_drummy($value->product_id) == 1 ?'':'readonly'?>>
                                 </td>
+                                <td>
+                                    <input type="text" class="form-control line-product-size" name="line_product_size[]"
+                                           value="<?=$value->size_desc?>">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control line-product-mat" name="line_product_mat[]"
+                                           value="<?=$value->mat_desc?>">
+                                </td>
                                 <td style="text-align: right;">
                                     <input type="number" class="form-control line-qty" name="line_qty[]" min="0"
                                            onchange="linecal($(this))" value="<?= $value->qty ?>">
@@ -170,6 +188,14 @@ use yii\widgets\ActiveForm;
                             </td>
                             <td>
                                 <input type="text" class="form-control line-product-name" name="line_product_name[]"
+                                       value="">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control line-product-size" name="line_product_size[]"
+                                       value="">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control line-product-mat" name="line_product_mat[]"
                                        value="">
                             </td>
                             <td style="text-align: right;">

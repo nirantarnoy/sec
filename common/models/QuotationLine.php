@@ -34,7 +34,7 @@ class QuotationLine extends \yii\db\ActiveRecord
         return [
             [['quotation_id', 'product_id', 'unit_id', 'status'], 'integer'],
             [['qty', 'line_price', 'line_total'], 'number'],
-            [['product_name'],'string']
+            [['product_name','size_desc','mat_desc'],'string']
         ];
     }
 
@@ -51,6 +51,8 @@ class QuotationLine extends \yii\db\ActiveRecord
             'unit_id' => 'Unit ID',
             'line_price' => 'Line Price',
             'line_total' => 'Line Total',
+            'size_desc' => 'Size',
+            'mat_desc' => 'Mat',
             'status' => 'Status',
         ];
     }
