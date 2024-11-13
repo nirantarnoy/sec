@@ -279,7 +279,9 @@ function numtothai($num)
                             </td>
                         </tr>
                         <?php $total = 0;
-                        $row_nums = 0; ?>
+                        $row_nums = 0;
+                        $vat_amt = 0;
+                        ?>
                         <?php foreach ($model_line as $value): ?>
                             <?php $total = $total + ($value->qty * $value->price);
                             $row_nums += 1; ?>
@@ -328,6 +330,11 @@ function numtothai($num)
                               <?php endfor;?>
                             <?php endif; ?>
                         <?php endif; ?>
+                        <?php
+                          if($total > 0){
+                              $vat_amt = ($total * 7) / 100;
+                          }
+                        ?>
                         <tr>
                             <td colspan="3" rowspan="2"
                                 style="text-align: left;padding-left: 10px;border: 1px solid grey;border-bottom: none;">
@@ -340,7 +347,7 @@ function numtothai($num)
                                 </div>
                             </td>
                             <td style="text-align: right;border: 1px solid grey;padding: 8px;border-bottom: none;">
-                                <div class="report-f18"><?= number_format($total) ?></div>
+                                <div class="report-f18"><?= number_format($total,2) ?></div>
                             </td>
                         </tr>
                         <tr>
@@ -356,7 +363,7 @@ function numtothai($num)
                             </td>
                             <td style="text-align: right;;border: 1px solid grey;padding: 8px;">
                                 <div class="report-f18">
-                                    0
+                                    <?=number_format($vat_amt,2)?>
                                 </div>
                             </td>
                         </tr>
@@ -364,7 +371,7 @@ function numtothai($num)
                             <td colspan="3"
                                 style="text-align: center;border: 1px solid grey;padding: 8px;">
                                 <div class="report-f18">
-                                    <span>( <b><?= numtothai($total) ?> </b>  )</span>
+                                    <span>( <b><?= numtothai($total+$vat_amt,2) ?> </b>  )</span>
                                 </div>
                             </td>
                             <td style="text-align: right;border: 1px solid grey;padding: 8px;">
@@ -373,7 +380,7 @@ function numtothai($num)
                                 </div>
                             </td>
                             <td style="text-align: right;border: 1px solid grey;padding: 8px;">
-                                <div class="report-f18"><?= number_format($total) ?></div>
+                                <div class="report-f18"><?= number_format($total+$vat_amt,2) ?></div>
                             </td>
                         </tr>
 
