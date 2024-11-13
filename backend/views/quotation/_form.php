@@ -7,6 +7,8 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var backend\models\Quotation $model */
 /** @var yii\widgets\ActiveForm $form */
+
+$unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status'=>1])->all();
 ?>
 
 <div class="quotation-form">
@@ -115,9 +117,14 @@ use yii\widgets\ActiveForm;
                                    onchange="linecal($(this))">
                         </td>
                         <td style="text-align: center;">
-                            <input type="hidden" class="line-product-unit-id" value="" name="line_unit_id[]">
-                            <input type="text" class="form-control line-product-unit-name" name="line_unit[]" value=""
-                                   readonly>
+<!--                            <input type="hidden" class="line-product-unit-id" value="" name="line_unit_id[]">-->
+<!--                            <input type="text" class="form-control line-product-unit-name" name="line_unit[]" value=""-->
+<!--                                   readonly>-->
+                            <select name="line_unit_id[]" id="" class="form-control line-product-unit-id">
+                                <?php foreach ($unit_data as $valuex):?>
+                                    <option value="<?=$valuex->id?>"><?=$valuex->name?></option>
+                                <?php endforeach;?>
+                            </select>
                         </td>
                         <td style="text-align: right">
                             <input type="text" class="form-control line-price" name="line_price[]" value=""
@@ -164,10 +171,21 @@ use yii\widgets\ActiveForm;
                                            onchange="linecal($(this))" value="<?= $value->qty ?>">
                                 </td>
                                 <td style="text-align: center;">
-                                    <input type="hidden" class="line-product-unit-id" value="<?= $value->unit_id ?>"
-                                           name="line_unit_id[]">
-                                    <input type="text" class="form-control line-product-unit-name" name="line_unit[]"
-                                           value="<?= \backend\models\Unit::findName($value->unit_id) ?>" readonly>
+<!--                                    <input type="hidden" class="line-product-unit-id" value="--><?php //= $value->unit_id ?><!--"-->
+<!--                                           name="line_unit_id[]">-->
+<!--                                    <input type="text" class="form-control line-product-unit-name" name="line_unit[]"-->
+<!--                                           value="--><?php //= \backend\models\Unit::findName($value->unit_id) ?><!--" readonly>-->
+                                    <select name="line_unit_id[]" id="" class="form-control line-product-unit-id">
+                                        <?php foreach ($unit_data as $valuex):?>
+                                        <?php
+                                            $selected = '';
+                                            if($value->unit_id == $valuex->id){
+                                                $selected = 'selected';
+                                            }
+                                            ?>
+                                            <option value="<?=$valuex->id?>" <?=$selected?>><?=$valuex->name?></option>
+                                        <?php endforeach;?>
+                                    </select>
                                 </td>
                                 <td style="text-align: right">
                                     <input type="text" class="form-control line-price" name="line_price[]"
@@ -209,9 +227,14 @@ use yii\widgets\ActiveForm;
                                        onchange="linecal($(this))">
                             </td>
                             <td style="text-align: center;">
-                                <input type="hidden" class="line-product-unit-id" value="" name="line_unit_id[]">
-                                <input type="text" class="form-control line-product-unit-name" name="line_unit[]"
-                                       value="" readonly>
+<!--                                <input type="hidden" class="line-product-unit-id" value="" name="line_unit_id[]">-->
+<!--                                <input type="text" class="form-control line-product-unit-name" name="line_unit[]"-->
+<!--                                       value="" readonly>-->
+                                <select name="line_unit_id[]" id="" class="form-control line-product-unit-id">
+                                    <?php foreach ($unit_data as $valuex):?>
+                                        <option value="<?=$valuex->id?>"><?=$valuex->name?></option>
+                                    <?php endforeach;?>
+                                </select>
                             </td>
                             <td style="text-align: right">
                                 <input type="text" class="form-control line-price" name="line_price[]" value=""
