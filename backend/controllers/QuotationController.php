@@ -133,7 +133,8 @@ class QuotationController extends Controller
                             }
                         }
                     }
-                    $model->total_text = $this->numtothai($total_all);
+                    $vat_amount = (($total_all - $model->discount_amt) * 7) / 100;
+                    $model->total_text = $this->numtothai(number_format(($total_all - $model->discount_amt) + $vat_amount,2));
                     $model->save(false);
                     return $this->redirect(['view', 'id' => $model->id]);
                 }
@@ -214,7 +215,9 @@ class QuotationController extends Controller
 
                     }
                 }
-                $model->total_text = $this->numtothai($total_all);
+                $vat_amount = (($total_all - $model->discount_amt) * 7) / 100;
+               // echo number_format(($total_all  - $model->discount_amt) + $vat_amount,2);return;
+                $model->total_text = $this->numtothai(number_format(($total_all  - $model->discount_amt) + $vat_amount,2));
                 $model->save(false);
 
 
@@ -379,7 +382,7 @@ class QuotationController extends Controller
             $number[1] = 0;
         }
         // return $number[0];
-        $return .= self::numtothaistring($number[0]) . "บาท";
+        $return .= self::numtothaibathstring($number[0]) . "บาท";
 
         $stang = intval($number[1]);
         // return $stang;
@@ -416,7 +419,31 @@ class QuotationController extends Controller
         }
         return $return;
     }
-
+    public function numtothaibathstring($num){
+        $return_str = '';
+        $txtnum1 = array('', 'หนึ่ง', 'สอง', 'สาม', 'สี่', 'ห้า', 'หก', 'เจ็ด', 'แปด', 'เก้า');
+        $txtnum2 = array('', 'สิบ', 'ร้อย', 'พัน', 'หมื่น', 'แสน', 'ล้าน');
+        if(strlen($num)>1){
+            $num_arr = str_split($num);
+            $count = count($num_arr);
+            foreach ($num_arr as $key => $val) {
+                if ($count > 1 && $val == 1 && $key == ($count - 1)) {
+                    $return_str .= "เอ็ด";
+                } else if ($count > 1 && $val == 1 && $key == 2) {
+                    $return_str .= $txtnum2[$val];
+                } else if ($count > 1 && $val == 2 && $key == ($count - 2)) {
+                    $return_str .= "ยี่" . $txtnum2[$count - $key - 1];
+                } else if ($count > 1 && $val == 1 && $key == 0) {
+                    $return_str.=$txtnum2[$val];
+                } else {
+                    $return_str .= $txtnum1[$val] . $txtnum2[$count - $key - 1];
+                }
+            }
+        }else{
+            $return_str = $txtnum1[intval($num)];
+        }
+        return $return_str;
+    }
     public function numtothaistring($num)
     {
         $return_str = "";
@@ -426,17 +453,20 @@ class QuotationController extends Controller
         $count = count($num_arr);
         foreach ($num_arr as $key => $val) {
             // echo $count." ".$val." ".$key."</br>";
+
             if ($count > 1 && $val == 1 && $key == ($count - 1)) {
                 $return_str .= "เอ็ด";
             } else if ($count > 1 && $val == 1 && $key == 2) {
                 $return_str .= $txtnum2[$val];
             } else if ($count > 1 && $val == 2 && $key == ($count - 2)) {
                 $return_str .= "ยี่" . $txtnum2[$count - $key - 1];
-            } else if ($count > 1 && $val == 0) {
+            } else if ($count > 1 && $val == 0 && $key == 0) {
+                $return_str.=$txtnum2[$val];
             } else {
                 $return_str .= $txtnum1[$val] . $txtnum2[$count - $key - 1];
             }
         }
         return $return_str;
+
     }
 }

@@ -42,6 +42,7 @@ class Quotation extends \yii\db\ActiveRecord
             [['quotation_date'], 'safe'],
             [['customer_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','attn_id'], 'integer'],
             [['quotation_no', 'customer_name', 'attn', 'from', 'remark', 'description','total_text'], 'string', 'max' => 255],
+            [['discount_per','discount_amt'],'number'],
         ];
     }
 
@@ -60,6 +61,8 @@ class Quotation extends \yii\db\ActiveRecord
             'attn' => 'Attn Name',
             'from' => 'From',
             'status' => 'สถานะ',
+            'discount_per'=>'ส่วนลด %',
+            'discount_amt'=>'ส่วนลดเงิน',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

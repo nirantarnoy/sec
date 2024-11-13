@@ -176,7 +176,7 @@
                 <tbody>
                 <?php $num_row = 0;
                 $total = 0;
-                $disc_amount = 0;
+                $disc_amount = $model->discount_amt;
                 $vat_amount = 0;
                 $all_total = 0; ?>
                 <?php foreach ($model_line as $value): ?>
@@ -257,7 +257,7 @@
                 </tr>
                 <tr>
                     <td colspan="3" style="border:1px solid lightgrey;padding: 5px;text-align: center"><b><span
-                                    class="show-total-string"></span></b></td>
+                                    class="show-total-string"><?=$model->total_text?></span></b></td>
                     <td colspan="2" style="border:1px solid lightgrey;padding:5px;"></td>
                     <td style="border:1px solid lightgrey;"><input type="hidden" class="all-total-amt"
                                                                    value="<?= $all_total ?>"></td>
@@ -325,7 +325,8 @@ $js = <<<JS
 $(function(){
     var total_amt = $(".all-total-amt").val();
     if(total_amt != null){
-        converNumToStr(total_amt);
+      //  alert(total_amt);
+      //  converNumToStr(8.03);
     }
 });
 function converNumToStr(num){

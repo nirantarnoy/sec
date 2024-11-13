@@ -63,6 +63,12 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'description')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
+    <div class="row">
+        <div class="col-lg-3"><?= $form->field($model, 'discount_per')->textInput(['maxlength' => true,'class'=>'form-control discount-per','value'=>$model->discount_per == null?0:$model->discount_per]) ?></div>
+        <div class="col-lg-3"><?= $form->field($model, 'discount_amt')->textInput(['maxlength' => true,'class'=>'form-control discount-amt','readonly'=>'readonly','value'=>$model->isNewRecord ?0:$model->discount_amt]) ?></div>
+        <div class="col-lg-3"></div>
+        <div class="col-lg-3"></div>
+    </div>
     <br/>
     <div class="row">
         <div class="col-lg-12">
@@ -169,7 +175,7 @@ use yii\widgets\ActiveForm;
                                 </td>
                                 <td style="text-align: right">
                                     <input type="text" style="text-align: right;" class="form-control line-total"
-                                           name="line_total[]" value="<?= $value->line_total ?>" readonly>
+                                           name="line_total[]" value="<?= number_format($value->line_total,2) ?>" readonly>
                                 </td>
                                 <td style="text-align: center;">
                                     <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
@@ -228,7 +234,11 @@ use yii\widgets\ActiveForm;
                     <td>
                         <div class="btn btn-sm btn-primary" onclick="finditem();"><i class="fa fa-plus"></i></div>
                     </td>
-                    <td colspan="7"></td>
+                    <td colspan="7">
+                        
+                    </td>
+                    <td><input type="text" class="form-control all-total" style="text-align: right" readonly value="0"></td>
+                    <td></td>
                 </tr>
                 </tfoot>
 
@@ -332,6 +342,21 @@ var removelist = [];
 
 $(function(){
     calall();
+    $(".discount-per").on("change",function(){
+       var discount = $(this).val();
+       var discount_amt = 0;
+       if(discount){
+           var total = 0;
+           $("table#table-list tbody tr").each(function(){
+              total += parseFloat($(this).closest("tr").find(".line-total").val()); 
+           });
+           if(total > 0){
+               discount_amt = (total * discount) /100;
+           }
+           
+           $(".discount-amt").val(parseFloat(discount_amt));
+       }
+    });
 });
 function submitForm(){
     var check_data = 0;
@@ -664,22 +689,42 @@ function linecal(e){
    var qty = e.closest("tr").find(".line-qty").val();
    var price = e.closest("tr").find(".line-price").val();
    e.closest("tr").find(".line-total").val(parseFloat(qty) * parseFloat(price));
-  // calall();
+   calall();
 }
 function calall(){
     
     var total_qty = 0;
+    var total_amount = 0;
+    var discount_per = $(".discount-per").val();
+    var total_all_amount = 0;
+    var discount_amt = 0;
+    
+    if(discount_per == null){
+        discount_per = 0;
+    }
+    
+    //alert(discount_per);
   
       $("#table-list tbody tr").each(function () {
            var line_qty = $(this).find('.line-qty').val();
+           var line_amount = $(this).find('.line-total').val();
          //  alert(line_amt);
            if(line_qty != null){
                total_qty = parseFloat(total_qty) + parseFloat(line_qty);
            }
+           
+           total_amount = parseFloat(total_amount) + parseFloat(line_amount);
           
       });
       
+      var total_after_discount = (parseFloat(total_amount) - (parseFloat(total_amount) * parseFloat(discount_per) /100 ));
+      total_all_amount =  parseFloat(total_after_discount) ; //+ ((parseFloat(total_after_discount) * 7)/100);
+      discount_amt = (parseFloat(total_amount) * parseFloat(discount_per) /100 )
+      
+      
     $(".qty-all-total").val(parseFloat(total_qty).toFixed(2));
+    $(".all-total").val(parseFloat(total_amount).toFixed(2));
+    $(".discount-amt").val(parseFloat(discount_amt).toFixed(2));
    
 }
 
