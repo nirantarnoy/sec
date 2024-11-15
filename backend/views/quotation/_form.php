@@ -189,7 +189,7 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
                                 </td>
                                 <td style="text-align: right">
                                     <input type="text" class="form-control line-price" name="line_price[]"
-                                           value="<?= number_format($value->line_price,2) ?>" onchange="linecal($(this))">
+                                           value="<?= $value->line_price?>" onchange="linecal($(this))">
                                 </td>
                                 <td style="text-align: right">
                                     <input type="text" style="text-align: right;" class="form-control line-total"
@@ -421,7 +421,7 @@ function finditem(){
               $("#findModal").modal("show");
           },
           error: function(err){
-              alert(err);
+              //alert(err);
               alert('error na ja');
           }
         });
@@ -730,13 +730,14 @@ function calall(){
   
       $("#table-list tbody tr").each(function () {
            var line_qty = $(this).find('.line-qty').val();
+           var line_price = $(this).find('.line-price').val();
            var line_amount = $(this).find('.line-total').val();
-         //  alert(line_amt);
+          // alert(line_amount);
            if(line_qty != null){
-               total_qty = parseFloat(total_qty).toFixed(2) + parseFloat(line_qty).toFixed(2);
+               total_qty = parseFloat(total_qty) + parseFloat(line_qty);
            }
            
-           total_amount = parseFloat(parseFloat(total_amount).toFixed(2) + parseFloat(line_amount).toFixed(2)).toFixed(2);
+           total_amount = parseFloat(total_amount)+ parseFloat(line_qty * line_price);
           
       });
       

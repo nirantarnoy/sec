@@ -118,13 +118,14 @@ class QuotationController extends Controller
                     $total_all = 0;
                     if ($line_product_id != null) {
                         for ($i = 0; $i <= count($line_product_id)-1; $i++) {
+                            $line_total_new = str_replace(',', '', $line_total[$i]);
                             $model_line = new \common\models\QuotationLine();
                             $model_line->quotation_id = $model->id;
                             $model_line->product_id = $line_product_id[$i];
                             $model_line->qty = $line_qty[$i];
                             $model_line->unit_id = $line_unit_id[$i];
                             $model_line->line_price = $line_price[$i];
-                            $model_line->line_total = $line_total[$i];
+                            $model_line->line_total = $line_total_new;
                             $model_line->product_name = $line_product_name[$i];
                             $model_line->size_desc = $line_product_size[$i];
                             $model_line->mat_desc = $line_product_mat[$i];
@@ -184,6 +185,7 @@ class QuotationController extends Controller
                 $total_all = 0;
                 if ($line_product_id != null) {
                     for ($i = 0; $i <= count($line_product_id)-1; $i++) {
+                        $line_total_new = str_replace(',', '', $line_total[$i]);
                         if ($line_recid[$i] == 0) {
                             $model_line = new \common\models\QuotationLine();
                             $model_line->quotation_id = $model->id;
@@ -191,7 +193,7 @@ class QuotationController extends Controller
                             $model_line->qty = $line_qty[$i];
                             $model_line->unit_id = $line_unit_id[$i];
                             $model_line->line_price = $line_price[$i];
-                            $model_line->line_total = $line_total[$i];
+                            $model_line->line_total = $line_total_new;
                             $model_line->size_desc = $line_product_size[$i];
                             $model_line->mat_desc = $line_product_mat[$i];
                             $model_line->product_name = $line_product_name[$i];
@@ -204,7 +206,7 @@ class QuotationController extends Controller
                             $model_line_update->qty = $line_qty[$i];
                             $model_line_update->unit_id = $line_unit_id[$i];
                             $model_line_update->line_price = $line_price[$i];
-                            $model_line_update->line_total = $line_total[$i];
+                            $model_line_update->line_total = $line_total_new;
                             $model_line_update->product_name = $line_product_name[$i];
                             $model_line_update->size_desc = $line_product_size[$i];
                             $model_line_update->mat_desc = $line_product_mat[$i];

@@ -178,7 +178,7 @@ $rec_status = checkReceive($model->id);
                                            style="text-align: right"
                                            class="form-control line-price"
                                            name="line_price[]"
-                                           value="<?= number_format($value->price,2) ?>"
+                                           value="<?= $value->price ?>"
                                            onchange="line_cal_amount($(this))">
                                 </td>
                                 <td style="text-align: right">
