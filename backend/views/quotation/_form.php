@@ -189,7 +189,7 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
                                 </td>
                                 <td style="text-align: right">
                                     <input type="text" class="form-control line-price" name="line_price[]"
-                                           value="<?= $value->line_price ?>" onchange="linecal($(this))">
+                                           value="<?= number_format($value->line_price,2) ?>" onchange="linecal($(this))">
                                 </td>
                                 <td style="text-align: right">
                                     <input type="text" style="text-align: right;" class="form-control line-total"
@@ -711,7 +711,7 @@ function calinvoice(e){
 function linecal(e){
    var qty = e.closest("tr").find(".line-qty").val();
    var price = e.closest("tr").find(".line-price").val();
-   e.closest("tr").find(".line-total").val(parseFloat(qty) * parseFloat(price));
+   e.closest("tr").find(".line-total").val(parseFloat(parseFloat(qty).toFixed(2) * parseFloat(price).toFixed(2)).toFixed(2));
    calall();
 }
 function calall(){
@@ -733,10 +733,10 @@ function calall(){
            var line_amount = $(this).find('.line-total').val();
          //  alert(line_amt);
            if(line_qty != null){
-               total_qty = parseFloat(total_qty) + parseFloat(line_qty);
+               total_qty = parseFloat(total_qty).toFixed(2) + parseFloat(line_qty).toFixed(2);
            }
            
-           total_amount = parseFloat(total_amount) + parseFloat(line_amount);
+           total_amount = parseFloat(parseFloat(total_amount).toFixed(2) + parseFloat(line_amount).toFixed(2)).toFixed(2);
           
       });
       

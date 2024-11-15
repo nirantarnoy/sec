@@ -99,9 +99,9 @@ class PurchController extends Controller
                             $model_line->purch_id = $model->id;
                             $model_line->product_id = $prod_id[$i];
                             $model_line->qty = $line_qty[$i];
-                            $model_line->price = $line_price[$i];
+                            $model_line->price = (float)$line_price[$i];
                             $model_line->remain_qty = $line_qty[$i];
-                            $model_line->line_total = $line_qty[$i]*$line_price[$i];
+                            $model_line->line_total = (float)$line_qty[$i]*$line_price[$i];
                             $model_line->status = 1;
                             $model_line->product_name = $line_product_name[$i];
                             $model_line->save(false);
@@ -147,15 +147,17 @@ class PurchController extends Controller
             $model->purch_date = date('Y-m-d',strtotime($p_date));
             if ($model->save(false)) {
                 if ($prod_id != null) {
-                    //print_r(\Yii::$app->request->post());return;
+                   // print_r(\Yii::$app->request->post());return;
+                  //  print_r($prod_id);return;
                     for ($i = 0; $i <= count($prod_id) - 1; $i++) {
                         if ($prod_id[$i] == null || $prod_id[$i] == '') continue;
 
                         $model_check = \common\models\PurchLine::find()->where(['purch_id' => $model->id, 'product_id' => $prod_id[$i]])->one();
                         if ($model_check) {
+                          //  echo 'hsa';return;
                             $model_check->qty = $line_qty[$i];
-                            $model_check->price = $line_price[$i];
-                            $model_check->line_total = $line_total[$i];
+                            $model_check->price = (float)$line_price[$i];
+                            $model_check->line_total = (float)$line_total[$i];
                             $model_check->remain_qty = $line_qty[$i];
                             $model_check->product_name = $line_product_name[$i];
                             $model_check->save(false);
@@ -164,8 +166,8 @@ class PurchController extends Controller
                             $model_line->purch_id = $model->id;
                             $model_line->product_id = $prod_id[$i];
                             $model_line->qty = $line_qty[$i];
-                            $model_line->price = $line_price[$i];
-                            $model_line->line_total = $line_total[$i];
+                            $model_line->price =  (float)$line_price[$i];
+                            $model_line->line_total =  (float)$line_total[$i];
                             $model_line->status = 1;
                             $model_line->remain_qty = $line_qty[$i];
                             $model_line->product_name =  $line_product_name[$i];

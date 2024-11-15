@@ -150,7 +150,7 @@ $rec_status = checkReceive($model->id);
                                 <td>
                                     <input type="hidden"
                                            class="form-control line-prod-id"
-                                           name="line_prod_id[]"
+                                           name="line_prod_id[]" value="<?=$value->product_id?>"
                                            readonly>
                                     <input type="text"
                                            class="form-control line-prod-code"
@@ -178,7 +178,7 @@ $rec_status = checkReceive($model->id);
                                            style="text-align: right"
                                            class="form-control line-price"
                                            name="line_price[]"
-                                           value="<?= $value->price ?>"
+                                           value="<?= number_format($value->price,2) ?>"
                                            onchange="line_cal_amount($(this))">
                                 </td>
                                 <td style="text-align: right">
@@ -186,7 +186,7 @@ $rec_status = checkReceive($model->id);
                                            class="form-control line-total"
                                            name="line_total[]"
                                            style="text-align: right"
-                                           value="<?= $value->line_total ?>"
+                                           value="<?= number_format($value->line_total,2) ?>"
                                            readonly>
                                 </td>
                                 <td style="text-align: center">
@@ -700,8 +700,8 @@ function showfind(e){
       var qty = e.closest('tr').find('.line-qty').val();
       var price = e.closest('tr').find('.line-price').val();
       if(qty != null && price != null){
-          var total = (qty * price);
-          e.closest('tr').find('.line-total').val(addCommas(parseFloat(total)));
+          var total = parseFloat(parseFloat(qty).toFixed(2) * parseFloat(price).toFixed(2)).toFixed(2);
+          e.closest('tr').find('.line-total').val(addCommas(parseFloat(total).toFixed(2)));
       }
     }
     function cal_linenum() {
