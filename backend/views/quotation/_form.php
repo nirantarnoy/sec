@@ -96,6 +96,8 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
                             <input type="text" class="form-control" readonly>
                         </td>
                         <td>
+                            <input type="hidden" class="line-rec-id" name="line_recid[]"
+                                   value="0">
                             <input type="hidden" class="line-product-id" name="line_product_id[]" value="">
                             <input type="text" class="form-control line-product-code" name="line_product_code[]"
                                    value="" readonly>
@@ -217,6 +219,8 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
                                 <input type="text" class="form-control" readonly>
                             </td>
                             <td>
+                                <input type="hidden" class="line-rec-id" name="line_recid[]"
+                                       value="0">
                                 <input type="hidden" class="line-product-id" name="line_product_id[]" value="">
                                 <input type="text" class="form-control line-product-code" name="line_product_code[]"
                                        value="" readonly>
