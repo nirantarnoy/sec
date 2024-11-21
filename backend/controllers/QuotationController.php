@@ -185,7 +185,7 @@ class QuotationController extends Controller
                             $model_line->product_name = $line_product_name[$i];
                             $model_line->size_desc = $line_product_size[$i];
                             $model_line->mat_desc = $line_product_mat[$i];
-                            $model_line->photo = $fine_data_name_to_save[$i];
+                         //   $model_line->photo = $fine_data_name_to_save[$i];
                             if ($model_line->save(false)) {
                                 $total_all += $model_line->line_total;
                             }
