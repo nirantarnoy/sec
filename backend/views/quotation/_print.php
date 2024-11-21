@@ -193,7 +193,12 @@
                     ?>
                     <tr>
                         <td style="text-align: center;border:1px solid lightgrey;padding: 5px;"><?= $num_row ?></td>
-                        <td style="border:1px solid lightgrey;padding-left: 5px;"><?= $value->product_name != '' ? $value->product_name . $line_desc : \backend\models\Product::findName($value->product_id) ?></td>
+                        <td style="border:1px solid lightgrey;padding-left: 5px;">
+                            <?php if($value->photo !=null || $value->photo !=''):?>
+                                <img src="<?= \Yii::$app->getUrlManager()->baseUrl . '/uploads/quotation_photo/' . $value->photo ?>" style="width: 20%" alt="">
+                            <?php endif;?>
+                            <?= $value->product_name != '' ? $value->product_name . $line_desc : \backend\models\Product::findName($value->product_id) ?>
+                        </td>
                         <td style="text-align: center;border:1px solid lightgrey;width: 10%"><?= $value->qty ?></td>
                         <td style="text-align: center;border:1px solid lightgrey;"><?= \backend\models\Unit::findName($value->unit_id) ?></td>
                         <td style="text-align: center;border:1px solid lightgrey;"><?= number_format($value->line_price, 2) ?></td>

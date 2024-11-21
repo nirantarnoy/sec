@@ -13,7 +13,7 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
 
 <div class="quotation-form">
 
-    <?php $form = ActiveForm::begin(['id' => 'form-quotation']); ?>
+    <?php $form = ActiveForm::begin(['id' => 'form-quotation','options'=>['enctype'=>'multipart/form-data']]); ?>
     <input type="hidden" name="removelist" class="remove-list" value="">
     <div class="row">
         <div class="col-lg-3">
@@ -84,9 +84,9 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
                     <th>Mat</th>
                     <th style="text-align: right;">จำนวน</th>
                     <th style="text-align: center;">หน่วยนับ</th>
-                    <th style="text-align: right;">ราคา</th>
+                    <th style="text-align: right;width:10%">ราคา</th>
                     <th style="text-align: right;">รวม</th>
-                    <th style="width: 5%"></th>
+                    <th style="width: 8%"></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -135,6 +135,9 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
                                    name="line_total[]" value="" readonly>
                         </td>
                         <td style="text-align: center;">
+                            <input type="file" style="display: none;" class="line-photo" id="1" name="line_photo[]" value="">
+                            <input type="hidden" class="line-photo-index" name="line_photo_index[]" value="">
+                            <div class="btn btn-sm btn-default" onclick="showphoto($(this))"><i class="fas fa-file-upload text-danger"></i></div>
                             <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
                         </td>
                     </tr>
@@ -196,6 +199,14 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
                                            name="line_total[]" value="<?= number_format($value->line_total,2) ?>" readonly>
                                 </td>
                                 <td style="text-align: center;">
+                                    <input type="file" style="display: none;" class="line-photo" name="line_photo[]">
+                                    <input type="hidden" class="line-photo" value="<?=$value->photo?>">
+                                    <?php if($value->photo!=null || $value->photo!=''):?>
+                                        <a class="btn btn-sm btn-default" target="_blank" href="<?= \Yii::$app->getUrlManager()->baseUrl . '/uploads/quotation_photo/' . $value->photo ?>"><i class="fas fa-file-upload text-success"></i></a>
+                                    <?php else:?>
+                                        <div class="btn btn-sm btn-default" onclick="showphoto($(this))"><i class="fas fa-file-upload text-danger"></i></div>
+                                    <?php endif;?>
+
                                     <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
                                 </td>
                             </tr>
@@ -245,6 +256,7 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
                                        name="line_total[]" value="" readonly>
                             </td>
                             <td style="text-align: center;">
+                                <div class="btn btn-sm btn-default"><i class="fas fa-file-upload text-danger"></i></div>
                                 <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
                             </td>
                         </tr>
@@ -381,6 +393,9 @@ $(function(){
        }
     });
 });
+function showphoto(e){
+    e.closest("tr").find(".line-photo").trigger("click");
+}
 function submitForm(){
     var check_data = 0;
     $("#table-list tbody tr").each(function(){
@@ -392,6 +407,10 @@ function submitForm(){
          alert('กรุณาเลือกรายละเอียดก่อนทำรายการ');
               return false;
     }else{
+        $("#table-list tbody tr").each(function(){
+            var photo_selected_file = $(this).closest("tr").find(".line-photo").val();
+           $(this).closest("tr").find(".line-photo-index").val(photo_selected_file); 
+        });
         $("form#form-quotation").submit();
     }
 }
@@ -446,6 +465,7 @@ function getAttn(e){
 
 function addline(e){
     var tr = $("#table-list tbody tr:last");
+    
                     var clone = tr.clone();
                     //clone.find(":text").val("");
                     // clone.find("td:eq(1)").text("");
@@ -457,6 +477,7 @@ function addline(e){
                    
                     clone.attr("data-var", "");
                     clone.find('.line-rec-id').val("0");
+                    clone.find('.line-photo').val("");
                    
                     tr.after(clone);
     
@@ -479,6 +500,7 @@ function removeline(e) {
                         $(this).find(".line-item-price").val('');
                         $(this).find(".line-item-total").val('');
                         $(this).find(".line-qty").val('');
+                        $(this).find(".line-photo").val("");
                         // cal_num();
                     });
                 } else {
@@ -614,7 +636,8 @@ $(".btn-emp-selected").click(function () {
       
         if(selecteditem.length >0){
              var tr = $("#table-list tbody tr:last");
-             
+             var last_line_photo_id = tr.closest("tr").find(".line-photo").attr("id");
+    //alert(last_line_photo_id);
              for(var i=0;i<=selecteditem.length-1;i++){
                //  var new_text = selecteditem[i]['line_work_type_name'] + "\\n" + "Order No."+selecteditem[i]['line_order_no'];
                    if (tr.closest("tr").find(".line-product-id").val() == "") {
@@ -629,6 +652,7 @@ $(".btn-emp-selected").click(function () {
                     tr.closest("tr").find(".line-price").val(selecteditem[i]['price']);
                     tr.closest("tr").find(".line-product-unit-id").val(selecteditem[i]['unit_id']);
                     tr.closest("tr").find(".line-product-unit-name").val(selecteditem[i]['unit_name']);
+                    tr.closest("tr").find(".line-photo").val("");
                     
                     if(selecteditem[i]['is_drummy'] == 1){
                         tr.closest("tr").find(".line-product-name").prop("readonly", "");
@@ -649,6 +673,8 @@ $(".btn-emp-selected").click(function () {
                         clone.closest("tr").find(".line-price").val(selecteditem[i]['price']);
                         clone.closest("tr").find(".line-product-unit-id").val(selecteditem[i]['unit_id']);
                         clone.closest("tr").find(".line-product-unit-name").val(selecteditem[i]['unit_name']);
+                        clone.closest("tr").find(".line-photo").val("");
+                        clone.closest("tr").find(".line-photo").attr("id",(parseInt(last_line_photo_id) +1));
                         
                         if(selecteditem[i]['is_drummy'] == 1){
                             clone.closest("tr").find(".line-product-name").prop("readonly", "");

@@ -9,6 +9,7 @@ use Yii;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * QuotationController implements the CRUD actions for Quotation model.
@@ -109,7 +110,62 @@ class QuotationController extends Controller
                 $line_product_size = \Yii::$app->request->post('line_product_size');
                 $line_product_mat = \Yii::$app->request->post('line_product_mat');
 
-               // print_r($line_product_name);return;
+                $line_photo = [];
+                $file_data = [];
+                $fine_data_name_to_save = [];
+                $line_photo_index = \Yii::$app->request->post('line_photo_index');
+                $uploaded = $_FILES['line_photo'];
+                for($x=0; $x<=count($line_photo_index)-1; $x++) {
+                   // echo $line_photo_index[$x].'<br />';
+                   if($line_photo_index != null || $line_photo_index != '') {
+                       $file_data[$x] = [
+                           'name'=>$uploaded['name'][$x],
+                           'type'=>$uploaded['type'][$x],
+                           'tmp_name'=>$uploaded['tmp_name'][$x],
+                           'error'=>$uploaded['error'][$x],
+                           'size'=>$uploaded['size'][$x],
+                       ];
+                   }else{
+                       $file_data[$x] = '';
+                   }
+                }
+
+                if($file_data != null) {
+                    foreach ($file_data as $key => $value) {
+                        if($value == null || $value == '') {
+                            $fine_data_name_to_save[$key] = '';
+                        }else{
+                           // $file_saveas = 'photo_'.time(). '.' . $value['type'];
+                           // $value->saveAs('uploads/quotation_photo/' . $file_saveas);
+                            $tmpName = $value['tmp_name'];
+                            $fileName = basename($value['name']);
+                            $uploadDir = 'uploads/quotation_photo/';
+                            move_uploaded_file($tmpName, $uploadDir . $fileName);
+                            $fine_data_name_to_save[$key] = $fileName;
+                        }
+                    }
+                }
+
+//                if (!empty($uploaded)) {
+//
+//                    for($x = 0; $x<= count($uploaded)-1; $x++) {
+//                        if(!empty($uploaded[$x])){
+//
+//                        }
+//                    }
+
+//                    foreach ($uploaded as $file) {
+//                        $uploaded_file = "photo_" . $file->baseName . '.' . $file->extension;
+////                        if ($uploaded->saveAs('uploads/quotation_photo/' . $uploaded_file)) {
+////                            array_push($line_photo, $uploaded_file);
+////                        }
+//                        $file->saveAs('uploads/quotation_photo/' . $uploaded_file);
+//                        array_push($line_photo, $uploaded_file);
+//
+//                    }
+          //      }
+
+             //   print_r($file_data);return;
 
                 $model->quotation_no = $model::getLastNo();
                 $model->quotation_date = date('Y-m-d', strtotime($t_date));
@@ -129,6 +185,7 @@ class QuotationController extends Controller
                             $model_line->product_name = $line_product_name[$i];
                             $model_line->size_desc = $line_product_size[$i];
                             $model_line->mat_desc = $line_product_mat[$i];
+                            $model_line->photo = $fine_data_name_to_save[$i];
                             if ($model_line->save(false)) {
                                 $total_all += $model_line->line_total;
                             }

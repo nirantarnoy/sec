@@ -24,7 +24,14 @@ $rec_status = checkReceive($model->id);
         <div class="col-lg-3">
             <?php $model->purch_date = $model->isNewRecord ? date('d/m/Y') : date('d/m/Y', strtotime($model->purch_date)); ?>
             <?= $form->field($model, 'purch_date')->widget(\kartik\date\DatePicker::className(), [
-                'value' => date('Y-m-d'),
+               //'value' => date('Y-m-d'),
+                'options'=>[
+
+                ],
+                'pluginOptions' => [
+                        'autoclose'=>true,
+                    'format' => 'dd/mm/yyyy',
+                ]
             ]) ?>
         </div>
         <div class="col-lg-3">
