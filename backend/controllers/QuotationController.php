@@ -113,38 +113,38 @@ class QuotationController extends Controller
                 $line_photo = [];
                 $file_data = [];
                 $fine_data_name_to_save = [];
-                $line_photo_index = \Yii::$app->request->post('line_photo_index');
-                $uploaded = $_FILES['line_photo'];
-                for($x=0; $x<=count($line_photo_index)-1; $x++) {
-                   // echo $line_photo_index[$x].'<br />';
-                   if($line_photo_index != null || $line_photo_index != '') {
-                       $file_data[$x] = [
-                           'name'=>$uploaded['name'][$x],
-                           'type'=>$uploaded['type'][$x],
-                           'tmp_name'=>$uploaded['tmp_name'][$x],
-                           'error'=>$uploaded['error'][$x],
-                           'size'=>$uploaded['size'][$x],
-                       ];
-                   }else{
-                       $file_data[$x] = '';
-                   }
-                }
-
-                if($file_data != null) {
-                    foreach ($file_data as $key => $value) {
-                        if($value == null || $value == '') {
-                            $fine_data_name_to_save[$key] = '';
-                        }else{
-                           // $file_saveas = 'photo_'.time(). '.' . $value['type'];
-                           // $value->saveAs('uploads/quotation_photo/' . $file_saveas);
-                            $tmpName = $value['tmp_name'];
-                            $fileName = basename($value['name']);
-                            $uploadDir = 'uploads/quotation_photo/';
-                            move_uploaded_file($tmpName, $uploadDir . $fileName);
-                            $fine_data_name_to_save[$key] = $fileName;
-                        }
-                    }
-                }
+//                $line_photo_index = \Yii::$app->request->post('line_photo_index');
+//                $uploaded = $_FILES['line_photo'];
+//                for($x=0; $x<=count($line_photo_index)-1; $x++) {
+//                   // echo $line_photo_index[$x].'<br />';
+//                   if($line_photo_index != null || $line_photo_index != '') {
+//                       $file_data[$x] = [
+//                           'name'=>$uploaded['name'][$x],
+//                           'type'=>$uploaded['type'][$x],
+//                           'tmp_name'=>$uploaded['tmp_name'][$x],
+//                           'error'=>$uploaded['error'][$x],
+//                           'size'=>$uploaded['size'][$x],
+//                       ];
+//                   }else{
+//                       $file_data[$x] = '';
+//                   }
+//                }
+//
+//                if($file_data != null) {
+//                    foreach ($file_data as $key => $value) {
+//                        if($value == null || $value == '') {
+//                            $fine_data_name_to_save[$key] = '';
+//                        }else{
+//                           // $file_saveas = 'photo_'.time(). '.' . $value['type'];
+//                           // $value->saveAs('uploads/quotation_photo/' . $file_saveas);
+//                            $tmpName = $value['tmp_name'];
+//                            $fileName = basename($value['name']);
+//                            $uploadDir = 'uploads/quotation_photo/';
+//                            move_uploaded_file($tmpName, $uploadDir . $fileName);
+//                            $fine_data_name_to_save[$key] = $fileName;
+//                        }
+//                    }
+//                }
 
 //                if (!empty($uploaded)) {
 //

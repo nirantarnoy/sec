@@ -135,9 +135,9 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
                                    name="line_total[]" value="" readonly>
                         </td>
                         <td style="text-align: center;">
-                            <input type="file" style="display: none;" class="line-photo" id="1" name="line_photo[]" value="">
-                            <input type="hidden" class="line-photo-index" name="line_photo_index[]" value="">
-                            <div class="btn btn-sm btn-default" onclick="showphoto($(this))"><i class="fas fa-file-upload text-danger"></i></div>
+<!--                            <input type="file" style="display: none;" class="line-photo" id="1" name="line_photo[]" value="">-->
+<!--                            <input type="hidden" class="line-photo-index" name="line_photo_index[]" value="">-->
+<!--                            <div class="btn btn-sm btn-default" onclick="showphoto($(this))"><i class="fas fa-file-upload text-danger"></i></div>-->
                             <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
                         </td>
                     </tr>
@@ -199,13 +199,13 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
                                            name="line_total[]" value="<?= number_format($value->line_total,2) ?>" readonly>
                                 </td>
                                 <td style="text-align: center;">
-                                    <input type="file" style="display: none;" class="line-photo" name="line_photo[]">
-                                    <input type="hidden" class="line-photo" value="<?=$value->photo?>">
-                                    <?php if($value->photo!=null || $value->photo!=''):?>
-                                        <a class="btn btn-sm btn-default" target="_blank" href="<?= \Yii::$app->getUrlManager()->baseUrl . '/uploads/quotation_photo/' . $value->photo ?>"><i class="fas fa-file-upload text-success"></i></a>
-                                    <?php else:?>
-                                        <div class="btn btn-sm btn-default" onclick="showphoto($(this))"><i class="fas fa-file-upload text-danger"></i></div>
-                                    <?php endif;?>
+<!--                                    <input type="file" style="display: none;" class="line-photo" name="line_photo[]">-->
+<!--                                    <input type="hidden" class="line-photo" value="--><?php //=$value->photo?><!--">-->
+<!--                                    --><?php //if($value->photo!=null || $value->photo!=''):?>
+<!--                                        <a class="btn btn-sm btn-default" target="_blank" href="--><?php //= \Yii::$app->getUrlManager()->baseUrl . '/uploads/quotation_photo/' . $value->photo ?><!--"><i class="fas fa-file-upload text-success"></i></a>-->
+<!--                                    --><?php //else:?>
+<!--                                        <div class="btn btn-sm btn-default" onclick="showphoto($(this))"><i class="fas fa-file-upload text-danger"></i></div>-->
+<!--                                    --><?php //endif;?>
 
                                     <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
                                 </td>
@@ -256,7 +256,7 @@ $unit_data = \backend\models\Unit::find()->select(['id','name'])->where(['status
                                        name="line_total[]" value="" readonly>
                             </td>
                             <td style="text-align: center;">
-                                <div class="btn btn-sm btn-default"><i class="fas fa-file-upload text-danger"></i></div>
+<!--                                <div class="btn btn-sm btn-default"><i class="fas fa-file-upload text-danger"></i></div>-->
                                 <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
                             </td>
                         </tr>
