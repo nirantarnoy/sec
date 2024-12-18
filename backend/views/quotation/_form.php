@@ -386,9 +386,10 @@ $(function(){
        var discount_amt = 0;
        if(discount){
            var total = 0;
-           $("table#table-list tbody tr").each(function(){
-              total += parseFloat($(this).closest("tr").find(".line-total").val()); 
-           });
+//           $("table#table-list tbody tr").each(function(){
+//              total += parseFloat($(this).closest("tr").find(".line-total").val()); 
+//           });
+           total = parseFloat($(".all-total").val()); 
            if(total > 0){
                discount_amt = (total * discount) /100;
            }

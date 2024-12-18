@@ -340,6 +340,7 @@ class CustomerController extends Controller
                         $new_address->city_id = $city_id;
                         $new_address->province_id = $province_id;
                         $new_address->zipcode = $zipcode;
+                        $new_address->address_type_id = 1;
                         $new_address->status = 1;
                         if ($new_address->save(false)) {
 
@@ -348,12 +349,12 @@ class CustomerController extends Controller
 
                     $address_chk2 = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type_id' => $party_type, 'address_type_id' => 2])->one();
                     if ($address_chk2) {
-                        $address_chk2->address = $address;
-                        $address_chk2->street = $street;
-                        $address_chk2->district_id = $district_id;
-                        $address_chk2->city_id = $city_id;
-                        $address_chk2->province_id = $province_id;
-                        $address_chk2->zipcode = $zipcode;
+                        $address_chk2->address = $address2;
+                        $address_chk2->street = $street2;
+                        $address_chk2->district_id = $district_id2;
+                        $address_chk2->city_id = $city_id2;
+                        $address_chk2->province_id = $province_id2;
+                        $address_chk2->zipcode = $zipcode2;
                         $address_chk2->status = 1;
                         if ($address_chk2->save(false)) {
 
