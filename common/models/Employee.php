@@ -40,9 +40,8 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['gender', 'position', 'salary_type', 'status', 'company_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['emp_start'], 'safe'],
-            [['code', 'fname', 'lname', 'description', 'photo'], 'string', 'max' => 255],
+            [['gender', 'position', 'salary_type', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by','cal_commission'], 'integer'],
+            [['code', 'f_name', 'l_name', 'description', 'photo'], 'string', 'max' => 255],
         ];
     }
 
@@ -54,8 +53,8 @@ class Employee extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'code' => 'รหัส',
-            'fname' => 'ชื่อ',
-            'lname' => 'นามสกุล',
+            'f_name' => 'ชื่อ',
+            'l_name' => 'นามสกุล',
             'gender' => 'เพศ',
             'position' => 'ตำแหน่ง',
             'salary_type' => 'Salary Type',
@@ -63,7 +62,7 @@ class Employee extends \yii\db\ActiveRecord
             'description' => 'รายละเอียด',
             'photo' => 'รูปภาพ',
             'status' => 'สถานะ',
-            'company_id' => 'Company ID',
+            'cal_commission'=>'คำนวนค่าคอม',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
             'created_by' => 'Created By',

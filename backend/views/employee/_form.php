@@ -27,10 +27,10 @@ $drivingcard_data = \backend\helpers\DrivingcardType::asArrayObject();
             <?= $form->field($model, 'code')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-4">
-            <?= $form->field($model, 'fname')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'f_name')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-4">
-            <?= $form->field($model, 'lname')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'l_name')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
     <div class="row">
@@ -50,6 +50,11 @@ $drivingcard_data = \backend\helpers\DrivingcardType::asArrayObject();
                 ]
             ]) ?>
         </div>
+        <div class="col-lg-4">
+            <label for="">คำนวนค่าคอม</label>
+            <?php echo $form->field($model, 'cal_commission')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label(false) ?>
+
+        </div>
     </div>
 
     <br>
@@ -59,40 +64,6 @@ $drivingcard_data = \backend\helpers\DrivingcardType::asArrayObject();
 
         </div>
     </div>
-
-
-    <div class="row">
-        <div class="col-lg-6">
-            <br>
-            <?php if ($model->photo != ''): ?>
-                <div class="row">
-
-                    <div class="col-lg-4">
-                        <img src="../web/uploads/images/employee/<?= $model->photo ?>" width="100%" alt="">
-                    </div>
-                    <div class="col-lg-4"></div>
-                    <div class="col-lg-4"></div>
-                </div>
-                <br>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <div class="btn btn-danger btn-delete-photo" data-var="<?= $model->id ?>">ลบรูปภาพ</div>
-                    </div>
-                    <div class="col-lg-4"></div>
-                </div>
-            <?php else: ?>
-                <div class="row">
-
-                    <div class="col-lg-4">
-                        <?= $form->field($model, 'photo')->fileInput(['maxlength' => true]) ?>
-                    </div>
-                    <div class="col-lg-4"></div>
-                    <div class="col-lg-4"></div>
-                </div>
-            <?php endif; ?>
-        </div>
-    </div>
-
     <br>
 
     <div class="form-group">

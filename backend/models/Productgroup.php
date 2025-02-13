@@ -7,7 +7,7 @@ use yii\db\ActiveRecord;
 
 date_default_timezone_set('Asia/Bangkok');
 
-class Productgroup extends \common\models\ProductGroup
+class Productgroup extends \common\models\ProductCat
 {
     public function behaviors()
     {

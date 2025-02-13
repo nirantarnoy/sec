@@ -10,10 +10,10 @@ $m_category = ['มกราคม', 'กุมภาพันธ์', 'มี�
 $m_category_show = [];
 
 $product_count = \backend\models\Product::find()->where(['status' => 1])->count();
-$order_count = \backend\models\Order::find()->count();
+$order_count = 0; // \backend\models\Order::find()->count();
 $customer_count = \backend\models\Customer::find()->where(['status' => 1])->count();
 
-$model_stock = \backend\models\Stocksum::find()->where(['>', 'qty', 0])->andFilterWhere(['!=', 'year(expired_date)', 1970])->groupBy(['product_id'])->orderBy(['expired_date' => SORT_ASC])->limit(10)->all();
+$model_stock = \backend\models\Stocksum::find()->where(['>', 'qty', 0])->limit(10)->all();
 
 $model_sale_top_product = null; // \common\models\ViewOrderAmount::find()->select(['product_id', 'sku', 'name', 'sum(qty) as qty'])->groupBy(['product_id'])->orderBy(['sum(qty)' => SORT_DESC])->limit(5)->all();
 $model_sale_compare = null; // \common\models\ViewOrderAmount::find()->select(['year', 'month', 'sum(cost_amt) as cost_amt', 'sum(sale_amt) as sale_amt'])->groupBy(['year', 'month'])->orderBy(['month' => SORT_ASC])->all();
@@ -35,7 +35,7 @@ $cost_stock_amt = 0;
     <div class="body-content">
 
         <div class="row">
-            <?php if (\Yii::$app->user->identity->username =='annadmin'): ?>
+            <?php if (\Yii::$app->user->identity->username =='secadmin'): ?>
             <div class="col-lg-3 col-6">
                 <!-- small box -->
                 <div class="small-box bg-secondary">
@@ -73,12 +73,12 @@ $cost_stock_amt = 0;
                     <div class="inner">
                         <h3><?= number_format($order_count) ?></h3>
                         <!--                        <sup style="font-size: 20px">%</sup>-->
-                        <p>จำนวนคำสั่งซื้อ</p>
+                        <p>จำนวน Job</p>
                     </div>
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
-                    <a href="<?= Url::to(['order/index'], true) ?>" class="small-box-footer">ไปยังคำสั่งซื้อ <i
+                    <a href="<?= Url::to(['order/index'], true) ?>" class="small-box-footer">ไปยัง Job <i
                                 class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>

@@ -11,7 +11,6 @@ use backend\models\Bank;
  */
 class BankSearch extends Bank
 {
-    public $globalSearch;
     /**
      * {@inheritdoc}
      */
@@ -20,7 +19,6 @@ class BankSearch extends Bank
         return [
             [['id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name', 'description'], 'safe'],
-            [['globalSearch'], 'string'],
         ];
     }
 
@@ -68,11 +66,8 @@ class BankSearch extends Bank
             'updated_by' => $this->updated_by,
         ]);
 
-        if($this->globalSearch!=''){
-            $query->orFilterWhere(['like', 'name', $this->globalSearch])
-                ->orFilterWhere(['like', 'description', $this->globalSearch]);
-        }
-
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'description', $this->description]);
 
         return $dataProvider;
     }

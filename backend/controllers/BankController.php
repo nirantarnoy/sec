@@ -4,12 +4,9 @@ namespace backend\controllers;
 
 use backend\models\Bank;
 use backend\models\BankSearch;
-use backend\models\CustomerSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\ForbiddenHttpException;
-use yii\filters\AccessControl;
 
 /**
  * BankController implements the CRUD actions for Bank model.
@@ -30,24 +27,6 @@ class BankController extends Controller
                         'delete' => ['POST'],
                     ],
                 ],
-                'access' => [
-                    'class' => AccessControl::className(),
-                    'denyCallback' => function ($rule, $action) {
-                        throw new ForbiddenHttpException('คุณไม่ได้รับอนุญาติให้เข้าใช้งาน!');
-                    },
-                    'rules' => [
-                        [
-                            'allow' => true,
-                            'roles' => ['@'],
-                            'matchCallback' => function ($rule, $action) {
-                                $currentRoute = \Yii::$app->controller->getRoute();
-                                if (\Yii::$app->user->can($currentRoute)) {
-                                    return true;
-                                }
-                            }
-                        ]
-                    ]
-                ],
             ]
         );
     }
@@ -59,17 +38,12 @@ class BankController extends Controller
      */
     public function actionIndex()
     {
-        $pageSize = \Yii::$app->request->post("perpage");
-
         $searchModel = new BankSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-
-        $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'perpage' => $pageSize,
         ]);
     }
 
@@ -97,7 +71,7 @@ class BankController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['bank/index']);
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             $model->loadDefaultValues();
@@ -120,7 +94,7 @@ class BankController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['bank/index']);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [

@@ -15,8 +15,8 @@ class EmployeeSearch extends Employee
     public function rules()
     {
         return [
-            [['id', 'gender', 'position', 'salary_type', 'status', 'company_id', 'created_at', 'updated_at', 'created_by', 'updated_by'], 'integer'],
-            [['code', 'fname', 'lname', 'emp_start', 'description', 'photo'], 'safe'],
+            [['id', 'gender', 'position', 'salary_type', 'status',  'created_at', 'updated_at', 'created_by', 'updated_by','cal_commission'], 'integer'],
+            [['code', 'f_name', 'l_name', 'description'], 'safe'],
             [['globalSearch'],'string']
         ];
     }
@@ -61,9 +61,7 @@ class EmployeeSearch extends Employee
             'gender' => $this->gender,
             'position' => $this->position,
             'salary_type' => $this->salary_type,
-            'emp_start' => $this->emp_start,
             'status' => $this->status,
-            'company_id' => $this->company_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,
@@ -79,10 +77,9 @@ class EmployeeSearch extends Employee
 
         if($this->globalSearch != ''){
             $query->orFilterWhere(['like', 'code', $this->globalSearch])
-                ->orFilterWhere(['like', 'fname', $this->globalSearch])
-                ->orFilterWhere(['like', 'lname', $this->globalSearch])
-                ->orFilterWhere(['like', 'description', $this->globalSearch])
-                ->orFilterWhere(['like', 'photo', $this->globalSearch]);
+                ->orFilterWhere(['like', 'f_name', $this->globalSearch])
+                ->orFilterWhere(['like', 'l_name', $this->globalSearch])
+                ->orFilterWhere(['like', 'description', $this->globalSearch]);
         }
 
         return $dataProvider;

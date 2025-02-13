@@ -7,11 +7,13 @@ use yii\widgets\DetailView;
 /** @var backend\models\Bank $model */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'ข้อมูลธนาคาร', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Banks', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="bank-view">
+
+    <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -27,6 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
+            'id',
             'name',
             'description',
             'status',
