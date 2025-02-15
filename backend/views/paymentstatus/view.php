@@ -7,14 +7,11 @@ use yii\widgets\DetailView;
 /** @var backend\models\Paymentstatus $model */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Paymentstatuses', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'สถานะชำระเงิน', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
 <div class="paymentstatus-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('Delete', ['delete', 'id' => $model->id], [
@@ -29,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
+         //   'id',
             'name',
             'description',
             'status',

@@ -5,14 +5,12 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var backend\models\Worktype $model */
 
-$this->title = 'Update Worktype: ' . $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Worktypes', 'url' => ['index']];
+$this->title = 'แก้ไขประเภทงาน: ' . $model->name;
+$this->params['breadcrumbs'][] = ['label' => 'ประเภทงาน', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'แก้ไข';
 ?>
 <div class="worktype-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,

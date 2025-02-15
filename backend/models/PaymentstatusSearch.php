@@ -11,6 +11,7 @@ use backend\models\Paymentstatus;
  */
 class PaymentstatusSearch extends Paymentstatus
 {
+    public $globalSearch;
     /**
      * {@inheritdoc}
      */
@@ -19,6 +20,7 @@ class PaymentstatusSearch extends Paymentstatus
         return [
             [['id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name', 'description'], 'safe'],
+            [['globalSearch'], 'string'],
         ];
     }
 
@@ -66,8 +68,10 @@ class PaymentstatusSearch extends Paymentstatus
             'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description]);
+        if($this->globalSearch!='') {
+            $query->orFilterWhere(['like', 'name', $this->globalSearch])
+                ->orFilterWhere(['like', 'description', $this->globalSearch]);
+        }
 
         return $dataProvider;
     }
