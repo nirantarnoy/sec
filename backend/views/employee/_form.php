@@ -4,17 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 
-$company_id = 1;
-$branch_id = 1;
-if (!empty(\Yii::$app->user->identity->company_id)) {
-    $company_id = \Yii::$app->user->identity->company_id;
-}
-if (!empty(\Yii::$app->user->identity->branch_id)) {
-    $branch_id = \Yii::$app->user->identity->branch_id;
-}
-
-$drivingcard_data = \backend\helpers\DrivingcardType::asArrayObject();
-
 ?>
 
 <div class="employee-form">
@@ -44,7 +33,7 @@ $drivingcard_data = \backend\helpers\DrivingcardType::asArrayObject();
         </div>
         <div class="col-lg-4">
             <?= $form->field($model, 'position')->Widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Position::find()->where(['company_id' => $company_id])->all(), 'id', 'name'),
+                'data' => \yii\helpers\ArrayHelper::map(\backend\models\Position::find()->where(['status' => 1])->all(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '--เลือกตำแหน่ง--'
                 ]

@@ -87,13 +87,13 @@ class Employee extends \common\models\Employee
     public static function findFullName($id)
     {
         $model = Employee::find()->where(['id' => $id])->one();
-        return $model != null ? $model->fname . ' ' . $model->lname : '';
+        return $model != null ? $model->f_name . ' ' . $model->l_name : '';
     }
 
     public static function findName2($id)
     {
         $model = Employee::find()->where(['id' => $id])->one();
-        return $model != null ? $model->fname : '';
+        return $model != null ? $model->f_name : '';
     }
 
     public static function findPositionName($id)

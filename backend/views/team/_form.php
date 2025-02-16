@@ -13,7 +13,7 @@ $yesno = [['id' => 0, 'name' => 'No'], ['id' => 1, 'name' => 'Yes'],];
 <div class="team-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
+    <input type="hidden" class="remove-list" name="removelist" value>
     <div class="row">
         <div class="col-lg-1"></div>
         <div class="col-lg-10">
@@ -51,10 +51,10 @@ $yesno = [['id' => 0, 'name' => 'No'], ['id' => 1, 'name' => 'Yes'],];
                         <td style="text-align: center;"></td>
                         <td>
                             <input type="hidden" class="line-emp-id" name="line_emp_id[]">
-                            <input type="text" class="form-control" name="emp_name[]" value="">
+                            <input type="text" class="form-control line-emp-name" name="line_emp_name[]" value="" readonly>
                         </td>
                         <td>
-                            <select name="line_is_head" id="" class="form-control line-is-head">
+                            <select name="line_is_head[]" id="" class="form-control line-is-head">
                                 <?php foreach ($yesno as $y): ?>
                                     <option value="<?= $y['id'] ?>"><?= $y['name'] ?></option>
                                 <?php endforeach; ?>
@@ -65,7 +65,54 @@ $yesno = [['id' => 0, 'name' => 'No'], ['id' => 1, 'name' => 'Yes'],];
                         </td>
                     </tr>
                 <?php else: ?>
+                    <?php if($model_line!=null): ?>
+                    <?php $line_num = 0;?>
+                       <?php foreach ($model_line as $line): ?>
+                        <?php $line_num++; ?>
+                            <tr data-var="<?=$line->id?>">
+                                <td style="text-align: center;"><?=$line_num?></td>
+                                <td>
+                                    <input type="hidden" class="line-emp-id" name="line_emp_id[]" value="<?=$line->emp_id?>">
+                                    <input type="text" class="form-control line-emp-name" name="line_emp_name[]" value="<?=\backend\models\Employee::findFullName($line->emp_id)?>" readonly>
+                                </td>
+                                <td>
+                                    <select name="line_is_head[]" id="" class="form-control line-is-head">
+                                        <?php foreach ($yesno as $y): ?>
+                                            <?php
+                                              $selected = '';
+                                              if($y['id'] == $line->is_head){
+                                                  $selected = 'selected';
+                                              }
+                                            ?>
+                                            <option value="<?= $y['id'] ?>" <?=$selected?>><?= $y['name'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                </td>
+                                <td style="text-align: center">
+                                    <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
+                                </td>
+                            </tr>
+                       <?php endforeach;?>
 
+                    <?php else:?>
+                        <tr>
+                            <td style="text-align: center;"></td>
+                            <td>
+                                <input type="hidden" class="line-emp-id" name="line_emp_id[]">
+                                <input type="text" class="form-control line-emp-name" name="line_emp_name[]" value="" readonly>
+                            </td>
+                            <td>
+                                <select name="line_is_head[]" id="" class="form-control line-is-head">
+                                    <?php foreach ($yesno as $y): ?>
+                                        <option value="<?= $y['id'] ?>"><?= $y['name'] ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </td>
+                            <td style="text-align: center">
+                                <div class="btn btn-sm btn-danger" onclick="removeline($(this))">ลบ</div>
+                            </td>
+                        </tr>
+                    <?php endif;?>
                 <?php endif; ?>
 
                 </tbody>
@@ -109,8 +156,8 @@ $yesno = [['id' => 0, 'name' => 'No'], ['id' => 1, 'name' => 'Yes'],];
                         <thead>
                         <tr>
                             <th style="width:10%;text-align: center">เลือก</th>
+                            <th style="width: 10%;text-align: center">รหัสพนักงาน</th>
                             <th style="width: 20%;text-align: center">ชื่อพนักงาน</th>
-                            <th style="width: 20%;text-align: center">รายละเอียด</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -132,7 +179,10 @@ $yesno = [['id' => 0, 'name' => 'No'], ['id' => 1, 'name' => 'Yes'],];
         </div>
     </div>
 <?php
-$js=<<<JS
+$url_to_find_item = \yii\helpers\Url::to(['team/finditem'], true);
+$js = <<<JS
+var selecteditem = [];
+var removelist = [];
 $(function(){
     
 });
@@ -151,23 +201,6 @@ function finditem(){
           },
           error: function(err){
               //alert(err);
-              alert('error na ja');
-          }
-        });
-}
-
-function getAttn(e){
-     $.ajax({
-          type: 'post',
-          dataType: 'html',
-          url:'$url_to_find_attn',
-          async: false,
-          data: {'id': e.val()},
-          success: function(data){
-            $("#select-attn-id").html(data);
-          },
-          error: function(err){
-              alert(err);
               alert('error na ja');
           }
         });
@@ -204,13 +237,10 @@ function removeline(e) {
     
                 if ($("#table-list tbody tr").length == 1) {
                     $("#table-list tbody tr").each(function () {
+                        $(this).find('td:eq(0)').html('');
                         $(this).find(":text").val("");
                        // $(this).find(".line-prod-photo").attr('src', '');
-                        $(this).find(".line-item-qty").val('');
-                        $(this).find(".line-item-price").val('');
-                        $(this).find(".line-item-total").val('');
-                        $(this).find(".line-qty").val('');
-                        $(this).find(".line-photo").val("");
+                        $(this).find(".line-is-head").val('0').change();
                         // cal_num();
                     });
                 } else {
@@ -244,84 +274,43 @@ function cancelline(e) {
 
 function addselecteditem(e) {
         var id = e.attr('data-var');
-        var item_id = e.closest('tr').find('.line-find-item-id').val();
+        var emp_id = e.closest('tr').find('.line-find-emp-id').val();
       
         ///// add new 
-         var item_code = e.closest('tr').find('.line-find-item-code').val();
-         var item_name = e.closest('tr').find('.line-find-item-name').val();
-         var onhand = e.closest('tr').find('.line-find-onhand-qty').val();
-         // var warehouse_id = e.closest('tr').find('.line-find-warehouse-id').val();
-         // var warehouse_name = e.closest('tr').find('.line-find-warehouse-name').val();
-         var price = e.closest('tr').find('.line-find-price').val();
-         var unit_id = e.closest('tr').find('.line-find-unit-id').val();
-         var unit_name = e.closest('tr').find('.line-find-unit-name').val();
-         var is_drummy = e.closest('tr').find('.line-find-is-drummy').val();
+         var emp_name = e.closest('tr').find('.line-find-emp-name').val();
         ///////
         if (id) {
-            if (checkhas(item_id, is_drummy)){
+            if (checkhas(emp_id)){
                 alert("รหัสสินค้าซ้ำ");
                 return false;
             }
             if (e.hasClass('btn-outline-success')) {
                 var obj = {};
-                obj['id'] = id;
-                obj['item_id'] = item_id;
-                obj['item_code'] = item_code;
-                obj['item_name'] = item_name;
-                obj['qty'] = onhand;
-                // obj['warehouse_id'] = warehouse_id;
-                // obj['warehouse_name'] = warehouse_name;
-                obj['price'] = price;
-                obj['unit_id'] = unit_id;
-                obj['unit_name'] = unit_name;
-                obj['is_drummy'] = is_drummy;
+                obj['emp_id'] = id;
+                obj['emp_name'] = emp_name;
                 
                 selecteditem.push(obj);
-                selectedorderlineid.push(obj['id']);
-                    // var obj_after = {};
-                    // obj_after['qty'] = order_line_qty;
-                    // obj_after['price'] = order_line_price;
-                    // obj_after['discount'] = 0;
-                    // obj_after['total'] = (order_line_qty * order_line_price);
-                    //
-                    // alert(obj_after['product_group_id']);
-                    // alert(obj_after['product_group_name']);
-                    // alert(obj_after['qty']);
-                    
-            
+                
                 e.removeClass('btn-outline-success');
                 e.addClass('btn-success');
                 disableselectitem();
                 console.log(selecteditem);
             } else {
-                //selecteditem.pop(id);
-                $.each(selecteditem, function (i, el) {
-                    if (this.id == id) {
-                        var qty = this.qty;
-                        selecteditem.splice(i, 1);
-                        selectedorderlineid.splice(i,1);
-                      //  deleteorderlineselected(product_group_id, qty); // update data in selected list
-                        console.log(selecteditemgroup);
-                      //  caltablecontent(); // refresh table below
-                    }
-                });
+                
                 e.removeClass('btn-success');
                 e.addClass('btn-outline-success');
                 
                 disableselectitem();
                 console.log(selecteditem);
-                console.log(selectedorderlineid);
-                console.log(selecteditemgroup);
             }
         }
-        $(".orderline-id-list").val(selectedorderlineid);
 }
 
-function checkhas(item_id , is_drummy){
+function checkhas(emp_id){
     var has = 0;
     $("#table-list tbody tr").each(function () {
-       var id = $(this).closest("tr").find(".line-product-id").val();
-       if (id == item_id && is_drummy != 1){
+       var id = $(this).closest("tr").find(".line-emp-id").val();
+       if (id == emp_id ){
            has = 1;
        }
     });
@@ -342,7 +331,6 @@ function disableselectitem() {
 
 $(".btn-emp-selected").click(function () {
         var linenum = 0;
-        var line_count = 0;
       
         if(selecteditem.length >0){
              var tr = $("#table-list tbody tr:last");
@@ -350,47 +338,18 @@ $(".btn-emp-selected").click(function () {
     //alert(last_line_photo_id);
              for(var i=0;i<=selecteditem.length-1;i++){
                //  var new_text = selecteditem[i]['line_work_type_name'] + "\\n" + "Order No."+selecteditem[i]['line_order_no'];
-                   if (tr.closest("tr").find(".line-product-id").val() == "") {
+                   if (tr.closest("tr").find(".line-emp-id").val() == "") {
                   //  alert(line_prod_code);
             
-                    tr.closest("tr").find(".line-product-id").val(selecteditem[i]['item_id']);
-                    tr.closest("tr").find(".line-product-code").val(selecteditem[i]['item_code']);
-                    tr.closest("tr").find(".line-product-name").val(selecteditem[i]['item_name']);
-                    tr.closest("tr").find(".line-qty").val(0);
-                    // tr.closest("tr").find(".line-product-warehouse-id").val(selecteditem[i]['warehouse_id']);
-                    // tr.closest("tr").find(".line-product-warehouse-name").val(selecteditem[i]['warehouse_name']);
-                    tr.closest("tr").find(".line-price").val(selecteditem[i]['price']);
-                    tr.closest("tr").find(".line-product-unit-id").val(selecteditem[i]['unit_id']);
-                    tr.closest("tr").find(".line-product-unit-name").val(selecteditem[i]['unit_name']);
-                    tr.closest("tr").find(".line-photo").val("");
+                    tr.closest("tr").find(".line-emp-id").val(selecteditem[i]['emp_id']);
+                    tr.closest("tr").find(".line-emp-name").val(selecteditem[i]['emp_name']);
                     
-                    if(selecteditem[i]['is_drummy'] == 1){
-                        tr.closest("tr").find(".line-product-name").prop("readonly", "");
-                    }else{
-                        tr.closest("tr").find(".line-product-name").prop("readonly", "readonly");
-                    }
                     //console.log(line_prod_code);
                     } else {
-                       
                         var clone = tr.clone();
                         clone.closest("tr").find(".line-rec-id").val('0');
-                        clone.closest("tr").find(".line-product-id").val(selecteditem[i]['item_id']);
-                        clone.closest("tr").find(".line-product-code").val(selecteditem[i]['item_code']);
-                        clone.closest("tr").find(".line-product-name").val(selecteditem[i]['item_name']);
-                        clone.closest("tr").find(".line-qty").val(0);
-                        // clone.closest("tr").find(".line-product-warehouse-id").val(selecteditem[i]['warehouse_id']);
-                        // clone.closest("tr").find(".line-product-warehouse-name").val(selecteditem[i]['warehouse_name']);
-                        clone.closest("tr").find(".line-price").val(selecteditem[i]['price']);
-                        clone.closest("tr").find(".line-product-unit-id").val(selecteditem[i]['unit_id']);
-                        clone.closest("tr").find(".line-product-unit-name").val(selecteditem[i]['unit_name']);
-                        clone.closest("tr").find(".line-photo").val("");
-                        clone.closest("tr").find(".line-photo").attr("id",(parseInt(last_line_photo_id) +1));
-                        
-                        if(selecteditem[i]['is_drummy'] == 1){
-                            clone.closest("tr").find(".line-product-name").prop("readonly", "");
-                        }else{
-                            clone.closest("tr").find(".line-product-name").prop("readonly", "readonly");
-                        }
+                        clone.closest("tr").find(".line-emp-id").val(selecteditem[i]['emp_id']);
+                        clone.closest("tr").find(".line-emp-name").val(selecteditem[i]['emp_name']);
                         tr.after(clone);
                     } 
              }

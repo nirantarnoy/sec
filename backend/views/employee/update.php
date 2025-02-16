@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'แก้ไข');
 <div class="employee-update">
     <?= $this->render('_form', [
         'model' => $model,
-        'model_line' => $model_line,
     ]) ?>
 
 </div>

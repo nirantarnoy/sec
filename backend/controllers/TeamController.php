@@ -25,7 +25,7 @@ class TeamController extends Controller
                 'verbs' => [
                     'class' => VerbFilter::className(),
                     'actions' => [
-                        'delete' => ['POST'],
+                        'delete' => ['POST','GET'],
                     ],
                 ],
             ]
@@ -75,8 +75,25 @@ class TeamController extends Controller
         $model = new Team();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($model->load($this->request->post())) {
+                $line_emp_id = \Yii::$app->request->post('line_emp_id');
+                $line_emp_name = \Yii::$app->request->post('line_emp_name');
+                $line_is_head = \Yii::$app->request->post('line_is_head');
+
+                if($model->save(false)){
+                    if(!empty($line_emp_id)){
+                        for($i = 0; $i <= count($line_emp_id)-1; $i++){
+                            $model_line = new \common\models\TeamLine();
+                            $model_line->team_id = $model->id;
+                            $model_line->emp_id = $line_emp_id[$i];
+                            $model_line->is_head = $line_is_head[$i];
+                            $model_line->status = 0;
+                            $model_line->save();
+                        }
+                    }
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }
+
             }
         } else {
             $model->loadDefaultValues();
@@ -97,13 +114,38 @@ class TeamController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $model_line = \common\models\TeamLine::find()->where(['team_id' => $id])->all();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $line_emp_id = \Yii::$app->request->post('line_emp_id');
+            $line_emp_name = \Yii::$app->request->post('line_emp_name');
+            $line_is_head = \Yii::$app->request->post('line_is_head');
+            $removelist = \Yii::$app->request->post('removelist');
+            if($model->save(false)){
+                if(!empty($line_emp_id)){
+                    \common\models\TeamLine::deleteAll(['team_id' => $id]);
+                    for($i = 0; $i <= count($line_emp_id)-1; $i++){
+                        $model_line = new \common\models\TeamLine();
+                        $model_line->team_id = $model->id;
+                        $model_line->emp_id = $line_emp_id[$i];
+                        $model_line->is_head = $line_is_head[$i];
+                        $model_line->status = 0;
+                        $model_line->save();
+                    }
+                }
+                if($removelist != null || $removelist != ''){
+                    $ex = explode(';', $removelist);
+                    if($ex != null){
+                       \common\models\TeamLine::deleteAll(['team_id' => $ex]);
+                    }
+                }
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('update', [
             'model' => $model,
+            'model_line' => $model_line,
         ]);
     }
 
@@ -135,5 +177,36 @@ class TeamController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionFinditem()
+    {
+        $html = '';
+        $has_data = 0;
+        //$model = \backend\models\Workqueue::find()->where(['is_invoice' => 0])->all();
+        // $model = \backend\models\Stocksum::find()->where(['warehouse_id' => 7])->all();
+        $model = \backend\models\Employee::find()->where(['status'=>1])->all();
+        if ($model) {
+            $has_data = 1;
+            foreach ($model as $value) {
+                $name = $value->f_name.' '.$value->l_name;
+                $html .= '<tr>';
+                $html .= '<td style="text-align: center">
+                            <div class="btn btn-outline-success btn-sm" onclick="addselecteditem($(this))" data-var="' . $value->id . '">เลือก</div>
+                            <input type="hidden" class="line-find-emp-id" value="' . $value->id . '">
+                            <input type="hidden" class="line-find-emp-name" value="' . $name . '">
+                           </td>';
+                $html .= '<td style="text-align: left">' . $value->code  . '</td>';
+                $html .= '<td style="text-align: left">' . $name . '</td>';
+                $html .= '</tr>';
+            }
+        }
+
+        if ($has_data == 0) {
+            $html .= '<tr>';
+            $html .= '<td colspan="5" style="text-align: center;color: red;">ไม่พบข้อมูล</td>';
+            $html .= '</tr>';
+        }
+        echo $html;
     }
 }

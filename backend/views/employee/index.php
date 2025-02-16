@@ -55,8 +55,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //  'id',
             'code',
-            'fname',
-            'lname',
+            'f_name',
+            'l_name',
             [
                 'attribute' => 'gender',
                 'value' => function ($data) {
