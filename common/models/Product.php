@@ -39,7 +39,7 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_group_id', 'unit_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','is_drummy'], 'integer'],
+            [['product_cat_id', 'unit_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','is_drummy'], 'integer'],
             [['cost_price','sale_price','total_qty'], 'number'],
             [['exp_date'], 'safe'],
             [['code', 'name', 'sku', 'barcode', 'description','photo','photo_2','customer_remark'], 'string', 'max' => 255],
@@ -57,7 +57,7 @@ class Product extends \yii\db\ActiveRecord
             'name' => 'ชื่อสินค้า',
             'sku' => 'Sku',
             'barcode' => 'Barcode',
-            'product_group_id' => 'ประเภทสินค้า',
+            'product_cat_id' => 'ประเภทสินค้า',
             'unit_id' => 'หน่วยนับ',
             'cost_price' => 'ราคาทุน',
             'description' => 'รายละเอียดสินค้า',

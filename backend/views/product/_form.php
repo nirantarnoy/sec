@@ -23,23 +23,10 @@ $yesno = [['id'=>1,'YES'],['id'=>0,'NO']];
             <?= $form->field($model, 'sku')->textInput(['maxlength' => true]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'barcode')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-lg-6">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6">
-            <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
-        </div>
-        <div class="col-lg-6">
-            <?= $form->field($model, 'customer_remark')->textarea(['maxlength' => true]) ?>
-        </div>
-    </div>
-    <div class="row">
         <div class="col-lg-3">
-            <?= $form->field($model, 'product_group_id')->widget(\kartik\select2\Select2::className(), [
+            <?= $form->field($model, 'product_cat_id')->widget(\kartik\select2\Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\backend\models\Productgroup::find()->all(), 'id', 'name'),
                 'options' => [
 
@@ -50,15 +37,20 @@ $yesno = [['id'=>1,'YES'],['id'=>0,'NO']];
             ]) ?>
         </div>
         <div class="col-lg-3">
-        <?= $form->field($model, 'unit_id')->widget(\kartik\select2\Select2::className(),[
+            <?= $form->field($model, 'unit_id')->widget(\kartik\select2\Select2::className(),[
                 'data'=>ArrayHelper::map(\backend\models\Unit::find()->all(), 'id', 'name'),
                 'options' => [
-                        'placeholder'=>'-- เลือกหน่วยนับ --',
+                    'placeholder'=>'-- เลือกหน่วยนับ --',
                 ]
-        ]) ?>
+            ]) ?>
         </div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'sale_price')->textInput() ?>
+    </div>
+    <div class="row">
+        <div class="col-lg-6">
+            <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
+        </div>
+        <div class="col-lg-6">
+
         </div>
     </div>
     <div class="row">

@@ -373,14 +373,14 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <?php if (\Yii::$app->user->can('usergroup/index')): ?>
+                            <?php //if (\Yii::$app->user->can('usergroup/index')): ?>
                                 <li class="nav-item">
                                     <a href="index.php?r=usergroup" class="nav-link usergroup">
                                         <i class="far fa-circlez nav-icon"></i>
                                         <p>กลุ่มผู้ใช้งาน</p>
                                     </a>
                                 </li>
-                            <?php endif; ?>
+                            <?php //endif; ?>
                             <?php //if (\Yii::$app->user->can('user/index')): ?>
                                 <li class="nav-item">
                                     <a href="index.php?r=user" class="nav-link user">
