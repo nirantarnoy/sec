@@ -14,7 +14,11 @@ $this->title = 'วิธีชำระเงิน';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="paymentmethod-index">
-
+    <?php if(\Yii::$app->session->getFlash('success') !== null): ?>
+        <div class="alert alert-success">
+            <?=\Yii::$app->session->getFlash('success')?>
+        </div>
+    <?php endif;?>
     <div class="row">
         <div class="col-lg-10">
             <p>

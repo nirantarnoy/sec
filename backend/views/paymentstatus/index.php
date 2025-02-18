@@ -15,7 +15,11 @@ $this->title = 'สถานะชำระเงิน';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="paymentstatus-index">
-
+    <?php if(\Yii::$app->session->getFlash('success') !== null): ?>
+        <div class="alert alert-success">
+            <?=\Yii::$app->session->getFlash('success')?>
+        </div>
+    <?php endif;?>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">

@@ -17,6 +17,7 @@ use yii\filters\VerbFilter;
  */
 class UsergroupController extends Controller
 {
+    public $enableCsrfValidation =false;
     /**
      * {@inheritdoc}
      */
@@ -93,7 +94,7 @@ class UsergroupController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $session = \Yii::$app->session;
-            $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
+            $session->setFlash('success', 'บันทึกรายการเรียบร้อย');
             return $this->redirect(['usergroup/index']);
         }
 

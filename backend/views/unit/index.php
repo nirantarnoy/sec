@@ -16,7 +16,11 @@ $this->title = 'หน่วยนับ';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="unit-index">
-
+    <?php if(\Yii::$app->session->getFlash('success') !== null): ?>
+        <div class="alert alert-success">
+            <?=\Yii::$app->session->getFlash('success')?>
+        </div>
+    <?php endif;?>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">

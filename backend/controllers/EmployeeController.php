@@ -121,8 +121,7 @@ class EmployeeController extends Controller
                 $model->photo = $photo_name;
             }
             if($model->save(false)){
-                $session = Yii::$app->session;
-                $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
+                \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
                 return $this->redirect(['index']);
             }
         }
@@ -159,8 +158,7 @@ class EmployeeController extends Controller
                     \common\models\DriverLicense::deleteAll(['id' => $delete_rec]);
                 }
 
-                $session = Yii::$app->session;
-                $session->setFlash('msg', 'บันทึกข้อมูลเรียบร้อย');
+                \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
                 return $this->redirect(['index']);
             }
         }

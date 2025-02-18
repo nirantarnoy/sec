@@ -103,7 +103,9 @@ class CompanyController extends Controller
             if ($model->load($this->request->post())) {
 
                 if ($model->save(false)) {
-                    return $this->redirect(['view', 'id' => $model->id]);
+                    //return $this->redirect(['view', 'id' => $model->id]);
+                    \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+                    return $this->redirect(['index']);
                 }
 
             }
@@ -131,7 +133,9 @@ class CompanyController extends Controller
         if ($this->request->isPost && $model->load($this->request->post())) {
             if ($model->save(false)) {
 
-                return $this->redirect(['view', 'id' => $model->id]);
+                //return $this->redirect(['view', 'id' => $model->id]);
+                \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+                return $this->redirect(['index']);
             }
         }
 

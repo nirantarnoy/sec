@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
  */
 class TeamController extends Controller
 {
+    public $enableCsrfValidation =false;
     /**
      * @inheritDoc
      */
@@ -91,7 +92,9 @@ class TeamController extends Controller
                             $model_line->save();
                         }
                     }
-                    return $this->redirect(['view', 'id' => $model->id]);
+                   // return $this->redirect(['view', 'id' => $model->id]);
+                    \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+                    return $this->redirect(['index']);
                 }
 
             }
@@ -140,7 +143,9 @@ class TeamController extends Controller
                     }
                 }
             }
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

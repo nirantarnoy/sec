@@ -16,6 +16,7 @@ use yii\filters\AccessControl;
  */
 class CustomerinvoiceController extends Controller
 {
+    public $enableCsrfValidation =false;
     /**
      * @inheritDoc
      */

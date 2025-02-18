@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
  */
 class BrandController extends Controller
 {
+    public $enableCsrfValidation =false;
     /**
      * @inheritDoc
      */
@@ -76,7 +77,9 @@ class BrandController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+              //  return $this->redirect(['view', 'id' => $model->id]);
+                \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+                return $this->redirect(['index']);
             }
         } else {
             $model->loadDefaultValues();
@@ -99,7 +102,9 @@ class BrandController extends Controller
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+           // return $this->redirect(['view', 'id' => $model->id]);
+            \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

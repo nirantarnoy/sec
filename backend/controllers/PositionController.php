@@ -18,6 +18,7 @@ use yii\filters\VerbFilter;
  */
 class PositionController extends Controller
 {
+    public $enableCsrfValidation =false;
     /**
      * {@inheritdoc}
      */
@@ -110,7 +111,9 @@ class PositionController extends Controller
             $model->company_id = 1;
 
             if($model->save()){
-                return $this->redirect(['view', 'id' => $model->id]);
+                //return $this->redirect(['view', 'id' => $model->id]);
+                \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+                return $this->redirect(['index']);
             }
 
         }
@@ -132,7 +135,9 @@ class PositionController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [

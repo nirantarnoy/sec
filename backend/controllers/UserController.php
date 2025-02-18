@@ -141,8 +141,8 @@ class UserController extends Controller
             //$model->status = $model->status == 1?10:9;
             if ($model->save()) {
                 $model->assignment();
-                $session = \Yii::$app->session;
-                $session->setFlash('msg', 'บันทึกรายการเรียบร้อย');
+              //  $session = \Yii::$app->session;
+                \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
                 return $this->redirect(['index']);
             }
         }

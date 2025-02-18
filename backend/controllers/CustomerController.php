@@ -257,7 +257,9 @@ class CustomerController extends Controller
 //                        }
 //                    }
                 }
-                return $this->redirect(['view', 'id' => $model->id]);
+                //return $this->redirect(['view', 'id' => $model->id]);
+                \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+                return $this->redirect(['index']);
             }
         } else {
             $model->loadDefaultValues();
@@ -412,7 +414,9 @@ class CustomerController extends Controller
 
 
             }
-            return $this->redirect(['view', 'id' => $model->id]);
+           // return $this->redirect(['view', 'id' => $model->id]);
+            \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+            return $this->redirect(['index']);
         }
 
         return $this->render('update', [
