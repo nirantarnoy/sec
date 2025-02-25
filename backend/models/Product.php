@@ -100,7 +100,7 @@ class Product extends \common\models\Product
 
     public static function getTotalQty($id){
         $model = \backend\models\Stocksum::find()->where(['product_id'=>$id])->sum('qty');
-        return $model;
+        return $model?$model:0;
     }
 
 //    public static function findName($id){

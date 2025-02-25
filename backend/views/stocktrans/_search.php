@@ -34,7 +34,7 @@ use yii\widgets\ActiveForm;
         <span style="margin-left: 5px;"></span>
         <?= $form->field($model, 'product_id')->widget(\kartik\select2\Select2::className(), [
             'data' => \yii\helpers\ArrayHelper::map(\backend\models\Product::find()->where(['status'=>1])->all(), 'id', function ($data) {
-                return $data->code . ' ' . $data->name;
+                return $data->sku . ' ' . $data->name;
             }),
             'options' => [
                 'placeholder' => '--เลือกสินค้า--',

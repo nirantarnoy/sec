@@ -145,7 +145,7 @@ $yesno = [['id' => 0, 'name' => 'No'], ['id' => 1, 'name' => 'Yes'],];
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3>รายการสินค้า</h3>
+                    <h3>รายชื่อพนักงาน</h3>
                 </div>
                 <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
                 <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
@@ -248,7 +248,7 @@ function removeline(e) {
                 }
                 // cal_linenum();
                 // cal_all();
-                calall();
+                cal_all();
             }
         
         

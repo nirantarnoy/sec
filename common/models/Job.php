@@ -1,0 +1,67 @@
+<?php
+
+namespace common\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "job".
+ *
+ * @property int $id
+ * @property string|null $job_no
+ * @property string|null $quotation_ref_no
+ * @property string|null $trans_date
+ * @property int|null $customer_id
+ * @property int|null $status
+ * @property int|null $created_at
+ * @property int|null $created_by
+ * @property int|null $updated_at
+ * @property int|null $updated_by
+ * @property int|null $team_id
+ * @property int|null $head_id
+ * @property int|null $payment_status
+ */
+class Job extends \yii\db\ActiveRecord
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'job';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['trans_date'], 'safe'],
+            [['customer_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'team_id', 'head_id', 'payment_status'], 'integer'],
+            [['job_no', 'quotation_ref_no'], 'string', 'max' => 255],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'job_no' => 'เลขที่งาน',
+            'quotation_ref_no' => 'Quotation Ref No',
+            'trans_date' => 'วันที่งาน',
+            'customer_id' => 'ลูกค้า',
+            'status' => 'สถานะ',
+            'created_at' => 'วันที่ทำรายการ',
+            'created_by' => 'ทำรายการโดย',
+            'updated_at' => 'วันที่แก้ไขรายการ',
+            'updated_by' => 'แก้ไขรายการโดย',
+            'team_id' => 'ทีม',
+            'head_id' => 'หัวหน้าทีม',
+            'payment_status' => 'สถานะชำระเงิน',
+        ];
+    }
+}

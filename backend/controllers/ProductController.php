@@ -118,8 +118,8 @@ class ProductController extends Controller
                 $line_exp_date = \Yii::$app->request->post('line_exp_date');
 
 
-                 $model->code = $model->sku;
-                 $model->is_special = 0;
+                // $model->code = $model->sku;
+                // $model->is_special = 0;
                 if ($model->save(false)) {
                     $uploaded = UploadedFile::getInstanceByName('product_photo');
                     $uploaded2 = UploadedFile::getInstanceByName('product_photo_2');
@@ -437,8 +437,9 @@ class ProductController extends Controller
                 $name = $value->name;
                 $price = 0;
                 $unit_id = $value->unit_id;
-                $unit_name = \backend\models\Unit::findName($unit_id);
-                $is_drummy  = $value->is_special;
+                $unit_name = ''; // \backend\models\Unit::findName($unit_id);
+                $product_cat_name = \backend\models\Productgroup::findName($value->product_cat_id);
+                $is_drummy  = 0; //$value->is_special;
                 $html .= '<tr>';
                 $html .= '<td style="text-align: center">
                             <div class="btn btn-outline-success btn-sm" onclick="addselecteditem($(this))" data-var="' . $value->id . '">เลือก</div>
@@ -452,7 +453,7 @@ class ProductController extends Controller
                            </td>';
                 $html .= '<td style="text-align: left">' . $code . '</td>';
                 $html .= '<td style="text-align: left">' . $name . '</td>';
-                $html .= '<td style="text-align: left">' . $unit_name . '</td>';
+                $html .= '<td style="text-align: left">' . $product_cat_name . '</td>';
                 $html .= '<td style="text-align: left">' . $onhand_qty . '</td>';
                 $html .= '</tr>';
             }

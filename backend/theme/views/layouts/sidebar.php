@@ -279,11 +279,27 @@
                             </a>
                         </li>
                         <?php //endif; ?>
+                        <?php //if (\Yii::$app->user->can('productcat/index')): ?>
+                        <li class="nav-item">
+                            <a href="index.php?r=deductitem/index" class="nav-link deductitem">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>หัวข้อค่าใช้จ่าย</p>
+                            </a>
+                        </li>
+                        <?php //endif; ?>
                         <?php //if (\Yii::$app->user->can('product/index')): ?>
                         <li class="nav-item">
                             <a href="index.php?r=team" class="nav-link team">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>ทีม</p>
+                            </a>
+                        </li>
+                        <?php //endif; ?>
+                        <?php //if (\Yii::$app->user->can('product/index')): ?>
+                        <li class="nav-item">
+                            <a href="index.php?r=job" class="nav-link job">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>ใบงาน</p>
                             </a>
                         </li>
                         <?php //endif; ?>
