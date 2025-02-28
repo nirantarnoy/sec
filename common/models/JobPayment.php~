@@ -5,11 +5,11 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "job_deduct".
+ * This is the model class for table "job_payment".
  *
  * @property int $id
  * @property int|null $job_id
- * @property int|null $deduct_title_id
+ * @property int|null $bank_id
  * @property string|null $trans_date
  * @property float|null $amount
  * @property string|null $note
@@ -19,14 +19,14 @@ use Yii;
  * @property int|null $updated_at
  * @property int|null $updated_by
  */
-class JobDeduct extends \yii\db\ActiveRecord
+class JobPayment extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'job_deduct';
+        return 'job_payment';
     }
 
     /**
@@ -35,7 +35,7 @@ class JobDeduct extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['job_id', 'deduct_title_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','is_vat'], 'integer'],
+            [['job_id', 'bank_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['trans_date'], 'safe'],
             [['amount'], 'number'],
             [['note'], 'string', 'max' => 255],
@@ -50,7 +50,7 @@ class JobDeduct extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'job_id' => 'Job ID',
-            'deduct_title_id' => 'Deduct Title ID',
+            'bank_id' => 'Bank ID',
             'trans_date' => 'Trans Date',
             'amount' => 'Amount',
             'note' => 'Note',

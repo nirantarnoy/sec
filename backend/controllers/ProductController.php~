@@ -206,6 +206,8 @@ class ProductController extends Controller
             $line_rec_id = \Yii::$app->request->post('line_rec_id');
             $removelist = \Yii::$app->request->post('remove_list');
 
+
+
             /// customer price
 
             $line_customer_rec_id = \Yii::$app->request->post('line_customer_rec_id');

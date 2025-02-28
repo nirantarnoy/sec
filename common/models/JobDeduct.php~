@@ -35,7 +35,7 @@ class JobDeduct extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['job_id', 'deduct_title_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','is_vat'], 'integer'],
+            [['job_id', 'deduct_title_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['trans_date'], 'safe'],
             [['amount'], 'number'],
             [['note'], 'string', 'max' => 255],

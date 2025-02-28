@@ -4,7 +4,7 @@ use Yii;
 use yii\db\ActiveRecord;
 date_default_timezone_set('Asia/Bangkok');
 
-class Job extends \common\models\Job
+class Jobdeduct extends \common\models\JobDeduct
 {
     public function behaviors()
     {
@@ -51,42 +51,13 @@ class Job extends \common\models\Job
 //        $model = Unit::find()->where(['id'=>$id])->one();
 //        return count($model)>0?$model->name:'';
 //    }
-    public static function findJobno($id){
-        $model = Job::find()->where(['id'=>$id])->one();
-        return $model!= null?$model->job_no:'';
-    }
+//    public static function findJobno($id){
+//        $model = Jobdeduct::find()->where(['id'=>$id])->one();
+//        return $model!= null?$model->:'';
+//    }
 //    public function findUnitid($code){
 //        $model = Unit::find()->where(['name'=>$code])->one();
 //        return count($model)>0?$model->id:0;
 //    }
-
-    public static function getLastNo()
-    {
-        //   $model = Orders::find()->MAX('order_no');
-        $model = Job::find()->MAX('job_no');
-
-        $pre = "WO";
-
-        if ($model != null) {
-//            $prefix = $pre.substr(date("Y"),2,2);
-//            $cnum = substr((string)$model,4,strlen($model));
-//            $len = strlen($cnum);
-//            $clen = strlen($cnum + 1);
-//            $loop = $len - $clen;
-            $prefix = $pre . '-' . substr(date("Y"), 2, 2);
-            $cnum = substr((string)$model, 5, strlen($model));
-            $len = strlen($cnum);
-            $clen = strlen($cnum + 1);
-            $loop = $len - $clen;
-            for ($i = 1; $i <= $loop; $i++) {
-                $prefix .= "0";
-            }
-            $prefix .= $cnum + 1;
-            return $prefix;
-        } else {
-            $prefix = $pre . '-' . substr(date("Y"), 2, 2). substr(date("m"),0,2);
-            return $prefix . '00001';
-        }
-    }
 
 }

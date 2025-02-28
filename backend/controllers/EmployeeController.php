@@ -142,21 +142,19 @@ class EmployeeController extends Controller
     {
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
-            $photo = UploadedFile::getInstance($model, 'photo');
-            if (!empty($photo)) {
-                $photo_name = time() . "." . $photo->getExtension();
-                $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/employee/' . $photo_name);
-                $model->photo = $photo_name;
-            }
+  //          $photo = UploadedFile::getInstance($model, 'photo');
+//            if (!empty($photo)) {
+//                $photo_name = time() . "." . $photo->getExtension();
+//                $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/employee/' . $photo_name);
+//                $model->photo = $photo_name;
+//            }
             $removelist = \Yii::$app->request->post('remove_list');
             if($model->save()){
 
-
-
-                $delete_rec = explode(",", $removelist);
-                if (count($delete_rec)) {
-                    \common\models\DriverLicense::deleteAll(['id' => $delete_rec]);
-                }
+//                $delete_rec = explode(",", $removelist);
+//                if (count($delete_rec)) {
+//                    \common\models\DriverLicense::deleteAll(['id' => $delete_rec]);
+//                }
 
                 \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
                 return $this->redirect(['index']);
