@@ -7,7 +7,6 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
-
 /** @var yii\web\View $this */
 /** @var backend\models\JobSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -16,11 +15,11 @@ $this->title = 'ใบงาน';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="job-index">
-    <?php if (\Yii::$app->session->getFlash('success') !== null): ?>
+    <?php if(\Yii::$app->session->getFlash('success') !== null): ?>
         <div class="alert alert-success">
-            <?= \Yii::$app->session->getFlash('success') ?>
+            <?=\Yii::$app->session->getFlash('success')?>
         </div>
-    <?php endif; ?>
+    <?php endif;?>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
@@ -66,10 +65,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'job_no',
             'quotation_ref_no',
             [
-                'attribute' => 'trans_date',
-                'value' => function ($data) {
-                    return $data->trans_date != null ? date('d-m-Y', strtotime($data->trans_date)) : '';
-                }
+                    'attribute' => 'trans_date',
+                    'value' => function ($data) {
+                        return $data->trans_date != null ?date('d-m-Y', strtotime($data->trans_date)):'';
+                    }
             ],
             [
                 'attribute' => 'customer_id',
@@ -78,23 +77,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
-                'attribute' => 'team_id',
-                'value' => function ($data) {
-                    return \backend\models\Team::findName($data->team_id);
-                }
+                    'attribute' => 'team_id',
+                    'value' => function ($data) {
+                        return \backend\models\Team::findName($data->team_id);
+                    }
             ],
             [
                 'attribute' => 'head_id',
                 'value' => function ($data) {
                     return \backend\models\Employee::findFullName($data->head_id);
                 }
-            ],
+],
             [
-                'attribute' => 'payment_status',
+                'attribute' => 'status',
                 'value' => function ($data) {
-                    return \backend\models\Paymentstatus::findName($data->payment_status);
+                    return \backend\models\Job::findStatus($data->status);
                 }
-            ],
+],
             //'status',
             //'created_at',
             //'created_by',
