@@ -37,6 +37,8 @@ class Job extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+          //  [['name'],'required'],
+            [['job_no'],'unique'],
             [['trans_date'], 'safe'],
             [['customer_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by', 'team_id', 'head_id', 'payment_status'], 'integer'],
             [['job_no', 'quotation_ref_no'], 'string', 'max' => 255],

@@ -60,7 +60,7 @@ class Employee extends \yii\db\ActiveRecord
             'salary_type' => 'Salary Type',
             'emp_start' => 'Emp Start',
             'description' => 'รายละเอียด',
-            'photo' => 'รูปภาพ',
+           // 'photo' => 'รูปภาพ',
             'status' => 'สถานะ',
             'cal_commission'=>'คำนวนค่าคอม',
             'created_at' => 'Created At',

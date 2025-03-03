@@ -40,6 +40,8 @@ class Employee extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['f_name'],'required'],
+            [['code'],'unique'],
             [['gender', 'position', 'salary_type', 'status', 'created_at', 'updated_at', 'created_by', 'updated_by','cal_commission'], 'integer'],
             [['code', 'f_name', 'l_name', 'description'], 'string', 'max' => 255],
         ];

@@ -39,8 +39,6 @@ class Product extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name','sku'],'required'],
-            [['name','sku'],'unique'],
             [['product_cat_id', 'unit_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','is_drummy'], 'integer'],
             [['cost_price','sale_price','total_qty'], 'number'],
             [['exp_date'], 'safe'],
