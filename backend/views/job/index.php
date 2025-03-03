@@ -90,6 +90,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             [
+                'attribute' => 'status',
+                'value' => function ($data) {
+                    return \backend\helpers\JobStatus::getTypeById($data->status);
+                }
+            ],
+            [
                 'attribute' => 'payment_status',
                 'value' => function ($data) {
                     return \backend\models\Paymentstatus::findName($data->payment_status);

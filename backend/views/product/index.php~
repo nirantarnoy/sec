@@ -1,20 +1,21 @@
 <?php
 
-use backend\models\Job;
+use backend\models\Product;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-use yii\widgets\LinkPager;
+//use yii\widgets\LinkPager;
+use yii\bootstrap4\LinkPager;
 /** @var yii\web\View $this */
-/** @var backend\models\JobSearch $searchModel */
+/** @var backend\models\ProductSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'ใบงาน';
+$this->title = 'สินค้า';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="job-index">
+<div class="employee-index">
     <?php if(\Yii::$app->session->getFlash('success') !== null): ?>
         <div class="alert alert-success">
             <?=\Yii::$app->session->getFlash('success')?>
@@ -28,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['warehouse/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['employee/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
@@ -42,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </form>
         </div>
     </div>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel,'viewstatus'=>$viewstatus]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -60,45 +61,49 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             [
                 'class' => 'yii\grid\SerialColumn',
-                'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'text-align: center']],
-            'job_no',
-            'quotation_ref_no',
-            [
-                    'attribute' => 'trans_date',
-                    'value' => function ($data) {
-                        return $data->trans_date != null ?date('d-m-Y', strtotime($data->trans_date)):'';
-                    }
+                'headerOptions' => ['style' => 'text-align:center;'],
+                'contentOptions' => ['style' => 'text-align: center'],
             ],
+
+            'sku',
+            'name',
+            'barcode',
+           // 'product_type_id',
             [
-                'attribute' => 'customer_id',
+                'attribute' => 'product_group_id',
                 'value' => function ($data) {
-                    return \backend\models\Customer::findCusFullName($data->customer_id);
+                    return \backend\models\Productgroup::findName($data->product_cat_id);
                 }
             ],
-            [
-                    'attribute' => 'team_id',
-                    'value' => function ($data) {
-                        return \backend\models\Team::findName($data->team_id);
-                    }
-            ],
-            [
-                'attribute' => 'head_id',
-                'value' => function ($data) {
-                    return \backend\models\Employee::findFullName($data->head_id);
-                }
-],
+            //'product_cat_id',
+            //'status',
+            //'last_price',
+            //'std_price',
+            //'company_id',
             [
                 'attribute' => 'status',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                    return \backend\models\Job::findStatus($data->status);
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">ใช้งาน</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
+                    }
                 }
-],
-            //'status',
-            //'created_at',
-            //'created_by',
-            //'updated_at',
-            //'updated_by',
+            ],
+            [
+                'attribute' => 'total_qty',
+                'label' => 'คงเหลือ',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function ($data) {
+                    $qty = \backend\models\Product::getTotalQty($data->id);
+                   return number_format($qty,0);
+                }
+            ],
+
             [
 
                 'header' => 'ตัวเลือก',

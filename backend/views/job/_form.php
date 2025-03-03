@@ -43,12 +43,18 @@ use yii\widgets\ActiveForm;
         <div class="col-lg-3">
             <?= $form->field($model, 'team_id')->widget(\kartik\select2\Select2::className(), [
                 'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status'=>1])->all(), 'id', 'name'),
-                'options' => ['placeholder' => 'Select a team ...'],
+                'options' => ['placeholder' => 'Select a team ...','onchange'=>'getemployee($(this));'],
                 'pluginOptions' => ['allowClear' => true],
             ]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'head_id')->textInput() ?>
+            <?= $form->field($model, 'head_id')->widget(\kartik\select2\Select2::className(),[
+                    'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Employee::find()->where(['status'=>1])->all(),'id',function($data){
+                        return $data->f_name.' '.$data->l_name;
+                    }),
+                'options' => ['placeholder' => 'Select a head ...','id'=>'selected-head-id'],
+                'pluginOptions' => ['allowClear' => true],
+            ]) ?>
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'payment_status')->widget(\kartik\select2\Select2::className(),[
@@ -56,7 +62,7 @@ use yii\widgets\ActiveForm;
             ]) ?>
         </div>
         <div class="col-lg-3">
-            <?= $form->field($model, 'status')->textInput() ?>
+            <?= $form->field($model, 'status')->textInput(['readonly'=>'readonly','value'=>$model->isNewRecord?'Open':\backend\helpers\JobStatus::getTypeById($model->status)]) ?>
         </div>
     </div>
     <div class="row">
@@ -669,6 +675,21 @@ function submitForm(){
         //});
         $("form#form-job").submit();
     }
+}
+
+function getemployee(e){
+    var id = $(e).val();
+    var url = "<?=Url::to(['job/getemployee'], true)?>";
+    $.ajax({
+        url: url,
+        type: 'html',
+        data: {id: id},
+        success: function (data) {
+           if(data != null || data != ""){
+               $("#selected-head-id").html(data);
+           }
+        }
+    });
 }
 
 JS;

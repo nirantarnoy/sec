@@ -106,8 +106,8 @@ class JobController extends Controller
                 }
 
                 $model->trans_date = date('Y-m-d', strtotime($trans_date));
-
-                if ($model->save(false)) {
+                $model->status = 1; // open
+                if ($model->save()) {
                     if ($line_product_id != null) {
                         if (count($line_product_id) > 0) {
                             for ($i = 0; $i <= count($line_product_id) - 1; $i++) {
@@ -542,5 +542,19 @@ class JobController extends Controller
             'model_line' => $model_line,
         ]);
 
+    }
+    public function actionGetemployee(){
+        $html = '';
+        $team_id = \Yii::$app->request->post('team_id');
+        if($team_id != null){
+            $model = \common\models\Employee::find()->where(['status' => 1,'team_id' => $team_id])->all();
+            if($model){
+                $html.= '<option value="">เลือกพนักงาน</option>';
+                foreach ($model as $key => $value) {
+                    $html.= '<option value="'.$value->id.'">'.$value->f_name.' '.$value->l_name.'</option>';
+                }
+            }
+        }
+        echo $html;
     }
 }

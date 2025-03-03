@@ -106,7 +106,7 @@ class JobController extends Controller
                 }
 
                 $model->trans_date = date('Y-m-d', strtotime($trans_date));
-
+                $model->status = 1; // open
                 if ($model->save(false)) {
                     if ($line_product_id != null) {
                         if (count($line_product_id) > 0) {
@@ -505,6 +505,16 @@ class JobController extends Controller
             if ($payment_method_id != null) {
                 \common\models\JobPayment::deleteAll(['job_id' => $job_id]);
                 for ($i = 0; $i <= count($payment_method_id) - 1; $i++) {
+
+                       $filename = '';
+                       $uploadedFile = \yii\web\UploadedFile::getInstanceByName('line_slip_doc[' . $i . ']');
+                        if ($uploadedFile != null) {
+                            $filename = $uploadedFile->name;
+                            $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                            $filename = \Yii::$app->security->generateRandomString() . '.' . $ext;
+                            $uploadedFile->saveAs(\Yii::$app->basePath . '/web/uploads/slip_doc/' . $filename);
+                        }
+
                         $model = new JobPayment();
                         $model->job_id = $job_id;
                         $model->trans_date = date('Y-m-d H:i:s');
@@ -512,6 +522,7 @@ class JobController extends Controller
                         $model->amount = $amount[$i];
                         $model->note = $note[$i];
                         $model->payment_method_id = $payment_method_id[$i];
+                        $model->slip_doc = $filename;
                         $model->save(false);
                 }
             }
@@ -531,5 +542,19 @@ class JobController extends Controller
             'model_line' => $model_line,
         ]);
 
+    }
+    public function actionGetemployee(){
+        $html = '';
+        $team_id = \Yii::$app->request->post('team_id');
+        if($team_id != null){
+            $model = \common\models\Employee::find()->where(['status' => 1,'team_id' => $team_id])->all();
+            if($model){
+                $html.= '<option value="">เลือกพนักงาน</option>';
+                foreach ($model as $key => $value) {
+                    $html.= '<option value="'.$value->id.'">'.$value->f_name.' '.$value->l_name.'</option>';
+                }
+            }
+        }
+        echo $html;
     }
 }
