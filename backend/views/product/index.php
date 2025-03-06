@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'barcode',
            // 'product_type_id',
             [
-                'attribute' => 'product_group_id',
+                'attribute' => 'product_cat_id',
                 'value' => function ($data) {
                     return \backend\models\Productgroup::findName($data->product_cat_id);
                 }

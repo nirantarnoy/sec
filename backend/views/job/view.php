@@ -60,7 +60,7 @@ $system_vat_per = \backend\models\Mainconfig::findOne(1)->job_vat_per;
                     [
                         'attribute' => 'customer_id',
                         'value' => function ($data) {
-                            return \backend\models\Customer::findCusName($data->customer_id);
+                            return \backend\models\Customer::findCusFullName($data->customer_id);
                         }
                     ],
                 ],
@@ -82,7 +82,12 @@ $system_vat_per = \backend\models\Mainconfig::findOne(1)->job_vat_per;
                             return \backend\models\Employee::findFullName($data->head_id);
                         }
                     ],
-                    'status',
+                   [
+                           'attribute' => 'status',
+                       'value'=>function($data){
+                          return \backend\helpers\JobStatus::getTypeById($data->status);
+                       }
+                   ],
 
                 ],
             ]) ?>

@@ -545,15 +545,23 @@ class JobController extends Controller
     }
     public function actionGetemployee(){
         $html = '';
-        $team_id = \Yii::$app->request->post('team_id');
+        $team_id = \Yii::$app->request->post('id');
         if($team_id != null){
-            $model = \common\models\Employee::find()->where(['status' => 1,'team_id' => $team_id])->all();
-            if($model){
-                $html.= '<option value="">เลือกพนักงาน</option>';
-                foreach ($model as $key => $value) {
-                    $html.= '<option value="'.$value->id.'">'.$value->f_name.' '.$value->l_name.'</option>';
+            $data = [];
+            $emplist = \common\models\TeamLine::find()->select(['emp_id'])->where(['team_id'=>$team_id])->all();
+            if($emplist){
+                foreach($emplist as $value){
+                    array_push($data,$value->emp_id);
+                }
+                $model = \common\models\Employee::find()->where(['status' => 1,'id' => $data])->all();
+                if($model){
+                    $html.= '<option value="">เลือกพนักงาน</option>';
+                    foreach ($model as $key => $value) {
+                        $html.= '<option value="'.$value->id.'">'.$value->f_name.' '.$value->l_name.'</option>';
+                    }
                 }
             }
+
         }
         echo $html;
     }

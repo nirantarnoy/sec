@@ -82,7 +82,12 @@ $system_vat_per = \backend\models\Mainconfig::findOne(1)->job_vat_per;
                             return \backend\models\Employee::findFullName($data->head_id);
                         }
                     ],
-                    'status',
+                   [
+                           'attribute' => 'status',
+                       'value'=>function($data){
+                          return \backend\helpers\JobStatus::getTypeById($data->status);
+                       }
+                   ],
 
                 ],
             ]) ?>
@@ -304,7 +309,7 @@ $system_vat_per = \backend\models\Mainconfig::findOne(1)->job_vat_per;
                                 <td style="text-align: right;"><?= number_format($line_amount, 2) ?></td>
                             </tr>
                         <?php endforeach; ?>
-                        <?php $total_deduct_with_vat_amount = ($total_deduct_with_vat * 7) / 100; ?>
+                        <?php $total_deduct_with_vat_amount = ($total_deduct_with_vat * $system_vat_per) / 100; ?>
                         </tbody>
                         <tfoot>
                         <tr>

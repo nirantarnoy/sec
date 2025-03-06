@@ -233,7 +233,7 @@ class DbbackupController extends Controller
         $username = "root";
         $password = "";
       //  $database_name = "admin_icesystem";
-        $database_name = "mmc_db";
+        $database_name = "sec";
         $date_string = time();
 
         $cmd = '';

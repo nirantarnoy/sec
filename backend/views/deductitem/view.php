@@ -32,7 +32,19 @@ $this->params['breadcrumbs'][] = $this->title;
      //       'id',
             'name',
             'description',
-            'status',
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: left'],
+                'contentOptions' => ['style' => 'text-align: left'],
+                'value' => function ($data) {
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">ใช้งาน</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
+                    }
+                }
+            ],
             'created_at',
             'created_by',
             'updated_at',

@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'sku',
             'name',
-            'barcode',
+            //'barcode',
            // 'product_type_id',
             [
                 'attribute' => 'product_group_id',

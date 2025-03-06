@@ -48,13 +48,21 @@ use yii\widgets\ActiveForm;
             ]) ?>
         </div>
         <div class="col-lg-3">
+            <?php if($model->isNewRecord):?>
+                <?= $form->field($model, 'head_id')->widget(\kartik\select2\Select2::className(),[
+                    'data'=> null,
+                    'options' => ['placeholder' => 'Select a head ...','class'=>'selected-head-id'],
+                    'pluginOptions' => ['allowClear' => true],
+                ]) ?>
+            <?php else:?>
             <?= $form->field($model, 'head_id')->widget(\kartik\select2\Select2::className(),[
                     'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Employee::find()->where(['status'=>1])->all(),'id',function($data){
                         return $data->f_name.' '.$data->l_name;
                     }),
-                'options' => ['placeholder' => 'Select a head ...','id'=>'selected-head-id'],
+                'options' => ['placeholder' => 'Select a head ...','class'=>'selected-head-id'],
                 'pluginOptions' => ['allowClear' => true],
             ]) ?>
+          <?php endif;?>
         </div>
         <div class="col-lg-3">
             <?= $form->field($model, 'payment_status')->widget(\kartik\select2\Select2::className(),[
@@ -359,6 +367,7 @@ use yii\widgets\ActiveForm;
 
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['product/finditem'], true);
+$url_to_find_employee =\yii\helpers\Url::to(['job/getemployee'], true);
 $js = <<<JS
 var selecteditem = [];
 var removelist = [];
@@ -679,14 +688,14 @@ function submitForm(){
 
 function getemployee(e){
     var id = $(e).val();
-    var url = "<?=Url::to(['job/getemployee'], true)?>";
+    var url = "$url_to_find_employee";
     $.ajax({
         url: url,
         type: 'html',
         data: {id: id},
         success: function (data) {
            if(data != null || data != ""){
-               $("#selected-head-id").html(data);
+               $(".selected-head-id").html(data);
            }
         }
     });

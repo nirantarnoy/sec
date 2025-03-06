@@ -41,8 +41,8 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'status',
                 'format' => 'raw',
-                'headerOptions' => ['style' => 'text-align: left'],
-                'contentOptions' => ['style' => 'text-align: left'],
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
                     if ($data->status == 1) {
                         return '<div class="badge badge-success">ใช้งาน</div>';
