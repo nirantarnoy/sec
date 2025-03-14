@@ -8,366 +8,575 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="job-form">
-
-    <?php $form = ActiveForm::begin(['options'=>['id'=>'form-job']]); ?>
-    <input type="hidden" class="remove-list" name="removelist" value="">
-    <div class="row">
-        <div class="col-lg-3">
-            <?= $form->field($model, 'job_no')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
-        </div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'quotation_ref_no')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-lg-3">
-            <?php $model->trans_date = $model->isNewRecord?date('d-m-Y'):date('d-m-Y',strtotime($model->trans_date));?>
-            <?= $form->field($model, 'trans_date')->widget(\kartik\date\DatePicker::className(),[
-                    'pluginOptions'=>[
-                            'format'=>'dd-mm-yyyy',
+    <div class="job-form">
+        <?php $form = ActiveForm::begin(['options' => ['id' => 'form-job']]); ?>
+        <input type="hidden" class="remove-list" name="removelist" value="">
+        <div class="row">
+            <div class="col-lg-3">
+                <?= $form->field($model, 'job_no')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'quotation_ref_no')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-lg-3">
+                <?php $model->trans_date = $model->isNewRecord ? date('d-m-Y') : date('d-m-Y', strtotime($model->trans_date)); ?>
+                <?= $form->field($model, 'trans_date')->widget(\kartik\date\DatePicker::className(), [
+                    'pluginOptions' => [
+                        'format' => 'dd-mm-yyyy',
                     ]
-            ]) ?>
-        </div>
-        <div class="col-lg-3">
+                ]) ?>
+            </div>
+            <div class="col-lg-3">
 
                 <?= $form->field($model, 'customer_id')->widget(\kartik\select2\Select2::className(), [
-                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Customer::find()->where(['status'=>1])->all(), 'id', function($data){
-                        return $data->first_name.' '.$data->last_name;
+                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Customer::find()->where(['status' => 1])->all(), 'id', function ($data) {
+                        return $data->first_name . ' ' . $data->last_name;
                     }),
                     'options' => ['placeholder' => 'Select a customer ...'],
                     'pluginOptions' => ['allowClear' => true],
                 ]) ?>
 
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-3">
-            <?= $form->field($model, 'team_id')->widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status'=>1])->all(), 'id', 'name'),
-                'options' => ['placeholder' => 'Select a team ...','onchange'=>'getemployee($(this));'],
-                'pluginOptions' => ['allowClear' => true],
-            ]) ?>
-        </div>
-        <div class="col-lg-3">
-            <?php if($model->isNewRecord):?>
-                <?= $form->field($model, 'head_id')->widget(\kartik\select2\Select2::className(),[
-                    'data'=> null,
-                    'options' => ['placeholder' => 'Select a head ...','class'=>'selected-head-id'],
+        <br/>
+        <h5><b>ข้อมูลผู้รับผิดชอบ / Staff information</b></h5>
+        <div class="row" style="background-color: lightsteelblue;padding: 8px;">
+            <div class="col-lg-3">
+                <?= $form->field($model, 'team_id')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status' => 1])->all(), 'id', 'name'),
+                    'options' => ['placeholder' => 'Select a team ...', 'onchange' => 'getemployee($(this));'],
                     'pluginOptions' => ['allowClear' => true],
                 ]) ?>
-            <?php else:?>
-            <?= $form->field($model, 'head_id')->widget(\kartik\select2\Select2::className(),[
-                    'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Employee::find()->where(['status'=>1])->all(),'id',function($data){
-                        return $data->f_name.' '.$data->l_name;
-                    }),
-                'options' => ['placeholder' => 'Select a head ...','class'=>'selected-head-id'],
-                'pluginOptions' => ['allowClear' => true],
-            ]) ?>
-          <?php endif;?>
+            </div>
+            <div class="col-lg-3">
+                <?php if ($model->isNewRecord): ?>
+                    <?= $form->field($model, 'head_id')->widget(\kartik\select2\Select2::className(), [
+                        'data' => null,
+                        'options' => ['placeholder' => 'Select a head ...', 'class' => 'selected-head-id'],
+                        'pluginOptions' => ['allowClear' => true],
+                    ]) ?>
+                <?php else: ?>
+                    <?= $form->field($model, 'head_id')->widget(\kartik\select2\Select2::className(), [
+                        'data' => \yii\helpers\ArrayHelper::map(\backend\models\Employee::find()->where(['status' => 1])->all(), 'id', function ($data) {
+                            return $data->f_name . ' ' . $data->l_name;
+                        }),
+                        'options' => ['placeholder' => 'Select a head ...', 'class' => 'selected-head-id'],
+                        'pluginOptions' => ['allowClear' => true],
+                    ]) ?>
+                <?php endif; ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'payment_status')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Paymentstatus::find()->where(['status' => 1])->all(), 'id', 'name')
+                ]) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly', 'value' => $model->isNewRecord ? 'Open' : \backend\helpers\JobStatus::getTypeById($model->status)]) ?>
+            </div>
         </div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'payment_status')->widget(\kartik\select2\Select2::className(),[
-                    'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Paymentstatus::find()->where(['status'=>1])->all(),'id','name')
-            ]) ?>
+        <div class="row" style="background-color: lightsteelblue;padding: 8px;">
+            <div class="col-lg-3">
+                <?= $form->field($model, 'job_type_id')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status' => 1])->all(), 'id', 'name'),
+                    'options' => ['placeholder' => 'Select a team ...', 'onchange' => 'getemployee($(this));'],
+                    'pluginOptions' => ['allowClear' => true],
+                ]) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'install_team_id')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status' => 1])->all(), 'id', 'name'),
+                    'options' => ['placeholder' => 'Select a team ...', 'onchange' => 'getemployee($(this));'],
+                    'pluginOptions' => ['allowClear' => true],
+                ]) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'main_distributor_id')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status' => 1])->all(), 'id', 'name'),
+                    'options' => ['placeholder' => 'Select a team ...', 'onchange' => 'getemployee($(this));'],
+                    'pluginOptions' => ['allowClear' => true],
+                ]) ?>
+            </div>
         </div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'status')->textInput(['readonly'=>'readonly','value'=>$model->isNewRecord?'Open':\backend\helpers\JobStatus::getTypeById($model->status)]) ?>
+        <br/>
+        <h5><b>ข้อมูลการชำระเงิน / Payment Information</b></h5>
+        <div class="row" style="background-color: lightsteelblue;padding: 8px;">
+            <div class="col-lg-3">
+                <?= $form->field($model, 'paid_amount')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'vat_amount')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'pending_amount')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'payment_amount')->textInput(['maxlength' => true]) ?>
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <table class="table-bordered" id="table-list">
-                <thead>
-                <tr>
-                    <th style="width: 5%;text-align: center;padding: 5px;">ลำดับที่</th>
-                    <th style="width: 18%">รหัสสินค้า/รายละเอียด</th>
-                    <th style="text-align: right;">ต้นทุน/หน่วย</th>
-                    <th style="text-align: right;width: 10%">Discount</th>
-                    <th style="text-align: right;">Dealer price</th>
-                    <th style="text-align: right;width: 10%">VAT7%</th>
-                    <th style="text-align: right;">รวมทุน/หน่วย</th>
-                    <th style="text-align: right;width: 10%">จำนวน</th>
-                    <th style="text-align: right;">รวมทุนทั้งหมด</th>
-                    <th style="text-align: right;">ราคาเสนอ/หน่วย</th>
-                    <th style="text-align: right;">รวมราคาเสนอ</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php if($model->isNewRecord):?>
+        <br/>
+        <h5><b>ข้อมูลรายการขายสินค้า / Product Sales Information</b></h5>
+        <div class="row" style="background-color: lightsteelblue;padding: 8px;">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-3">
+                        <label for="">รายการสินค้า</label>
+                        <?php
+                        echo \kartik\select2\Select2::widget([
+                            'name' => 'product_id',
+                            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Product::find()->where(['status' => 1])->all(), 'id', 'name'),
+                            'options' => ['class' => 'form-control product-id'],
+                            'pluginOptions' => ['allowClear' => true]
+                        ])
+                        ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="">ต้นทุนต่อหน่วย / Unit Cost</label>
+                        <input type="text" class="form-control product-cost" value="">
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="">% ส่วนลด / % Discount</label>
+                        <input type="text" class="form-control discount-per" value="">
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="">จำนวน/ Quantity</label>
+                        <input type="text" class="form-control quantity" value="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <label for="">ราคาขายต่อหน่วย / Unit Price</label>
+                        <input type="text" class="form-control unit-price" value="">
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="">ราคารวมขาย / Total Sale Price</label>
+                        <input type="text" class="form-control total-sale-price" value="">
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="">สต๊อกสินค้า / Stock</label>
+                        <input type="text" class="form-control discount-per" value="">
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="">บริษัทผู้นำเข้า / Distributor</label>
+                        <input type="text" class="form-control distributor" value="">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <label for="">หมวดหมู่ต้นทุนสินค้า / Cost Type</label>
+                        <input type="text" class="form-control unit-price" value="">
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="">Vat</label>
+                        <div class="bnt-group" data-toggle="buttons">
+                            <label class="btn btn-default">
+                                <input type="radio" name="vat-include" value="7"> In VAT
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" name="vat-exclude" value="7"> Ex. VAT
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" name="vat-no" value="7"> No VAT
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <label for="">Withholding Tax</label>
+                        <div class="bnt-groupx" data-toggle="buttons">
+                            <label class="btn btn-default">
+                                <input type="radio" name="vat" value="7"> Withholding Tax
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
+                        <div class="btn btn-primary" style="padding: 10px;margin-top: 20px;">เพิ่มรายการสินค้าในตารางสรุป / Add To Summary</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table-bordered" id="table-list">
+                    <thead>
                     <tr>
-                        <td style="text-align: center;">
-
-                        </td>
-                        <td style="padding: 0">
-                            <input type="hidden" class="line-product-id" name="line_product_id[]" value>
-                            <input type="text" class="form-control line-product-name" name="line_product_name[]" style="border: none;width: 100%" value="">
-                        </td>
-                        <td style="padding: 0">
-                            <input type="number" class="form-control line-cost-per-unit" name="line_cost_per_unit[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" onchange="linecal($(this))">
-                        </td>
-                        <td style="padding: 0">
-                            <input type="number" class="form-control line-discount" name="line_discount[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" onchange="linecal($(this))">
-                        </td>
-                        <td style="padding: 0">
-                            <input type="number" class="form-control line-dealer-price" name="line_dealer_price[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" readonly>
-                        </td>
-                        <td style="padding: 0">
-                            <input type="number" class="form-control line-vat" name="line_vat[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" readonly>
-                        </td>
-                        <td style="padding: 0">
-                            <input type="number" class="form-control line-total-cost-per-unit" name="line_total_cost_per_unit[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" readonly>
-                        </td>
-                        <td style="padding: 0">
-                            <input type="number" class="form-control line-qty" name="line_qty[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" onchange="linecalqty($(this))">
-                        </td>
-                        <td style="padding: 0">
-                            <input type="text" class="form-control line-total-cost-all" name="line_total_cost_all[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" readonly>
-                        </td>
-                        <td style="padding: 0">
-                            <input type="number" class="form-control line-quote-per-unit" name="line_quote_per_unit[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" onchange="linecalqty($(this))">
-                        </td>
-                        <td style="padding: 0">
-                            <input type="text" class="form-control line-total-quote-price" name="line_total_quote_price[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" readonly>
-                        </td>
-                        <td style="text-align: center;">
-                            <div class="btn btn-sm btn-danger" onclick="removeline($(this))">-</div>
-                        </td>
+                        <th style="width: 5%;text-align: center;padding: 5px;">ลำดับที่</th>
+                        <th style="width: 18%">รหัสสินค้า/รายละเอียด</th>
+                        <th style="text-align: right;">ต้นทุน/หน่วย</th>
+                        <th style="text-align: right;width: 10%">Discount</th>
+                        <th style="text-align: right;">Dealer price</th>
+                        <th style="text-align: right;width: 10%">VAT7%</th>
+                        <th style="text-align: right;">รวมทุน/หน่วย</th>
+                        <th style="text-align: right;width: 10%">จำนวน</th>
+                        <th style="text-align: right;">รวมทุนทั้งหมด</th>
+                        <th style="text-align: right;">ราคาเสนอ/หน่วย</th>
+                        <th style="text-align: right;">รวมราคาเสนอ</th>
+                        <th></th>
                     </tr>
-                <?php else:?>
-                <?php $line_no = 0;?>
-                <?php if($model_line !=null):?>
-                    <?php foreach ($model_line as $value):?>
-                            <?php $line_no +=1;?>
-                            <tr data-var="<?=$value->id?>">
-                                <td style="text-align: center;">
-                                   <?=$line_no;?>
-                                </td>
-                                <td style="padding: 0">
-                                    <input type="hidden" class="line-rec-id" name="rec_id[]" value="<?=$value->id?>">
-                                    <input type="hidden" class="line-product-id" name="line_product_id[]" value="<?=$value->product_id?>">
-                                    <input type="text" class="form-control line-product-name" name="line_product_name[]" style="border: none;width: 100%" value="<?=\backend\models\Product::findName($value->product_id)?>">
-                                </td>
-                                <td style="padding: 0">
-                                    <input type="number" class="form-control line-cost-per-unit" name="line_cost_per_unit[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="<?=$value->cost_per_unit?>" min="0" onchange="linecal($(this))">
-                                </td>
-                                <td style="padding: 0">
-                                    <input type="number" class="form-control line-discount" name="line_discount[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="<?=$value->discount_per?>" min="0" onchange="linecal($(this))">
-                                </td>
-                                <td style="padding: 0">
-                                    <input type="number" class="form-control line-dealer-price" name="line_dealer_price[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="<?=$value->dealer_price?>" min="0" readonly>
-                                </td>
-                                <td style="padding: 0">
-                                    <input type="number" class="form-control line-vat" name="line_vat[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="<?=$value->vat_amount?>" min="0" readonly>
-                                </td>
-                                <td style="padding: 0">
-                                    <input type="number" class="form-control line-total-cost-per-unit" name="line_total_cost_per_unit[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="<?=$value->total_cost_per_unit?>" min="0" readonly>
-                                </td>
-                                <td style="padding: 0">
-                                    <input type="number" class="form-control line-qty" name="line_qty[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="<?=$value->qty?>" min="0" onchange="linecalqty($(this))">
-                                </td>
-                                <td style="padding: 0">
-                                    <input type="text" class="form-control line-total-cost-all" name="line_total_cost_all[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="<?=$value->cost_total?>" readonly>
-                                </td>
-                                <td style="padding: 0">
-                                    <input type="number" class="form-control line-quote-per-unit" name="line_quote_per_unit[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="<?=$value->quotation_per_unit_price?>" min="0" onchange="linecalqty($(this))">
-                                </td>
-                                <td style="padding: 0">
-                                    <input type="text" class="form-control line-total-quote-price" name="line_total_quote_price[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="<?=$value->total_quotation_price?>" readonly>
-                                </td>
-                                <td style="text-align: center;">
-                                    <div class="btn btn-sm btn-danger" onclick="removeline($(this))">-</div>
-                                </td>
-                            </tr>
-                    <?php endforeach;?>
-                <?php else:?>
+                    </thead>
+                    <tbody>
+                    <?php if ($model->isNewRecord): ?>
                         <tr>
                             <td style="text-align: center;">
 
                             </td>
                             <td style="padding: 0">
-                                <input type="hidden" class="line-rec-id" name="rec_id[]" value="">
                                 <input type="hidden" class="line-product-id" name="line_product_id[]" value>
-                                <input type="text" class="form-control line-product-name" name="line_product_name[]" style="border: none;width: 100%" value="">
+                                <input type="text" class="form-control line-product-name" name="line_product_name[]"
+                                       style="border: none;width: 100%" value="">
                             </td>
                             <td style="padding: 0">
-                                <input type="number" class="form-control line-cost-per-unit" name="line_cost_per_unit[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" onchange="linecal($(this))">
+                                <input type="number" class="form-control line-cost-per-unit" name="line_cost_per_unit[]"
+                                       style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                       value="" min="0" onchange="linecal($(this))">
                             </td>
                             <td style="padding: 0">
-                                <input type="number" class="form-control line-discount" name="line_discount[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" onchange="linecal($(this))">
+                                <input type="number" class="form-control line-discount" name="line_discount[]"
+                                       style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                       value="" min="0" onchange="linecal($(this))">
                             </td>
                             <td style="padding: 0">
-                                <input type="number" class="form-control line-dealer-price" name="line_dealer_price[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" readonly>
+                                <input type="number" class="form-control line-dealer-price" name="line_dealer_price[]"
+                                       style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                       value="" min="0" readonly>
                             </td>
                             <td style="padding: 0">
-                                <input type="number" class="form-control line-vat" name="line_vat[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" readonly>
+                                <input type="number" class="form-control line-vat" name="line_vat[]"
+                                       style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                       value="" min="0" readonly>
                             </td>
                             <td style="padding: 0">
-                                <input type="number" class="form-control line-total-cost-per-unit" name="line_total_cost_per_unit[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" readonly>
+                                <input type="number" class="form-control line-total-cost-per-unit"
+                                       name="line_total_cost_per_unit[]"
+                                       style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                       value="" min="0" readonly>
                             </td>
                             <td style="padding: 0">
-                                <input type="number" class="form-control line-qty" name="line_qty[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" onchange="linecalqty($(this))">
+                                <input type="number" class="form-control line-qty" name="line_qty[]"
+                                       style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                       value="" min="0" onchange="linecalqty($(this))">
                             </td>
                             <td style="padding: 0">
-                                <input type="text" class="form-control line-total-cost-all" name="line_total_cost_all[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" readonly>
+                                <input type="text" class="form-control line-total-cost-all" name="line_total_cost_all[]"
+                                       style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                       value="" readonly>
                             </td>
                             <td style="padding: 0">
-                                <input type="number" class="form-control line-quote-per-unit" name="line_quote_per_unit[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" min="0" onchange="linecalqty($(this))">
+                                <input type="number" class="form-control line-quote-per-unit"
+                                       name="line_quote_per_unit[]"
+                                       style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                       value="" min="0" onchange="linecalqty($(this))">
                             </td>
                             <td style="padding: 0">
-                                <input type="text" class="form-control line-total-quote-price" name="line_total_quote_price[]" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" readonly>
+                                <input type="text" class="form-control line-total-quote-price"
+                                       name="line_total_quote_price[]"
+                                       style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                       value="" readonly>
                             </td>
                             <td style="text-align: center;">
                                 <div class="btn btn-sm btn-danger" onclick="removeline($(this))">-</div>
                             </td>
                         </tr>
-                <?php endif;?>
-                <?php endif;?>
-                </tbody>
-                <tfoot>
-                <tr>
-                    <td></td>
-                    <td style="text-align: right;">รวมราคา</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="padding: 0">
-                        <input type="text" class="form-control sub-total-1" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" readonly>
-                    </td>
-                    <td></td>
-                    <td style="padding: 0;">
-                        <input type="text" class="form-control sub-total-2" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" readonly>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td style="text-align: right;">ส่วนสด</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="padding: 0;">
-                        <input type="text" class="form-control discount-all" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" readonly>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td style="text-align: right;">จำนวนเงินหลังหักส่วนลด</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="padding: 0;">
-                        <input type="text" class="form-control after-discount-all" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" readonly>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td style="text-align: right;">ภาษีมูลค่าเพิ่ม 7%</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td style="padding: 0;">
-                        <input type="text" class="form-control vat-all" style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" readonly>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td style="text-align: right;">จำนวนเงินรวมทั้งสิ้น</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td colspan="2" style="padding: 0;">
-                        <input type="text" class="form-control grand-total-all" style="background-color: black;color: white;border: none;width: 100%;box-sizing: border-box;text-align: right;" value="" readonly>
-                    </td>
-                    <td></td>
-                </tr>
-                </tfoot>
-            </table>
-        </div>
-    </div>
-    <br />
-    <div class="form-group">
-        <div class="btn btn-sm btn-primary" onclick="finditem()">เพิ่มรายการ</div>
-    </div>
-    <div class="form-group">
-        <?php //echo Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-        <div class="btn btn-success" onclick="submitForm()">Save</div>
-    </div>
+                    <?php else: ?>
+                        <?php $line_no = 0; ?>
+                        <?php if ($model_line != null): ?>
+                            <?php foreach ($model_line as $value): ?>
+                                <?php $line_no += 1; ?>
+                                <tr data-var="<?= $value->id ?>">
+                                    <td style="text-align: center;">
+                                        <?= $line_no; ?>
+                                    </td>
+                                    <td style="padding: 0">
+                                        <input type="hidden" class="line-rec-id" name="rec_id[]"
+                                               value="<?= $value->id ?>">
+                                        <input type="hidden" class="line-product-id" name="line_product_id[]"
+                                               value="<?= $value->product_id ?>">
+                                        <input type="text" class="form-control line-product-name"
+                                               name="line_product_name[]" style="border: none;width: 100%"
+                                               value="<?= \backend\models\Product::findName($value->product_id) ?>">
+                                    </td>
+                                    <td style="padding: 0">
+                                        <input type="number" class="form-control line-cost-per-unit"
+                                               name="line_cost_per_unit[]"
+                                               style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                               value="<?= $value->cost_per_unit ?>" min="0" onchange="linecal($(this))">
+                                    </td>
+                                    <td style="padding: 0">
+                                        <input type="number" class="form-control line-discount" name="line_discount[]"
+                                               style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                               value="<?= $value->discount_per ?>" min="0" onchange="linecal($(this))">
+                                    </td>
+                                    <td style="padding: 0">
+                                        <input type="number" class="form-control line-dealer-price"
+                                               name="line_dealer_price[]"
+                                               style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                               value="<?= $value->dealer_price ?>" min="0" readonly>
+                                    </td>
+                                    <td style="padding: 0">
+                                        <input type="number" class="form-control line-vat" name="line_vat[]"
+                                               style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                               value="<?= $value->vat_amount ?>" min="0" readonly>
+                                    </td>
+                                    <td style="padding: 0">
+                                        <input type="number" class="form-control line-total-cost-per-unit"
+                                               name="line_total_cost_per_unit[]"
+                                               style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                               value="<?= $value->total_cost_per_unit ?>" min="0" readonly>
+                                    </td>
+                                    <td style="padding: 0">
+                                        <input type="number" class="form-control line-qty" name="line_qty[]"
+                                               style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                               value="<?= $value->qty ?>" min="0" onchange="linecalqty($(this))">
+                                    </td>
+                                    <td style="padding: 0">
+                                        <input type="text" class="form-control line-total-cost-all"
+                                               name="line_total_cost_all[]"
+                                               style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                               value="<?= $value->cost_total ?>" readonly>
+                                    </td>
+                                    <td style="padding: 0">
+                                        <input type="number" class="form-control line-quote-per-unit"
+                                               name="line_quote_per_unit[]"
+                                               style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                               value="<?= $value->quotation_per_unit_price ?>" min="0"
+                                               onchange="linecalqty($(this))">
+                                    </td>
+                                    <td style="padding: 0">
+                                        <input type="text" class="form-control line-total-quote-price"
+                                               name="line_total_quote_price[]"
+                                               style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                               value="<?= $value->total_quotation_price ?>" readonly>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <div class="btn btn-sm btn-danger" onclick="removeline($(this))">-</div>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <tr>
+                                <td style="text-align: center;">
 
-    <?php ActiveForm::end(); ?>
-
-</div>
-
-
-<div id="findModal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-xl">
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>รายการสินค้า</h3>
-            </div>
-            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
-            <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
-
-            <div class="modal-body">
-                <input type="hidden" name="line_qc_product" class="line_qc_product" value="">
-                <table class="table table-bordered table-striped table-find-list" width="100%">
-                    <thead>
-                    <tr>
-                        <th style="width:10%;text-align: center">เลือก</th>
-                        <th style="width: 10%;text-align: center">รหัส</th>
-                        <th style="width: 20%;text-align: center">รายละเอียดสินค้า</th>
-                        <th style="width: 15%;text-align: center">ประเภทสินค้า</th>
-                        <th style="width: 15%;text-align: center">จำนวนคงเหลือ</th>
-                    </tr>
-                    </thead>
-                    <tbody>
+                                </td>
+                                <td style="padding: 0">
+                                    <input type="hidden" class="line-rec-id" name="rec_id[]" value="">
+                                    <input type="hidden" class="line-product-id" name="line_product_id[]" value>
+                                    <input type="text" class="form-control line-product-name" name="line_product_name[]"
+                                           style="border: none;width: 100%" value="">
+                                </td>
+                                <td style="padding: 0">
+                                    <input type="number" class="form-control line-cost-per-unit"
+                                           name="line_cost_per_unit[]"
+                                           style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                           value="" min="0" onchange="linecal($(this))">
+                                </td>
+                                <td style="padding: 0">
+                                    <input type="number" class="form-control line-discount" name="line_discount[]"
+                                           style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                           value="" min="0" onchange="linecal($(this))">
+                                </td>
+                                <td style="padding: 0">
+                                    <input type="number" class="form-control line-dealer-price"
+                                           name="line_dealer_price[]"
+                                           style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                           value="" min="0" readonly>
+                                </td>
+                                <td style="padding: 0">
+                                    <input type="number" class="form-control line-vat" name="line_vat[]"
+                                           style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                           value="" min="0" readonly>
+                                </td>
+                                <td style="padding: 0">
+                                    <input type="number" class="form-control line-total-cost-per-unit"
+                                           name="line_total_cost_per_unit[]"
+                                           style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                           value="" min="0" readonly>
+                                </td>
+                                <td style="padding: 0">
+                                    <input type="number" class="form-control line-qty" name="line_qty[]"
+                                           style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                           value="" min="0" onchange="linecalqty($(this))">
+                                </td>
+                                <td style="padding: 0">
+                                    <input type="text" class="form-control line-total-cost-all"
+                                           name="line_total_cost_all[]"
+                                           style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                           value="" readonly>
+                                </td>
+                                <td style="padding: 0">
+                                    <input type="number" class="form-control line-quote-per-unit"
+                                           name="line_quote_per_unit[]"
+                                           style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                           value="" min="0" onchange="linecalqty($(this))">
+                                </td>
+                                <td style="padding: 0">
+                                    <input type="text" class="form-control line-total-quote-price"
+                                           name="line_total_quote_price[]"
+                                           style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                           value="" readonly>
+                                </td>
+                                <td style="text-align: center;">
+                                    <div class="btn btn-sm btn-danger" onclick="removeline($(this))">-</div>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endif; ?>
                     </tbody>
+                    <tfoot>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: right;">รวมราคา</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="padding: 0">
+                            <input type="text" class="form-control sub-total-1"
+                                   style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value=""
+                                   readonly>
+                        </td>
+                        <td></td>
+                        <td style="padding: 0;">
+                            <input type="text" class="form-control sub-total-2"
+                                   style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value=""
+                                   readonly>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: right;">ส่วนสด</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="padding: 0;">
+                            <input type="text" class="form-control discount-all"
+                                   style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value=""
+                                   readonly>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: right;">จำนวนเงินหลังหักส่วนลด</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="padding: 0;">
+                            <input type="text" class="form-control after-discount-all"
+                                   style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value=""
+                                   readonly>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: right;">ภาษีมูลค่าเพิ่ม 7%</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="padding: 0;">
+                            <input type="text" class="form-control vat-all"
+                                   style="border: none;width: 100%;box-sizing: border-box;text-align: right;" value=""
+                                   readonly>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: right;">จำนวนเงินรวมทั้งสิ้น</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="2" style="padding: 0;">
+                            <input type="text" class="form-control grand-total-all"
+                                   style="background-color: black;color: white;border: none;width: 100%;box-sizing: border-box;text-align: right;"
+                                   value="" readonly>
+                        </td>
+                        <td></td>
+                    </tr>
+                    </tfoot>
                 </table>
-
-            </div>
-
-            <div class="modal-footer">
-                <button class="btn btn-outline-success btn-emp-selected" data-dismiss="modalx" disabled><i
-                            class="fa fa-check"></i> ตกลง
-                </button>
-                <button type="button" class="btn btn-default" data-dismiss="modal"><i
-                            class="fa fa-close text-danger"></i> ปิดหน้าต่าง
-                </button>
             </div>
         </div>
+        <br/>
+        <div class="form-group">
+            <div class="btn btn-sm btn-primary" onclick="finditem()">เพิ่มรายการ</div>
+        </div>
+        <div class="form-group">
+            <?php //echo Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
+            <div class="btn btn-success" onclick="submitForm()">Save</div>
+        </div>
+
+        <?php ActiveForm::end(); ?>
 
     </div>
-</div>
+
+
+    <div id="findModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>รายการสินค้า</h3>
+                </div>
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+
+                <div class="modal-body">
+                    <input type="hidden" name="line_qc_product" class="line_qc_product" value="">
+                    <table class="table table-bordered table-striped table-find-list" width="100%">
+                        <thead>
+                        <tr>
+                            <th style="width:10%;text-align: center">เลือก</th>
+                            <th style="width: 10%;text-align: center">รหัส</th>
+                            <th style="width: 20%;text-align: center">รายละเอียดสินค้า</th>
+                            <th style="width: 15%;text-align: center">ประเภทสินค้า</th>
+                            <th style="width: 15%;text-align: center">จำนวนคงเหลือ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button class="btn btn-outline-success btn-emp-selected" data-dismiss="modalx" disabled><i
+                                class="fa fa-check"></i> ตกลง
+                    </button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                                class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['product/finditem'], true);
-$url_to_find_employee =\yii\helpers\Url::to(['job/getemployee'], true);
+$url_to_find_employee = \yii\helpers\Url::to(['job/getemployee'], true);
 $js = <<<JS
 var selecteditem = [];
 var removelist = [];
@@ -703,6 +912,6 @@ function getemployee(e){
 
 JS;
 
-$this->registerJs($js,static::POS_END);
+$this->registerJs($js, static::POS_END);
 
 ?>

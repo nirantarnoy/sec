@@ -384,7 +384,7 @@ function checkcreateNew(e){
 function createnewunit(){
     var unit_name = $(".new-unit-name").val();
     var unit_desc = $(".new-unit-description").val();
-   // alert(unit_name);
+    alert(unit_name);
     if(unit_name == ''){
         $(".new-unit-name").css(["border-color", "red"]);
         return false;

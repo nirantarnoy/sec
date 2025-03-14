@@ -35,7 +35,7 @@ class Unit extends \yii\db\ActiveRecord
         return [
             [['name'],'required'],
             [['name'],'unique'],
-            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['status', 'created_at', 'created_by', 'updated_at', 'updated_by','can_new'], 'integer'],
             [['code', 'name', 'description'], 'string', 'max' => 255],
         ];
     }
