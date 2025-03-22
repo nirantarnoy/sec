@@ -56,8 +56,16 @@ $yesno = [['id' => 1, 'YES'], ['id' => 0, 'NO']];
             <div class="col-lg-6">
                 <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
             </div>
-            <div class="col-lg-6">
-
+            <div class="col-lg-3">
+                <?= $form->field($model, 'deduct_type_id')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\CostDeductType::asArrayObject(), 'id', 'name'),
+                    'options' => [
+                        'placeholder' => '-- เลือกประเภท --'
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ]
+                ]) ?>
             </div>
         </div>
         <div class="row">

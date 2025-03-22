@@ -43,7 +43,7 @@ use yii\widgets\ActiveForm;
         <div class="row" style="background-color: lightsteelblue;padding: 8px;">
             <div class="col-lg-3">
                 <?= $form->field($model, 'team_id')->widget(\kartik\select2\Select2::className(), [
-                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status' => 1])->all(), 'id', 'name'),
+                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status' => 1,'team_type_id' => 2])->all(), 'id', 'name'),
                     'options' => ['placeholder' => 'Select a team ...', 'onchange' => 'getemployee($(this));'],
                     'pluginOptions' => ['allowClear' => true],
                 ]) ?>
@@ -84,15 +84,15 @@ use yii\widgets\ActiveForm;
             </div>
             <div class="col-lg-3">
                 <?= $form->field($model, 'install_team_id')->widget(\kartik\select2\Select2::className(), [
-                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status' => 1])->all(), 'id', 'name'),
+                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Team::find()->where(['status' => 1,'team_type_id'=>2])->all(), 'id', 'name'),
                     'options' => ['placeholder' => 'Select a team ...', 'onchange' => 'getemployee($(this));'],
                     'pluginOptions' => ['allowClear' => true],
                 ]) ?>
             </div>
             <div class="col-lg-3">
                 <?= $form->field($model, 'main_distributor_id')->widget(\kartik\select2\Select2::className(), [
-                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status' => 1])->all(), 'id', 'name'),
-                    'options' => ['placeholder' => 'Select a team ...', 'onchange' => 'getemployee($(this));'],
+                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Distributor::find()->where(['status' => 1])->all(), 'id', 'name'),
+                    'options' => ['placeholder' => 'Select',],
                     'pluginOptions' => ['allowClear' => true],
                 ]) ?>
             </div>
@@ -101,16 +101,20 @@ use yii\widgets\ActiveForm;
         <h5><b>ข้อมูลการชำระเงิน / Payment Information</b></h5>
         <div class="row" style="background-color: lightsteelblue;padding: 8px;">
             <div class="col-lg-3">
-                <?= $form->field($model, 'paid_amount')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'paid_amount')->textInput(['maxlength' => true,'readonly' => 'readonly','value'=>number_format(getJobpayment($model->id,3))]) ?>
             </div>
             <div class="col-lg-3">
-                <?= $form->field($model, 'vat_amount')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'withholding_amount')->textInput(['maxlength' => true,'readonly' => 'readonly','value'=>number_format(getWithholdingAmount($model->id,3))]) ?>
             </div>
             <div class="col-lg-3">
-                <?= $form->field($model, 'pending_amount')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'pending_amount')->textInput(['maxlength' => true,'readonly' => 'readonly','value'=>number_format(getPaidPending($model->id),3)]) ?>
+                <?= $form->field($model,'set_to_zero')->widget(\toxor88\switchery\Switchery::className())->label(false) ?>
             </div>
             <div class="col-lg-3">
-                <?= $form->field($model, 'payment_amount')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'payment_status')->hiddenInput(['maxlength' => true,'readonly' => 'readonly'])->label(false) ?>
+
+                <label for="">สถานะการจ่ายเงิน/Payment Status</label>
+                <input type="text" class="form-control" readonly value="<?= \backend\models\PaymentStatus::findName($model->payment_status) ?>">
             </div>
         </div>
         <br/>
@@ -124,36 +128,37 @@ use yii\widgets\ActiveForm;
                         echo \kartik\select2\Select2::widget([
                             'name' => 'product_id',
                             'data' => \yii\helpers\ArrayHelper::map(\backend\models\Product::find()->where(['status' => 1])->all(), 'id', 'name'),
-                            'options' => ['class' => 'form-control product-id'],
+                            'id' => 'product-id',
+                            'options' => ['class' => 'form-control product-id', 'placeholder' => 'เลือกรายการสินค้า ...','onchange'=>'checkDuplicate($(this));'],
                             'pluginOptions' => ['allowClear' => true]
                         ])
                         ?>
                     </div>
                     <div class="col-lg-3">
                         <label for="">ต้นทุนต่อหน่วย / Unit Cost</label>
-                        <input type="text" class="form-control product-cost" value="">
+                        <input type="number" class="form-control product-cost" value="0" min="0" onchange="cal_add();">
                     </div>
                     <div class="col-lg-3">
                         <label for="">% ส่วนลด / % Discount</label>
-                        <input type="text" class="form-control discount-per" value="">
+                        <input type="number" class="form-control discount-per" value="0" min="0" onchange="cal_add();">
                     </div>
                     <div class="col-lg-3">
                         <label for="">จำนวน/ Quantity</label>
-                        <input type="text" class="form-control quantity" value="">
+                        <input type="number" class="form-control quantity" value="0" min="0" onchange="cal_add();">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-3">
                         <label for="">ราคาขายต่อหน่วย / Unit Price</label>
-                        <input type="text" class="form-control unit-price" value="">
+                        <input type="text" class="form-control unit-price" value="" onchange="cal_add();">
                     </div>
                     <div class="col-lg-3">
                         <label for="">ราคารวมขาย / Total Sale Price</label>
-                        <input type="text" class="form-control total-sale-price" value="">
+                        <input type="text" class="form-control total-sale-price" value="0" readonly>
                     </div>
                     <div class="col-lg-3">
                         <label for="">สต๊อกสินค้า / Stock</label>
-                        <input type="text" class="form-control discount-per" value="">
+                        <input type="text" class="form-control stock-type" value="">
                     </div>
                     <div class="col-lg-3">
                         <label for="">บริษัทผู้นำเข้า / Distributor</label>
@@ -163,19 +168,19 @@ use yii\widgets\ActiveForm;
                 <div class="row">
                     <div class="col-lg-3">
                         <label for="">หมวดหมู่ต้นทุนสินค้า / Cost Type</label>
-                        <input type="text" class="form-control unit-price" value="">
+                        <input type="text" class="form-control cost-type" value="">
                     </div>
                     <div class="col-lg-3">
                         <label for="">Vat</label>
                         <div class="bnt-group" data-toggle="buttons">
                             <label class="btn btn-default">
-                                <input type="radio" name="vat-include" value="7"> In VAT
+                                <input type="radio" class="vat-type" name="vat_type" value="1"> In VAT
                             </label>
                             <label class="btn btn-default">
-                                <input type="radio" name="vat-exclude" value="7"> Ex. VAT
+                                <input type="radio" class="vat-type" name="vat_type" value="2"> Ex. VAT
                             </label>
                             <label class="btn btn-default">
-                                <input type="radio" name="vat-no" value="7"> No VAT
+                                <input type="radio" class="vat-type" name="vat_type" value="3" checked> No VAT
                             </label>
                         </div>
                     </div>
@@ -183,19 +188,22 @@ use yii\widgets\ActiveForm;
                         <label for="">Withholding Tax</label>
                         <div class="bnt-groupx" data-toggle="buttons">
                             <label class="btn btn-default">
-                                <input type="radio" name="vat" value="7"> Withholding Tax
+                                <input type="radio" class="withholding-type" name="withholding_type" value="1"> Yes
+                            </label>
+                            <label class="btn btn-default">
+                                <input type="radio" class="withholding-type" name="withholding_type" value="2"> No
                             </label>
                         </div>
                     </div>
                     <div class="col-lg-3">
-                        <div class="btn btn-primary" style="padding: 10px;top: 20px;">เพิ่มรายการสินค้าในตารางสรุป / Add To Summary</div>
+                        <div class="btn btn-primary" style="padding: 10px;margin-top: 20px;" onclick="createproductline()">เพิ่มรายการสินค้าในตารางสรุป / Add To Summary</div>
                     </div>
                 </div>
             </div>
         </div>
         <br/>
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-12" style="overflow-x: scroll">
                 <table class="table-bordered" id="table-list">
                     <thead>
                     <tr>
@@ -208,7 +216,7 @@ use yii\widgets\ActiveForm;
                         <th style="text-align: right;">รวมทุน/หน่วย</th>
                         <th style="text-align: right;width: 10%">จำนวน</th>
                         <th style="text-align: right;">รวมทุนทั้งหมด</th>
-                        <th style="text-align: right;">ราคาเสนอ/หน่วย</th>
+                        <th style="text-align: right;">ราคาขาย/หน่วย</th>
                         <th style="text-align: right;">รวมราคาเสนอ</th>
                         <th></th>
                     </tr>
@@ -240,6 +248,7 @@ use yii\widgets\ActiveForm;
                                        value="" min="0" readonly>
                             </td>
                             <td style="padding: 0">
+                                <input type="hidden" class="line-vat-type" name="line_vat_type[]" value="">
                                 <input type="number" class="form-control line-vat" name="line_vat[]"
                                        style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
                                        value="" min="0" readonly>
@@ -312,6 +321,7 @@ use yii\widgets\ActiveForm;
                                                value="<?= $value->dealer_price ?>" min="0" readonly>
                                     </td>
                                     <td style="padding: 0">
+                                        <input type="hidden" class="line-vat-type" name="line_vat_type[]" value="<?= $value->vat_type ?>">
                                         <input type="number" class="form-control line-vat" name="line_vat[]"
                                                style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
                                                value="<?= $value->vat_amount ?>" min="0" readonly>
@@ -380,6 +390,7 @@ use yii\widgets\ActiveForm;
                                            value="" min="0" readonly>
                                 </td>
                                 <td style="padding: 0">
+                                    <input type="hidden" class="line-vat-type" name="line_vat_type[]" value="">
                                     <input type="number" class="form-control line-vat" name="line_vat[]"
                                            style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
                                            value="" min="0" readonly>
@@ -520,7 +531,7 @@ use yii\widgets\ActiveForm;
         </div>
         <br/>
         <div class="form-group">
-            <div class="btn btn-sm btn-primary" onclick="finditem()">เพิ่มรายการ</div>
+<!--            <div class="btn btn-sm btn-primary" onclick="finditem()">เพิ่มรายการ</div>-->
         </div>
         <div class="form-group">
             <?php //echo Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
@@ -572,7 +583,41 @@ use yii\widgets\ActiveForm;
 
         </div>
     </div>
-
+<?php
+function getJobpayment($id){
+    $pay_amount = 0;
+    if($id){
+        $model = \common\models\JobPayment::find()->where(['job_id' => $id])->sum('amount');
+        if($model){
+            $pay_amount = $model;
+        }
+    }
+    return $pay_amount;
+}
+function getWithholdingAmount($id){
+    $pay_amount = 0;
+    if($id){
+        $model = \common\models\JobLine::find()->where(['job_id' => $id])->sum('withholdingtax');
+        if($model){
+            $pay_amount = $model;
+        }
+    }
+    return $pay_amount;
+}
+function getPaidPending($id){
+    $pending_amount = 0;
+    if($id){
+        $model = \common\models\JobPayment::find()->where(['job_id' => $id])->sum('amount');
+        $model_job_amount = \common\models\JobLine::find()->where(['job_id' => $id])->sum('total_quotation_price');
+        if($model){
+            $pending_amount = $model_job_amount -$model;
+        }else{
+            $pending_amount = $model_job_amount;
+        }
+    }
+    return $pending_amount;
+}
+?>
 
 <?php
 $url_to_find_item = \yii\helpers\Url::to(['product/finditem'], true);
@@ -583,15 +628,134 @@ var removelist = [];
 $(function(){
     calTotal();
 });
+function checkDuplicate(e){
+    $("#table-list tbody tr").each(function(){
+        if($(this).closest("tr").find(".line-product-id").val() == e.val()){
+            alert('ไม่สามารถเลือกรายการซ้ําได้');
+            return;
+        }
+    });
+}
+function changeHoldingTax(e){
+    if(e.attr("checked")){
+        e.prop( "checked", false );
+       // alert(1);
+    }else{
+        e.prop( "checked", true );
+      //  alert(0);
+    }
+   
+}
+function cal_add(){
+    var add_product_cost = $(".product-cost").val();
+    var add_quantity = $(".quantity").val();
+    var add_unit_price = $(".unit-price").val();
+    var add_discount_per = $(".discount-per").val();
+    
+    
+    
+}
+function createproductline(){
+    var add_product_id = $(".product-id").val();
+    var add_product_name = $(".product-id option:selected").text();
+    var add_product_cost = $(".product-cost").val();
+    var add_discount_per = $(".discount-per").val();
+    var add_quantity = $(".quantity").val();
+    var add_unit_price = $(".unit-price").val();
+    var add_total_sale_price = $(".total-sale-price").val();
+    var add_total_distributor = $(".distributor").val();
+    var add_vat_type = document.querySelector('input[name="vat_type"]:checked').value;
+    
+    
+    if(add_product_id === ""){
+        //alert(add_product_id);
+        $("#product-id").focus();
+        $("#product-id").addClass("is-invalid");
+        return false;
+    }
+    
+    var check_dup = 0;
+    
+    $("#table-list tbody tr").each(function(){
+        if($(this).closest("tr").find(".line-product-id").val() === add_product_id){
+           check_dup+=1;
+        }
+    });
+    
+    if(check_dup > 0){
+         alert('ไม่สามารถเลือกรายการซ้ําได้');
+            return false;
+    }
+    
+             var tr = $("#table-list tbody tr:last");
+             var line_discount = 0;
+             var line_dealer_price = 0;
+             var line_vat = 0;
+                       
+             line_discount = parseFloat(add_product_cost) * parseFloat(add_discount_per) / 100;
+             line_dealer_price = parseFloat(add_product_cost) - parseFloat(line_discount);
+             //alert(add_vat_type);
+             if(add_vat_type === 1){
+                 line_vat = 100;// parseFloat(line_dealer_price) * 7 /100;
+             }else{
+                 line_vat = 0;
+                 //alert(add_vat_type);
+             }
+                   if (tr.closest("tr").find(".line-product-id").val() == "") {
+                       
+                  //  alert(line_prod_code);
+                    tr.closest("tr").find(".line-rec-id").val(0);
+                    tr.closest("tr").find(".line-product-id").val(add_product_id);
+                    tr.closest("tr").find(".line-product-name").val(add_product_name);
+                    tr.closest("tr").find(".line-cost-per-unit").val(add_product_cost);
+                    tr.closest("tr").find(".line-discount").val(add_discount_per);
+                    tr.closest("tr").find(".line-qty").val(add_quantity);
+                    tr.closest("tr").find(".line-unit-price").val(add_unit_price);
+                    tr.closest("tr").find(".line-total-cost-per-unit").val(add_total_sale_price);
+                    tr.closest("tr").find(".line-quote-per-unit").val(add_unit_price);
+                    tr.closest("tr").find(".line-vat-type").val(add_vat_type);
+                    tr.closest("tr").find(".line-vat").val(line_vat);
+                    tr.closest("tr").find(".line-dealer-price").val(line_dealer_price);
+                    
+                    linecal(tr);
+                    //console.log(line_prod_code);
+                    } else {
+                        var clone = tr.clone();
+                            clone.closest("tr").find(".line-rec-id").val(0);
+                            clone.closest("tr").find(".line-product-id").val(add_product_id);
+                            clone.closest("tr").find(".line-product-name").val(add_product_name);
+                            clone.closest("tr").find(".line-cost-per-unit").val(add_product_cost);
+                            clone.closest("tr").find(".line-discount").val(add_discount_per);
+                            clone.closest("tr").find(".line-qty").val(add_quantity);
+                            clone.closest("tr").find(".line-unit-price").val(add_unit_price);
+                            clone.closest("tr").find(".line-total-cost-per-unit").val(add_total_sale_price);
+                            clone.closest("tr").find(".line-quote-per-unit").val(add_unit_price);
+                            clone.closest("tr").find(".line-vat-type").val(add_vat_type);
+                            clone.closest("tr").find(".line-vat").val(line_vat);
+                            clone.closest("tr").find(".line-dealer-price").val(line_dealer_price);
+                        tr.after(clone);
+                        linecal(clone);
+                    } 
+             
+         var linenum = 0;    
+        $("#table-list tbody tr").each(function () {
+           linenum += 1;
+            $(this).closest("tr").find("td:eq(0)").text(linenum);
+            // $(this).find(':input[type="number"]').val("0");
+            // $(this).closest("tr").find(".line-prod-code").val(line_prod_code);
+        });
+}
 function linecal(e){
     var line_cost_per_unit = e.closest('tr').find(".line-cost-per-unit").val();
     var line_discount = e.closest('tr').find(".line-discount").val();
     var line_dealer_price = e.closest('tr').find(".line-dealer-price").val();
+    var line_vat_type = e.closest('tr').find(".line-vat-type").val();
     var line_vat = e.closest('tr').find(".line-vat").val();
     var line_total_cost_per_unit = e.closest('tr').find(".line-total-cost-per-unit").val();
     var line_qty = e.closest('tr').find(".line-qty").val();
     var line_total_cost_all = e.closest('tr').find(".line-total-cost-all").val();
     var line_quote_per_unit = e.closest('tr').find(".line-quote-per-unit").val();
+    
     //var line_total_quote_price = $(".line-total-quote-price").val();
     if(line_cost_per_unit == null || line_cost_per_unit == ""){
         line_cost_per_unit = 0;
@@ -618,7 +782,12 @@ function linecal(e){
         line_quote_per_unit = 0;
     }
     var dealer_price = parseFloat(line_cost_per_unit) - (parseFloat(line_cost_per_unit) * parseFloat(line_discount) / 100);
-    var line_vat = parseFloat(dealer_price) * 7 /100;
+   // var line_vat = 0;
+    //alert('xxxx = '+line_vat_type);
+    if(line_vat_type ==1){
+        line_vat = parseFloat(dealer_price) * 7 /100;
+    }
+
     e.closest('tr').find(".line-dealer-price").val(dealer_price);
     e.closest('tr').find(".line-vat").val(line_vat);
     e.closest('tr').find(".line-total-cost-per-unit").val(parseFloat(dealer_price + line_vat).toFixed(2));

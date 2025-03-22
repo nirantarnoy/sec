@@ -46,10 +46,10 @@ class Team extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'name' => 'ชื่อทีม',
-            'description' => 'รายละเอียด',
-            'status' => 'สถานะ',
-            'team_type_id'=>'ประเภททีม',
+            'name' => 'Name',
+            'description' => 'Description',
+            'status' => 'Status',
+            'team_type_id'=>'Team Type',
             'created_at' => 'Created At',
             'created_by' => 'Created By',
             'updated_at' => 'Updated At',

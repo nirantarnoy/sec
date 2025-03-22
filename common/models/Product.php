@@ -41,7 +41,7 @@ class Product extends \yii\db\ActiveRecord
         return [
             [['name','sku'],'required'],
             [['name','sku'],'unique'],
-            [['product_cat_id', 'unit_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','is_drummy'], 'integer'],
+            [['product_cat_id', 'unit_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','is_drummy','deduct_type_id'], 'integer'],
             [['cost_price','sale_price','total_qty'], 'number'],
             [['exp_date'], 'safe'],
             [['code', 'name', 'sku', 'barcode', 'description','photo','photo_2','customer_remark'], 'string', 'max' => 255],
@@ -68,6 +68,7 @@ class Product extends \yii\db\ActiveRecord
             'photo_2' => 'รูปภาพ',
             'sale_price' => 'ราคา',
             'customer_remark' => 'หมายเหตุ',
+            'deduct_type_id' => 'ประเภทหัก',
             'total_qty' =>'จำนวนทั้งหมด',
             'created_at' => 'Created At',
             'created_by' => 'Created By',

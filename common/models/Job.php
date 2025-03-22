@@ -42,8 +42,8 @@ class Job extends \yii\db\ActiveRecord
             [['trans_date','status'], 'safe'],
             [['customer_id', 'created_at', 'created_by', 'updated_at', 'updated_by', 'team_id', 'head_id', 'payment_status','job_master_id'], 'integer'],
             [['job_no', 'quotation_ref_no','invoice_ref_no'], 'string', 'max' => 255],
-            [['job_type_id','install_team_id','main_distributor_id'],'integer'],
-            [['vat_amount','paid_amount','pending_amount','payment_amount'],'number'],
+            [['job_type_id','install_team_id','main_distributor_id','set_to_zero'],'integer'],
+            [['vat_amount','paid_amount','pending_amount','payment_amount','withholding_amount'],'number'],
         ];
     }
 
@@ -65,16 +65,18 @@ class Job extends \yii\db\ActiveRecord
             'created_by' => 'ทำรายการโดย',
             'updated_at' => 'วันที่แก้ไขรายการ',
             'updated_by' => 'แก้ไขรายการโดย',
-            'team_id' => 'ทีม',
+            'team_id' => 'ทีมขาย',
             'head_id' => 'ผู้รับผิดชอบ',
             'job_type_id' => 'ประเภทงาน',
             'install_team_id' => 'ทีมติดตั้ง',
-            'main_distributor_id' => 'Main Distributor',
+            'main_distributor_id' => 'ผู้นำเข้าหลัก',
             'vat_amount' => 'ยอดภาษีมูลค่าเพิ่ม',
-            'paid_amount' => 'ยอดช่างชำระเงิน',
-            'pending_amount' => 'ยอดค้างชำระ',
+            'paid_amount' => 'เงินที่ชำระแล้ว/Paid Amount',
+            'pending_amount' => 'เงินที่ค้างชำระ/Pending Amount',
             'payment_amount' => 'ยอดชำระเงิน',
-            'payment_status' => 'สถานะชำระเงิน',
+            'payment_status' => 'สถานะการจ่ายเงิน/Payment Status',
+            'withholding_amount'=>'เงินที่หักภาษี ณ ที่จ่าย/WHT',
+            'set_to_zero'=>'ปรับยอดเป็นศูนย์',
         ];
     }
 }

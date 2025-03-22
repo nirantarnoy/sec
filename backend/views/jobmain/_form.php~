@@ -220,7 +220,7 @@ use yii\grid\GridView;
 //                                'data-pjax' => '0',
 //                                // 'style'=>['float'=>'rigth'],
 //                            ]);
-                            return Html::a('<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', 'index.php?r=job/update?id=' . $data->id , $options);
+                            return Html::a('<span class="fas fa-edit btn btn-xs btn-default"></span>', 'index.php?r=job/update&id=' . $data->id , $options);
                         },
                         'delete' => function ($url, $data, $index) {
                             $options = array_merge([
