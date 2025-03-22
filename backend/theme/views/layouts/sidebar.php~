@@ -110,15 +110,26 @@
 <!--                            </li>-->
                         <?php //endif; ?>
                         <?php //if (\Yii::$app->user->can('customer/index')): ?>
-                            <li class="nav-item">
-                                <a href="index.php?r=customer" class="nav-link customer">
-                                    <i class="far fa-circlez nav-icon"></i>
-                                    <p>
-                                        ลูกค้า
-                                        <!--                                <span class="right badge badge-danger">New</span>-->
-                                    </p>
-                                </a>
-                            </li>
+                        <li class="nav-item">
+                            <a href="index.php?r=customer" class="nav-link customer">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>
+                                    ลูกค้า
+                                    <!--                                <span class="right badge badge-danger">New</span>-->
+                                </p>
+                            </a>
+                        </li>
+                        <?php //endif; ?>
+                        <?php //if (\Yii::$app->user->can('customer/index')): ?>
+                        <li class="nav-item">
+                            <a href="index.php?r=distributor" class="nav-link distributor">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>
+                                    ผู้นำเข้าหลัก
+                                    <!--                                <span class="right badge badge-danger">New</span>-->
+                                </p>
+                            </a>
+                        </li>
                         <?php //endif; ?>
 
                     </ul>

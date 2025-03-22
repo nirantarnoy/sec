@@ -308,7 +308,7 @@
                         <?php //endif; ?>
                         <?php //if (\Yii::$app->user->can('product/index')): ?>
                         <li class="nav-item">
-                            <a href="index.php?r=job" class="nav-link job">
+                            <a href="index.php?r=jobmain" class="nav-link jobmain">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>ใบงาน</p>
                             </a>
