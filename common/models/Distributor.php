@@ -37,6 +37,7 @@ class Distributor extends \yii\db\ActiveRecord
             [['name'], 'unique'],
             [['is_main', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name', 'description'], 'string', 'max' => 255],
+            [['can_new'], 'safe'],
         ];
     }
 

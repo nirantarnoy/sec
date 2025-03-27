@@ -38,7 +38,7 @@ class JobLine extends \yii\db\ActiveRecord
     {
         return [
             [['job_id', 'product_id','stock_type_id','cost_category_type','vat_type','withholdingtax'], 'integer'],
-            [['cost_per_unit', 'discount_per', 'dealer_price', 'vat_amount', 'total_cost_per_unit', 'qty', 'cost_total', 'quotation_per_unit_price', 'total_quotation_price'], 'number'],
+            [['cost_per_unit', 'discount_per', 'dealer_price', 'vat_amount', 'total_cost_per_unit', 'qty', 'cost_total', 'quotation_per_unit_price', 'total_quotation_price','withholding_tax_amount'], 'number'],
             [['product_name','distributor_info'], 'string', 'max' => 255],
         ];
     }

@@ -7,6 +7,7 @@ use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
+
 /** @var yii\web\View $this */
 /** @var backend\models\TeamSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
@@ -15,11 +16,11 @@ $this->title = 'Teams';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="team-index">
-    <?php if(\Yii::$app->session->getFlash('success') !== null): ?>
+    <?php if (\Yii::$app->session->getFlash('success') !== null): ?>
         <div class="alert alert-success">
-            <?=\Yii::$app->session->getFlash('success')?>
+            <?= \Yii::$app->session->getFlash('success') ?>
         </div>
-    <?php endif;?>
+    <?php endif; ?>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
@@ -64,6 +65,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: center']],
             'name',
             'description',
+            [
+                'attribute' => 'team_type_id',
+                'value' => function ($data) {
+                    return \backend\helpers\TeamType::getTypeById($data->team_type_id);
+                }
+            ],
             [
                 'attribute' => 'status',
                 'format' => 'raw',

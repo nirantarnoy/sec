@@ -16,7 +16,7 @@ use yii\filters\AccessControl;
 /**
  * PickingController implements the CRUD actions for Picking model.
  */
-class DbbackupController extends Controller
+class DbrestoreController extends Controller
 {
     public $enableCsrfValidation = false;
 
@@ -60,6 +60,7 @@ class DbbackupController extends Controller
 
     public function actionBak()
     {
+
         $host = "localhost";
         $username = "root";
         $password = "";
@@ -169,12 +170,16 @@ class DbbackupController extends Controller
                     $response = $this->restoreMysqlDB($conn, $upfiles);
                     //print_r($response);
                     \Yii::$app->session->setFlash('msg','Restore ข้อมูลสำเร็จ');
-                    return $this->redirect(['db/restorepage']);
+                    return $this->redirect(['dbrestore/restorepage']);
 
                 }
 
 
+            }else{
+                echo "cannot save file.";
             }
+        }else{
+            echo "empty file.";
         }
 
     }
@@ -198,7 +203,7 @@ class DbbackupController extends Controller
                 $sql .= $line;
 
                 if (substr(trim($line), -1, 1) == ';') {
-                   // $result = mysqli_query($conn, $sql);
+                    // $result = mysqli_query($conn, $sql);
                     $result = \Yii::$app->db->createCommand($sql)->query();
                     if (!$result) {
                         $error .= mysqli_error($conn) . "\n";
@@ -231,16 +236,16 @@ class DbbackupController extends Controller
     {
         $host = "localhost";
         $username = "root";
+        // $password = "'" . "Ning0615410888$$" . "'";
         $password = "";
-      //  $database_name = "admin_icesystem";
-        $database_name = "sec";
+        $database_name = "vorapat";
         $date_string = time();
 
         $cmd = '';
 
         $os = php_uname();
         if (strpos($os, 'ndow') > 0) {
-            $cmd = 'E:/xampp/mysql/bin/';
+            $cmd = 'D:/xampp/mysql/bin/';
             $cmd .= "mysqldump -h {$host} -u {$username} {$database_name} > " . '../web/uploads/backup/' . "pc_{$date_string}_{$database_name}.sql";
 
         } else {
@@ -364,7 +369,7 @@ class DbbackupController extends Controller
         if ($id != '') {
             unlink('../web/uploads/backup/' . $id);
         }
-        return $this->redirect(['dbbackup/backuplist']);
+        return $this->redirect(['dbmanagement/backuplist']);
     }
 
 }

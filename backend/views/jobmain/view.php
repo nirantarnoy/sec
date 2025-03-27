@@ -27,16 +27,51 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-       //     'id',
-            'team_id',
-            'emp_id',
+            //     'id',
+            [
+                'attribute' => 'team_id',
+                'value' => function ($data) {
+                    return \backend\models\Team::findName($data->team_id);
+                }
+            ],
+            [
+                'attribute' => 'emp_id',
+                'value' => function ($data) {
+                    return \backend\models\Employee::findFullName($data->emp_id);
+                }
+            ],
             'job_month',
-            'approve_payment_status',
-            'status',
-            'created_at',
-            'created_by',
-            'updated_at',
-            'updated_by',
+            [
+                    'attribute' => 'approve_payment_status',
+                    'value' => function ($data) {
+                        return \backend\helpers\JobApprovePaymentStatus::getTypeById($data->approve_payment_status);
+                    }
+            ],
+            //'status',
+            [
+                'attribute' => 'created_at',
+                'value' => function ($data) {
+                    return date('d-m-Y H:i:s', $data->created_at);
+                }
+            ],
+            [
+                'attribute' => 'created_by',
+                'value' => function ($data) {
+                    return \backend\models\User::findName($data->created_by);
+                }
+            ],
+            [
+                'attribute' => 'updated_at',
+                'value' => function ($data) {
+                    return date('d-m-Y H:i:s', $data->updated_at);
+                }
+            ],
+            [
+                'attribute' => 'updated_by',
+                'value' => function ($data) {
+                    return \backend\models\User::findName($data->updated_by);
+                }
+            ],
         ],
     ]) ?>
 

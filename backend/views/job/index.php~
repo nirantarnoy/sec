@@ -1,6 +1,6 @@
 <?php
 
-use backend\models\Jobmain;
+use backend\models\Job;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -9,14 +9,13 @@ use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
 
 /** @var yii\web\View $this */
-/** @var backend\models\JobmainSearch $searchModel */
+/** @var backend\models\JobSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Jobmains';
+$this->title = 'ใบงาน';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="jobmain-index">
-
+<div class="job-index">
     <?php if (\Yii::$app->session->getFlash('success') !== null): ?>
         <div class="alert alert-success">
             <?= \Yii::$app->session->getFlash('success') ?>
@@ -57,47 +56,57 @@ $this->params['breadcrumbs'][] = $this->title;
         //     'striped' => false,
         //    'hover' => true,
         'id' => 'product-grid',
-        //'tableOptions' => ['class' => 'table table-hover'],
+        //'responsiveWrap' => true,
+        'tableOptions' => ['class' => 'table table-responsive table-hover'],
         'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
         'columns' => [
             [
                 'class' => 'yii\grid\SerialColumn',
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center']],
+            'job_no',
+            'quotation_ref_no',
+            [
+                'attribute' => 'trans_date',
+                'value' => function ($data) {
+                    return $data->trans_date != null ? date('d-m-Y', strtotime($data->trans_date)) : '';
+                }
+            ],
+            [
+                'attribute' => 'customer_id',
+                'value' => function ($data) {
+                    return \backend\models\Customer::findCusFullName($data->customer_id);
+                }
+            ],
             [
                 'attribute' => 'team_id',
-                'value' => function ($model) {
-                    return \backend\models\Team::findName($model->team_id);
+                'value' => function ($data) {
+                    return \backend\models\Team::findName($data->team_id);
                 }
             ],
             [
-                'attribute' => 'emp_id',
+                'attribute' => 'head_id',
                 'value' => function ($data) {
-                    return \backend\models\Employee::findFullName($data->emp_id);
+                    return \backend\models\Employee::findFullName($data->head_id);
                 }
             ],
-            'job_month',
-            'approve_payment_status',
             [
-                'attribute' => 'approve_payment_status',
-                'format' => 'raw',
-                'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'text-align: center'],
+                'attribute' => 'status',
                 'value' => function ($data) {
-                    if ($data->approve_payment_status == 1) {
-                        return '<div class="badge badge-success">อนุมัติจ่ายแล้ว</div>';
-                    } else {
-                        return '<div class="badge badge-dark">ยังไม่อนุมัติจ่าย</div>';
-                    }
+                    return \backend\helpers\JobStatus::getTypeById($data->status);
                 }
             ],
-            //'company_id',
-            //'branch_id',
+            [
+                'attribute' => 'payment_status',
+                'value' => function ($data) {
+                    return \backend\models\Paymentstatus::findName($data->payment_status);
+                }
+            ],
+            //'status',
             //'created_at',
-            //'updated_at',
             //'created_by',
+            //'updated_at',
             //'updated_by',
-
             [
 
                 'header' => 'ตัวเลือก',

@@ -194,7 +194,6 @@ class JobmainController extends Controller
             $model->status = 1;
             $model->job_value_amount = 0;
             if($model->save(false)){
-                \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
                 return $this->redirect(['jobmain/update','id'=>$jobmain_id]);
             }
         }

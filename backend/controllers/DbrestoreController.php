@@ -238,7 +238,7 @@ class DbrestoreController extends Controller
         $username = "root";
         // $password = "'" . "Ning0615410888$$" . "'";
         $password = "";
-        $database_name = "vorapat";
+        $database_name = "sec";
         $date_string = time();
 
         $cmd = '';

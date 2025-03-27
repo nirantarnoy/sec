@@ -41,7 +41,7 @@ class Product extends \yii\db\ActiveRecord
         return [
             [['name','sku'],'required'],
             [['name','sku'],'unique'],
-            [['product_cat_id', 'unit_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','is_drummy','deduct_type_id'], 'integer'],
+            [['product_cat_id', 'unit_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','is_drummy','deduct_type_id','cal_type_id','distributor_id'], 'integer'],
             [['cost_price','sale_price','total_qty'], 'number'],
             [['exp_date'], 'safe'],
             [['code', 'name', 'sku', 'barcode', 'description','photo','photo_2','customer_remark'], 'string', 'max' => 255],
@@ -75,6 +75,8 @@ class Product extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'updated_by' => 'Updated By',
             'exp_date' => 'Exp Date',
+            'cal_type_id' => 'ประเภทการคํานวณ',
+            'distributor_id'=> 'ผู้นำเข้าหลัก',
         ];
     }
 }

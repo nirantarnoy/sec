@@ -35,10 +35,10 @@ class JobPayment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['job_id', 'bank_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['trans_date'], 'safe'],
+            [['job_id', 'bank_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','payment_method_id'], 'integer'],
+            [['trans_date','fee_amount'], 'safe'],
             [['amount'], 'number'],
-            [['note'], 'string', 'max' => 255],
+            [['note','slip_doc'], 'string', 'max' => 255],
         ];
     }
 

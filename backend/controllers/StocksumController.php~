@@ -60,7 +60,8 @@ class StocksumController extends Controller
     {
         $searchModel = new StocksumSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        $dataProvider->query->andFilterWhere(['product.cal_type_id' => 1]);
+        $dataProvider->query->andFilterWhere(['cal_type_id' => 1]);
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

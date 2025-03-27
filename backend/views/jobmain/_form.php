@@ -5,150 +5,166 @@ use yii\widgets\ActiveForm;
 use yii\widgets\LinkPager;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
-use yii\grid\GridView;
+use kartik\grid\GridView;
+
 /** @var yii\web\View $this */
 /** @var backend\models\Jobmain $model */
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="jobmain-form">
-<!--    <div id="tagsContainer" style="margin-top: 10px; border: 1px solid #ccc; padding: 5px; min-height: 30px;"></div>-->
-    <?php $form = ActiveForm::begin(); ?>
-    <input type="hidden" id="jobmain-id" value="<?=$model->id?>">
-    <div class="row">
-        <div class="col-lg-3">
-            <?= $form->field($model, 'team_id')->widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status'=>1])->all(), 'id', 'name'),
-                'options' => ['id'=>'team-id','placeholder' => 'Select a team ...','onchange'=>'getemployee($(this));'],
-                'pluginOptions' => ['allowClear' => true],
-            ]) ?>
-        </div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'emp_id')->widget(\kartik\select2\Select2::className(),[
-                'data'=>\yii\helpers\ArrayHelper::map(\backend\models\Employee::find()->where(['status'=>1])->all(),'id',function($data){
-                    return $data->f_name.' '.$data->l_name;
-                }),
-                'options' => ['id'=>'head-id','placeholder' => 'Select a head ...','class'=>'selected-head-id'],
-                'pluginOptions' => ['allowClear' => true],
-            ]) ?>
-        </div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'job_month')->widget(\kartik\date\DatePicker::className(),[
-                'pluginOptions'=>[
-                    'format'=>'dd-mm-yyyy',
-                ]
-            ]) ?>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-    <br />
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="row">
-                <div class="col-lg-12">
-                    <b>ข้อมูลลูกค้า / Customer information</b>
-                </div>
+    <div class="jobmain-form">
+        <!--    <div id="tagsContainer" style="margin-top: 10px; border: 1px solid #ccc; padding: 5px; min-height: 30px;"></div>-->
+        <?php $form = ActiveForm::begin(); ?>
+        <input type="hidden" id="jobmain-id" value="<?= $model->id ?>">
+        <div class="row">
+            <div class="col-lg-3">
+                <?= $form->field($model, 'team_id')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Team::find()->where(['status' => 1,'team_type_id' => 1])->all(), 'id', 'name'),
+                    'options' => ['id' => 'team-id', 'placeholder' => 'Select a team ...', 'onchange' => 'getemployee($(this));'],
+                    'pluginOptions' => ['allowClear' => true],
+                ]) ?>
             </div>
-            <form action="">
-            <div class="row">
-                <div class="col-lg-3">
-                    <label for="">เลขที่งาน / Job No</label>
-                    <input type="text" class="form-control" value="" readonly="readonly">
-                </div>
-                <div class="col-lg-3">
-                    <label for="">ชื่อลูกค้า / Customer Name</label>
-                    <?php
-                       echo \kartik\select2\Select2::widget([
-                               'name'=>'customer_id',
-                               'data' => \yii\helpers\ArrayHelper::map(\common\models\Customer::find()->where(['status'=>1])->all(), 'id', function($data){
-                                   return $data->first_name.' '.$data->last_name;
-                               }),
-                           'options' => ['id'=>'customer-id','placeholder' => 'Select a customer ...'],
-                           'pluginOptions' => ['allowClear' => true],
-                       ])
-                    ?>
-                </div>
-                <div class="col-lg-3">
-                    <label for="">ใบเสนอราคาเลขที่ / Quotation No.</label>
-                    <br />
-                    <!-- Input Field -->
-                    <?= Html::textInput('tagInput', '', [
-                        'class' => 'tag-input',
-                        'id' => 'tagInput',
-                        'placeholder' => 'Type and press space...',
-                        'style' => 'width: 100%; padding: 5px;'
-                    ]) ?>
-
-                    <!-- Hidden Field to Store Tags (For Form Submission) -->
-                    <?= Html::hiddenInput('quotation_tags', '', ['id' => 'hiddenTags']) ?>
-                </div>
-                <div class="col-lg-3">
-                    <label for="">ใบกำกับภาษีเลขที่ / Invoice No.</label>
-                    <br />
-                    <!-- Input Field -->
-                    <?= Html::textInput('tagInput2', '', [
-                        'class' => 'tag-input-2',
-                        'id' => 'tagInput2',
-                        'placeholder' => 'Type and press space...',
-                        'style' => 'width: 100%; padding: 5px;'
-                    ]) ?>
-
-                    <!-- Hidden Field to Store Tags (For Form Submission) -->
-                    <?= Html::hiddenInput('invoice_tags', '', ['id' => 'hiddenInvoiceTags']) ?>
-                </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'emp_id')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Employee::find()->where(['status' => 1])->all(), 'id', function ($data) {
+                        return $data->f_name . ' ' . $data->l_name;
+                    }),
+                    'options' => ['id' => 'head-id', 'placeholder' => 'Select a head ...', 'class' => 'selected-head-id'],
+                    'pluginOptions' => ['allowClear' => true],
+                ]) ?>
             </div>
-            </form>
-            <br />
-            <div class="row">
-                <div class="col-lg-3">
-                    <button class="btn btn-primary btn-save" onclick="addJob();">เพิ่มข้อมูลใบงาน</button>
-                </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'job_month')->widget(\kartik\date\DatePicker::className(), [
+                    'pluginOptions' => [
+                        'format' => 'dd-mm-yyyy',
+                    ]
+                ]) ?>
             </div>
         </div>
-    </div>
-    <br />
-    <div class="row">
-        <div class="col-lg-6"><b>รายการใบงาน</b></div>
-    </div>
-    <div class="job-index">
-        <?php if (\Yii::$app->session->getFlash('success') !== null): ?>
-            <div class="alert alert-success">
-                <?= \Yii::$app->session->getFlash('success') ?>
+
+        <div class="form-group">
+            <?= Html::submitButton('เพิ่มรายงาน / Add Report', ['class' => 'btn btn-success']) ?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+
+        <?php if(!$model->isNewRecord):?>
+        <br/>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <b>ข้อมูลลูกค้า / Customer information</b>
+                    </div>
+                </div>
+                <form action="">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <label for="">เลขที่งาน / Job No</label>
+                            <input type="text" class="form-control" value="" readonly="readonly">
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="">ชื่อลูกค้า / Customer Name</label>
+                            <?php
+                            echo \kartik\select2\Select2::widget([
+                                'name' => 'customer_id',
+                                'data' => \yii\helpers\ArrayHelper::map(\common\models\Customer::find()->where(['status' => 1])->all(), 'id', function ($data) {
+                                    return $data->first_name . ' ' . $data->last_name;
+                                }),
+                                'options' => ['id' => 'customer-id', 'placeholder' => 'Select a customer ...'],
+                                'pluginOptions' => ['allowClear' => true],
+                            ])
+                            ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="">ใบเสนอราคาเลขที่ / Quotation No.</label>
+                            <br/>
+                            <!-- Input Field -->
+                            <?= Html::textInput('tagInput', '', [
+                                'class' => 'tag-input',
+                                'id' => 'tagInput',
+                                'placeholder' => 'Type and press space...',
+                                'style' => 'width: 100%; padding: 5px;'
+                            ]) ?>
+
+                            <!-- Hidden Field to Store Tags (For Form Submission) -->
+                            <?= Html::hiddenInput('quotation_tags', '', ['id' => 'hiddenTags']) ?>
+                        </div>
+                        <div class="col-lg-3">
+                            <label for="">ใบกำกับภาษีเลขที่ / Invoice No.</label>
+                            <br/>
+                            <!-- Input Field -->
+                            <?= Html::textInput('tagInput2', '', [
+                                'class' => 'tag-input-2',
+                                'id' => 'tagInput2',
+                                'placeholder' => 'Type and press space...',
+                                'style' => 'width: 100%; padding: 5px;'
+                            ]) ?>
+
+                            <!-- Hidden Field to Store Tags (For Form Submission) -->
+                            <?= Html::hiddenInput('invoice_tags', '', ['id' => 'hiddenInvoiceTags']) ?>
+                        </div>
+                    </div>
+                </form>
+                <br/>
+                <div class="row">
+                    <div class="col-lg-3">
+                        <button class="btn btn-primary btn-save" onclick="addJob();">เพิ่มข้อมูลใบงาน</button>
+                    </div>
+                </div>
             </div>
-        <?php endif; ?>
-        <?php Pjax::begin(); ?>
-        <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            // 'filterModel' => $searchModel,
-            'emptyCell' => '-',
-            'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
-            'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
-            'showOnEmpty' => false,
-            //    'bordered' => true,
-            //     'striped' => false,
-            //    'hover' => true,
-            'id' => 'product-grid',
-            //'tableOptions' => ['class' => 'table table-hover'],
-            'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
-            'columns' => [
-                [
-                    'class' => 'yii\grid\SerialColumn',
-                    'headerOptions' => ['style' => 'text-align: center'],
-                    'contentOptions' => ['style' => 'text-align: center']],
-               // 'job_no',
-                [
-                    'attribute' => 'customer_id',
-                    'value' => function ($data) {
-                        return \backend\models\Customer::findCusFullName($data->customer_id);
-                    }
-                ],
-                'quotation_ref_no',
-                'invoice_ref_no',
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-lg-6"><b>รายการใบงาน</b></div>
+        </div>
+        <div class="job-index" style="overflow: hidden">
+            <?php if (\Yii::$app->session->getFlash('success') !== null): ?>
+                <div class="alert alert-success">
+                    <?= \Yii::$app->session->getFlash('success') ?>
+                </div>
+            <?php endif; ?>
+            <?php if ($dataProvider != null): ?>
+                <?php Pjax::begin(); ?>
+                <?= GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    // 'filterModel' => $searchModel,
+                    'emptyCell' => '-',
+                    'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
+                    'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
+                    'showOnEmpty' => false,
+                    //    'bordered' => true,
+                    //     'striped' => false,
+                    //    'hover' => true,
+                    'responsive' => true,
+                    'id' => 'job-grid',
+
+                    //   'tableOptions' => ['class' => 'table table-responsive table-hover'],
+                    'tableOptions' => ['style' => 'table-layout: auto;width: 150%;'],
+                    'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
+                    'columns' => [
+                        [
+                            'class' => 'yii\grid\SerialColumn',
+                            'headerOptions' => ['style' => 'text-align: center;width: 3% !important;'],
+                            'contentOptions' => ['style' => 'text-align: center;width: 3% !important;'],],
+                        // 'job_no',
+                        [
+                            'attribute' => 'customer_id',
+                            'headerOptions' => ['style' => 'width: 5% !important;'],
+                            'contentOptions' => ['style' => 'width: 5% !important;'],
+                            'value' => function ($data) {
+                                return \backend\models\Customer::findCusFullName($data->customer_id);
+                            }
+                        ],
+                        [
+                            'attribute' => 'quotation_ref_no',
+                            'headerOptions' => ['style' => 'width: 5% !important;'],
+                            'contentOptions' => ['style' => 'width: 5% !important;'],
+                            'value' => function ($data) {
+                                return $data->quotation_ref_no;
+                            }
+                        ],
+                        'invoice_ref_no',
 //                [
 //                    'attribute' => 'team_id',
 //                    'value' => function ($data) {
@@ -163,53 +179,142 @@ use yii\grid\GridView;
 //                ],
 
 
-                [
-                    'attribute' => 'head_id',
-                    'value' => function ($data) {
-                        return \backend\models\Employee::findFullName($data->head_id);
-                    }
-                ],
-                [
-                    'attribute' => 'status',
-                    'value' => function ($data) {
-                        return \backend\helpers\JobStatus::getTypeById($data->status);
-                    }
-                ],
-                [
-                    'attribute' => 'payment_status',
-                    'value' => function ($data) {
-                        return \backend\models\Paymentstatus::findName($data->payment_status);
-                    }
-                ],
-                //'status',
-                //'created_at',
-                //'created_by',
-                //'updated_at',
-                //'updated_by',
-                [
+                        [
+                            'attribute' => 'head_id',
+                            'value' => function ($data) {
+                                return \backend\models\Employee::findFullName($data->head_id);
+                            }
+                        ],
+                        [
+                            'attribute' => 'job_type_id',
+                            'value' => function ($data) {
+                                return \backend\models\WorkType::findName($data->job_type_id);
+                            }
+                        ],
+                        [
+                            'attribute' => 'install_team_id',
+                            'value' => function ($data) {
+                                return \backend\models\Team::findName($data->install_team_id);
+                            }
+                        ],
+                        [
+                            'attribute' => 'main_distributor_id',
+                            'value' => function ($data) {
+                                return \backend\models\Distributor::findName($data->main_distributor_id);
+                            }
+                        ],
+                        [
+                            'attribute' => 'status',
+                            'value' => function ($data) {
+                                return \backend\helpers\JobStatus::getTypeById($data->status);
+                            }
+                        ],
+                        [
+                            'attribute' => 'paid_amount',
+                            'contentOptions' => ['style' => 'text-align: right'],
+                            'value' => function ($data) {
+                                return number_format($data->paid_amount != null ? $data->paid_amount : 0, 2);
+                            }
+                        ],
+                        [
+                            'attribute' => 'withholding_amount',
+                            'contentOptions' => ['style' => 'text-align: right'],
+                            'value' => function ($data) {
+                                return number_format($data->withholding_amount != null ? $data->withholding_amount : 0, 2);
+                            }
+                        ],
+                        [
+                            'attribute' => 'pending_amount',
+                            'contentOptions' => ['style' => 'text-align: right'],
+                            'value' => function ($data) {
+                                return number_format($data->pending_amount != null ? $data->pending_amount : 0, 2);
+                            }
+                        ],
+                        [
+                            'attribute' => 'payment_status',
+                            'contentOptions' => ['style' => 'text-align: center'],
+                            'format' => 'raw',
+                            'value' => function ($data) {
+                                $status = \backend\models\Paymentstatus::findName($data->payment_status);
+                                if ($data->payment_status == 1) {
+                                    return '<div class="badge badge-danger">' . $status . '</div>';
+                                } else if ($data->payment_status == 2) {
+                                    return '<div class="badge badge-warning">' . $status . '</div>';
+                                } else if ($data->payment_status == 3) {
+                                    return '<div class="badge badge-success">' . $status . '</div>';
+                                }
+                            }
+                        ],
+                        [
+                            'attribute' => 'job_value_amount',
+                            'contentOptions' => ['style' => 'text-align: right'],
+                            'label' => 'มูลค่างาน',
+                            'value' => function ($data) {
+                                return number_format($data->job_value_amount != null ? $data->job_value_amount : 0, 2);
+                            }
+                        ],
+                        [
+                            'attribute' => 'job_cost_amount',
+                            'contentOptions' => ['style' => 'text-align: right'],
+                            'value' => function ($data) {
+                                return number_format($data->job_cost_amount != null ? $data->job_cost_amount : 0, 2);
+                            }
+                        ],
+                        [
+                            'attribute' => 'job_benefit_amount',
+                            'contentOptions' => ['style' => 'text-align: right'],
+                            'value' => function ($data) {
+                                return number_format($data->job_benefit_amount != null ? $data->job_benefit_amount : 0, 2);
+                            }
+                        ],
+                        [
+                            'attribute' => 'job_benefit_per',
+                            'contentOptions' => ['style' => 'text-align: right'],
+                            'value' => function ($data) {
+                                return number_format($data->job_benefit_per != null ? $data->job_benefit_per : 0, 2);
+                            }
+                        ],
+                        [
+                            'attribute' => 'commission_amount',
+                            'contentOptions' => ['style' => 'text-align: right'],
+                            'value' => function ($data) {
+                                return number_format($data->commission_amount != null ? $data->commission_amount : 0, 2);
+                            }
+                        ],
+                        [
+                            'attribute' => 'remark',
+                        ],
 
-                    'header' => 'ตัวเลือก',
-                    'headerOptions' => ['style' => 'text-align:center;', 'class' => 'activity-view-link',],
-                    'class' => 'yii\grid\ActionColumn',
-                    'contentOptions' => ['style' => 'text-align: center'],
-                    'template' => '{view} {update}{delete}',
-                    'buttons' => [
-                        'view' => function ($url, $data, $index) {
-                            $options = [
-                                'title' => Yii::t('yii', 'View'),
-                                'aria-label' => Yii::t('yii', 'View'),
-                                'data-pjax' => '0',
-                            ];
-                            return Html::a(
-                                '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, $options);
-                        },
-                        'update' => function ($url, $data, $index) {
-                            $options = array_merge([
-                                'title' => Yii::t('yii', 'Update'),
-                                'aria-label' => Yii::t('yii', 'Update'),
-                                'data-pjax' => '0',
-                                'id' => 'modaledit',
-                            ]);
+
+                        //'status',
+                        //'created_at',
+                        //'created_by',
+                        //'updated_at',
+                        //'updated_by',
+                        [
+
+                            'header' => 'ตัวเลือก',
+                            'headerOptions' => ['style' => 'text-align:center;', 'class' => 'activity-view-link',],
+                            'class' => 'yii\grid\ActionColumn',
+                            'contentOptions' => ['style' => 'text-align: center'],
+                            'template' => '{update}',
+                            'buttons' => [
+                                'view' => function ($url, $data, $index) {
+                                    $options = [
+                                        'title' => Yii::t('yii', 'View'),
+                                        'aria-label' => Yii::t('yii', 'View'),
+                                        'data-pjax' => '0',
+                                    ];
+                                    return Html::a(
+                                        '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, $options);
+                                },
+                                'update' => function ($url, $data, $index) {
+                                    $options = array_merge([
+                                        'title' => Yii::t('yii', 'Update'),
+                                        'aria-label' => Yii::t('yii', 'Update'),
+                                        'data-pjax' => '0',
+                                        'id' => 'modaledit',
+                                    ]);
 //                            return Html::a(
 //                                '<span class="fas fa-edit btn btn-xs btn-default"></span>', $url, [
 //                                'id' => 'activity-view-link',
@@ -219,37 +324,39 @@ use yii\grid\GridView;
 //                                'data-pjax' => '0',
 //                                // 'style'=>['float'=>'rigth'],
 //                            ]);
-                            return Html::a('<span class="fas fa-edit btn btn-xs btn-default"></span>', 'index.php?r=job/update&id=' . $data->id , $options);
-                        },
-                        'delete' => function ($url, $data, $index) {
-                            $options = array_merge([
-                                'title' => Yii::t('yii', 'Delete'),
-                                'aria-label' => Yii::t('yii', 'Delete'),
-                                //'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
-                                //'data-method' => 'post',
-                                //'data-pjax' => '0',
-                                'data-url' => $url,
-                                'data-var' => $data->id,
-                                'onclick' => 'recDelete($(this));'
-                            ]);
-                            return Html::a('<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
-                        }
-                    ]
-                ],
-            ],
-            'pager' => ['class' => LinkPager::className()],
-        ]); ?>
+                                    return Html::a('<span class="fas fa-edit btn btn-xs btn-default"></span>', 'index.php?r=job/update&id=' . $data->id, $options);
+                                },
+                                'delete' => function ($url, $data, $index) {
+                                    $options = array_merge([
+                                        'title' => Yii::t('yii', 'Delete'),
+                                        'aria-label' => Yii::t('yii', 'Delete'),
+                                        //'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
+                                        //'data-method' => 'post',
+                                        //'data-pjax' => '0',
+                                        'data-url' => $url,
+                                        'data-var' => $data->id,
+                                        'onclick' => 'recDelete($(this));'
+                                    ]);
+                                    return Html::a('<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
+                                }
+                            ]
+                        ],
+                    ],
+                    'pager' => ['class' => LinkPager::className()],
+                ]); ?>
 
-        <?php Pjax::end(); ?>
+                <?php Pjax::end(); ?>
+            <?php endif; ?>
+
+        </div>
+       <?php endif; ?>
 
     </div>
 
-</div>
-
 
 <?php
-$url_to_find_employee =\yii\helpers\Url::to(['job/getemployee'], true);
-$url_to_add_job =\yii\helpers\Url::to(['jobmain/createjob'], true);
+$url_to_find_employee = \yii\helpers\Url::to(['job/getemployee'], true);
+$url_to_add_job = \yii\helpers\Url::to(['jobmain/createjob'], true);
 $js = <<<JS
 var selecteditem = [];
 var removelist = [];
@@ -375,17 +482,18 @@ function addJob(){
     
    
     if(jobmain_id && customer_id){
-         alert(team_id);
+      //   alert(team_id);
         $.ajax({
         url: url,
         type: 'post',
         dataType: 'html',
         data: {id: jobmain_id,customer_id:customer_id,tags:tags,tags2:tags2,team_id:team_id,head_id:head_id},
         success: function (data) {
-           alert('ok');
+           //alert('ok');
+          // window.location.reload();
         },
         error: function (err) {
-            alert('error');
+           // alert('error');
         }
     });
     }
@@ -394,6 +502,6 @@ function addJob(){
 
 JS;
 
-$this->registerJs($js,static::POS_END);
+$this->registerJs($js, static::POS_END);
 
 ?>

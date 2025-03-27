@@ -34,6 +34,7 @@ class JobMaster extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['team_id','emp_id','job_month'],'required'],
             [['team_id', 'emp_id', 'approve_payment_status', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['job_month'], 'safe'],
         ];
