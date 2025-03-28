@@ -4,22 +4,22 @@ namespace backend\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Distributor;
+use backend\models\Unit;
 
 /**
- * DistributorSearch represents the model behind the search form of `backend\models\Distributor`.
+ * UnitSearch represents the model behind the search form of `backend\models\Unit`.
  */
-class DistributorSearch extends Distributor
+class UnitSearch extends Unit
 {
-    public $globalSearch;
+    public  $globalSearch;
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'is_main', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
-            [['name', 'description'], 'safe'],
+            [['id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
+            [['code', 'name', 'description'], 'safe'],
             [['globalSearch'], 'string'],
         ];
     }
@@ -42,7 +42,7 @@ class DistributorSearch extends Distributor
      */
     public function search($params)
     {
-        $query = Distributor::find();
+        $query = Unit::find();
 
         // add conditions that should always apply here
 
@@ -61,17 +61,16 @@ class DistributorSearch extends Distributor
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'is_main' => $this->is_main,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,
             'updated_at' => $this->updated_at,
             'updated_by' => $this->updated_by,
-            'can_new' => 0,
         ]);
 
-        if($this->globalSearch != null || $this->globalSearch != ''){
-            $query->orFilterWhere(['like', 'name', $this->globalSearch])
+        if($this->globalSearch!=null || $this->globalSearch!=""){
+            $query->orFilterWhere(['like', 'code', $this->globalSearch])
+                ->orFilterWhere(['like', 'name', $this->globalSearch])
                 ->orFilterWhere(['like', 'description', $this->globalSearch]);
         }
 

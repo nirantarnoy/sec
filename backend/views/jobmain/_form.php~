@@ -283,9 +283,6 @@ use kartik\grid\GridView;
                         ],
                         [
                             'attribute' => 'remark',
-                            'value' => function ($data) {
-                                return $data->remark != null ? $data->remark : '';
-                            }
                         ],
 
 
