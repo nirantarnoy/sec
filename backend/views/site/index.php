@@ -10,7 +10,7 @@ $m_category = ['มกราคม', 'กุมภาพันธ์', 'มี�
 $m_category_show = [];
 
 $product_count = \backend\models\Product::find()->where(['status' => 1])->count();
-$order_count = 0; // \backend\models\Order::find()->count();
+$order_count =  \backend\models\Job::find()->where(['created_by' => \Yii::$app->user->id])->count();
 $customer_count = \backend\models\Customer::find()->where(['status' => 1])->count();
 
 $model_stock = \backend\models\Stocksum::find()->where(['>', 'qty', 0])->limit(10)->all();
@@ -78,7 +78,7 @@ $cost_stock_amt = 0;
                     <div class="icon">
                         <i class="ion ion-stats-bars"></i>
                     </div>
-                    <a href="<?= Url::to(['order/index'], true) ?>" class="small-box-footer">ไปยัง Job <i
+                    <a href="<?= Url::to(['jobmain/index'], true) ?>" class="small-box-footer">ไปยัง Job <i
                                 class="fas fa-arrow-circle-right"></i></a>
                 </div>
             </div>

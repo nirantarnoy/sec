@@ -34,6 +34,7 @@ class JobMaster extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['team_id','emp_id'],'required'],
             [['team_id', 'emp_id', 'approve_payment_status', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['job_month'], 'safe'],
         ];
@@ -51,10 +52,10 @@ class JobMaster extends \yii\db\ActiveRecord
             'job_month' => 'สรุปยอดขายประจำเดือน / Monthly',
             'approve_payment_status' => 'สถานะอนุมัติการจ่ายเงิน / Payment Status',
             'status' => 'สถานะ / Status',
-            'created_at' => 'Created At',
-            'created_by' => 'Created By',
-            'updated_at' => 'Updated At',
-            'updated_by' => 'Updated By',
+            'created_at' => 'สร้างเมื่อ',
+            'created_by' => 'สร้างโดย',
+            'updated_at' => 'แก้ไขเมื่อ',
+            'updated_by' => 'แก้ไขโดย',
         ];
     }
 }

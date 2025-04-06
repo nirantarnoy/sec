@@ -66,6 +66,7 @@ class UnitSearch extends Unit
             'created_by' => $this->created_by,
             'updated_at' => $this->updated_at,
             'updated_by' => $this->updated_by,
+            'can_new'=> 0,
         ]);
 
         if($this->globalSearch!=null || $this->globalSearch!=""){

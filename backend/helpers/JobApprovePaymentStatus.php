@@ -1,0 +1,42 @@
+<?php
+
+namespace backend\helpers;
+
+class JobApprovePaymentStatus
+{
+    private static $data = [
+        '1' => 'Pending',
+        '2' => 'Approved',
+        '3' => 'Not Approved',
+    ];
+
+    private static $dataobj = [
+        ['id'=>'1','name' => 'Pending'],
+        ['id'=>'2','name' => 'Approved'],
+        ['id'=>'3','name' => 'Not Approved'],
+    ];
+    public static function asArray()
+    {
+        return self::$data;
+    }
+    public static function asArrayObject()
+    {
+        return self::$dataobj;
+    }
+    public static function getTypeById($idx)
+    {
+        if (isset(self::$data[$idx])) {
+            return self::$data[$idx];
+        }
+
+        return 'Unknown Type';
+    }
+    public static function getTypeByName($idx)
+    {
+        if (isset(self::$data[$idx])) {
+            return self::$data[$idx];
+        }
+
+        return 'Unknown Type';
+    }
+}

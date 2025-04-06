@@ -36,7 +36,7 @@ class JobPayment extends \yii\db\ActiveRecord
     {
         return [
             [['job_id', 'bank_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','payment_method_id'], 'integer'],
-            [['trans_date'], 'safe'],
+            [['trans_date','fee_amount','total_amount'], 'safe'],
             [['amount'], 'number'],
             [['note','slip_doc'], 'string', 'max' => 255],
         ];

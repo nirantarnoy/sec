@@ -57,10 +57,23 @@ $yesno = [['id' => 1, 'YES'], ['id' => 0, 'NO']];
                 <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
             </div>
             <div class="col-lg-3">
-                <?= $form->field($model, 'deduct_type_id')->widget(\kartik\select2\Select2::className(), [
-                    'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\CostDeductType::asArray(), 'id', 'name'),
+                <?= $form->field($model, 'cal_type_id')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\common\models\CostCalType::find()->all(), 'id', 'name'),
                     'options' => [
-                        'placeholder' => '-- เลือกประเภท --'
+                        'placeholder' => '-- เลือกประเภทการคำนวน --',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                    ]
+                ]) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'distributor_id')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Distributor::find()->where(['status'=>1])->orderBy(['can_new'=>SORT_ASC])->all(), 'id', 'name'),
+                    'options' => [
+                        'placeholder' => '-- เลือกผู้นำเข้าหลัก --',
+                        'id'=>'selected-distributor-id',
+                        'onchange'=>'checkcreateNewDistributor($(this));'
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -269,7 +282,50 @@ $yesno = [['id' => 1, 'YES'], ['id' => 0, 'NO']];
                 </div>
                 <div class="modal-footer">
                     <div class="btn btn-outline-success btn-save-unit" onclick="createnewunit()"><i
-                                class="fa fa-check"></i> บันทึกx
+                                class="fa fa-check"></i> บันทึก
+                    </div>
+                    <button type="button" class="btn btn-default" data-dismiss="modal"><i
+                                class="fa fa-close text-danger"></i> ปิดหน้าต่าง
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="createDistributorModal" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-xl">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>สร้างข้อมูลผู้นำเข้าหลัก</h3>
+                </div>
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto">-->
+                <!--            <div class="modal-body" style="white-space:nowrap;overflow-y: auto;scrollbar-x-position: top">-->
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <label for="">ชื่อ</label>
+                            <input type="text" class="form-control new-distributor-name" name="new_distributor_name"
+                                   required value="">
+
+                        </div>
+                        <div class="col-lg-4">
+                            <label for="">รายละเอียด</label>
+                            <input type="text" class="form-control" name="new_distributor_description" required
+                                   value="">
+                        </div>
+
+
+                    </div>
+                    <div style="height: 10px;"></div>
+
+                    <br/>
+
+                </div>
+                <div class="modal-footer">
+                    <div class="btn btn-outline-success btn-save-unit" onclick="createnewdistributor()"><i
+                                class="fa fa-check"></i> บันทึก
                     </div>
                     <button type="button" class="btn btn-default" data-dismiss="modal"><i
                                 class="fa fa-close text-danger"></i> ปิดหน้าต่าง
@@ -281,6 +337,7 @@ $yesno = [['id' => 1, 'YES'], ['id' => 0, 'NO']];
     </div>
 <?php
 $url_to_create_unit = Url::to(['product/createunit'], true);
+$url_to_create_distributor = \yii\helpers\Url::to(['job/createdistributor'], true);
 $js = <<<JS
 var removelist = [];
 var removecustomerpricelist = [];
@@ -302,11 +359,44 @@ $(function(){
                       if (text === 'Create New') { // Change background for ID = 1
                         $(this).css("background-color", "#28a745"); // Green
                         $(this).css("color", "white"); // White text for better contrast
+                        $(this).css("text-align","center");
+                    }
+                });
+            }, 100);
+    });
+  
+  $('#selected-distributor-id').on('select2:open', function() {
+            setTimeout(function() {
+                $(".select2-results__option").each(function() {
+                    //var id = $(this).attr(""); // Get the option ID
+                    
+                    // if (id &&id.includes("9")) { // Change background for ID = 1
+                    //     $(this).css("background-color", "#28a745"); // Green
+                    //     $(this).css("color", "white"); // White text for better contrast
+                    // }
+                    
+                    var text = $(this).text().trim();
+                    
+                      if (text === 'Create New') { // Change background for ID = 1
+                        $(this).css("background-color", "#28a745"); // Green
+                        $(this).css("color", "white"); // White text for better contrast
                     }
                 });
             }, 100);
     });
 });
+
+function checkcreateNewDistributor(e){
+    var text = $("#selected-distributor-id option:selected").text().trim();
+    //alert(text);
+    if (text == 'Create New') { // Change background for ID = 1
+        $(e).css("background-color", "#28a745"); // Green
+        $(e).css("color", "white"); // White text for better contrast
+        $(e).css("text-align","center");
+        
+        $("#createDistributorModal").modal("show");
+    }
+}
 function addline(e){
     var tr = $("#table-list tbody tr:last");
     var clone = tr.clone();
@@ -411,6 +501,38 @@ function createnewunit(){
                 // $("#selected-unit-id").val(data).change();
                 if(data != '' || data != null){
                      $("#selected-unit-id").html(data);
+                }
+               
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+}
+
+function createnewdistributor(){
+    var unit_name = $(".new-distributor-name").val();
+    var unit_desc = $(".new-distributor-description").val();
+   // alert(unit_name);
+    if(unit_name == ''){
+        $(".new-distributor-name").css(["border-color", "red"]);
+        return false;
+    }else{
+        $.ajax({
+            url: '$url_to_create_distributor',
+            dataType: 'html',
+            method: 'POST',
+            data: {
+                'name': unit_name,
+                'description': unit_desc,
+            },
+            success: function (data) {
+                $("#createDistributorModal").modal("hide");
+                // $("#selected-unit-id").append('<option value="'+data+'">'+unit_name+'</option>');
+                // $("#selected-unit-id").val(data).change();
+                if(data != '' || data != null){
+                     $("#selected-distributor-id").html(data);
                 }
                
             },

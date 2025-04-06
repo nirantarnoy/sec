@@ -240,7 +240,7 @@ class DbbackupController extends Controller
 
         $os = php_uname();
         if (strpos($os, 'ndow') > 0) {
-            $cmd = 'D:/xampp/mysql/bin/';
+            $cmd = 'E:/xampp/mysql/bin/';
             $cmd .= "mysqldump -h {$host} -u {$username} {$database_name} > " . '../web/uploads/backup/' . "pc_{$date_string}_{$database_name}.sql";
 
         } else {

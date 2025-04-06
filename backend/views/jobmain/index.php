@@ -12,7 +12,7 @@ use yii\widgets\LinkPager;
 /** @var backend\models\JobmainSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'Jobmains';
+$this->title = 'รายการใบงาน';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="jobmain-index">
@@ -78,21 +78,19 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'job_month',
+                'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
                     return $data->job_month != null ? date('d-m-Y', strtotime($data->job_month)) : '';
                 }
             ],
-            'approve_payment_status',
             [
                 'attribute' => 'approve_payment_status',
-                'format' => 'raw',
-                'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center'],
+                'format' => 'raw',
                 'value' => function ($data) {
+                    $approve_status_name = \backend\helpers\JobApprovePaymentStatus::getTypeByName($data->approve_payment_status);
                     if ($data->approve_payment_status == 1) {
-                        return '<div class="badge badge-success">อนุมัติจ่ายแล้ว</div>';
-                    } else {
-                        return '<div class="badge badge-dark">ยังไม่อนุมัติจ่าย</div>';
+                        return '<div class="badge badge-xl badge-secondary">' . $approve_status_name . '</div>';
                     }
                 }
             ],

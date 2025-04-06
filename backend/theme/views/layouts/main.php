@@ -168,6 +168,9 @@ $is_pos_user = 0;
     var cururl = $("#current-url").val();
     $(function () {
 
+        setTimeout(function(){
+            $('.alert').fadeOut('slow');
+        },5000);
 
         //---- active menu
         $("#perpage").change(function () {
@@ -188,6 +191,10 @@ $is_pos_user = 0;
                 $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).addClass("active");
                 $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).parent().parent().parent().find(".nav-link").trigger("click");
                 //console.log(x);
+
+                if(cururl == 'job'){
+                    $(this).find(".nav-treeview").find(".nav-item").find(".jobmain").addClass("active");
+                }
             } else {
                 $(this).find("." + cururl).addClass("active");
             }

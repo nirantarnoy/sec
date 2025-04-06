@@ -11,6 +11,7 @@ use backend\models\Distributor;
  */
 class DistributorSearch extends Distributor
 {
+    public $globalSearch;
     /**
      * {@inheritdoc}
      */
@@ -19,6 +20,7 @@ class DistributorSearch extends Distributor
         return [
             [['id', 'is_main', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'integer'],
             [['name', 'description'], 'safe'],
+            [['globalSearch'], 'string'],
         ];
     }
 
@@ -67,8 +69,11 @@ class DistributorSearch extends Distributor
             'updated_by' => $this->updated_by,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'description', $this->description]);
+        if($this->globalSearch != null || $this->globalSearch != ''){
+            $query->orFilterWhere(['like', 'name', $this->globalSearch])
+                ->orFilterWhere(['like', 'description', $this->globalSearch]);
+        }
+
 
         return $dataProvider;
     }

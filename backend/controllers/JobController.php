@@ -104,7 +104,8 @@ class JobController extends Controller
                         $trans_date = $xdate[2] . '/' . $xdate[1] . '/' . $xdate[0];
                     }
                 }
-
+                $model->pending_amount = str_replace(',', '', $model->pending_amount);
+                $model->payment_status = 1;
                 $model->trans_date = date('Y-m-d', strtotime($trans_date));
                 $model->status = 1; // open
                 if ($model->save()) {
@@ -167,6 +168,11 @@ class JobController extends Controller
             $line_total_cost_all = \Yii::$app->request->post('line_total_cost_all');
             $line_quote_per_unit = \Yii::$app->request->post('line_quote_per_unit');
             $line_total_quote_price = \Yii::$app->request->post('line_total_quote_price');
+            $job_value_amount = \Yii::$app->request->post('job_value_amount');
+
+            $line_vat_type = \Yii::$app->request->post('line_vat_type');
+            $line_withholding_type = \Yii::$app->request->post('line_withholding_type');
+            $line_distributor_id = \Yii::$app->request->post('line_distributor_id');
 
             $removelist = \Yii::$app->request->post('removelist');
             $rec_id = \Yii::$app->request->post('rec_id');
@@ -181,13 +187,42 @@ class JobController extends Controller
                 }
             }
 
+           // echo $job_value_amount;return;
+
+            $new_job_value_amount = 0;
+            $new_pending_amount = 0;
+
+            if ($model->set_to_zero == 1){
+                $amont_replace = str_replace(',', '', $model->pending_amount);
+                $new_pending_amount = floor($amont_replace);
+
+                $value_amt = str_replace(',', '', $job_value_amount);
+                $new_job_value_amount = floor($value_amt);
+            }else{
+                $new_pending_amount = str_replace(',', '', $model->pending_amount);
+                $new_job_value_amount = str_replace(',', '', $job_value_amount);
+            }
+
+          //  echo $new_job_value_amount;return;
+
+
+
             $model->trans_date = date('Y-m-d', strtotime($trans_date));
-
-
+            $model->pending_amount = $new_pending_amount;
+            $model->job_value_amount = $new_job_value_amount;
+            $model->paid_amount = str_replace(',', '', $model->paid_amount);
+            $model->withholding_amount = 0;
+            $model->payment_amount = 0;
+            $model->status = 1;
             if ($model->save(false)) {
                 if ($line_product_id != null) {
                     if (count($line_product_id) > 0) {
                         for ($i = 0; $i <= count($line_product_id) - 1; $i++) {
+
+                            $whd_amt = 0;
+                            if($line_withholding_type[$i] == 1){
+                                $whd_amt = ($line_total_quote_price[$i] * 3) / 100;
+                            }
 
                             $check_has = \common\models\JobLine::find()->where(['job_id' => $model->id, 'id' => $rec_id[$i]])->one();
                             if ($check_has != null) {
@@ -202,6 +237,10 @@ class JobController extends Controller
                                 $check_has->cost_total = $line_total_cost_all[$i];
                                 $check_has->quotation_per_unit_price = $line_quote_per_unit[$i];
                                 $check_has->total_quotation_price = $line_total_quote_price[$i];
+                                $check_has->vat_type = $line_vat_type[$i];
+                                $check_has->withholdingtax = $line_withholding_type[$i];
+                                $check_has->distributor_id = $line_distributor_id[$i];
+                                $check_has->withholding_tax_amount = $whd_amt;
                                 $check_has->save(false);
                             } else {
                                 $model_line = new \common\models\JobLine();
@@ -217,6 +256,10 @@ class JobController extends Controller
                                 $model_line->cost_total = $line_total_cost_all[$i];
                                 $model_line->quotation_per_unit_price = $line_quote_per_unit[$i];
                                 $model_line->total_quotation_price = $line_total_quote_price[$i];
+                                $model_line->vat_type = $line_vat_type[$i];
+                                $model_line->withholdingtax = $line_withholding_type[$i];
+                                $model_line->distributor_id = $line_distributor_id[$i];
+                                $model_line->withholding_tax_amount = $whd_amt;
                                 $model_line->save(false);
                             }
                         }
@@ -230,11 +273,16 @@ class JobController extends Controller
                             }
                         }
                     }
+                   // \backend\models\Job::updateAll(['job_value_amount' => 0, ['id' => $model->id]]);
+                    $this->calJobsummary($model->id);
                 }
                 \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
-                return $this->redirect(['index']);
+               // return $this->redirect(['index']);
+                return $this->redirect(['jobmain/update', 'id' => $model->job_master_id]);
             }
         }
+
+
 
         return $this->render('update', [
             'model' => $model,
@@ -501,6 +549,8 @@ class JobController extends Controller
 
         $payment_remove_list = \Yii::$app->request->post('payment_remove_list');
 
+        $saved_status = 0;
+        $total_payment = 0;
         if ($job_id) {
             if ($payment_method_id != null) {
                 \common\models\JobPayment::deleteAll(['job_id' => $job_id]);
@@ -523,7 +573,10 @@ class JobController extends Controller
                         $model->note = $note[$i];
                         $model->payment_method_id = $payment_method_id[$i];
                         $model->slip_doc = $filename;
-                        $model->save(false);
+                        if($model->save(false)){
+                            $total_payment+=$amount[$i];
+                            $saved_status +=1;
+                        }
                 }
             }
 
@@ -536,12 +589,55 @@ class JobController extends Controller
 //                }
 //            }
         }
+        if($saved_status > 0){
+            $model_check_paid = \common\models\Job::find()->where(['id' => $job_id])->one();
+            if($model_check_paid){
+                 $pending_amt = $this->getPaidPending($job_id);
+                 if($pending_amt <= 0){
+                     $model_check_paid->payment_status = 3;
+                     $model_check_paid->paid_amount = $total_payment;
+                     $model_check_paid->pending_amount = 0;
+                     $model_check_paid->save(false);
+                 }else{
+                     $model_check_paid->payment_status = 2;
+                     $model_check_paid->paid_amount = $total_payment;
+                     $model_check_paid->pending_amount = $pending_amt;
+                     $model_check_paid->save(false);
+                 }
+            }
+
+        }
+
         $model_line = \common\models\JobLine::find()->where(['job_id' => $job_id])->all();
         return $this->render('view', [
             'model' => $this->findModel($job_id),
             'model_line' => $model_line,
         ]);
 
+    }
+    function getPaidPending($id)
+    {
+        $pending_amount = 0;
+        if ($id) {
+            $model = \common\models\JobPayment::find()->where(['job_id' => $id])->sum('amount');
+            $model_job_amount = \common\models\Job::find()->where(['id' => $id])->sum('job_value_amount');
+            if ($model) {
+                $pending_amount = $model_job_amount - $model;
+            } else {
+                if ($model_job_amount) {
+                    $pending_amount = $model_job_amount;
+                }
+            }
+        }
+        return $pending_amount;
+    }
+    function getJobpayment($id)
+    {
+        $amt = 0;
+        if ($id) {
+            $amt = \common\models\JobPayment::find()->where(['job_id' => $id])->sum('amount');
+        }
+        return $amt;
     }
     public function actionGetemployee(){
         $html = '';
@@ -562,6 +658,288 @@ class JobController extends Controller
                 }
             }
 
+        }
+        echo $html;
+    }
+
+    function calJobsummary($job_id){
+        if($job_id){
+            $model = \common\models\ViewJobData::find()->where(['id' => $job_id])->all();
+            if($model){
+                $cost_with_vat = 0;
+                $cost_without_vat = 0;
+                $total_cost = 0;
+                $job_value_amount = 0;
+                $withholding_amt = 0;
+                foreach($model as $value){
+                    $cost_with_vat = $cost_with_vat + $this->sumcostvat($job_id, $value->cal_type_id, 1);
+                    $cost_without_vat = $cost_without_vat + $this->sumcostvat($job_id, $value->cal_type_id, 2);
+                    $job_value_amount = $value->job_value_amount;
+                    $withholding_amt = $withholding_amt + $value->withholding_tax_amount;
+                }
+                $total_cost = $cost_with_vat + $cost_without_vat;
+               // $total_cost_with_vat = $cost_with_vat + $this->getJobVat($job_id)-($cost_with_vat - ($cost_with_vat  / 1.07)) + $cost_without_vat;
+                $total_after_deduct_vat = $job_value_amount-($cost_with_vat + $this->getJobVat($job_id)-($cost_with_vat - ($cost_with_vat  / 1.07)) + $cost_without_vat);
+                $total_after_deduct_vat_per = ($total_after_deduct_vat/$job_value_amount)*100;
+                $total_commission = 0.27 *$total_after_deduct_vat;
+
+
+                if($total_cost >0){
+                    \backend\models\Job::updateAll([
+                        'job_cost_amount' => $total_cost,
+                        'job_benefit_amount'=>$total_after_deduct_vat,
+                        'job_benefit_per'=>$total_after_deduct_vat_per,
+                        'commission_amount'=>$total_commission,
+                        'withholding_amount'=>$withholding_amt,
+                        'job_value_amount'=>$job_value_amount,
+                        'pending_amount'=>0,
+                    ], ['id' => $job_id]);
+
+
+                    $update_pending_amt = $this->getPaidPending($job_id);
+                    if($update_pending_amt){
+                        \backend\models\Job::updateAll(['pending_amount'=>$update_pending_amt],['id'=>$job_id]);
+                    }
+                }
+            }
+        }
+    }
+    function sumcostvat($job_id, $deduct_id, $vat_type)
+    {
+        $amount = 0;
+        if ($job_id && $deduct_id) {
+            if ($vat_type == 1) {
+                $model = \common\models\ViewJobData::find()->where(['id' => $job_id, 'cal_type_id' => $deduct_id, 'vat_type' => 1])->sum('cost_total');
+                if ($model) {
+                    $amount = $model;
+                }
+            } else {
+                $model = \common\models\ViewJobData::find()->where(['id' => $job_id, 'cal_type_id' => $deduct_id, 'vat_type' => [2, 3]])->sum('cost_total');
+                if ($model) {
+                    $amount = $model;
+                }
+            }
+
+        }
+        return $amount;
+    }
+    function sumcost($job_id, $deduct_id, $type_id)
+    {
+        $amount = 0;
+        if ($job_id && $deduct_id) {
+            if ($type_id == 1) {
+                $model = \common\models\ViewJobData::find()->where(['id' => $job_id, 'cal_type_id' => $deduct_id, 'vat_type' => 1])->sum('cost_total');
+                if ($model) {
+                    $amount = $model;
+                }
+            } else {
+                $model = \common\models\ViewJobData::find()->where(['id' => $job_id, 'cal_type_id' => $deduct_id, 'vat_type' => [2, 3]])->sum('cost_total');
+                if ($model) {
+                    $amount = $model;
+                }
+            }
+
+        }
+        return $amount;
+    }
+    function getJobVat($job_id){
+        $amount = 0;
+        if($job_id){
+            $model = \common\models\ViewJobData::find()->where(['id'=>$job_id])->sum('total_quotation_price');
+            if($model){
+                $amount = ($model * 7) / 100;
+            }
+        }
+        return $amount;
+    }
+
+    function actionCopyjob(){
+        $job_id = \Yii::$app->request->post('job_id');
+        $quotation_no = \Yii::$app->request->post('quotation_no');
+        $invoice_no = \Yii::$app->request->post('invoice_no');
+        $new_job_id = 0;
+        if($job_id){
+            $model_org = \backend\models\Job::find()->where(['id'=>$job_id])->one();
+            if($model_org){
+                $model = new \backend\models\Job();
+                $model->job_no = $model::getLastNo();
+                $model->trans_date = date('Y-m-d');
+                $model->job_master_id = $model_org->job_master_id;
+               // $model->customer_id = $model_org->customer_id;
+                $model->quotation_ref_no = $quotation_no;
+                $model->invoice_ref_no = $invoice_no;
+                $model->team_id = $model_org->team_id;
+                $model->head_id = $model_org->head_id;
+                $model->payment_status = 1;
+                $model->status = 1;
+                $model->job_value_amount = 0;
+                if($model->save(false)){
+                    $new_job_id = $model->id;
+                    $model_line_org = \common\models\JobLine::find()->where(['job_id'=>$job_id])->all();
+                    if($model_line_org){
+                        foreach ($model_line_org as $model_line){
+                            $model_line_new = new \common\models\JobLine();
+                            $model_line_new->job_id = $model->id;
+                            $model_line_new->product_id = $model_line->product_id;
+                            $model_line_new->product_name = $model_line->product_name;
+                            $model_line_new->cost_per_unit = 0;
+                            $model_line_new->discount_per = 0;
+                            $model_line_new->dealer_price = 0;
+                            $model_line_new->vat_amount = 0;
+                            $model_line_new->total_cost_per_unit = 0;
+                            $model_line_new->qty = 0;
+                            $model_line_new->cost_total =0;
+                            $model_line_new->quotation_per_unit_price = 0;
+                            $model_line_new->total_quotation_price = 0;
+                            $model_line_new->vat_type = $model_line->vat_type;
+                            $model_line_new->withholdingtax = $model_line->withholdingtax;
+                            $model_line_new->distributor_id = $model_line->distributor_id;
+                            $model_line_new->save(false);
+                        }
+                    }
+                }
+            }
+        }
+        //$model = $this->findModel($new_job_id);
+        //$model_line = \common\models\JobLine::find()->where(['job_id' => $new_job_id])->all();
+        return $this->redirect(['job/update', 'id'=>$new_job_id]);
+
+    }
+
+    public function actionCreatepaymentnew()
+    {
+        $job_id = \Yii::$app->request->post('job_id');
+        $payment_method_id = \Yii::$app->request->post('payment_method_id');
+        $bank_id = \Yii::$app->request->post('bank_id');
+        $amount = \Yii::$app->request->post('payment_amount');
+        $fee_amount = \Yii::$app->request->post('fee_amount');
+        $note = \Yii::$app->request->post('line_payment_remark');
+        $line_rec_id = \Yii::$app->request->post('line_rec_id');
+
+        $payment_remove_list = \Yii::$app->request->post('payment_remove_list');
+
+        $saved_status = 0;
+        $total_payment = 0;
+        if ($job_id) {
+            if ($payment_method_id != null) {
+
+
+
+//                    $filename = '';
+//                    $uploadedFile = \yii\web\UploadedFile::getInstanceByName('line_slip_doc[' . $i . ']');
+//                    if ($uploadedFile != null) {
+//                        $filename = $uploadedFile->name;
+//                        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+//                        $filename = \Yii::$app->security->generateRandomString() . '.' . $ext;
+//                        $uploadedFile->saveAs(\Yii::$app->basePath . '/web/uploads/slip_doc/' . $filename);
+//                    }
+
+                    $model = new JobPayment();
+                    $model->job_id = $job_id;
+                    $model->trans_date = date('Y-m-d H:i:s');
+                    $model->bank_id = 0;
+                    $model->amount = $amount;
+                    $model->fee_amount = $fee_amount;
+                    $model->total_amount = $amount + $fee_amount;
+                    $model->note = $note;
+                    $model->payment_method_id = $payment_method_id;
+                    $model->slip_doc = '';
+                    if($model->save(false)){
+                        $total_payment+=$amount;
+                        $saved_status +=1;
+                    }
+
+            }
+
+        }
+        if($saved_status > 0){
+            $model_check_paid = \common\models\Job::find()->where(['id' => $job_id])->one();
+            if($model_check_paid){
+                $pending_amt = $this->getPaidPending($job_id);
+                if($pending_amt <= 0){
+                    $model_check_paid->payment_status = 3;
+                    $model_check_paid->paid_amount = $total_payment;
+                    $model_check_paid->pending_amount = 0;
+                    $model_check_paid->save(false);
+                }else{
+                    $model_check_paid->payment_status = 2;
+                    $model_check_paid->paid_amount = $total_payment;
+                    $model_check_paid->pending_amount = $pending_amt;
+                    $model_check_paid->save(false);
+                }
+            }
+        }
+        return $this->redirect(['job/update', 'id'=>$job_id]);
+
+//        $model_line = \common\models\JobLine::find()->where(['job_id' => $job_id])->all();
+//        return $this->render('view', [
+//            'model' => $this->findModel($job_id),
+//            'model_line' => $model_line,
+//        ]);
+
+    }
+
+    function actionRemovepaymentline(){
+        $id = \Yii::$app->request->post('id');
+        $job_id = \Yii::$app->request->post('job_id');
+        $res = 0;
+        $total_payment = 0;
+        if($id){
+            if(\common\models\JobPayment::deleteAll(['id' => $id])){
+                $res = 1;
+                $model_check_paid = \common\models\Job::find()->where(['id' => $job_id])->one();
+                $pending_amt = $this->getPaidPending($job_id);
+
+                $total_payment = $this->getJobpayment($job_id);
+                if($pending_amt <= 0){
+                    $model_check_paid->payment_status = 3;
+                    $model_check_paid->paid_amount = $total_payment;
+                    $model_check_paid->pending_amount = 0;
+                    $model_check_paid->save(false);
+                }else{
+                    if($total_payment <=0){
+                        $model_check_paid->payment_status = 1;
+                        $model_check_paid->paid_amount = $total_payment;
+                        $model_check_paid->pending_amount = $model_check_paid->job_value_amount;
+                        $model_check_paid->save(false);
+                    }else{
+                        $model_check_paid->payment_status = 2;
+                        $model_check_paid->paid_amount = $total_payment;
+                        $model_check_paid->pending_amount = $pending_amt;
+                        $model_check_paid->save(false);
+                    }
+
+                }
+            }
+        }
+
+        echo $res;
+    }
+
+    public function actionCreatedistributor(){
+        $new_id = 0;
+        $html= '';
+        $name = \Yii::$app->request->post('name');
+        $description = \Yii::$app->request->post('description');
+        if($name){
+            $model = new \common\models\Distributor();
+            $model->name = $name;
+            $model->description = $description;
+            $model->status = 1;
+            $model->can_new = 0;
+            if($model->save(true)){
+                $new_id = $model->id;
+                $model_list = \backend\models\Distributor::find()->where(['status'=>1])->orderBy(['can_new'=>SORT_ASC])->all();
+                if($model_list){
+                    foreach($model_list as $value){
+                        $selected = '';
+                        if($value->id == $new_id){
+                            $selected = 'selected';
+                        }
+                        $html .= '<option value="'.$value->id.'" '.$selected.'>'.$value->name.'</option>';
+                    }
+                }
+            }
         }
         echo $html;
     }

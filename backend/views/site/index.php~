@@ -10,7 +10,7 @@ $m_category = ['มกราคม', 'กุมภาพันธ์', 'มี�
 $m_category_show = [];
 
 $product_count = \backend\models\Product::find()->where(['status' => 1])->count();
-$order_count = 0; // \backend\models\Order::find()->count();
+$order_count =  \backend\models\Job::find()->where(['created_by' => \Yii::$app->user->id])->count();
 $customer_count = \backend\models\Customer::find()->where(['status' => 1])->count();
 
 $model_stock = \backend\models\Stocksum::find()->where(['>', 'qty', 0])->limit(10)->all();
@@ -103,7 +103,7 @@ $cost_stock_amt = 0;
         <?php
         $date_data = ['มค.', 'กพ.', 'มี.ค.', 'เม.ย.', 'พค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
         $data_series = [
-            ['name' => 'กำไร', 'data' => [5000, 15400, 20000, 35000, 50000, 65000, 70000, 75000, 80000, 85000, 90000]],
+            ['name' => 'ยอดขาย', 'data' => [5000, 15400, 20000, 35000, 50000, 65000, 70000, 75000, 80000, 85000, 90000]],
             ];
         ?>
         <div class="row">

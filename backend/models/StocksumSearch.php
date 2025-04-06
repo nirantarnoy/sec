@@ -42,6 +42,7 @@ class StocksumSearch extends Stocksum
     public function search($params)
     {
         $query = Stocksum::find();
+        $query->innerJoin('product', 'product.id = stock_sum.product_id');
 
         // add conditions that should always apply here
 
