@@ -308,6 +308,14 @@
                         <?php //endif; ?>
                         <?php //if (\Yii::$app->user->can('product/index')): ?>
                         <li class="nav-item">
+                            <a href="index.php?r=performancechart" class="nav-link performancechart">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>Performance Chart</p>
+                            </a>
+                        </li>
+                        <?php //endif; ?>
+                        <?php //if (\Yii::$app->user->can('product/index')): ?>
+                        <li class="nav-item">
                             <a href="index.php?r=jobmain" class="nav-link jobmain">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>ใบงาน</p>
