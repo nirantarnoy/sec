@@ -12,7 +12,7 @@ class m250217_065323_add_journal_no_column_to_stock_trans_table extends Migratio
      */
     public function safeUp()
     {
-        $this->addColumn('{{%stock_trans}}', 'journal_no', $this->string());
+        //$this->addColumn('{{%stock_trans}}', 'journal_no', $this->string());
     }
 
     /**
@@ -20,6 +20,6 @@ class m250217_065323_add_journal_no_column_to_stock_trans_table extends Migratio
      */
     public function safeDown()
     {
-        $this->dropColumn('{{%stock_trans}}', 'journal_no');
+       // $this->dropColumn('{{%stock_trans}}', 'journal_no');
     }
 }
