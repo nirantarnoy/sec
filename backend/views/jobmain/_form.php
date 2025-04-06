@@ -402,6 +402,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
 
     </div>
     <br/>
+<?php if(!$model->isNewRecord):?>
     <form action="<?= Url::to(['jobmain/createjobstdcom'], true) ?>" method="post">
     <div class="row">
         <div class="col-lg-6">
@@ -488,9 +489,9 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
                                                            class="form-control line-profit-std-total-amt" value="0"
                                                            name="line_profit_std_total_amt[]" readonly></td>
-                            <td style="padding: 0.1em;">
-                                <div class="btn btn-sm btn-danger">-</div>
-                            </td>
+<!--                            <td style="padding: 0.1em;">-->
+<!--                                <div class="btn btn-sm btn-danger">-</div>-->
+<!--                            </td>-->
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
@@ -875,6 +876,7 @@ $team_line = \common\models\TeamLine::find()->where(['team_id' => $model->team_i
         </div>
     </div>
     </form>
+<?php endif;?>
 <?php
 function getSummaryprofitamount($team_id, $trans_date)
 {
