@@ -194,7 +194,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                             [
                                 'attribute' => 'job_type_id',
                                 'value' => function ($data) {
-                                    return \backend\models\WorkType::findName($data->job_type_id);
+                                    return \backend\models\Worktype::findName($data->job_type_id);
                                 }
                             ],
                             [
