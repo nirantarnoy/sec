@@ -719,15 +719,16 @@ $team_line = \common\models\TeamLine::find()->where(['team_id' => $model->team_i
                 </thead>
                 <tbody>
                 <?php
+                $sum_line_share_per = 0;
+                $sum_line_share_amount = 0;
+                $sum_line_share_ttar = 0;
+                $sum_line_share_ptar = 0;
+                $sum_line_share_ppr = 0;
+                $sum_line_share_total = 0;
+                $sum_line_share_rebate = 0;
+                $sum_line_share_grand_total = 0;
                 if ($team_line) {
-                    $sum_line_share_per = 0;
-                    $sum_line_share_amount = 0;
-                    $sum_line_share_ttar = 0;
-                    $sum_line_share_ptar = 0;
-                    $sum_line_share_ppr = 0;
-                    $sum_line_share_total = 0;
-                    $sum_line_share_rebate = 0;
-                    $sum_line_share_grand_total = 0;
+
                     foreach ($team_line as $value):?>
                         <?php
                            $line_com_share_per = 0;
