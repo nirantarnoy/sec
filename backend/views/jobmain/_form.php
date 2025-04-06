@@ -939,6 +939,7 @@ function getEmpcomshare($emp_id, $job_main_id){
 <?php
 $url_to_find_employee = \yii\helpers\Url::to(['job/getemployee'], true);
 $url_to_add_job = \yii\helpers\Url::to(['jobmain/createjob'], true);
+$url_to_check_quot_dup = \yii\helpers\Url::to(['jobmain/checkdup'], true);
 $js = <<<JS
 var selecteditem = [];
 var removelist = [];
@@ -954,6 +955,16 @@ $(function(){
         if ((event.which === 32 || event.which === 13) && value !== '') {
             // Prevent form submission on Enter
             event.preventDefault();
+            
+            
+            // var xx = checkdupQuotation(value);
+            // alert(xx);
+            
+            if(checkdupQuotation(value) == 100){
+                alert("ใบเสนอราคาซ้ำในระบบ");
+                input.val('');
+                return false;
+            }
 
             // Check if tag already exists
             if (!tags.includes(value)) {
@@ -1186,6 +1197,30 @@ function calsharecommissionsum(){
     $(".line-com-share-rebate-amount-sum").val(parseFloat(sum_line_com_share_rebate_amount).toFixed(2));
     $(".line-com-share-grand-total-amount-sum").val(parseFloat(sum_line_com_share_grand_total_amount).toFixed(2));
     
+}
+
+function checkdupQuotation(quot_no){
+    var res = 0;
+    if(quot_no != null){
+        $.ajax({
+            url: '$url_to_check_quot_dup',
+            type: 'post',
+            dataType: 'html',
+            async: false,
+            data: {'quot_no': quot_no},
+            success: function (data) {
+                res = data;
+              // alert(data);
+              // window.location.reload();
+            },
+            error: function (err) {
+                //alert('error');
+                res = 0;
+            }
+        });
+    }
+    
+    return res;
 }
 
 JS;

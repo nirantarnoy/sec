@@ -284,4 +284,16 @@ class JobmainController extends Controller
 
         return $this->redirect(['jobmain/update', 'id' => $jobmain_id]);
     }
+    public function actionCheckdup()
+    {
+        $quot_no = \Yii::$app->request->post('quot_no');
+        if($quot_no !=''){
+            $model = \common\models\Job::find()->where(['like', 'quotation_ref_no', $quot_no])->count();
+            if($model){
+                return 100;
+            }
+        }else{
+            return 150;
+        }
+    }
 }
