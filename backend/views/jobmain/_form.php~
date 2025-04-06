@@ -962,6 +962,7 @@ $(function(){
             
             if(checkdupQuotation(value) == 100){
                 alert("ใบเสนอราคาซ้ำในระบบ");
+                input.val('');
                 return false;
             }
 

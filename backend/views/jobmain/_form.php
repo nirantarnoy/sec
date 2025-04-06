@@ -574,7 +574,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                     $sum_profit_per2 = 0;
                     $sum_profit_amount2 = 0;
 
-                    if ($model_job_main_com_std_sum->std_amount != null) {
+                    if ($model_job_main_com_std_sum != null) {
                         $sum_profit = $model_job_main_com_std_sum->std_amount;
                         $sum_profit_per = $model_job_main_com_std_sum->commission_per;
                         $sum_profit_amount = $model_job_main_com_std_sum->commission_amount;
@@ -582,7 +582,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         $sum_profit = getSummaryprofitamount($model->team_id, $model->job_month);
                     }
 
-                    if($model_job_main_com_std_sum_level_2->std_amount != null){
+                    if($model_job_main_com_std_sum_level_2 != null){
                         $sum_profit2 = $model_job_main_com_std_sum_level_2->std_amount;
                         $sum_profit_per2 = $model_job_main_com_std_sum_level_2->commission_per;
                         $sum_profit_amount2 = $model_job_main_com_std_sum_level_2->commission_amount;
