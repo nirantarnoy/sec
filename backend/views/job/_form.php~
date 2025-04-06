@@ -1297,6 +1297,8 @@ function createproductline(){
             // $(this).find(':input[type="number"]').val("0");
             // $(this).closest("tr").find(".line-prod-code").val(line_prod_code);
         });
+        
+        clearInput();
 }
 function linecal(e){
     var line_cost_per_unit = e.closest('tr').find(".line-cost-per-unit").val();
