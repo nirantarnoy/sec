@@ -1,0 +1,60 @@
+<?php
+
+namespace common\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "advance_master".
+ *
+ * @property int $id
+ * @property int|null $trans_month
+ * @property int|null $trans_year
+ * @property int|null $team_id
+ * @property float|null $total_balance
+ * @property int|null $created_by
+ * @property int|null $created_at
+ * @property int|null $updated_at
+ * @property int|null $updated_by
+ */
+class AdvanceMaster extends \yii\db\ActiveRecord
+{
+    /**
+     * {@inheritdoc}
+     */
+    public static function tableName()
+    {
+        return 'advance_master';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rules()
+    {
+        return [
+            [['trans_month', 'trans_year', 'team_id'], 'required'],
+            [['trans_month', 'trans_year', 'team_id'], 'unique','targetAttribute' => ['trans_month', 'trans_year', 'team_id'], 'message' => 'The combination of Trans Month, Trans Year and Team Id has already been taken.'],
+            [['trans_month', 'trans_year', 'team_id', 'created_by', 'created_at', 'updated_at', 'updated_by'], 'integer'],
+            [['total_balance','advance_amount'], 'number'],
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'trans_month' => 'เดือน',
+            'trans_year' => 'ปี',
+            'team_id' => 'ชื่อทีม',
+            'total_balance' => 'ยอดคงเหลือ',
+            'created_by' => 'Created By',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'updated_by' => 'Updated By',
+        ];
+    }
+}

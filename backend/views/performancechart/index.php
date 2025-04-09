@@ -167,7 +167,10 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
                     array_push($data_chart_sale_amount, ['name' => \backend\models\Employee::findFullName($value->emp_id), 'y' => round($line_sale_per_amount, 2)]);
                     array_push($data_chart_profit_per_amount, ['name' => \backend\models\Employee::findFullName($value->emp_id), 'y' => round($line_profit_per, 2)]);
 
-                    array_push($data_chart_job_count_per_cat, [\backend\models\Employee::findFullName($value->emp_id)]);
+                   // if($value->emp_id !=1){
+                        array_push($data_chart_job_count_per_cat, [\backend\models\Employee::findFullName($value->emp_id)]);
+                   // }
+
                     array_push($list_chart_data, ['emp_id' => $value->emp_id, 'data' => $line_job_count_per]);
                     array_push($list_chart_personal_data,['emp_id'=>$value->emp_id,'data'=>$line_personal_perform_per]);
                     ?>
@@ -382,6 +385,7 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
     if ($list_chart_data != null) {
         for ($x = 0; $x <= count($list_chart_data) - 1; $x++) {
             foreach ($team_member as $valuex) {
+
                 if ($valuex->emp_id == $list_chart_data[$x]['emp_id']) {
                     array_push($bar_value, (float)$list_chart_data[$x]['data']);
                 }
@@ -393,6 +397,7 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
     if($list_chart_personal_data !=null){
         for ($x = 0; $x <= count($list_chart_personal_data) - 1; $x++) {
             foreach ($team_member as $valuex) {
+              //  if($valuex->emp_id == 1)continue;
                 if ($valuex->emp_id == $list_chart_personal_data[$x]['emp_id']) {
                     array_push($bar_performance_value, (float)$list_chart_personal_data[$x]['data']);
                 }

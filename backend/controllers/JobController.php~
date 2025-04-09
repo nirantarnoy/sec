@@ -721,22 +721,17 @@ class JobController extends Controller
                             $new_commission_amount_2 += ($valuex->commission_amount);
                         }
 
-                        $new_xx_com_amount = 0;
-                        $new_xx_std_com_amount =0;
-
                         $model_xx = \common\models\JobProfitComStd::find()->where(['job_id'=>$job_master_id,'type_id'=>1])->one();
                         if($model_xx){
-                            $new_xx_com_amount = (($model_xx->std_amount + $total_after_deduct_vat) * $model_xx->commission_per) / 100;
-                            $new_xx_std_com_amount = ($model_xx->std_amount + $total_after_deduct_vat);
                             $model_xx->std_amount = ($model_xx->std_amount + $total_after_deduct_vat);
-                            $model_xx->commission_amount = $new_xx_com_amount;
+                            $model_xx->commission_amount = (($model_xx->std_amount + $total_after_deduct_vat) * $model_xx->commission_per) / 100;
                             $model_xx->save(false);
                         }
 
 
 
-                        $new_com_per_2 = (($new_commission_amount_2 + $new_xx_com_amount) * 100) / ($new_com_amount_2 + $new_xx_std_com_amount);
-                        \common\models\JobProfitComStd::updateAll(['std_amount'=>($new_com_amount_2 + $new_xx_std_com_amount),'commission_amount'=>($new_commission_amount_2+$new_xx_com_amount),'commission_per'=>$new_com_per_2],['job_id'=>$job_master_id,'type_id'=>2]);
+                        $new_com_per_2 = ($new_commission_amount_2 * 100) / $new_com_amount_2;
+                        \common\models\JobProfitComStd::updateAll(['std_amount'=>$new_com_amount_2,'commission_amount'=>$new_commission_amount_2,'commission_per'=>$new_com_per_2],['job_id'=>$job_master_id,'type_id'=>2]);
 
                     }else{
                        // \common\models\JobProfitComStd::updateAll(['std_amount'=>$total_after_deduct_vat],['job_id'=>$job_master_id,'type_id'=>1]);

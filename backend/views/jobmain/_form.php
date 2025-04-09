@@ -402,7 +402,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
 
     </div>
     <br/>
-<?php if(!$model->isNewRecord):?>
+<?php if(!$model->isNewRecord && $dataProvider->getTotalCount() > 0):?>
     <form action="<?= Url::to(['jobmain/createjobstdcom'], true) ?>" method="post">
     <div class="row">
         <div class="col-lg-6">
@@ -444,7 +444,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                     <?php else: ?>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="0"
+                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -461,7 +461,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="0"
+                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -478,7 +478,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="0"
+                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -495,7 +495,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="0"
+                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -512,7 +512,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="0"
+                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -529,7 +529,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="0"
+                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -540,13 +540,13 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
                                                            class="form-control line-profit-std-total-amt" value="0"
                                                            name="line_profit_std_total_amt[]" readonly></td>
-                            <td style="padding: 0.1em;">
-                                <div class="btn btn-sm btn-danger">-</div>
-                            </td>
+<!--                            <td style="padding: 0.1em;">-->
+<!--<!--                                <div class="btn btn-sm btn-danger">-</div>-->
+<!--                            </td>-->
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="0"
+                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -576,9 +576,14 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                     $sum_profit_amount2 = 0;
 
                     if ($model_job_main_com_std_sum != null) {
-                        $sum_profit = $model_job_main_com_std_sum->std_amount;
-                        $sum_profit_per = $model_job_main_com_std_sum->commission_per;
-                        $sum_profit_amount = $model_job_main_com_std_sum->commission_amount;
+                        if($model_job_main_com_std_sum->std_amount >0){
+                            $sum_profit = $model_job_main_com_std_sum->std_amount;
+                            $sum_profit_per = $model_job_main_com_std_sum->commission_per;
+                            $sum_profit_amount = $model_job_main_com_std_sum->commission_amount;
+                        }else{
+                            $sum_profit = getSummaryprofitamount($model->team_id, $model->job_month);
+                        }
+
                     } else {
                         $sum_profit = getSummaryprofitamount($model->team_id, $model->job_month);
                     }
@@ -683,7 +688,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                     </tr>
                     <tr>
                         <td colspan="2">
-<!--                            <div class="btn btn-sm btn-primary">เพิ่มแถว</div>-->
+                            <div class="btn btn-sm btn-primary">เพิ่มแถว</div>
                         </td>
                         <td colspan="2" style="text-align: right;">
                             <button class="btn btn-sm btn-warning">อัพเดทตาราง</button>
@@ -1097,8 +1102,8 @@ function addJob(){
 }
 
 function cal_profit_std(e){
-    var line_profit_std = e.closest('tr').find(".line-profit-std-amt").val();
-    var line_profit_commission_rate = e.closest('tr').find(".line-profit-std-com-per").val();
+    var line_profit_std = e.closest('tr').find(".line-profit-std-amt").val().replace(",","");
+    var line_profit_commission_rate = e.closest('tr').find(".line-profit-std-com-per").val().replace(",","");
     
     var line_total = (parseFloat(line_profit_std) * parseFloat(line_profit_commission_rate)) / 100;
     e.closest('tr').find(".line-profit-std-total-amt").val(parseFloat(line_total).toFixed(2));

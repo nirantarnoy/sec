@@ -129,7 +129,7 @@ $product_as_service = \common\models\CostCalType::find()->all();
                 }
                 ?>
                 <input type="text" class="form-control" style="<?= $status_color ?>" readonly
-                       value="<?= \backend\models\PaymentStatus::findName($model->payment_status) ?>">
+                       value="<?= \backend\models\Paymentstatus::findName($model->payment_status) ?>">
             </div>
         </div>
         <br/>

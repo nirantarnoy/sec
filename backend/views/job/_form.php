@@ -116,7 +116,7 @@ $product_as_service = \common\models\CostCalType::find()->all();
             </div>
             <div class="col-lg-3">
                 <?= $form->field($model, 'pending_amount')->textInput(['maxlength' => true, 'readonly' => 'readonly', 'value' => number_format(getPaidPending($model->id), 3)]) ?>
-                <?= $form->field($model, 'set_to_zero')->widget(\toxor88\switchery\Switchery::className())->label(false) ?>
+<!--                --><?php //= $form->field($model, 'set_to_zero')->widget(\toxor88\switchery\Switchery::className())->label(false) ?>
             </div>
             <div class="col-lg-3">
                 <label for="">สถานะการจ่ายเงิน/Payment Status</label>
