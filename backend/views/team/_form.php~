@@ -22,8 +22,8 @@ $yesno = [['id' => 0, 'name' => 'No'], ['id' => 1, 'name' => 'Yes'],];
 
             <?= $form->field($model, 'description')->textarea(['maxlength' => true]) ?>
 
-            <?= $form->field($model, '_type_id')->widget(\kartik\select2\Select2::className(), [
-                'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\CostDeductType::asArrayObject(), 'id', 'name'),
+            <?= $form->field($model, 'team_type_id')->widget(\kartik\select2\Select2::className(), [
+                'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\TeamType::asArrayObject(), 'id', 'name'),
                 'options' => [
                     'placeholder' => '-- เลือกประเภท --'
                 ],

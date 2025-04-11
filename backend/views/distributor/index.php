@@ -11,7 +11,7 @@ use yii\widgets\LinkPager;
 /** @var backend\models\DistributorSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'ผู้นำเข้าหลัก';
+$this->title = 'บริษัทผู้นำเข้า';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="distributor-index">

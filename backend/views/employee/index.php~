@@ -1,27 +1,19 @@
 <?php
 
-use backend\models\Jobmain;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\ActionColumn;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\widgets\Pjax;
-use yii\widgets\LinkPager;
-
-/** @var yii\web\View $this */
-/** @var backend\models\JobmainSearch $searchModel */
-/** @var yii\data\ActiveDataProvider $dataProvider */
-
-$this->title = 'รายการใบงาน';
+use yii\helpers\Url;
+use yii\bootstrap4\LinkPager;
+$this->title = Yii::t('app', 'พนักงาน');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="jobmain-index">
-
-    <?php if (\Yii::$app->session->getFlash('success') !== null): ?>
+<div class="employee-index">
+    <?php if(\Yii::$app->session->getFlash('success') !== null): ?>
         <div class="alert alert-success">
-            <?= \Yii::$app->session->getFlash('success') ?>
+            <?=\Yii::$app->session->getFlash('success')?>
         </div>
-    <?php endif; ?>
+    <?php endif;?>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
@@ -30,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['warehouse/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['employee/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
@@ -44,11 +36,11 @@ $this->params['breadcrumbs'][] = $this->title;
             </form>
         </div>
     </div>
-    <?php echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php echo $this->render('_search', ['model' => $searchModel,'viewstatus'=>$viewstatus]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        // 'filterModel' => $searchModel,
+         'filterModel' => $searchModel,
         'emptyCell' => '-',
         'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
         'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
@@ -62,44 +54,51 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             [
                 'class' => 'yii\grid\SerialColumn',
-                'headerOptions' => ['style' => 'text-align: center'],
-                'contentOptions' => ['style' => 'text-align: center']],
-            [
-                'attribute' => 'team_id',
-                'value' => function ($model) {
-                    return \backend\models\Team::findName($model->team_id);
-                }
-            ],
-            [
-                'attribute' => 'emp_id',
-                'value' => function ($data) {
-                    return \backend\models\Employee::findFullName($data->emp_id);
-                }
-            ],
-            [
-                'attribute' => 'job_month',
+                'headerOptions' => ['style' => 'text-align:center;'],
                 'contentOptions' => ['style' => 'text-align: center'],
+            ],
+
+            //  'id',
+            [
+                    'attribute'=>'code',
+
+            ],
+            'f_name',
+            'l_name',
+            [
+                'attribute' => 'gender',
                 'value' => function ($data) {
-                    return $data->job_month != null ? date('m/Y', strtotime($data->job_month)) : '';
-                }
+                    return \backend\helpers\GenderType::getTypeById($data->gender);
+                },
+                'filter' => \yii\helpers\ArrayHelper::map(\backend\helpers\GenderType::asArrayObject(),'id','name'),
+                'filterType' => GridView::FILTER_SELECT2,
+                'filterInputOptions' => ['class' => 'form-control', 'prompt' => '--- เลือก ---'],
             ],
             [
-                'attribute' => 'approve_payment_status',
-                'contentOptions' => ['style' => 'text-align: center'],
+                'attribute' => 'position',
+                'value' => function ($data) {
+                    return \backend\models\Position::findName($data->position);
+                },
+                'filter' => \yii\helpers\ArrayHelper::map(\backend\models\Position::find()->where(['status'=>1])->all(),'id','name'),
+                'filterType' => GridView::FILTER_SELECT2,
+                'filterInputOptions' => ['class' => 'form-control', 'prompt' => '--- เลือก ---'],
+            ],
+            [
+                'attribute' => 'status',
                 'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                    $approve_status_name = \backend\helpers\JobApprovePaymentStatus::getTypeByName($data->approve_payment_status);
-                    if ($data->approve_payment_status == 1) {
-                        return '<div class="badge badge-xl badge-secondary">' . $approve_status_name . '</div>';
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">ใช้งาน</div>';
+                    } else {
+                        return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
                     }
-                }
+                },
+                'filter' => \yii\helpers\ArrayHelper::map(\backend\helpers\CommonStatueType::asArrayObject(),'id','name'),
+                'filterType' => GridView::FILTER_SELECT2,
+                'filterInputOptions' => ['class' => 'form-control', 'prompt' => '--- เลือก ---'],
             ],
-            //'company_id',
-            //'branch_id',
-            //'created_at',
-            //'updated_at',
-            //'created_by',
-            //'updated_by',
 
             [
 

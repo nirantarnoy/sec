@@ -125,7 +125,7 @@
                             <a href="index.php?r=distributor" class="nav-link distributor">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>
-                                    ผู้นำเข้าหลัก
+                                    บริษัทผู้นำเข้า
                                     <!--                                <span class="right badge badge-danger">New</span>-->
                                 </p>
                             </a>

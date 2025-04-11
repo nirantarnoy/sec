@@ -40,11 +40,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        // 'filterModel' => $searchModel,
+         'filterModel' => $searchModel,
         'emptyCell' => '-',
         'layout' => "{items}\n{summary}\n<div class='text-center'>{pager}</div>",
         'summary' => "แสดง {begin} - {end} ของทั้งหมด {totalCount} รายการ",
-        'showOnEmpty' => false,
+        'showOnEmpty' => true,
         //    'bordered' => true,
         //     'striped' => false,
         //    'hover' => true,
@@ -59,20 +59,29 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 
             //  'id',
-            'code',
+            [
+                    'attribute'=>'code',
+
+            ],
             'f_name',
             'l_name',
             [
                 'attribute' => 'gender',
                 'value' => function ($data) {
                     return \backend\helpers\GenderType::getTypeById($data->gender);
-                }
+                },
+                'filter' => \yii\helpers\ArrayHelper::map(\backend\helpers\GenderType::asArrayObject(),'id','name'),
+                'filterType' => GridView::FILTER_SELECT2,
+                'filterInputOptions' => ['class' => 'form-control', 'prompt' => '--- เลือก ---'],
             ],
             [
                 'attribute' => 'position',
                 'value' => function ($data) {
                     return \backend\models\Position::findName($data->position);
-                }
+                },
+                'filter' => \yii\helpers\ArrayHelper::map(\backend\models\Position::find()->where(['status'=>1])->all(),'id','name'),
+                'filterType' => GridView::FILTER_SELECT2,
+                'filterInputOptions' => ['class' => 'form-control', 'prompt' => '--- เลือก ---'],
             ],
             [
                 'attribute' => 'status',
@@ -85,7 +94,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     } else {
                         return '<div class="badge badge-secondary">ไม่ใช้งาน</div>';
                     }
-                }
+                },
+                'filter' => \yii\helpers\ArrayHelper::map(\backend\helpers\CommonStatueType::asArrayObject(),'id','name'),
+                'filterType' => GridView::FILTER_SELECT2,
+                'filterInputOptions' => ['class' => 'form-control', 'prompt' => '--- เลือก ---'],
             ],
 
             [

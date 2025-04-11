@@ -24,7 +24,7 @@ class SiteController extends Controller
                 'class' => AccessControl::class,
                 'rules' => [
                     [
-                        'actions' => ['login', 'error','logindriver'],
+                        'actions' => ['login', 'error','logindriver','testsendtelegram'],
                         'allow' => true,
                     ],
                     [
@@ -295,5 +295,31 @@ class SiteController extends Controller
         // print_r($aControllers['AdjustmentController']);
 
     }
+  public function actionTestsendtelegram(){
+      $telegram_api_url = "https://api.telegram.org/bot";
+      $telegram_token = "7182012715:AAH-m2X1l7q0cghwoDWnJf9jNndbDtc6Ej0";
+      $telegram_chat_id = "-4787477639";// "7653537115"; //-4787477639 group chat id
+     // $message = "This is test send request from icesystem ";
 
+      $message = '' . "\n";
+      $message .= 'DD: จบขาย POS' . "\n";
+      $message .= 'User:' . 'Niran2' . "\n";
+      //   $message .= 'User:' . \backend\models\User::findName($user_id) . "\n";
+      $message .= "รวมยอดขาย วันที่: " . date('Y-m-d') . "(" . date('H:i') . ")" . "\n";
+
+      $message .= 'ขายสด: ' . number_format(1800, 2) . "\n";
+      $message .= "ขายเชื่อ: " . number_format(3000, 2) . "\n";
+      $message .= "รวม: " . number_format(4800, 2) . "\n";
+
+      $message .= "รับชำระหนี้ " . "\n";
+      $message .= "เงินสด: " . number_format(0, 2) . "\n";
+      $message .= "เงินโอน: " . number_format(0, 2) . "\n";
+
+      // $message .= 'สามารถดูรายละเอียดได้ที่ http://103.253.73.108/icesystem/backend/web/index.php?r=dailysum/indexnew' . "\n"; // nky
+      $message .= 'สามารถดูรายละเอียดได้ที่ http://103.253.73.108/icesystemdindang/backend/web/index.php?r=dailysum/indexnew' . "\n"; // bkt
+
+      $url = $telegram_api_url . $telegram_token . "/sendMessage?chat_id=" . $telegram_chat_id . "&text=" . urlencode($message);
+      //Send message to telegram
+      file_get_contents($url);
+  }
 }

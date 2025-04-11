@@ -53,7 +53,7 @@ $group_assign_list = [];
 <!--        <div class="col-lg-3">-->
 <!--            --><?php //= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
 <!--        </div>-->
-        <div class="col-lg-6">
+        <div class="col-lg-name">
             <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
     </div>

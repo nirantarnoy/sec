@@ -1,27 +1,26 @@
 <?php
 
-use backend\models\Jobmain;
+use backend\models\Distributor;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 use yii\widgets\LinkPager;
-
 /** @var yii\web\View $this */
-/** @var backend\models\JobmainSearch $searchModel */
+/** @var backend\models\DistributorSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'รายการใบงาน';
+$this->title = 'ผู้นำเข้าหลัก';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="jobmain-index">
+<div class="distributor-index">
 
-    <?php if (\Yii::$app->session->getFlash('success') !== null): ?>
+    <?php if(\Yii::$app->session->getFlash('success') !== null): ?>
         <div class="alert alert-success">
-            <?= \Yii::$app->session->getFlash('success') ?>
+            <?=\Yii::$app->session->getFlash('success')?>
         </div>
-    <?php endif; ?>
+    <?php endif;?>
     <?php Pjax::begin(); ?>
     <div class="row">
         <div class="col-lg-10">
@@ -64,33 +63,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\SerialColumn',
                 'headerOptions' => ['style' => 'text-align: center'],
                 'contentOptions' => ['style' => 'text-align: center']],
+            'name',
+            'description',
             [
-                'attribute' => 'team_id',
-                'value' => function ($model) {
-                    return \backend\models\Team::findName($model->team_id);
-                }
-            ],
-            [
-                'attribute' => 'emp_id',
-                'value' => function ($data) {
-                    return \backend\models\Employee::findFullName($data->emp_id);
-                }
-            ],
-            [
-                'attribute' => 'job_month',
-                'contentOptions' => ['style' => 'text-align: center'],
-                'value' => function ($data) {
-                    return $data->job_month != null ? date('m/Y', strtotime($data->job_month)) : '';
-                }
-            ],
-            [
-                'attribute' => 'approve_payment_status',
-                'contentOptions' => ['style' => 'text-align: center'],
+                'attribute' => 'status',
                 'format' => 'raw',
+                'headerOptions' => ['style' => 'text-align: center'],
+                'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                    $approve_status_name = \backend\helpers\JobApprovePaymentStatus::getTypeByName($data->approve_payment_status);
-                    if ($data->approve_payment_status == 1) {
-                        return '<div class="badge badge-xl badge-secondary">' . $approve_status_name . '</div>';
+                    if ($data->status == 1) {
+                        return '<div class="badge badge-success">ใช้งาน</div>';
+                    } else {
+                        return '<div class="badge badge-dark">ไม่ใช้งาน</div>';
                     }
                 }
             ],

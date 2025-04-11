@@ -183,6 +183,7 @@ $is_pos_user = 0;
         }
 
         //     var xx = $(".nav-sidebar").find(".nav-item").find("."+cururl+"").find(".nav-link").parent().parent().attr("class");
+        var current_active_menu = null;
         $("ul.nav-sidebar li").each(function (index) {
             var cli = $(this).attr("class");
             var list_class = cli.split(" ");
@@ -190,16 +191,20 @@ $is_pos_user = 0;
             if ($.inArray("has-sub", list_class) !== -1) {
                 $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).addClass("active");
                 $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).parent().parent().parent().find(".nav-link").trigger("click");
+                $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).parent().parent().parent().trigger("click");
+
                 //console.log(x);
 
-                if(cururl == 'job'){
-                    $(this).find(".nav-treeview").find(".nav-item").find(".jobmain").addClass("active");
-                }
+                // if(cururl == 'job'){
+                //     $(this).find(".nav-treeview").find(".nav-item").find(".jobmain").addClass("active");
+                // }
             } else {
                 $(this).find("." + cururl).addClass("active");
             }
 
         });
+
+
         //--- end active menu
 
         const Toast = Swal.mixin({

@@ -137,7 +137,7 @@ class TeamController extends Controller
                     }
                 }
                 if($removelist != null || $removelist != ''){
-                    $ex = explode(',', $removelist);
+                    $ex = explode(';', $removelist);
                     if($ex != null){
                        \common\models\TeamLine::deleteAll(['team_id' => $ex]);
                     }
