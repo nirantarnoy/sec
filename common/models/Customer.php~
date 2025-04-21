@@ -50,7 +50,7 @@ class Customer extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'code' => 'รหัส',
-            'name' => 'ชื่อลูกค้า',
+            'name' => 'ชื่อ',
             'description' => 'รายละเอียด',
             'taxid' => 'เลขที่ประจำตัวผู้เสียภาษี',
             'customer_group_id' => 'กลุ่มลูกค้า',
