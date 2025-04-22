@@ -127,10 +127,19 @@ class JobmainController extends Controller
         $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
         $dataProvider->pagination->pageSize = $pageSize;
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            //  return $this->redirect(['view', 'id' => $model->id]);
-            \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
-            return $this->redirect(['index']);
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $xdata = explode("-", $model->job_month);
+            $tdate = date('Y-m-d');
+            if(count($xdata)>1){
+                $tdate = $xdata[2] . '/' . $xdata[1] . '/' . $xdata[0];
+            }
+            $model->job_month = date('Y-m-d', strtotime($tdate));
+            if( $model->save()){
+                //  return $this->redirect(['view', 'id' => $model->id]);
+                \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+                return $this->redirect(['index']);
+            }
+
         }
 
         return $this->render('update', [

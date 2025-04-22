@@ -290,10 +290,10 @@ class JobmainController extends Controller
         if($quot_no !=''){
             $model = \common\models\Job::find()->where(['like', 'quotation_ref_no', $quot_no])->count();
             if($model){
-                echo 100;
+                return 100;
             }
         }else{
-            echo 100;
+            return 150;
         }
     }
 }
