@@ -97,6 +97,8 @@ class JobController extends Controller
                 $line_quote_per_unit = \Yii::$app->request->post('line_quote_per_unit');
                 $line_total_quote_price = \Yii::$app->request->post('line_total_quote_price');
 
+                $line_stock_id = \Yii::$app->request->post('line_stock_id');
+
                 $model->job_no = $model::getLastNo();
                 $trans_date = date('Y-m-d H:is');
                 $xdate = explode('-', $model->trans_date);
@@ -126,6 +128,7 @@ class JobController extends Controller
                                 $model_line->cost_total = $line_total_cost_all[$i];
                                 $model_line->quotation_per_unit_price = $line_quote_per_unit[$i];
                                 $model_line->total_quotation_price = $line_total_quote_price[$i];
+                                $model_line->stock_type_id = $line_stock_id[$i];
                                 $model_line->save(false);
                             }
                         }
@@ -672,6 +675,7 @@ class JobController extends Controller
                 $total_cost = 0;
                 $job_value_amount = 0;
                 $withholding_amt = 0;
+                $total_after_deduct_vat_per = 0;
                 foreach($model as $value){
                     $cost_with_vat = $cost_with_vat + $this->sumcostvat($job_id, $value->cal_type_id, 1);
                     $cost_without_vat = $cost_without_vat + $this->sumcostvat($job_id, $value->cal_type_id, 2);
@@ -681,7 +685,10 @@ class JobController extends Controller
                 $total_cost = $cost_with_vat + $cost_without_vat;
                // $total_cost_with_vat = $cost_with_vat + $this->getJobVat($job_id)-($cost_with_vat - ($cost_with_vat  / 1.07)) + $cost_without_vat;
                 $total_after_deduct_vat = $job_value_amount-($cost_with_vat + $this->getJobVat($job_id)-($cost_with_vat - ($cost_with_vat  / 1.07)) + $cost_without_vat);
-                $total_after_deduct_vat_per = ($total_after_deduct_vat/$job_value_amount)*100;
+                if($total_after_deduct_vat > 0 && $job_value_amount > 0){
+                    $total_after_deduct_vat_per = ($total_after_deduct_vat/$job_value_amount)*100;
+                }
+
                 $total_commission = 0.27 *$total_after_deduct_vat;
 
 
@@ -877,6 +884,15 @@ class JobController extends Controller
 //                        $uploadedFile->saveAs(\Yii::$app->basePath . '/web/uploads/slip_doc/' . $filename);
 //                    }
 
+                    $filename = '';
+                    $uploadedFile = \yii\web\UploadedFile::getInstanceByName('payment_slip');
+                    if ($uploadedFile != null) {
+                        $filename = $uploadedFile->name;
+                        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                        $filename = \Yii::$app->security->generateRandomString() . '.' . $ext;
+                        $uploadedFile->saveAs(\Yii::$app->basePath . '/web/uploads/slip_doc/' . $filename);
+                    }
+
                     $model = new JobPayment();
                     $model->job_id = $job_id;
                     $model->trans_date = date('Y-m-d H:i:s');
@@ -886,7 +902,7 @@ class JobController extends Controller
                     $model->total_amount = $amount + $fee_amount;
                     $model->note = $note;
                     $model->payment_method_id = $payment_method_id;
-                    $model->slip_doc = '';
+                    $model->slip_doc = $filename;
                     if($model->save(false)){
                         $total_payment+=$amount;
                         $saved_status +=1;

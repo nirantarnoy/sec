@@ -120,7 +120,7 @@ class EmployeeController extends Controller
                 $photo->saveAs(Yii::getAlias('@backend') . '/web/uploads/images/employee/' . $photo_name);
                 $model->photo = $photo_name;
             }
-            if($model->save(false)){
+            if($model->save()){
                 \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
                 return $this->redirect(['index']);
             }

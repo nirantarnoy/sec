@@ -129,7 +129,7 @@ class CustomerController extends Controller
 
 //                print_r($line_contact_name);return ;
 
-                if ($model->save(false)) {
+                if ($model->save(true)) {
                     if ($party_type) {
 //                        echo $address;
 //                        echo $zipcode; return ;
@@ -315,7 +315,7 @@ class CustomerController extends Controller
 
 
       //      print_r($removelist); return;
-            if ($model->save(false)) {
+            if ($model->save(true)) {
                 if ($party_type) {
 //                    echo 'dd'; return
                     $address_chk = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type_id' => $party_type, 'address_type_id' => 1])->one();

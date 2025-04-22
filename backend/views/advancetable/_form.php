@@ -6,7 +6,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var backend\models\Advancetable $model */
 /** @var yii\widgets\ActiveForm $form */
-$model_table_line = \common\models\CashAdvance::find()->where(['advance_master_id' => $model->id])->all();
+$model_table_line = \common\models\CashAdvance::find()->where(['advance_master_id' => $model->id])->orderBy(['trans_date' => SORT_DESC])->all();
 ?>
 
 <div class="advancetable-form">

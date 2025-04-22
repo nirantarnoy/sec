@@ -36,6 +36,7 @@ class Customer extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
+            [['name'], 'unique'],
             [['customer_group_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','payment_term_id','vat_per_id'], 'integer'],
             [['code', 'name', 'description', 'taxid','first_name','last_name','contact_name'], 'string', 'max' => 255],
             [['first_name', 'last_name', 'contact_name'], 'safe'],
