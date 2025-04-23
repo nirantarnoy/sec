@@ -129,7 +129,7 @@ class CustomerController extends Controller
                 $contact_name = \Yii::$app->request->post('line_contact_name');
 
 //                print_r($line_contact_name);return ;
-                $model->can_new = 0;
+
                 if ($model->save(true)) {
                     if ($party_type) {
 //                        echo $address;
