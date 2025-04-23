@@ -688,7 +688,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                     </tr>
                     <tr>
                         <td colspan="2">
-<!--                            <div class="btn btn-sm btn-primary">เพิ่มแถว</div>-->
+                            <div class="btn btn-sm btn-primary">เพิ่มแถว</div>
                         </td>
                         <td colspan="2" style="text-align: right;">
                             <button class="btn btn-sm btn-warning">อัพเดทตาราง</button>

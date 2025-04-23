@@ -42,9 +42,11 @@ class CashAdvance extends \yii\db\ActiveRecord
     {
         return [
             [['trans_date'], 'safe'],
+         //   [['quotation_ref_no'], 'required'],
             [['team_id', 'created_by', 'created_at', 'updated_by', 'updated_at','advance_master_id','trans_month','trans_year'], 'integer'],
             [['in_amount', 'out_amount', 'balance_amount', 'distance_total', 'express_amount', 'line_total'], 'number'],
             [['name', 'work_name', 'quotation_ref_no', 'remark'], 'string', 'max' => 255],
+            [['customer_id'],'safe'],
         ];
     }
 
@@ -71,6 +73,7 @@ class CashAdvance extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_by' => 'Updated By',
             'updated_at' => 'Updated At',
+            'customer_id'=> 'ลูกค้า',
         ];
     }
 }

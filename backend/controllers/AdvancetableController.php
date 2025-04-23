@@ -130,6 +130,7 @@ class AdvancetableController extends Controller
                 if($model_line->name != "" ){
                     $model_line->trans_date = date('Y-m-d',strtotime($tdate));
                     $model_line->balance_amount = $line_balance;
+                    $model_line->quotation_ref_no = \Yii::$app->request->post('quotation_tags');
                     if($model_line->save(false)){
                         \common\models\AdvanceMaster::updateAll(['total_balance' => $line_balance], ['id' => $model->id]);
                         return $this->redirect(['update', 'id' => $model->id]);
@@ -201,5 +202,33 @@ class AdvancetableController extends Controller
 
         }
         echo "ok";
+    }
+
+    public function actionCreatecustomer(){
+        $new_id = 0;
+        $html= '';
+        $name = \Yii::$app->request->post('name');
+        $description = \Yii::$app->request->post('description');
+        if($name){
+            $model = new \common\models\Customer();
+            $model->name = $name;
+            $model->description = $description;
+            $model->status = 1;
+            $model->can_new = 0;
+            if($model->save(false)){
+                $new_id = $model->id;
+                $model_list = \backend\models\Customer::find()->where(['status'=>1])->orderBy(['can_new'=>SORT_ASC])->all();
+                if($model_list){
+                    foreach($model_list as $value){
+                        $selected = '';
+                        if($value->id == $new_id){
+                            $selected = 'selected';
+                        }
+                        $html .= '<option value="'.$value->id.'" '.$selected.'>'.$value->name.'</option>';
+                    }
+                }
+            }
+        }
+        echo $html;
     }
 }

@@ -63,12 +63,12 @@ $model_table_line = \common\models\CashAdvance::find()->where(['advance_master_i
                     <?= $form->field($model_line, 'name')->textInput(['maxlength' => true]) ?>
                 </div>
                 <div class="col-lg-3">
-                    <?= $form->field($model_line, 'in_amount')->textInput(['type' => 'number', 'value' => 0,'step' => 'any']) ?>
+                    <?= $form->field($model_line, 'in_amount')->textInput(['type' => 'number', 'value' => 0]) ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <?= $form->field($model_line, 'out_amount')->textInput(['type' => 'number', 'value' => 0,'step' => 'any']) ?>
+                    <?= $form->field($model_line, 'out_amount')->textInput(['type' => 'number', 'value' => 0]) ?>
                 </div>
 
                 <div class="col-lg-3">

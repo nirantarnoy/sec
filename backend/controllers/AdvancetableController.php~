@@ -74,7 +74,7 @@ class AdvancetableController extends Controller
         $model_line = new Cashadvance();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
+            if ($model->load($this->request->post()) && $model->save(true)) {
                 //return $this->redirect(['view', 'id' => $model->id]);
                 return $this->redirect(['update', 'id' => $model->id]);
             }
@@ -201,5 +201,33 @@ class AdvancetableController extends Controller
 
         }
         echo "ok";
+    }
+
+    public function actionCreatecustomer(){
+        $new_id = 0;
+        $html= '';
+        $name = \Yii::$app->request->post('name');
+        $description = \Yii::$app->request->post('description');
+        if($name){
+            $model = new \common\models\Customer();
+            $model->name = $name;
+            $model->description = $description;
+            $model->status = 1;
+            $model->can_new = 0;
+            if($model->save(false)){
+                $new_id = $model->id;
+                $model_list = \backend\models\Customer::find()->where(['status'=>1])->orderBy(['can_new'=>SORT_ASC])->all();
+                if($model_list){
+                    foreach($model_list as $value){
+                        $selected = '';
+                        if($value->id == $new_id){
+                            $selected = 'selected';
+                        }
+                        $html .= '<option value="'.$value->id.'" '.$selected.'>'.$value->name.'</option>';
+                    }
+                }
+            }
+        }
+        echo $html;
     }
 }
