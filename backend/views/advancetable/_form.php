@@ -59,16 +59,30 @@ $model_table_line = \common\models\CashAdvance::find()->where(['advance_master_i
                         ]
                     ]) ?>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-3">
+                    <?= $form->field($model_line, 'trans_type_id')->widget(\kartik\select2\Select2::className(), [
+                        'options' => [
+                            'id' => 'trans-type-id',
+                            'placeholder' => 'เลือกประเภท',
+                            'onchange' => 'changeTransType($(this));'
+                        ],
+                        'data' => \yii\helpers\ArrayHelper::map(\backend\helpers\CashAdvanceType::asArrayObject(), 'id', 'name'),
+                        'pluginOptions' => [
+                            'allowClear' => true
+                        ]
+                    ]); ?>
+                    <div class="trans-type-id-validate" style="display:none;color:red;">เลือกประเภทรายการ</div>
+                </div>
+                <div class="col-lg-3">
                     <?= $form->field($model_line, 'name')->textInput(['maxlength' => true]) ?>
                 </div>
                 <div class="col-lg-3">
-                    <?= $form->field($model_line, 'in_amount')->textInput(['type' => 'number', 'value' => 0,'step' => 'any']) ?>
+                    <?= $form->field($model_line, 'in_amount')->textInput(['id'=>'in-amount','type' => 'number', 'value' => 0, 'step' => 'any']) ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <?= $form->field($model_line, 'out_amount')->textInput(['type' => 'number', 'value' => 0,'step' => 'any']) ?>
+                    <?= $form->field($model_line, 'out_amount')->textInput(['id'=>'out-amount','type' => 'number', 'value' => 0, 'step' => 'any']) ?>
                 </div>
 
                 <div class="col-lg-3">
@@ -83,32 +97,32 @@ $model_table_line = \common\models\CashAdvance::find()->where(['advance_master_i
                     ]) ?>
 
                     <!-- Hidden Field to Store Tags (For Form Submission) -->
-                    <?php  echo Html::hiddenInput('quotation_tags', '', ['id' => 'hiddenTags']) ?>
+                    <?php echo Html::hiddenInput('quotation_tags', '', ['id' => 'hiddenTags']) ?>
                     <?php //echo $form->field($model_line, 'quotation_ref_no')->textInput(['maxlength' => true,'id'=>'hiddenTags']) ?>
                     <div class="tag-validate" style="display:none;color:red;">กรอกข้อมูลเลขที่ใบเสนอราคา</div>
 
                 </div>
                 <div class="col-lg-6">
                     <?= $form->field($model_line, 'customer_id')->widget(\kartik\select2\Select2::className(), [
-                        'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customer::find()->where(['status'=>1])->orderBy(['can_new'=>SORT_ASC])->all(), 'id', 'name'),
+                        'data' => \yii\helpers\ArrayHelper::map(\backend\models\Customer::find()->where(['status' => 1])->orderBy(['can_new' => SORT_ASC])->all(), 'id', 'name'),
                         'options' => [
                             'id' => 'selected-customer-id',
                             'placeholder' => 'เลือกลูกค้า...',
                             'onchange' => 'checkcreateNew($(this));',
-                            ],
+                        ],
                         'pluginOptions' => ['allowClear' => true],
                     ]) ?>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-3">
-                    <?= $form->field($model_line, 'distance_total')->textInput(['type' => 'number', 'value' => 0,'class'=>'form-control distance-value','onchange'=>'calculateTotal($(this));']) ?>
+                    <?= $form->field($model_line, 'distance_total')->textInput(['type' => 'number', 'value' => 0, 'class' => 'form-control distance-value', 'onchange' => 'calculateTotal($(this));']) ?>
                 </div>
                 <div class="col-lg-3">
-                    <?= $form->field($model_line, 'express_amount')->textInput(['type' => 'number', 'value' => 0,'class'=>'form-control express-value','onchange'=>'calculateTotal($(this));']) ?>
+                    <?= $form->field($model_line, 'express_amount')->textInput(['type' => 'number', 'value' => 0, 'class' => 'form-control express-value', 'onchange' => 'calculateTotal($(this));']) ?>
                 </div>
                 <div class="col-lg-3">
-                    <?= $form->field($model_line, 'line_total')->textInput(['readonly' => 'readonly','class'=>'form-control total-value']) ?>
+                    <?= $form->field($model_line, 'line_total')->textInput(['readonly' => 'readonly', 'class' => 'form-control total-value']) ?>
                 </div>
                 <div class="col-lg-3">
                     <?= $form->field($model_line, 'remark')->textInput(['maxlength' => true]) ?>
@@ -225,8 +239,9 @@ $model_table_line = \common\models\CashAdvance::find()->where(['advance_master_i
                     <div style="height: 10px;"></div>
                     <div class="row">
                         <div class="col-lg-6">
-                                <label for="">รายละเอียด</label>
-                            <textarea name="new_customer_description" class="form-control new-customer-description" id="" cols="30" rows="3"></textarea>
+                            <label for="">รายละเอียด</label>
+                            <textarea name="new_customer_description" class="form-control new-customer-description"
+                                      id="" cols="30" rows="3"></textarea>
                         </div>
                     </div>
 
@@ -419,14 +434,62 @@ function calculateTotal(e){
 function submitformadvance(){
     var form = $("form#form-advancetable");
     var tag_check = $("#hiddenTags").val();
-    if(tag_check == '' || tag_check == null){
-        $(".tag-validate").show();
-        return false;
-    }else{
-        $(".tag-validate").hide();
-        form.submit();
+    var trans_type_id = $("#trans-type-id").val();
+    //alert(trans_type_id);
+    if(trans_type_id >=3){
+        $(".trans-type-id-validate").hide();
+        if(tag_check == '' || tag_check == null){
+            $(".tag-validate").show();
+            return false;
+        }else{
+            $(".tag-validate").hide();
+            form.submit();
+        }
     }
-    
+    if(trans_type_id !=null && trans_type_id !=''){
+         form.submit();
+    }else{
+        $(".trans-type-id-validate").show();
+    }
+}
+
+function changeTransType(e){
+    var value = e.val();
+     $(".tag-validate").hide();
+     if(value !=null || value !=''){
+         $(".trans-type-id-validate").hide();
+     }
+    if(value == '1'){
+        $("#in-amount").prop("disabled","");
+        $("#out-amount").prop("disabled","disabled");
+        $(".distance-value").prop("disabled","disabled");
+        $(".express-value").prop("disabled","disabled");
+        $("#tagInput").prop("disabled","disabled");
+    }else if(value == '2'){
+        $("#in-amount").prop("disabled","");
+        $("#out-amount").prop("disabled","disabled");
+        $(".distance-value").prop("disabled","disabled");
+        $(".express-value").prop("disabled","disabled");
+        $("#tagInput").prop("disabled","disabled");
+    }else if(value == '3'){
+        $("#in-amount").prop("disabled","disabled");
+        $("#out-amount").prop("disabled","");
+        $(".distance-value").prop("disabled","");
+        $(".express-value").prop("disabled","");
+        $("#tagInput").prop("disabled","");
+    }else if(value == '4'){
+        $("#in-amount").prop("disabled","disabled");
+        $("#out-amount").prop("disabled","");
+        $(".distance-value").prop("disabled","");
+        $(".express-value").prop("disabled","");
+        $("#tagInput").prop("disabled","");
+    }else if(value == '5'){
+        $("#in-amount").prop("disabled","disabled");
+        $("#out-amount").prop("disabled","");
+        $(".distance-value").prop("disabled","");
+        $(".express-value").prop("disabled","");
+        $("#tagInput").prop("disabled","");
+    }
 }
 JS;
 

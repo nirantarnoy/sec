@@ -412,7 +412,7 @@ $product_as_service = \common\models\CostCalType::find()->all();
                                         <input type="hidden" class="line-withholding-type"
                                                name="line_withholding_type[]" value="<?= $value->withholdingtax ?>">
                                         <input type="hidden" class="line-distributor-id" name="line_distributor_id[]" value="<?= $value->distributor_id ?>">
-                                        <input type="hidden" class="line-stock-id" name="line_stock_id[]" value="">
+                                        <input type="hidden" class="line-stock-id" name="line_stock_id[]" value="<?= $value->stock_type_id ?>">
                                         <input type="text" class="form-control line-total-quote-price"
                                                name="line_total_quote_price[]"
                                                style="border: none;width: 100%;box-sizing: border-box;text-align: right;"
@@ -938,6 +938,18 @@ function sumcostvat($job_id, $deduct_id, $vat_type)
         </div>
     </div>
 
+   <br />
+   <div class="row">
+       <div class="col-lg-3">
+           <div class="btn-group">
+               <div class="btn btn-primary">นำส่งข้อมูล / Submit</div>
+               <div class="btn btn-warning">รีวิวการชำระเงิน / Payment Review</div>
+           </div>
+       </div>
+       <div class="col-lg-3"></div>
+       <div class="col-lg-3"></div>
+   </div>
+
 
     <div id="findModal" class="modal fade" role="dialog">
         <div class="modal-dialog modal-md">
@@ -1101,7 +1113,12 @@ function getPaidPending($id)
         $model = \common\models\JobPayment::find()->where(['job_id' => $id])->sum('amount');
         $model_job_amount = \common\models\Job::find()->where(['id' => $id])->sum('job_value_amount');
         if ($model) {
-            $pending_amount = $model_job_amount - $model;
+            if($model >= $model_job_amount){
+                $pending_amount = 0;
+            }else{
+                $pending_amount = $model_job_amount - $model;
+            }
+
         } else {
             if ($model_job_amount) {
                 $pending_amount = $model_job_amount;
