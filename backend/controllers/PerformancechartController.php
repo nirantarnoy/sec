@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\Unit;
 use backend\models\UnitSearch;
 use backend\models\UsergroupSearch;
+use common\models\TeamExtraCom;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -186,6 +187,24 @@ class PerformancechartController extends Controller
         $line_tele_sell_target = \Yii::$app->request->post('line_tele_sell_target');
         $line_install_target = \Yii::$app->request->post('line_install_target');
 
+
+        /// Extra commission
+        $extra_sale_price = \Yii::$app->request->post('total_sale_price');
+        $extra_sale_profit = \Yii::$app->request->post('total_sale_profit');
+        $extra_ttr_per = \Yii::$app->request->post('ttr_per');
+        $extra_ttar_amount = \Yii::$app->request->post('ttar_amount');
+
+        $line_extra_com_emp_id = \Yii::$app->request->post('line_extra_com_emp_id');
+        $line_extra_com_sale_price = \Yii::$app->request->post('line_extra_com_sale_price');
+        $line_extra_com_sale_profit = \Yii::$app->request->post('line_extra_com_sale_profit');
+        $line_extra_com_sale_ptar = \Yii::$app->request->post('line_extra_com_sale_ptar');
+        $line_extra_com_sale_ppr = \Yii::$app->request->post('line_extra_com_sale_ppr');
+        $line_extra_com_sum_ttar = \Yii::$app->request->post('line_extra_com_sum_ttar');
+        $line_extra_com_sum_ptar = \Yii::$app->request->post('line_extra_com_sum_ptar');
+        $line_extra_com_sum_ppr = \Yii::$app->request->post('line_extra_com_sum_ppr');
+        $line_extra_com_sale_total = \Yii::$app->request->post('line_extra_com_sale_total');
+
+
         $loop_emp_num =0;
         foreach ($team_member as $value_member){
             $loop_emp_num+=1;
@@ -316,6 +335,43 @@ class PerformancechartController extends Controller
             }
 
             // }
+        }
+
+
+        if($perform_year && $perform_month && $team_id){
+            $model_check_target_year2 = \common\models\TeamTargetYear::find()->where(['target_year'=>$perform_year,'team_id'=>$team_id])->one();
+            if($line_extra_com_sale_price){
+                $delete_id = \common\models\TeamExtraCom::find()->where(['target_year_id'=>$model_check_target_year2->id])->one();
+                if($delete_id){
+                    \common\models\TeamExtraCom::deleteAll(['target_year_id'=>$model_check_target_year2->id]);
+                    \common\models\TeamExtraComLine::deleteAll(['team_extra_com_id'=>$delete_id->id]);
+                }
+
+                $model_extra_com = new \common\models\TeamExtraCom();
+                $model_extra_com->target_year_id = $model_check_target_year2->id;
+                $model_extra_com->total_sale_price = str_replace(',', '',$extra_sale_price);
+                $model_extra_com->total_sale_profit = str_replace(',', '',$extra_sale_profit);
+                $model_extra_com->ttar_per = $extra_ttr_per;
+                $model_extra_com->ttar_amount = str_replace(',', '',$extra_ttar_amount);
+                if($model_extra_com->save(false)){
+                    if($line_extra_com_emp_id !=null){
+                       for($z=0;$z<=count($line_extra_com_emp_id)-1;$z++){
+                           $model_extra_com_line = new \common\models\TeamExtraComLine();
+                           $model_extra_com_line->team_extra_com_id = $model_extra_com->id;
+                           $model_extra_com_line->emp_id = $line_extra_com_emp_id[$z];
+                           $model_extra_com_line->sale_price = str_replace(',', '', $line_extra_com_sale_price[$z]);
+                           $model_extra_com_line->sale_profit = str_replace(',', '',$line_extra_com_sale_profit[$z]);
+                           $model_extra_com_line->ptar_per = $line_extra_com_sale_ptar[$z];
+                           $model_extra_com_line->ppr_per = $line_extra_com_sale_ppr[$z];
+                           $model_extra_com_line->sum_ttat = str_replace(',', '',$line_extra_com_sum_ttar[$z]);
+                           $model_extra_com_line->sum_ptar = str_replace(',', '',$line_extra_com_sum_ptar[$z]);
+                           $model_extra_com_line->sum_ppr = str_replace(',', '',$line_extra_com_sum_ppr[$z]);
+                           $model_extra_com_line->sum_total = str_replace(',', '',$line_extra_com_sale_total[$z]);
+                           $model_extra_com_line->save(false);
+                       }
+                    }
+                }
+            }
         }
 
         return $this->redirect(['index']);

@@ -291,7 +291,7 @@ function addselecteditem(e) {
         ///////
         if (id) {
             if (checkhas(emp_id)){
-                alert("รหัสสินค้าซ้ำ");
+                alert("รหัสพนักงานซ้ำ");
                 return false;
             }
             if (e.hasClass('btn-outline-success')) {

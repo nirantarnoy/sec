@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\Distributor;
 use backend\models\DistributorSearch;
+use backend\models\UnitSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,12 +39,16 @@ class DistributorController extends Controller
      */
     public function actionIndex()
     {
+        $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new DistributorSearch();
-        $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
+        $dataProvider->setSort(['defaultOrder' => ['id' => SORT_DESC]]);
+        $dataProvider->pagination->pageSize = $pageSize;
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'perpage' => $pageSize,
         ]);
     }
 
@@ -71,7 +76,8 @@ class DistributorController extends Controller
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+                return $this->redirect(['index']);
             }
         } else {
             $model->loadDefaultValues();

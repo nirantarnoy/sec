@@ -45,6 +45,7 @@ class Product extends \yii\db\ActiveRecord
             [['cost_price','sale_price','total_qty'], 'number'],
             [['exp_date'], 'safe'],
             [['code', 'name', 'sku', 'barcode', 'description','photo','photo_2','customer_remark'], 'string', 'max' => 255],
+            [['cost'],'default','value'=>0],
         ];
     }
 
@@ -67,6 +68,7 @@ class Product extends \yii\db\ActiveRecord
             'photo' => 'รูปภาพ',
             'photo_2' => 'รูปภาพ',
             'sale_price' => 'ราคา',
+            'cost'=>'ต้นทุนสินค้า',
             'customer_remark' => 'หมายเหตุ',
             'deduct_type_id' => 'ประเภทหัก',
             'total_qty' =>'จำนวนทั้งหมด',

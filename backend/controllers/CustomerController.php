@@ -65,6 +65,7 @@ class CustomerController extends Controller
 
         $searchModel = new CustomerSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andFilterWhere(['can_new'=>0]);
 
         $dataProvider->pagination->pageSize = $pageSize;
 
@@ -127,9 +128,9 @@ class CustomerController extends Controller
                 $contact_dept_name = \Yii::$app->request->post('line_dept_name');
                 $contact_name = \Yii::$app->request->post('line_contact_name');
 
-//                print_r($line_contact_name);return ;
-
-                if ($model->save(false)) {
+            //    print_r($line_contact_name);return ;
+                $model->can_new = 0;
+                if ($model->save()) {
                     if ($party_type) {
 //                        echo $address;
 //                        echo $zipcode; return ;
@@ -256,10 +257,11 @@ class CustomerController extends Controller
 //                            $model_group_assign->save(false);
 //                        }
 //                    }
+                    //return $this->redirect(['view', 'id' => $model->id]);
+                    \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
+                    return $this->redirect(['index']);
                 }
-                //return $this->redirect(['view', 'id' => $model->id]);
-                \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
-                return $this->redirect(['index']);
+
             }
         } else {
             $model->loadDefaultValues();
@@ -315,7 +317,7 @@ class CustomerController extends Controller
 
 
       //      print_r($removelist); return;
-            if ($model->save(false)) {
+            if ($model->save(true)) {
                 if ($party_type) {
 //                    echo 'dd'; return
                     $address_chk = \common\models\AddressInfo::find()->where(['party_id' => $model->id, 'party_type_id' => $party_type, 'address_type_id' => 1])->one();

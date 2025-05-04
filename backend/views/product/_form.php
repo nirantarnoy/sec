@@ -82,6 +82,11 @@ $yesno = [['id' => 1, 'YES'], ['id' => 0, 'NO']];
             </div>
         </div>
         <div class="row">
+            <div class="col-lg-3">
+                <?= $form->field($model, 'cost')->textInput(['maxlength' => true]) ?>
+            </div>
+        </div>
+        <div class="row">
 
             <div class="col-lg-3">
                 <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>

@@ -137,7 +137,7 @@ class TeamController extends Controller
                     }
                 }
                 if($removelist != null || $removelist != ''){
-                    $ex = explode(';', $removelist);
+                    $ex = explode(',', $removelist);
                     if($ex != null){
                        \common\models\TeamLine::deleteAll(['team_id' => $ex]);
                     }
@@ -190,7 +190,7 @@ class TeamController extends Controller
         $has_data = 0;
         //$model = \backend\models\Workqueue::find()->where(['is_invoice' => 0])->all();
         // $model = \backend\models\Stocksum::find()->where(['warehouse_id' => 7])->all();
-        $model = \backend\models\Employee::find()->where(['status'=>1])->all();
+        $model = \backend\models\Employee::find()->where(['status'=>1])->orderBy(['id'=>SORT_ASC])->all();
         if ($model) {
             $has_data = 1;
             foreach ($model as $value) {

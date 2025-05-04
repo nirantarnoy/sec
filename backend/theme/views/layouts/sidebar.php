@@ -125,7 +125,7 @@
                             <a href="index.php?r=distributor" class="nav-link distributor">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>
-                                    ผู้นำเข้าหลัก
+                                    บริษัทผู้นำเข้า
                                     <!--                                <span class="right badge badge-danger">New</span>-->
                                 </p>
                             </a>
@@ -319,6 +319,14 @@
                             <a href="index.php?r=jobmain" class="nav-link jobmain">
                                 <i class="far fa-circlez nav-icon"></i>
                                 <p>ใบงาน</p>
+                            </a>
+                        </li>
+                        <?php //endif; ?>
+                        <?php //if (\Yii::$app->user->can('product/index')): ?>
+                        <li class="nav-item">
+                            <a href="index.php?r=advancetable" class="nav-link advancetable">
+                                <i class="far fa-circlez nav-icon"></i>
+                                <p>Cash Advance</p>
                             </a>
                         </li>
                         <?php //endif; ?>

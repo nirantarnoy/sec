@@ -7,6 +7,7 @@ use backend\models\Jobdeduct;
 use backend\models\JobSearch;
 use backend\models\TeamSearch;
 use common\models\JobPayment;
+use common\models\JobProfitComStd;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -96,6 +97,8 @@ class JobController extends Controller
                 $line_quote_per_unit = \Yii::$app->request->post('line_quote_per_unit');
                 $line_total_quote_price = \Yii::$app->request->post('line_total_quote_price');
 
+                $line_stock_id = \Yii::$app->request->post('line_stock_id');
+
                 $model->job_no = $model::getLastNo();
                 $trans_date = date('Y-m-d H:is');
                 $xdate = explode('-', $model->trans_date);
@@ -125,6 +128,7 @@ class JobController extends Controller
                                 $model_line->cost_total = $line_total_cost_all[$i];
                                 $model_line->quotation_per_unit_price = $line_quote_per_unit[$i];
                                 $model_line->total_quotation_price = $line_total_quote_price[$i];
+                                $model_line->stock_type_id = $line_stock_id[$i];
                                 $model_line->save(false);
                             }
                         }
@@ -207,7 +211,7 @@ class JobController extends Controller
 
 
 
-            $model->trans_date = date('Y-m-d', strtotime($trans_date));
+           // $model->trans_date = date('Y-m-d', strtotime($trans_date));
             $model->pending_amount = $new_pending_amount;
             $model->job_value_amount = $new_job_value_amount;
             $model->paid_amount = str_replace(',', '', $model->paid_amount);
@@ -274,7 +278,7 @@ class JobController extends Controller
                         }
                     }
                    // \backend\models\Job::updateAll(['job_value_amount' => 0, ['id' => $model->id]]);
-                    $this->calJobsummary($model->id);
+                    $this->calJobsummary($model->id,$model->job_master_id);
                 }
                 \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
                // return $this->redirect(['index']);
@@ -662,7 +666,7 @@ class JobController extends Controller
         echo $html;
     }
 
-    function calJobsummary($job_id){
+    function calJobsummary($job_id,$job_master_id){
         if($job_id){
             $model = \common\models\ViewJobData::find()->where(['id' => $job_id])->all();
             if($model){
@@ -671,6 +675,7 @@ class JobController extends Controller
                 $total_cost = 0;
                 $job_value_amount = 0;
                 $withholding_amt = 0;
+                $total_after_deduct_vat_per = 0;
                 foreach($model as $value){
                     $cost_with_vat = $cost_with_vat + $this->sumcostvat($job_id, $value->cal_type_id, 1);
                     $cost_without_vat = $cost_without_vat + $this->sumcostvat($job_id, $value->cal_type_id, 2);
@@ -680,7 +685,10 @@ class JobController extends Controller
                 $total_cost = $cost_with_vat + $cost_without_vat;
                // $total_cost_with_vat = $cost_with_vat + $this->getJobVat($job_id)-($cost_with_vat - ($cost_with_vat  / 1.07)) + $cost_without_vat;
                 $total_after_deduct_vat = $job_value_amount-($cost_with_vat + $this->getJobVat($job_id)-($cost_with_vat - ($cost_with_vat  / 1.07)) + $cost_without_vat);
-                $total_after_deduct_vat_per = ($total_after_deduct_vat/$job_value_amount)*100;
+                if($total_after_deduct_vat > 0 && $job_value_amount > 0){
+                    $total_after_deduct_vat_per = ($total_after_deduct_vat/$job_value_amount)*100;
+                }
+
                 $total_commission = 0.27 *$total_after_deduct_vat;
 
 
@@ -700,6 +708,48 @@ class JobController extends Controller
                     if($update_pending_amt){
                         \backend\models\Job::updateAll(['pending_amount'=>$update_pending_amt],['id'=>$job_id]);
                     }
+
+                    $model_std_profit = \common\models\JobProfitComStd::find()->where(['job_id'=>$job_master_id,'type_id'=>1])->one();
+                    if($model_std_profit){
+                        $new_com_amount = ($total_after_deduct_vat * $model_std_profit->commission_per) / 100;
+                        \common\models\JobProfitComStd::updateAll(['commission_amount'=>$new_com_amount],['job_id'=>$job_master_id,'type_id'=>1]);
+                    }
+
+                   // \common\models\JobProfitComStd::updateAll(['std_amount'=>$total_after_deduct_vat],['job_id'=>$job_master_id,'type_id'=>1]);
+
+                    $model_std_profit_new_all_cal = \common\models\JobProfitComStd::find()->where(['job_id'=>$job_master_id,'type_id'=>[0]])->all();
+                    if($model_std_profit_new_all_cal){
+                        $new_com_amount_2 = 0;
+                        $new_com_per_2 = 0;
+                        $new_commission_amount_2 = 0;
+
+                        foreach ($model_std_profit_new_all_cal as $valuex) {
+                            $new_com_amount_2 += ($valuex->std_amount);
+                            $new_commission_amount_2 += ($valuex->commission_amount);
+                        }
+
+                        $new_xx_com_amount = 0;
+                        $new_xx_std_com_amount =0;
+
+                        $model_xx = \common\models\JobProfitComStd::find()->where(['job_id'=>$job_master_id,'type_id'=>1])->one();
+                        if($model_xx){
+                            $new_xx_com_amount = (($model_xx->std_amount + $total_after_deduct_vat) * $model_xx->commission_per) / 100;
+                            $new_xx_std_com_amount = ($model_xx->std_amount + $total_after_deduct_vat);
+                            $model_xx->std_amount = ($model_xx->std_amount + $total_after_deduct_vat);
+                            $model_xx->commission_amount = $new_xx_com_amount;
+                            $model_xx->save(false);
+                        }
+
+
+
+                        $new_com_per_2 = (($new_commission_amount_2 + $new_xx_com_amount) * 100) / ($new_com_amount_2 + $new_xx_std_com_amount);
+                        \common\models\JobProfitComStd::updateAll(['std_amount'=>($new_com_amount_2 + $new_xx_std_com_amount),'commission_amount'=>($new_commission_amount_2+$new_xx_com_amount),'commission_per'=>$new_com_per_2],['job_id'=>$job_master_id,'type_id'=>2]);
+
+                    }else{
+                       // \common\models\JobProfitComStd::updateAll(['std_amount'=>$total_after_deduct_vat],['job_id'=>$job_master_id,'type_id'=>1]);
+                    }
+
+
                 }
             }
         }
@@ -834,6 +884,15 @@ class JobController extends Controller
 //                        $uploadedFile->saveAs(\Yii::$app->basePath . '/web/uploads/slip_doc/' . $filename);
 //                    }
 
+                    $filename = '';
+                    $uploadedFile = \yii\web\UploadedFile::getInstanceByName('payment_slip');
+                    if ($uploadedFile != null) {
+                        $filename = $uploadedFile->name;
+                        $ext = pathinfo($filename, PATHINFO_EXTENSION);
+                        $filename = \Yii::$app->security->generateRandomString() . '.' . $ext;
+                        $uploadedFile->saveAs(\Yii::$app->basePath . '/web/uploads/slip_doc/' . $filename);
+                    }
+
                     $model = new JobPayment();
                     $model->job_id = $job_id;
                     $model->trans_date = date('Y-m-d H:i:s');
@@ -843,7 +902,7 @@ class JobController extends Controller
                     $model->total_amount = $amount + $fee_amount;
                     $model->note = $note;
                     $model->payment_method_id = $payment_method_id;
-                    $model->slip_doc = '';
+                    $model->slip_doc = $filename;
                     if($model->save(false)){
                         $total_payment+=$amount;
                         $saved_status +=1;

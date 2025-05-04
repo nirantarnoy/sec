@@ -82,6 +82,11 @@ $yesno = [['id' => 1, 'YES'], ['id' => 0, 'NO']];
             </div>
         </div>
         <div class="row">
+            <div class="col-lg-3">
+                <?= $form->field($model, 'cost')->textarea(['maxlength' => true]) ?>
+            </div>
+        </div>
+        <div class="row">
 
             <div class="col-lg-3">
                 <?php echo $form->field($model, 'status')->widget(\toxor88\switchery\Switchery::className(), ['options' => ['label' => '', 'class' => 'form-control']])->label() ?>
@@ -380,6 +385,7 @@ $(function(){
                       if (text === 'Create New') { // Change background for ID = 1
                         $(this).css("background-color", "#28a745"); // Green
                         $(this).css("color", "white"); // White text for better contrast
+                        $(this).css("text-align","center");
                     }
                 });
             }, 100);

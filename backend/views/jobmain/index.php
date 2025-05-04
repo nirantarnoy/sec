@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'job_month',
                 'contentOptions' => ['style' => 'text-align: center'],
                 'value' => function ($data) {
-                    return $data->job_month != null ? date('d-m-Y', strtotime($data->job_month)) : '';
+                    return $data->job_month != null ? date('m/Y', strtotime($data->job_month)) : '';
                 }
             ],
             [

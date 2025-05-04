@@ -35,9 +35,12 @@ class Customer extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['firstname','email'], 'required'],
+            [['name'], 'required'],
+            [['name'], 'unique','targetAttribute' => ['name']],
             [['customer_group_id', 'status', 'created_at', 'created_by', 'updated_at', 'updated_by','payment_term_id','vat_per_id'], 'integer'],
-            [['code', 'name', 'description', 'taxid','first_name','last_name','contact_name'], 'string', 'max' => 255],
+            [['code', 'description', 'taxid','first_name','last_name','contact_name'], 'string', 'max' => 255],
+            [['first_name', 'last_name', 'contact_name'], 'safe'],
+            [['can_new'],'default','value' => 0],
         ];
     }
 
@@ -49,7 +52,7 @@ class Customer extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'code' => 'รหัส',
-            'name' => 'ชื่อ',
+            'name' => 'ชื่อลูกค้า',
             'description' => 'รายละเอียด',
             'taxid' => 'เลขที่ประจำตัวผู้เสียภาษี',
             'customer_group_id' => 'กลุ่มลูกค้า',
@@ -65,3 +68,6 @@ class Customer extends \yii\db\ActiveRecord
         ];
     }
 }
+
+
+

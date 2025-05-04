@@ -265,7 +265,7 @@ class JobmainController extends Controller
 
             if($line_com_share_emp_id != null){
                 \common\models\JobComShare::deleteAll(['job_id' => $jobmain_id]);
-                for ($i = 0; $i <= count($line_com_share_per) - 1; $i++) {
+                for ($i = 0; $i <= count($line_com_share_emp_id) - 1; $i++) {
                     $model = new \common\models\JobComShare();
                     $model->job_id = $jobmain_id;
                     $model->emp_id = $line_com_share_emp_id[$i];
@@ -283,5 +283,17 @@ class JobmainController extends Controller
         }
 
         return $this->redirect(['jobmain/update', 'id' => $jobmain_id]);
+    }
+    public function actionCheckdup()
+    {
+        $quot_no = \Yii::$app->request->post('quot_no');
+        if($quot_no !=''){
+            $model = \common\models\Job::find()->where(['like', 'quotation_ref_no', $quot_no])->count();
+            if($model){
+                return 100;
+            }
+        }else{
+            return 150;
+        }
     }
 }

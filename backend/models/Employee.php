@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\TeamLine;
 use Yii;
 use yii\db\ActiveRecord;
 
@@ -120,18 +121,11 @@ class Employee extends \common\models\Employee
         return $model != null ? $model->fname.' '.$model->lname : '';
     }
 
-    public static function isPosUser($id)
+    public static function isTeamHead($team_id,$id)
     {
         $model = null;
-        $model_x = User::find()->where(['id' => $id])->one();
-        if ($model_x) {
-            $model_emp = Employee::find()->where(['id' => $model_x->employee_ref_id])->one();
-            if ($model_emp) {
-                $model = $model_emp->is_sale_operator;
-            }
-        }
-
-        return $model != null ? $model : 0;
+        $model = TeamLine::find()->where(['team_id'=>$team_id,'emp_id' => $id])->one();
+        return $model != null ? $model->is_head : 0;
     }
 
     public static function findUserId($code)

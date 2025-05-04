@@ -16,7 +16,7 @@ class EmployeeSearch extends Employee
     {
         return [
             [['id', 'gender', 'position', 'salary_type', 'status',  'created_at', 'updated_at', 'created_by', 'updated_by','cal_commission'], 'integer'],
-            [['code', 'f_name', 'l_name', 'description'], 'safe'],
+            [['code', 'f_name', 'l_name', 'description'], 'string'],
             [['globalSearch'],'string']
         ];
     }
@@ -62,6 +62,9 @@ class EmployeeSearch extends Employee
             'position' => $this->position,
             'salary_type' => $this->salary_type,
             'status' => $this->status,
+            'code'=> $this->code,
+            'f_name'=> $this->f_name,
+            'l_name'=> $this->l_name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'created_by' => $this->created_by,

@@ -47,11 +47,14 @@ $group_assign_list = [];
 
     <div class="row">
         <div class="col-lg-1"></div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
-        </div>
-        <div class="col-lg-3">
-            <?= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
+<!--        <div class="col-lg-3">-->
+<!--            --><?php //= $form->field($model, 'first_name')->textInput(['maxlength' => true]) ?>
+<!--        </div>-->
+<!--        <div class="col-lg-3">-->
+<!--            --><?php //= $form->field($model, 'last_name')->textInput(['maxlength' => true]) ?>
+<!--        </div>-->
+        <div class="col-lg-6">
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
     <div class="row">
