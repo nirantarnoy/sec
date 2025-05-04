@@ -4,14 +4,21 @@ use yii\helpers\Url;
 use miloschuman\highcharts\Highcharts;
 
 
-
 $kpi_title = \common\models\KpiPerformanceTitle::find()->orderBy(['id' => SORT_ASC])->all();
 $team_member = \common\models\TeamLine::find()->where(['team_id' => 1])->orderBy(['emp_id' => SORT_ASC])->all();
+
+$team_extra_com_line = null;
+$team_extra_com = \common\models\TeamExtraCom::find()->where(['target_year_id' => 1])->orderBy(['id' => SORT_ASC])->one(); // Must change to team and year and month
+if ($team_extra_com != null) {
+    $team_extra_com_line = \common\models\TeamExtraComLine::find()->where(['team_extra_com_id' => $team_extra_com->id])->orderBy(['id' => SORT_ASC])->all();
+}
 
 $data_chart_sale_amount = [];
 $data_chart_profit_per_amount = [];
 $data_chart_job_count_per_amount = [];
 $data_chart_job_count_per_cat = [];
+
+$data_emp_commission = [];
 
 $data_chart_job_personal_performance_per = [];
 $month_data = [
@@ -29,46 +36,46 @@ $month_data = [
     ['id' => 12, 'name' => 'Dec']
 ];
 $year_data = [];
-for($a=0;$a<=3;$a++){
-    array_push($year_data,['id'=>date('Y')-$a,'name'=>date('Y')-$a]);
+for ($a = 0; $a <= 3; $a++) {
+    array_push($year_data, ['id' => date('Y') - $a, 'name' => date('Y') - $a]);
 }
 
 
 $find_month_name = '';
-for($v=0;$v<=count($month_data)-1;$v++){
-    if($month_data[$v]['id']==$selected_month)$find_month_name=$month_data[$v]['name'];
+for ($v = 0; $v <= count($month_data) - 1; $v++) {
+    if ($month_data[$v]['id'] == $selected_month) $find_month_name = $month_data[$v]['name'];
 }
 
-$this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
+$this->title = 'Performance Chart ' . $find_month_name . ' ' . $selected_year;
 ?>
-<form action="<?=Url::to(['performancechart/index'],true)?>" method="post">
+<form action="<?= Url::to(['performancechart/index'], true) ?>" method="post">
     <div class="row">
         <div class="col-lg-3">
             <select name="selected_month" class="form-control" id="">
                 <option value="-1">--เลือกเดือน--</option>
-                <?php for($i=0;$i<=count($month_data)-1;$i++):?>
-                <?php
-                   $selected = '';
-                   if($month_data[$i]['id'] == $selected_month){
-                       $selected = 'selected';
-                   }
-                ?>
-                    <option value="<?=$month_data[$i]['id']?>" <?=$selected?>><?=$month_data[$i]['name']?></option>
-                <?php endfor;?>
+                <?php for ($i = 0; $i <= count($month_data) - 1; $i++): ?>
+                    <?php
+                    $selected = '';
+                    if ($month_data[$i]['id'] == $selected_month) {
+                        $selected = 'selected';
+                    }
+                    ?>
+                    <option value="<?= $month_data[$i]['id'] ?>" <?= $selected ?>><?= $month_data[$i]['name'] ?></option>
+                <?php endfor; ?>
             </select>
         </div>
         <div class="col-lg-3">
             <select name="selected_year" class="form-control" id="">
                 <option value="-1">--เลือกปี--</option>
-                <?php for($i=0;$i<=count($year_data)-1;$i++):?>
+                <?php for ($i = 0; $i <= count($year_data) - 1; $i++): ?>
                     <?php
                     $selected = '';
-                    if($year_data[$i]['id'] == $selected_year){
+                    if ($year_data[$i]['id'] == $selected_year) {
                         $selected = 'selected';
                     }
                     ?>
-                    <option value="<?=$year_data[$i]['id']?>" <?=$selected?>><?=$year_data[$i]['name']?></option>
-                <?php endfor;?>
+                    <option value="<?= $year_data[$i]['id'] ?>" <?= $selected ?>><?= $year_data[$i]['name'] ?></option>
+                <?php endfor; ?>
             </select>
         </div>
         <div class="col-lg-3">
@@ -77,7 +84,7 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
         <div class="col-lg-3"></div>
     </div>
 </form>
-<br />
+<br/>
 <form action="<?= Url::to(['performancechart/updatekpi'], true) ?>" method="post">
     <div class="row">
         <div class="col-lg-3">
@@ -167,12 +174,14 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
                     array_push($data_chart_sale_amount, ['name' => \backend\models\Employee::findFullName($value->emp_id), 'y' => round($line_sale_per_amount, 2)]);
                     array_push($data_chart_profit_per_amount, ['name' => \backend\models\Employee::findFullName($value->emp_id), 'y' => round($line_profit_per, 2)]);
 
-                    if($value->emp_id !=1){
-                        array_push($data_chart_job_count_per_cat, [\backend\models\Employee::findFullName($value->emp_id)]);
-                    }
+                    // if($value->emp_id !=1){
+                    array_push($data_chart_job_count_per_cat, [\backend\models\Employee::findFullName($value->emp_id)]);
+                    // }
 
                     array_push($list_chart_data, ['emp_id' => $value->emp_id, 'data' => $line_job_count_per]);
-                    array_push($list_chart_personal_data,['emp_id'=>$value->emp_id,'data'=>$line_personal_perform_per]);
+                    array_push($list_chart_personal_data, ['emp_id' => $value->emp_id, 'data' => $line_personal_perform_per]);
+
+                    array_push($data_emp_commission, ['emp_id' => $value->emp_id, 'emp_name' => \backend\models\Employee::findFullName($value->emp_id), 'sale_amount' => $line_job_value_amount, 'profit_amount' => $line_profit_amount]);
                     ?>
                     <tr>
                         <td style="padding; 0">
@@ -271,8 +280,8 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
         <div class="col-lg-6">
 
             <input type="hidden" name="team_id" value="1">
-            <input type="hidden" name="perform_year" value="<?=$selected_year?>">
-            <input type="hidden" name="perform_month" value="<?=$selected_month?>">
+            <input type="hidden" name="perform_year" value="<?= $selected_year ?>">
+            <input type="hidden" name="perform_month" value="<?= $selected_month ?>">
 
             <table class="table table-bordered" id="table-kpi-list">
                 <thead>
@@ -394,10 +403,10 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
 
     }
 
-    if($list_chart_personal_data !=null){
+    if ($list_chart_personal_data != null) {
         for ($x = 0; $x <= count($list_chart_personal_data) - 1; $x++) {
             foreach ($team_member as $valuex) {
-              //  if($valuex->emp_id == 1)continue;
+                //  if($valuex->emp_id == 1)continue;
                 if ($valuex->emp_id == $list_chart_personal_data[$x]['emp_id']) {
                     array_push($bar_performance_value, (float)$list_chart_personal_data[$x]['data']);
                 }
@@ -406,7 +415,7 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
     }
 
     array_push($data_chart_job_count_per_amount, ['name' => '%ปริมาณงาน', 'data' => $bar_value]);
-    array_push($data_chart_job_personal_performance_per,['name'=>'%performance','data'=>$bar_performance_value]);
+    array_push($data_chart_job_personal_performance_per, ['name' => '%performance', 'data' => $bar_performance_value]);
     ?>
     <div class="row">
         <div class="col-lg-6">
@@ -548,19 +557,21 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
         $ptar_colspan = count($team_member) + 1;
     }
     $model_target_team = null;
-    $model_target_year = \common\models\TeamTargetYear::find()->select(['id'])->where(['target_year'=>$selected_year,'team_id'=>1])->one();
-    if($model_target_year){
-        $model_target_team = \common\models\TeamTarget::find()->where(['target_year_id'=>$model_target_year->id])->all();
+    $model_target_year = \common\models\TeamTargetYear::find()->select(['id'])->where(['target_year' => $selected_year, 'team_id' => 1])->one();
+    if ($model_target_year) {
+        $model_target_team = \common\models\TeamTarget::find()->where(['target_year_id' => $model_target_year->id])->all();
     }
 
-    function getTargetbyEmp($target_id,$emp_id){
-       $amount = 0;
-       $model = \common\models\TeamPersonalTarget::find()->select(['emp_target_amount'])->where(['team_target_id'=>$target_id,'emp_id'=>$emp_id])->one();
-       if($model){
-           $amount = $model->emp_target_amount;
-       }
-       return $amount;
+    function getTargetbyEmp($target_id, $emp_id)
+    {
+        $amount = 0;
+        $model = \common\models\TeamPersonalTarget::find()->select(['emp_target_amount'])->where(['team_target_id' => $target_id, 'emp_id' => $emp_id])->one();
+        if ($model) {
+            $amount = $model->emp_target_amount;
+        }
+        return $amount;
     }
+
     ?>
     <div class="row">
         <div class="col-lg-12">
@@ -570,9 +581,10 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
                     <td rowspan="2" style="background-color: lightgreen;vertical-align: middle;text-align: center;">
                         Milestone
                     </td>
-                    <td colspan="4" style="background-color: lightgreen;text-align: center;"><b>TEAM TARGET (TTAR)</b></td>
+                    <td colspan="4" style="background-color: lightgreen;text-align: center;"><b>TEAM TARGET (TTAR)</b>
+                    </td>
                     <td colspan="<?= $ptar_colspan ?>" style="background-color: lightgreen;text-align: center;"><b>PERSONAL
-                        TARGET (PTAR)</b>
+                            TARGET (PTAR)</b>
                     </td>
                     <td style="background-color: lightgreen;text-align: center;width: 3%"></td>
                 </tr>
@@ -589,82 +601,101 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
                 </tr>
                 </thead>
                 <tbody>
-                <?php if($model_target_team ==null):?>
-                <tr>
-                    <td style="padding: 0;">
-                        <input type="text" class="form-control line-milestone" style="height: 46px;border: none;text-align: left;"
-                               name="line_milestone[]" value="">
-                    </td>
-                    <td style="padding: 0;">
-                        <input type="text" class="form-control line-monthly-target"
-                               style="height: 46px;border: none;text-align: right;" name="line_monthly_target[]"
-                               value="0" onchange="calTeamtarget()">
-                    </td>
-                    <td style="padding: 0;"><input type="text" class="form-control line-tele-sell-target"
-                                                   style="height: 46px;border: none;text-align: right;"
-                                                   name="line_tele_sell_target[]" value="0" readonly></td>
-                    <td style="padding: 0;"><input type="text" class="form-control line-install-target"
-                                                   style="height: 46px;border: none;text-align: right;"
-                                                   name="line_install_target[]" value="0" readonly></td>
-                    <td style="padding: 0;"><input type="text" class="form-control lint-ttar"
-                                                   style="height: 46px;border: none;text-align: center;"
-                                                   name="line_ttar[]" value="0"></td>
-                    <?php $loop_emp_num = 0;?>
-                    <?php foreach ($team_member as $value): ?>
-                        <?php $loop_emp_num +=1;?>
+                <?php if ($model_target_team == null): ?>
+                    <tr>
                         <td style="padding: 0;">
-                            <input type="hidden" name="line_personal_emp_id<?=$loop_emp_num?>[]" value="<?= $value->emp_id ?>">
-                            <input type="text" class="form-control line-personal-target"
-                                   style="height: 46px;border: none;text-align: right;" name="line_personal_target<?=$loop_emp_num?>[]"
-                                   value="0" readonly>
+                            <input type="text" class="form-control line-milestone"
+                                   style="height: 46px;border: none;text-align: left;"
+                                   name="line_milestone[]" value="">
                         </td>
-                    <?php endforeach; ?>
-                    <td style="padding: 0;"><input type="text" class="form-control line-ptar"
-                                                   style="height: 46px;border: none;text-align: center;"
-                                                   name="line_ptar[]" value="0"></td>
-                    <td><div class="btn btn-sm btn-danger" onclick="removeTeamtarget($(this))">-</div></td>
-                </tr>
-                <?php else:?>
-                <?php foreach($model_target_team as $value_target):?>
+                        <td style="padding: 0;">
+                            <input type="text" class="form-control line-monthly-target"
+                                   style="height: 46px;border: none;text-align: right;" name="line_monthly_target[]"
+                                   value="0" onchange="calTeamtarget()">
+                        </td>
+                        <td style="padding: 0;"><input type="text" class="form-control line-tele-sell-target"
+                                                       style="height: 46px;border: none;text-align: right;"
+                                                       name="line_tele_sell_target[]" value="0" readonly></td>
+                        <td style="padding: 0;"><input type="text" class="form-control line-install-target"
+                                                       style="height: 46px;border: none;text-align: right;"
+                                                       name="line_install_target[]" value="0" readonly></td>
+                        <td style="padding: 0;"><input type="text" class="form-control lint-ttar"
+                                                       style="height: 46px;border: none;text-align: center;"
+                                                       name="line_ttar[]" value="0"></td>
+                        <?php $loop_emp_num = 0; ?>
+                        <?php foreach ($team_member as $value): ?>
+                            <?php $loop_emp_num += 1; ?>
+                            <td style="padding: 0;">
+                                <input type="hidden" name="line_personal_emp_id<?= $loop_emp_num ?>[]"
+                                       value="<?= $value->emp_id ?>">
+                                <input type="text" class="form-control line-personal-target"
+                                       style="height: 46px;border: none;text-align: right;"
+                                       name="line_personal_target<?= $loop_emp_num ?>[]"
+                                       value="0" readonly>
+                            </td>
+                        <?php endforeach; ?>
+                        <td style="padding: 0;"><input type="text" class="form-control line-ptar"
+                                                       style="height: 46px;border: none;text-align: center;"
+                                                       name="line_ptar[]" value="0"></td>
+                        <td>
+                            <div class="btn btn-sm btn-danger" onclick="removeTeamtarget($(this))">-</div>
+                        </td>
+                    </tr>
+                <?php else: ?>
+                    <?php foreach ($model_target_team as $value_target): ?>
                         <tr>
                             <td style="padding: 0;">
-                                <input type="text" class="form-control line-milestone" style="height: 46px;border: none;text-align: left;"
-                                       name="line_milestone[]" value="<?=$value_target->milestone?>">
+                                <input type="text" class="form-control line-milestone"
+                                       style="height: 46px;border: none;text-align: left;"
+                                       name="line_milestone[]" value="<?= $value_target->milestone ?>">
                             </td>
                             <td style="padding: 0;">
                                 <input type="text" class="form-control line-monthly-target"
                                        style="height: 46px;border: none;text-align: right;" name="line_monthly_target[]"
-                                       value="<?=number_format($value_target->monthly_amount,2)?>" onchange="calTeamtarget()">
+                                       value="<?= number_format($value_target->monthly_amount, 2) ?>"
+                                       onchange="calTeamtarget()">
                             </td>
                             <td style="padding: 0;"><input type="text" class="form-control line-tele-sell-target"
                                                            style="height: 46px;border: none;text-align: right;"
-                                                           name="line_tele_sell_target[]" value="<?=number_format($value_target->tele_sell_amount,2)?>" readonly></td>
+                                                           name="line_tele_sell_target[]"
+                                                           value="<?= number_format($value_target->tele_sell_amount, 2) ?>"
+                                                           readonly></td>
                             <td style="padding: 0;"><input type="text" class="form-control line-install-target"
                                                            style="height: 46px;border: none;text-align: right;"
-                                                           name="line_install_target[]" value="<?=number_format($value_target->installation_amount,2)?>" readonly></td>
+                                                           name="line_install_target[]"
+                                                           value="<?= number_format($value_target->installation_amount, 2) ?>"
+                                                           readonly></td>
                             <td style="padding: 0;"><input type="text" class="form-control lint-ttar"
                                                            style="height: 46px;border: none;text-align: center;"
-                                                           name="line_ttar[]" value="<?=number_format($value_target->ttar_per,2)?>"></td>
-                            <?php $loop_emp_num = 0;?>
+                                                           name="line_ttar[]"
+                                                           value="<?= number_format($value_target->ttar_per, 2) ?>">
+                            </td>
+                            <?php $loop_emp_num = 0; ?>
                             <?php foreach ($team_member as $value): ?>
                                 <?php
-                                $loop_emp_num +=1;
-                                $line_emp_target_amount = getTargetbyEmp($value_target->id,$value->emp_id);
+                                $loop_emp_num += 1;
+                                $line_emp_target_amount = getTargetbyEmp($value_target->id, $value->emp_id);
                                 ?>
                                 <td style="padding: 0;">
-                                    <input type="hidden" name="line_personal_emp_id<?=$loop_emp_num?>[]" value="<?= $value->emp_id ?>">
+                                    <input type="hidden" name="line_personal_emp_id<?= $loop_emp_num ?>[]"
+                                           value="<?= $value->emp_id ?>">
                                     <input type="text" class="form-control line-personal-target"
-                                           style="height: 46px;border: none;text-align: right;" name="line_personal_target<?=$loop_emp_num?>[]"
-                                           value="<?=number_format($line_emp_target_amount,2)?>" readonly>
+                                           style="height: 46px;border: none;text-align: right;"
+                                           name="line_personal_target<?= $loop_emp_num ?>[]"
+                                           value="<?= number_format($line_emp_target_amount, 2) ?>" readonly>
                                 </td>
                             <?php endforeach; ?>
                             <td style="padding: 0;"><input type="text" class="form-control line-ptar"
                                                            style="height: 46px;border: none;text-align: center;"
-                                                           name="line_ptar[]" value="<?=number_format($value_target->ptar_per,2)?>"></td>
-                            <td><div class="btn btn-sm btn-danger" onclick="removeTeamtarget($(this))">-</div></td>
+                                                           name="line_ptar[]"
+                                                           value="<?= number_format($value_target->ptar_per, 2) ?>">
+                            </td>
+                            <td>
+                                <div class="btn btn-sm btn-danger" onclick="removeTeamtarget($(this))">-</div>
+                            </td>
                         </tr>
-                <?php endforeach;?>
-                <?php endif;?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
                 </tbody>
                 <tfoot>
                 <tr>
@@ -676,8 +707,255 @@ $this->title = 'Performance Chart '.$find_month_name.' '.$selected_year;
             </table>
         </div>
     </div>
+    <br/>
+    <div class="row">
+        <div class="col-lg-12">
+            <h5><b>Extra Commission Summary :</b></h5>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <table class="table table-bordered" id="table-extra-commission">
+                <thead>
+                <tr>
+                    <th style="width: 15%;background-color: #dd7854;"><b>Total Sale Price :</b></th>
+                    <th style="width: 10%;text-align: center;padding: 0">
+                        <input type="text"
+                               class="form-control total-sale-price"
+                               style="border: none;text-align: left;height: 47px;"
+                               name="total_sale_price"
+                               value="<?= number_format($total_sale_amount, 2) ?>" readonly>
+                    </th>
+                    <th style="width: 10%;text-align: right;background-color: #dd7854;"><b>Total Sale Profit :</b></th>
+                    <th style="width: 10%;text-align: center;padding: 0">
+                        <input type="text"
+                               class="form-control total-sale-profit"
+                               style="border: none;text-align: left;height: 47px;"
+                               name="total_sale_profit"
+                               value="<?= number_format($total_profit_amount, 2) ?>" readonly>
+                    </th>
+                    <th style="width: 10%;text-align: right;background-color: #dd7854;"><b>%TTAR :</b></th>
+                    <th style="width: 10%;text-align: center;padding: 0">
+                        <input type="text"
+                               class="form-control ttar-per"
+                               style="border: none;text-align: left;height: 47px;"
+                               name="ttr_per"
+                               value="<?= number_format($team_extra_com!=null?$team_extra_com->ttar_per:0, 1) ?>" onchange="calTTAR()">
+                    </th>
+                    <th style="width: 10%;text-align: right;background-color: #dd7854;"><b>TTAR :</b></th>
+                    <th style="width: 10%;text-align: center;padding: 0">
+                        <input type="text"
+                               class="form-control ttar-amount"
+                               style="border: none;text-align: left;height: 47px;"
+                               name="ttar_amount"
+                               value="<?= number_format($team_extra_com!=null?$team_extra_com->ttar_amount:0, 2) ?>" readonly>
+                    </th>
+                    <th style="width: 10%;background-color: #dd7854;"></th>
+                </tr>
+                <tr>
+                    <th style="text-align: center;background-color: #9149d2;color: white;"><b>Name</b></th>
+                    <th style="text-align: center;background-color: #9149d2;color: white;"><b>Sale Price</b></th>
+                    <th style="text-align: center;background-color: #9149d2;color: white;"><b>Sale Profit</b></th>
+                    <th style="text-align: center;background-color: #9149d2;color: white;"><b>%PTAR</b></th>
+                    <th style="text-align: center;background-color: #9149d2;color: white;"><b>%PPR</b></th>
+                    <th style="text-align: center;background-color: #9149d2;color: white;"><b>SUM.TTAR</b></th>
+                    <th style="text-align: center;background-color: #9149d2;color: white;"><b>SUM.PTAR</b></th>
+                    <th style="text-align: center;background-color: #9149d2;color: white;"><b>SUM.PPR</b></th>
+                    <th style="text-align: center;background-color: #9149d2;color: white;"><b>Total</b></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <?php if ($team_extra_com != null): ?>
+                    <?php foreach ($team_extra_com_line as $value): ?>
+                        <tr>
+                            <td style="text-align: center;">
+                                <input type="hidden" name="line_extra_com_emp_id[]"
+                                       value="<?= $value->emp_id?>">
+                                <?= \backend\models\Employee::findFullName($value->emp_id) ?>
+                            </td>
+                            <td style="text-align: right;padding: 0;">
+                                <input type="text"
+                                       class="form-control line-extra-com-sale-price"
+                                       style="border: none;text-align: right;height: 47px;"
+                                       name="line_extra_com_sale_price[]"
+                                       value="<?= number_format($value->sale_price, 2) ?>"
+                                       readonly>
+                            </td>
+                            <td style="text-align: right;padding: 0;">
+                                <input type="text"
+                                       class="form-control line-extra-com-sale-profit"
+                                       style="border: none;text-align: right;height: 47px;"
+                                       name="line_extra_com_sale_profit[]"
+                                       value="<?= number_format($value->sale_profit, 2) ?>"
+                                       readonly>
+                            </td>
+                            <td style="text-align: center;padding: 0;">
+                                <input type="text"
+                                       class="form-control line-extra-com-ptar"
+                                       style="border: none;text-align: center;height: 47px;"
+                                       name="line_extra_com_sale_ptar[]"
+                                       value="<?= number_format($value->ptar_per, 1) ?>" onchange="calTTAR();">
+                            </td>
+                            <td style="text-align: center;padding: 0;">
+                                <input type="text"
+                                       class="form-control line-extra-com-ppr"
+                                       style="border: none;text-align: center;height: 47px;"
+                                       name="line_extra_com_sale_ppr[]"
+                                       value="<?= number_format($value->ppr_per, 1) ?>" onchange="calTTAR();">
+                            </td>
+                            <td style="text-align: right;padding: 0;">
+                                <input type="text"
+                                       class="form-control line-extra-com-sum-ttar"
+                                       style="border: none;text-align: right;height: 47px;"
+                                       name="line_extra_com_sum_ttar[]"
+                                       value="<?= number_format($value->sum_ttat, 2) ?>" readonly>
+                            </td>
+                            <td style="text-align: right;padding: 0;">
+                                <input type="text"
+                                       class="form-control line-extra-com-sum-ptar"
+                                       style="border: none;text-align: right;height: 47px;"
+                                       name="line_extra_com_sum_ptar[]"
+                                       value="<?= number_format($value->sum_ptar, 2) ?>" readonly>
+                            </td>
+                            <td style="text-align: right;padding: 0;">
+                                <input type="text"
+                                       class="form-control line-extra-com-sum-ppr"
+                                       style="border: none;text-align: right;height: 47px;"
+                                       name="line_extra_com_sum_ppr[]"
+                                       value="<?= number_format($value->sum_ppr, 2) ?>" readonly>
+                            </td>
+                            <td style="text-align: right;padding: 0;">
+                                <input type="text"
+                                       class="form-control line-extra-com-sale-total"
+                                       style="border: none;text-align: right;height: 47px;"
+                                       name="line_extra_com_sale_total[]"
+                                       value="<?= number_format($value->sum_total, 2) ?>" readonly>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <?php if ($data_emp_commission != null): ?>
+                        <?php for ($x = 0; $x <= count($data_emp_commission) - 1; $x++): ?>
+                            <?php
+                            if (\backend\models\Employee::isTeamHead(1, $data_emp_commission[$x]['emp_id']) == 1) {
+                                continue;
+                            }
+                            ?>
+                            <tr>
+                                <td style="text-align: center;">
+                                    <input type="hidden" name="line_extra_com_emp_id[]"
+                                           value="<?= $data_emp_commission[$x]['emp_id'] ?>">
+                                    <?= $data_emp_commission[$x]['emp_name'] ?>
+                                </td>
+                                <td style="text-align: right;padding: 0;">
+                                    <input type="text"
+                                           class="form-control line-extra-com-sale-price"
+                                           style="border: none;text-align: right;height: 47px;"
+                                           name="line_extra_com_sale_price[]"
+                                           value="<?= number_format($data_emp_commission[$x]['sale_amount'], 2) ?>"
+                                           readonly>
+                                </td>
+                                <td style="text-align: right;padding: 0;">
+                                    <input type="text"
+                                           class="form-control line-extra-com-sale-profit"
+                                           style="border: none;text-align: right;height: 47px;"
+                                           name="line_extra_com_sale_profit[]"
+                                           value="<?= number_format($data_emp_commission[$x]['profit_amount'], 2) ?>"
+                                           readonly>
+                                </td>
+                                <td style="text-align: center;padding: 0;">
+                                    <input type="text"
+                                           class="form-control line-extra-com-ptar"
+                                           style="border: none;text-align: center;height: 47px;"
+                                           name="line_extra_com_sale_ptar[]"
+                                           value="<?= number_format(0, 1) ?>" onchange="calTTAR();">
+                                </td>
+                                <td style="text-align: center;padding: 0;">
+                                    <input type="text"
+                                           class="form-control line-extra-com-ppr"
+                                           style="border: none;text-align: center;height: 47px;"
+                                           name="line_extra_com_sale_ppr[]"
+                                           value="<?= number_format(0, 1) ?>" onchange="calTTAR();">
+                                </td>
+                                <td style="text-align: right;padding: 0;">
+                                    <input type="text"
+                                           class="form-control line-extra-com-sum-ttar"
+                                           style="border: none;text-align: right;height: 47px;"
+                                           name="line_extra_com_sum_ttar[]"
+                                           value="<?= number_format(0, 2) ?>" readonly>
+                                </td>
+                                <td style="text-align: right;padding: 0;">
+                                    <input type="text"
+                                           class="form-control line-extra-com-sum-ptar"
+                                           style="border: none;text-align: right;height: 47px;"
+                                           name="line_extra_com_sum_ptar[]"
+                                           value="<?= number_format(0, 2) ?>" readonly>
+                                </td>
+                                <td style="text-align: right;padding: 0;">
+                                    <input type="text"
+                                           class="form-control line-extra-com-sum-ppr"
+                                           style="border: none;text-align: right;height: 47px;"
+                                           name="line_extra_com_sum_ppr[]"
+                                           value="<?= number_format(0, 2) ?>" readonly>
+                                </td>
+                                <td style="text-align: right;padding: 0;">
+                                    <input type="text"
+                                           class="form-control line-extra-com-sale-total"
+                                           style="border: none;text-align: right;height: 47px;"
+                                           name="line_extra_com_sale_total[]"
+                                           value="<?= number_format(0, 2) ?>" readonly>
+                                </td>
+                            </tr>
+
+                        <?php endfor; ?>
+                    <?php endif; ?>
+                <?php endif; ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <td style="text-align: center;background-color: #9149d2;color: white;"></td>
+                    <td style="text-align: right;background-color: #9149d2;color: white;"></td>
+                    <td style="text-align: right;background-color: #9149d2;color: white;"></td>
+                    <td style="text-align: center;background-color: #9149d2;color: white;"></td>
+                    <td style="text-align: center;background-color: #9149d2;color: white;"></td>
+                    <td style="text-align: right;background-color: #9149d2;color: white;padding: 0;">
+                        <input type="text"
+                               class="form-control total-sum-ttar"
+                               style="border: none;text-align: right;height: 47px;background-color: #9149d2;color: white;font-weight: bold;"
+                               name="total_sum_ttar"
+                               value="<?= number_format(0, 2) ?>" readonly>
+                    </td>
+                    <td style="text-align: right;background-color: #9149d2;color: white;padding: 0;">
+                        <input type="text"
+                               class="form-control total-sum-ptar"
+                               style="border: none;text-align: right;height: 47px;background-color: #9149d2;color: white;font-weight: bold;"
+                               name="total_sum_ptar"
+                               value="<?= number_format(0, 2) ?>" readonly>
+                    </td>
+                    <td style="text-align: right;background-color: #9149d2;color: white;padding: 0;">
+                        <input type="text"
+                               class="form-control total-sum-ppr"
+                               style="border: none;text-align: right;height: 47px;background-color: #9149d2;color: white;font-weight: bold;"
+                               name="total_sum_ppr"
+                               value="<?= number_format(0, 2) ?>" readonly>
+                    </td>
+                    <td style="text-align: right;background-color: #9149d2;color: white;padding: 0;">
+                        <input type="text"
+                               class="form-control total-sum-grand"
+                               style="border: none;text-align: right;height: 47px;background-color: #9149d2;color: white;font-weight: bold;"
+                               name="total_sum_grand"
+                               value="<?= number_format(0, 2) ?>" readonly>
+                    </td>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
 
 </form>
+
+<input type="hidden" class="total-person" value="<?= $team_member != null ? count($team_member) - 1 : 0 ?>">
 
 
 <?php
@@ -786,7 +1064,23 @@ function getKpiperform($team_id, $month, $year, $kpi_title_id)
 
 <?php
 $js = <<<JS
-$(function(){});
+$(function(){
+    var sum_ttar = 0;
+    var sum_ptar = 0;
+    var sum_ppr = 0;
+    var sum_total = 0;
+    $("table#table-extra-commission tbody tr").each(function(){
+        sum_ttar = sum_ttar + parseFloat($(this).closest("tr").find(".line-extra-com-sum-ttar").val().replace(',',''));
+        sum_ptar = sum_ptar + parseFloat($(this).closest("tr").find(".line-extra-com-sum-ptar").val().replace(',',''));
+        sum_ppr = sum_ppr + parseFloat($(this).closest("tr").find(".line-extra-com-sum-ppr").val().replace(',',''));
+        sum_total = sum_total + parseFloat($(this).closest("tr").find(".line-extra-com-sale-total").val().replace(',',''));
+    });
+    $(".total-sum-ttar").val(parseFloat(sum_ttar).toFixed(2).toLocaleString());
+    $(".total-sum-ptar").val(parseFloat(sum_ptar).toFixed(2).toLocaleString());
+    $(".total-sum-ppr").val(parseFloat(sum_ppr).toFixed(2).toLocaleString());
+    $(".total-sum-total").val(parseFloat(sum_total).toFixed(2).toLocaleString());
+    
+});
 function calkpi(e){
     var line_kpi_rating = e.closest("tr").find(".line-kpi-rating").val();
     var line_kpi_personal_goal = e.closest("tr").find(".line-kpi-personal-goal").val();
@@ -932,6 +1226,57 @@ function removeTeamtarget(e){
     if($("table#table-target-list tbody tr").length > 1){
         e.parent().parent().remove();
     }
+}
+
+function calTTAR(){
+    var ttar_per = $(".ttar-per").val();
+    var sale_profit = $(".total-sale-profit").val().replace(",","");
+    if(ttar_per != "" && sale_profit != ""){
+        var ttar = (parseFloat(ttar_per) * parseFloat(sale_profit)) /100;
+        $(".ttar-amount").val(parseFloat(ttar).toFixed(2));
+    }
+    recalExtra();
+}
+function recalExtra(){
+    var total_ttar = $(".ttar-amount").val().replace(",","");
+    var total_person = $(".total-person").val();
+    
+    var total_sum_ttar = 0;
+    var total_sum_ptar = 0;
+    var total_sum_ppr = 0;
+    var total_sum_grand = 0;
+  //  alert(total_person);
+    var amount_by_person = parseFloat(total_ttar)/parseFloat(total_person);
+    
+    $("table#table-extra-commission tbody tr").each(function(){
+        var sale_profit = $(this).closest("tr").find(".line-extra-com-sale-profit").val().replace(",","");
+        var ptar_per = $(this).closest("tr").find(".line-extra-com-ptar").val();
+        var ppr_per = $(this).closest("tr").find(".line-extra-com-ppr").val();
+        var line_ptar_amount = 0;
+        var line_ppr_amount = 0;
+        
+        if (parseFloat(sale_profit) > 0 && parseFloat(ptar_per) > 0){
+            line_ptar_amount = (parseFloat(sale_profit) * parseFloat(ptar_per)) /100;
+        }
+        if(parseFloat(sale_profit) > 0 && parseFloat(ppr_per) > 0){
+            line_ppr_amount = (parseFloat(sale_profit) * parseFloat(ppr_per)) /100;
+        }
+        
+        var line_total = parseFloat(amount_by_person) + parseFloat(line_ptar_amount) + parseFloat(line_ppr_amount);
+        
+        $(this).closest("tr").find(".line-extra-com-sum-ttar").val(parseFloat(amount_by_person).toFixed(2));
+        $(this).closest("tr").find(".line-extra-com-sum-ptar").val(parseFloat(line_ptar_amount).toFixed(2));
+        $(this).closest("tr").find(".line-extra-com-sum-ppr").val(parseFloat(line_ppr_amount).toFixed(2));
+        $(this).closest("tr").find(".line-extra-com-sale-total").val(parseFloat(line_total).toFixed(2));
+        
+        
+        total_sum_ttar = total_sum_ttar + parseFloat(amount_by_person);
+        total_sum_grand = total_sum_grand + parseFloat(line_total);
+        
+        $(".total-sum-grand").val(parseFloat(total_sum_grand).toFixed(2));
+    });
+    
+    $(".total-sum-ttar").val(parseFloat(total_sum_ttar).toFixed(2));
 }
 
 JS;

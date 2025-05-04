@@ -402,10 +402,10 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
 
     </div>
     <br/>
-<?php if(!$model->isNewRecord && $dataProvider->getTotalCount() > 0):?>
+<?php if (!$model->isNewRecord && $dataProvider->getTotalCount() > 0): ?>
     <form action="<?= Url::to(['jobmain/createjobstdcom'], true) ?>" method="post">
-    <div class="row">
-        <div class="col-lg-6">
+        <div class="row">
+            <div class="col-lg-6">
 
                 <input type="hidden" name="current_job_main_id" value="<?= $model->id ?>">
                 <table class="table table-bordered" id="table-commission">
@@ -414,7 +414,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         <th style="text-align: right;">Total Profit</th>
                         <th style="text-align: right;width: 20%">%Commission</th>
                         <th style="text-align: right;">Total Commission</th>
-<!--                        <th></th>-->
+                        <!--                        <th></th>-->
                     </tr>
                     </thead>
                     <tbody>
@@ -436,15 +436,16 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                                                                class="form-control line-profit-std-total-amt"
                                                                value="<?= number_format($value->commission_amount, 2) ?>"
                                                                name="line_profit_std_total_amt[]" readonly></td>
-<!--                                <td style="padding: 0.1em;">-->
-<!--                                    <div class="btn btn-sm btn-danger">-</div>-->
-<!--                                </td>-->
+                                <!--                                <td style="padding: 0.1em;">-->
+                                <!--                                    <div class="btn btn-sm btn-danger">-</div>-->
+                                <!--                                </td>-->
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
+                                                           class="form-control line-profit-std-amt"
+                                                           value="<?= number_format(100000, 2) ?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -455,13 +456,14 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
                                                            class="form-control line-profit-std-total-amt" value="0"
                                                            name="line_profit_std_total_amt[]" readonly></td>
-<!--                            <td style="padding: 0.1em;">-->
-<!--                                <div class="btn btn-sm btn-danger">-</div>-->
-<!--                            </td>-->
+                            <!--                            <td style="padding: 0.1em;">-->
+                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                            <!--                            </td>-->
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
+                                                           class="form-control line-profit-std-amt"
+                                                           value="<?= number_format(100000, 2) ?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -472,13 +474,14 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
                                                            class="form-control line-profit-std-total-amt" value="0"
                                                            name="line_profit_std_total_amt[]" readonly></td>
-<!--                            <td style="padding: 0.1em;">-->
-<!--                                <div class="btn btn-sm btn-danger">-</div>-->
-<!--                            </td>-->
+                            <!--                            <td style="padding: 0.1em;">-->
+                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                            <!--                            </td>-->
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
+                                                           class="form-control line-profit-std-amt"
+                                                           value="<?= number_format(100000, 2) ?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -489,13 +492,14 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
                                                            class="form-control line-profit-std-total-amt" value="0"
                                                            name="line_profit_std_total_amt[]" readonly></td>
-<!--                            <td style="padding: 0.1em;">-->
-<!--                                <div class="btn btn-sm btn-danger">-</div>-->
-<!--                            </td>-->
+                            <!--                            <td style="padding: 0.1em;">-->
+                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                            <!--                            </td>-->
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
+                                                           class="form-control line-profit-std-amt"
+                                                           value="<?= number_format(100000, 2) ?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -506,13 +510,14 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
                                                            class="form-control line-profit-std-total-amt" value="0"
                                                            name="line_profit_std_total_amt[]" readonly></td>
-<!--                            <td style="padding: 0.1em;">-->
-<!--                                <div class="btn btn-sm btn-danger">-</div>-->
-<!--                            </td>-->
+                            <!--                            <td style="padding: 0.1em;">-->
+                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                            <!--                            </td>-->
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
+                                                           class="form-control line-profit-std-amt"
+                                                           value="<?= number_format(100000, 2) ?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -523,13 +528,14 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
                                                            class="form-control line-profit-std-total-amt" value="0"
                                                            name="line_profit_std_total_amt[]" readonly></td>
-<!--                            <td style="padding: 0.1em;">-->
-<!--                                <div class="btn btn-sm btn-danger">-</div>-->
-<!--                            </td>-->
+                            <!--                            <td style="padding: 0.1em;">-->
+                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                            <!--                            </td>-->
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
+                                                           class="form-control line-profit-std-amt"
+                                                           value="<?= number_format(100000, 2) ?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -540,13 +546,14 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
                                                            class="form-control line-profit-std-total-amt" value="0"
                                                            name="line_profit_std_total_amt[]" readonly></td>
-<!--                            <td style="padding: 0.1em;">-->
-<!--<!--                                <div class="btn btn-sm btn-danger">-</div>-->
-<!--                            </td>-->
+                            <!--                            <td style="padding: 0.1em;">-->
+                            <!--<!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                            <!--                            </td>-->
                         </tr>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt" value="<?=number_format(100000,2)?>"
+                                                           class="form-control line-profit-std-amt"
+                                                           value="<?= number_format(100000, 2) ?>"
                                                            name="line_profit_std_amt[]"
                                                            onchange="cal_profit_std($(this))">
                             </td>
@@ -557,9 +564,9 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
                                                            class="form-control line-profit-std-total-amt" value="0"
                                                            name="line_profit_std_total_amt[]" readonly></td>
-<!--                            <td style="padding: 0.1em;">-->
-<!--                                <div class="btn btn-sm btn-danger">-</div>-->
-<!--                            </td>-->
+                            <!--                            <td style="padding: 0.1em;">-->
+                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                            <!--                            </td>-->
                         </tr>
 
                     <?php endif; ?>
@@ -574,13 +581,16 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                     $sum_profit2 = 0;
                     $sum_profit_per2 = 0;
                     $sum_profit_amount2 = 0;
+                    $total_achievement_amount = 0;
+                    $pay_by_company = 0;
+                    $pay_by_team_lead = 0;
 
                     if ($model_job_main_com_std_sum != null) {
-                        if($model_job_main_com_std_sum->std_amount >0){
+                        if ($model_job_main_com_std_sum->std_amount > 0) {
                             $sum_profit = $model_job_main_com_std_sum->std_amount;
                             $sum_profit_per = $model_job_main_com_std_sum->commission_per;
                             $sum_profit_amount = $model_job_main_com_std_sum->commission_amount;
-                        }else{
+                        } else {
                             $sum_profit = getSummaryprofitamount($model->team_id, $model->job_month);
                         }
 
@@ -588,10 +598,16 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         $sum_profit = getSummaryprofitamount($model->team_id, $model->job_month);
                     }
 
-                    if($model_job_main_com_std_sum_level_2 != null){
+                    if ($model_job_main_com_std_sum_level_2 != null) {
                         $sum_profit2 = $model_job_main_com_std_sum_level_2->std_amount;
                         $sum_profit_per2 = $model_job_main_com_std_sum_level_2->commission_per;
                         $sum_profit_amount2 = $model_job_main_com_std_sum_level_2->commission_amount;
+                    }
+
+                    $total_achievement_amount = getAcheivementAmount(6);
+                    if($model_job_main_com_std_sum != null){
+                        $pay_by_company = $total_achievement_amount/2;
+                        $pay_by_team_lead = $total_achievement_amount/2;
                     }
 
 
@@ -611,7 +627,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                                                        class="form-control total-profit-summary-cal"
                                                        value="<?= number_format($sum_profit_amount, 2) ?>"
                                                        name="total_profit_summary_cal" readonly></td>
-<!--                        <td style="padding: 0;"></td>-->
+                        <!--                        <td style="padding: 0;"></td>-->
                     </tr>
                     <tr>
                         <td style="text-align: right;padding: 0;background-color: lightblue;">
@@ -630,7 +646,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                                                        class="form-control total-profit-summary-cal-2"
                                                        value="<?= number_format($sum_profit_amount2, 2) ?>"
                                                        name="total_profit_summary_cal_2" readonly></td>
-<!--                        <td style="padding: 0;"></td>-->
+                        <!--                        <td style="padding: 0;"></td>-->
                     </tr>
                     <tr>
                         <td style="text-align: right;padding: 0.2em;background-color: lightblue;"><b>Total Achievement
@@ -638,12 +654,12 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         <td style="padding: 0;"><input type="text"
                                                        style="border: none;text-align: right;background-color: lightblue;"
                                                        class="form-control" name="x"
-                                                       value="0" readonly></td>
+                                                       value="50" readonly></td>
                         <td style="padding: 0;"><input type="text"
-                                                       style="border: none;text-align: right;background-color: lightblue;"
-                                                       class="form-control line-profit-std-total-amtx" value="0"
+                                                       style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
+                                                       class="form-control line-profit-std-total-amtx" value="<?=number_format($total_achievement_amount,2)?>"
                                                        name="line_profit_std_total_amt[]" readonly></td>
-<!--                        <td style="padding: 0;"></td>-->
+                        <!--                        <td style="padding: 0;"></td>-->
                     </tr>
                     <tr>
                         <td style="text-align: right;padding: 0.2em;background-color: lightblue;"><b>Extra Commission by
@@ -651,12 +667,12 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         <td style="padding: 0;"><input type="text"
                                                        style="border: none;text-align: right;background-color: lightblue;"
                                                        class="form-control" name="x"
-                                                       value="0" readonly></td>
+                                                       value="50" readonly></td>
                         <td style="padding: 0;"><input type="text"
-                                                       style="border: none;text-align: right;background-color: lightblue;"
-                                                       class="form-control line-profit-std-total-amtx" value="0"
+                                                       style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
+                                                       class="form-control line-profit-std-total-amtx" value="<?=number_format($pay_by_company,2)?>"
                                                        name="line_profit_std_total_amt[]" readonly></td>
-<!--                        <td></td>-->
+                        <!--                        <td></td>-->
                     </tr>
                     <tr>
                         <td style="text-align: right;padding: 0.2em;background-color: lightblue;"><b>Extra Commission by
@@ -666,10 +682,10 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                                                        class="form-control" name="x"
                                                        value="0" readonly></td>
                         <td style="padding: 0;"><input type="text"
-                                                       style="border: none;text-align: right;background-color: lightblue;"
-                                                       class="form-control line-profit-std-total-amtx" value="0"
+                                                       style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
+                                                       class="form-control line-profit-std-total-amtx" value="<?=number_format($pay_by_team_lead,2)?>"
                                                        name="line_profit_std_total_amt[]" readonly></td>
-<!--                        <td></td>-->
+                        <!--                        <td></td>-->
                     </tr>
                     <tr>
                         <td style="text-align: right;padding: 0.2em;background-color: lightblue;"><b>Total Commission
@@ -681,10 +697,10 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         <td style="padding: 0;background-color: lightblue"><input type="text"
                                                                                   style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
                                                                                   class="form-control line-profit-std-grand-total"
-                                                                                  value="<?= number_format(getGrandTotalCommission($model->id), 2) ?>"
+                                                                                  value="<?= number_format($sum_profit_amount2 + $total_achievement_amount, 2) ?>" /> <!--number_format(getGrandTotalCommission($model->id) --
                                                                                   name="line_profit_std_grand_total"
                                                                                   readonly></td>
-<!--                        <td></td>-->
+                        <!--                        <td></td>-->
                     </tr>
                     <tr>
                         <td colspan="2">
@@ -697,191 +713,193 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                     </tfoot>
                 </table>
 
+            </div>
         </div>
-    </div>
-    <br/>
+        <br/>
 
-<?php
-$team_line = \common\models\TeamLine::find()->where(['team_id' => $model->team_id])->andFilterWhere(['!=', 'is_head', 1])->orderBy(['id' => SORT_ASC])->all();
-?>
-    <div class="row">
-        <div class="col-lg-6"><h5>Commission Sharing</h5></div>
-    </div>
-    <div class="row">
-        <div class="col-lg-12">
-            <table class="table table-bordered" id="table-share-commission">
-                <thead>
-                <tr>
-                    <th style="background-color: #36ab63;width:15%;">Name</th>
-                    <th style="background-color: #36ab63;width:10%;text-align: right;">%Commission</th>
-                    <th style="background-color: #36ab63;width:10%;text-align: right;">Commission,std.</th>
-                    <th style="background-color: #36ab63;width:10%;text-align: right;">TTAR</th>
-                    <th style="background-color: #36ab63;width:10%;text-align: right;">PTAR</th>
-                    <th style="background-color: #36ab63;width:10%;text-align: right;">PPR</th>
-                    <th style="background-color: #36ab63;width:10%;text-align: right;">Total Commission</th>
-                    <th style="background-color: #36ab63;width:10%;text-align: right;">Rebate/Campaign</th>
-                    <th style="background-color: #36ab63;width:15%;text-align: right;">Grand Total Commission</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                $sum_line_share_per = 0;
-                $sum_line_share_amount = 0;
-                $sum_line_share_ttar = 0;
-                $sum_line_share_ptar = 0;
-                $sum_line_share_ppr = 0;
-                $sum_line_share_total = 0;
-                $sum_line_share_rebate = 0;
-                $sum_line_share_grand_total = 0;
-                if ($team_line) {
-
-                    foreach ($team_line as $value):?>
-                        <?php
-                           $line_com_share_per = 0;
-                           $line_com_share_amount = 0;
-                           $line_com_share_ttar = 0;
-                           $line_com_share_ptar = 0;
-                           $line_com_share_ppr = 0;
-                           $line_com_share_total = 0;
-                           $line_com_share_rebate = 0;
-                           $line_com_share_grand_total = 0;
-
-                           $share_data = getEmpcomshare($value->emp_id,$model->id);
-                           if($share_data){
-                               $line_com_share_per = $share_data[0]['share_per'];
-                               $line_com_share_amount = $share_data[0]['share_amount'];
-                               $line_com_share_ttar = $share_data[0]['ttar_amount'];
-                               $line_com_share_ptar = $share_data[0]['ptar_amount'];
-                               $line_com_share_ppr = $share_data[0]['ppr_amount'];
-                               $line_com_share_total = $share_data[0]['total_amount'];
-                               $line_com_share_rebate = $share_data[0]['rebate_amount'];
-                               $line_com_share_grand_total = $share_data[0]['grand_total_amount'];
-
-                               $sum_line_share_per += $line_com_share_per;
-                               $sum_line_share_amount += $line_com_share_amount;
-                               $sum_line_share_ttar += $line_com_share_ttar;
-                               $sum_line_share_ptar += $line_com_share_ptar;
-                               $sum_line_share_ppr += $line_com_share_ppr;
-                               $sum_line_share_total += $line_com_share_total;
-                               $sum_line_share_rebate += $line_com_share_rebate;
-                               $sum_line_share_grand_total += $line_com_share_grand_total;
-                           }
-                        ?>
-                        <tr>
-                            <td style="padding: 10px 0px 0px 5px;">
-                                <input type="hidden" class="line_com_share_emp_id" name="line_com_share_emp_id[]" value="<?= $value->emp_id ?>">
-                                <?= \backend\models\Employee::findFullName($value->emp_id) ?>
-                            </td>
-                            <td style="text-align: right;padding: 0px;">
-                                <input type="text" class="form-control line-com-share-per"
-                                       style="height: 46px;border: none;text-align: right;"
-                                       name="line_com_share_per[]"
-                                       value="<?=number_format($line_com_share_per,1)?>" onchange="calsharecommission($(this))">
-                            </td>
-                            <td style="text-align: right;padding: 0px;">
-                                <input type="text" class="form-control line-com-share-amount"
-                                       style="height: 46px;border: none;text-align: right;"
-                                       name="line_com_share_amount[]"
-                                       value="<?=number_format($line_com_share_amount,2)?>" readonly>
-                            </td>
-                            <td style="text-align: right;padding: 0px;">
-                                <input type="text" class="form-control line-com-share-ttar-amount"
-                                       style="height: 46px;border: none;text-align: right;"
-                                       name="line_com_share_ttar_amount[]"
-                                       value="<?=number_format($line_com_share_ttar,2)?>" readonly>
-                            </td>
-                            <td style="text-align: right;padding: 0px;">
-                                <input type="text" class="form-control line-com-share-ptar-amount"
-                                       style="height: 46px;border: none;text-align: right;"
-                                       name="line_com_share_ptar_amount[]"
-                                       value="<?=number_format($line_com_share_ptar,2)?>" readonly>
-                            </td>
-                            <td style="text-align: right;padding: 0px;">
-                                <input type="text" class="form-control line-com-share-ppr-amount"
-                                       style="height: 46px;border: none;text-align: right;"
-                                       name="line_com_share_ppr_amount[]"
-                                       value="<?=number_format($line_com_share_ppr,2)?>" readonly>
-                            </td>
-                            <td style="text-align: right;padding: 0px;">
-                                <input type="text" class="form-control line-com-share-total-amount"
-                                       style="height: 46px;border: none;text-align: right;"
-                                       name="line_com_share_total_amount[]"
-                                       value="<?=number_format($line_com_share_total,2)?>" readonly>
-                            </td>
-                            <td style="text-align: right;padding: 0px;">
-                                <input type="text" class="form-control line-com-share-rebate-amount"
-                                       style="height: 46px;border: none;text-align: right;"
-                                       name="line_com_share_rebate_amount[]"
-                                       value="<?=number_format($line_com_share_rebate,2)?>" readonly>
-                            </td>
-                            <td style="text-align: right;padding: 0px;">
-                                <input type="text" class="form-control line-com-share-grand-total-amount"
-                                       style="height: 46px;border: none;text-align: right;font-weight: bold;color: red;"
-                                       name="line_com_share_grand_total_amount[]"
-                                       value="<?=number_format($line_com_share_grand_total,2)?>" readonly>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                <?php } ?>
-                </tbody>
-                <tfoot>
-                <tr>
-                    <td style="text-align: right;background-color: lightblue;padding-top: 20px;"><b>รวม</b></td>
-                    <td style="background-color: lightblue;">
-                        <input type="text" class="form-control line-com-share-per-sum"
-                               style="height: 46px;border: none;text-align: right;font-weight: bold;color: red;"
-                               name="line_com_share_per_sum[]"
-                               value="<?=number_format($sum_line_share_per,1)?>" readonly>
-                    </td>
-                    <td style="background-color: lightblue;">
-                        <input type="text" class="form-control line-com-share-amount-sum"
-                               style="height: 46px;border: none;text-align: right;font-weight: bold"
-                               name="line_com_share_amount_sum[]"
-                               value="<?=number_format($sum_line_share_amount,2)?>" readonly>
-                    </td>
-                    <td style="background-color: lightblue;">
-                        <input type="text" class="form-control line-com-share-ttar-amount-sum"
-                               style="height: 46px;border: none;text-align: right;font-weight: bold"
-                               name="line_com_share_ttar_amount_sum[]"
-                               value="<?=number_format($sum_line_share_ttar,2)?>" readonly>
-                    </td>
-                    <td style="background-color: lightblue;">
-                        <input type="text" class="form-control line-com-share-ptar-amount-sum"
-                               style="height: 46px;border: none;text-align: right;font-weight: bold"
-                               name="line_com_share_ptar_amount_sum[]"
-                               value="<?=number_format($sum_line_share_ptar,2)?>" readonly>
-                    </td>
-                    <td style="background-color: lightblue;">
-                        <input type="text" class="form-control line-com-share-ppr-amount-sum"
-                               style="height: 46px;border: none;text-align: right;font-weight: bold"
-                               name="line_com_share_ppr_amount_sum[]"
-                               value="<?=number_format($sum_line_share_ppr,2)?>" readonly>
-                    </td>
-                    <td style="background-color: lightblue;">
-                        <input type="text" class="form-control line-com-share-total-amount-sum"
-                               style="height: 46px;border: none;text-align: right;font-weight: bold"
-                               name="line_com_share_total_amount_sum[]"
-                               value="<?=number_format($sum_line_share_total,2)?>" readonly>
-                    </td>
-                    <td style="background-color: lightblue;">
-                        <input type="text" class="form-control line-com-share-rebate-amount-sum"
-                               style="height: 46px;border: none;text-align: right;font-weight: bold"
-                               name="line_com_share_rebate_amount_sum[]"
-                               value="<?=number_format($sum_line_share_rebate,2)?>" readonly>
-                    </td>
-                    <td style="background-color: lightblue;">
-                        <input type="text" class="form-control line-com-share-grand-total-amount-sum"
-                               style="height: 46px;border: none;text-align: right;font-weight: bold;color: red;"
-                               name="line_com_share_grand_total_amount_sum[]"
-                               value="<?=number_format($sum_line_share_grand_total,2)?>" readonly>
-                    </td>
-                </tr>
-                </tfoot>
-            </table>
+        <?php
+        $team_line = \common\models\TeamLine::find()->where(['team_id' => $model->team_id])->andFilterWhere(['!=', 'is_head', 1])->orderBy(['id' => SORT_ASC])->all();
+        ?>
+        <div class="row">
+            <div class="col-lg-6"><h5>Commission Sharing</h5></div>
         </div>
-    </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-bordered" id="table-share-commission">
+                    <thead>
+                    <tr>
+                        <th style="background-color: #36ab63;width:15%;">Name</th>
+                        <th style="background-color: #36ab63;width:10%;text-align: right;">%Commission</th>
+                        <th style="background-color: #36ab63;width:10%;text-align: right;">Commission,std.</th>
+                        <th style="background-color: #36ab63;width:10%;text-align: right;">TTAR</th>
+                        <th style="background-color: #36ab63;width:10%;text-align: right;">PTAR</th>
+                        <th style="background-color: #36ab63;width:10%;text-align: right;">PPR</th>
+                        <th style="background-color: #36ab63;width:10%;text-align: right;">Total Commission</th>
+                        <th style="background-color: #36ab63;width:10%;text-align: right;">Rebate/Campaign</th>
+                        <th style="background-color: #36ab63;width:15%;text-align: right;">Grand Total Commission</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <?php
+                    $sum_line_share_per = 0;
+                    $sum_line_share_amount = 0;
+                    $sum_line_share_ttar = 0;
+                    $sum_line_share_ptar = 0;
+                    $sum_line_share_ppr = 0;
+                    $sum_line_share_total = 0;
+                    $sum_line_share_rebate = 0;
+                    $sum_line_share_grand_total = 0;
+                    if ($team_line) {
+
+                        foreach ($team_line as $value):?>
+                            <?php
+                            $line_com_share_per = 0;
+                            $line_com_share_amount = 0;
+                            $line_com_share_ttar = 0;
+                            $line_com_share_ptar = 0;
+                            $line_com_share_ppr = 0;
+                            $line_com_share_total = 0;
+                            $line_com_share_rebate = 0;
+                            $line_com_share_grand_total = 0;
+
+                            $share_data = getEmpcomshare($value->emp_id, $model->id);
+                            if ($share_data) {
+                                $line_com_share_per = $share_data[0]['share_per'];
+                                $line_com_share_amount = $share_data[0]['share_amount'];
+                                $line_com_share_ttar = $share_data[0]['ttar_amount'];
+                                $line_com_share_ptar = $share_data[0]['ptar_amount'];
+                                $line_com_share_ppr = $share_data[0]['ppr_amount'];
+                                $line_com_share_total = $share_data[0]['total_amount'];
+                                $line_com_share_rebate = $share_data[0]['rebate_amount'];
+                                $line_com_share_grand_total = $share_data[0]['grand_total_amount'];
+
+                                $sum_line_share_per += $line_com_share_per;
+                                $sum_line_share_amount += $line_com_share_amount;
+                                $sum_line_share_ttar += $line_com_share_ttar;
+                                $sum_line_share_ptar += $line_com_share_ptar;
+                                $sum_line_share_ppr += $line_com_share_ppr;
+                                $sum_line_share_total += $line_com_share_total;
+                                $sum_line_share_rebate += $line_com_share_rebate;
+                                $sum_line_share_grand_total += $line_com_share_grand_total;
+                            }
+                            ?>
+                            <tr>
+                                <td style="padding: 10px 0px 0px 5px;">
+                                    <input type="hidden" class="line_com_share_emp_id" name="line_com_share_emp_id[]"
+                                           value="<?= $value->emp_id ?>">
+                                    <?= \backend\models\Employee::findFullName($value->emp_id) ?>
+                                </td>
+                                <td style="text-align: right;padding: 0px;">
+                                    <input type="text" class="form-control line-com-share-per"
+                                           style="height: 46px;border: none;text-align: right;"
+                                           name="line_com_share_per[]"
+                                           value="<?= number_format($line_com_share_per, 1) ?>"
+                                           onchange="calsharecommission($(this))">
+                                </td>
+                                <td style="text-align: right;padding: 0px;">
+                                    <input type="text" class="form-control line-com-share-amount"
+                                           style="height: 46px;border: none;text-align: right;"
+                                           name="line_com_share_amount[]"
+                                           value="<?= number_format($line_com_share_amount, 2) ?>" readonly>
+                                </td>
+                                <td style="text-align: right;padding: 0px;">
+                                    <input type="text" class="form-control line-com-share-ttar-amount"
+                                           style="height: 46px;border: none;text-align: right;"
+                                           name="line_com_share_ttar_amount[]"
+                                           value="<?= number_format($line_com_share_ttar, 2) ?>" readonly>
+                                </td>
+                                <td style="text-align: right;padding: 0px;">
+                                    <input type="text" class="form-control line-com-share-ptar-amount"
+                                           style="height: 46px;border: none;text-align: right;"
+                                           name="line_com_share_ptar_amount[]"
+                                           value="<?= number_format($line_com_share_ptar, 2) ?>" readonly>
+                                </td>
+                                <td style="text-align: right;padding: 0px;">
+                                    <input type="text" class="form-control line-com-share-ppr-amount"
+                                           style="height: 46px;border: none;text-align: right;"
+                                           name="line_com_share_ppr_amount[]"
+                                           value="<?= number_format($line_com_share_ppr, 2) ?>" readonly>
+                                </td>
+                                <td style="text-align: right;padding: 0px;">
+                                    <input type="text" class="form-control line-com-share-total-amount"
+                                           style="height: 46px;border: none;text-align: right;"
+                                           name="line_com_share_total_amount[]"
+                                           value="<?= number_format($line_com_share_total, 2) ?>" readonly>
+                                </td>
+                                <td style="text-align: right;padding: 0px;">
+                                    <input type="text" class="form-control line-com-share-rebate-amount"
+                                           style="height: 46px;border: none;text-align: right;"
+                                           name="line_com_share_rebate_amount[]"
+                                           value="<?= number_format($line_com_share_rebate, 2) ?>" readonly>
+                                </td>
+                                <td style="text-align: right;padding: 0px;">
+                                    <input type="text" class="form-control line-com-share-grand-total-amount"
+                                           style="height: 46px;border: none;text-align: right;font-weight: bold;color: red;"
+                                           name="line_com_share_grand_total_amount[]"
+                                           value="<?= number_format($line_com_share_grand_total, 2) ?>" readonly>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php } ?>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td style="text-align: right;background-color: lightblue;padding-top: 20px;"><b>รวม</b></td>
+                        <td style="background-color: lightblue;">
+                            <input type="text" class="form-control line-com-share-per-sum"
+                                   style="height: 46px;border: none;text-align: right;font-weight: bold;color: red;"
+                                   name="line_com_share_per_sum[]"
+                                   value="<?= number_format($sum_line_share_per, 1) ?>" readonly>
+                        </td>
+                        <td style="background-color: lightblue;">
+                            <input type="text" class="form-control line-com-share-amount-sum"
+                                   style="height: 46px;border: none;text-align: right;font-weight: bold"
+                                   name="line_com_share_amount_sum[]"
+                                   value="<?= number_format($sum_line_share_amount, 2) ?>" readonly>
+                        </td>
+                        <td style="background-color: lightblue;">
+                            <input type="text" class="form-control line-com-share-ttar-amount-sum"
+                                   style="height: 46px;border: none;text-align: right;font-weight: bold"
+                                   name="line_com_share_ttar_amount_sum[]"
+                                   value="<?= number_format($sum_line_share_ttar, 2) ?>" readonly>
+                        </td>
+                        <td style="background-color: lightblue;">
+                            <input type="text" class="form-control line-com-share-ptar-amount-sum"
+                                   style="height: 46px;border: none;text-align: right;font-weight: bold"
+                                   name="line_com_share_ptar_amount_sum[]"
+                                   value="<?= number_format($sum_line_share_ptar, 2) ?>" readonly>
+                        </td>
+                        <td style="background-color: lightblue;">
+                            <input type="text" class="form-control line-com-share-ppr-amount-sum"
+                                   style="height: 46px;border: none;text-align: right;font-weight: bold"
+                                   name="line_com_share_ppr_amount_sum[]"
+                                   value="<?= number_format($sum_line_share_ppr, 2) ?>" readonly>
+                        </td>
+                        <td style="background-color: lightblue;">
+                            <input type="text" class="form-control line-com-share-total-amount-sum"
+                                   style="height: 46px;border: none;text-align: right;font-weight: bold"
+                                   name="line_com_share_total_amount_sum[]"
+                                   value="<?= number_format($sum_line_share_total, 2) ?>" readonly>
+                        </td>
+                        <td style="background-color: lightblue;">
+                            <input type="text" class="form-control line-com-share-rebate-amount-sum"
+                                   style="height: 46px;border: none;text-align: right;font-weight: bold"
+                                   name="line_com_share_rebate_amount_sum[]"
+                                   value="<?= number_format($sum_line_share_rebate, 2) ?>" readonly>
+                        </td>
+                        <td style="background-color: lightblue;">
+                            <input type="text" class="form-control line-com-share-grand-total-amount-sum"
+                                   style="height: 46px;border: none;text-align: right;font-weight: bold;color: red;"
+                                   name="line_com_share_grand_total_amount_sum[]"
+                                   value="<?= number_format($sum_line_share_grand_total, 2) ?>" readonly>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </form>
-<?php endif;?>
+<?php endif; ?>
 <?php
 function getSummaryprofitamount($team_id, $trans_date)
 {
@@ -923,12 +941,28 @@ function getGrandTotalCommissionLevel2($job_main_id)
     return $total;
 }
 
-function getEmpcomshare($emp_id, $job_main_id){
+function getAcheivementAmount($team_extra_com_id)
+{
+    $total = 0;
+  //  $month = date('m', strtotime($trans_date));
+  //  $year = date('Y', strtotime($trans_date));
+    //if ($team_id != null && $month != null && $year != null) {
+    if($team_extra_com_id != null){
+        $model = \common\models\TeamExtraComLine::find()->where(['team_extra_com_id' => $team_extra_com_id])->sum('sum_total');
+        if ($model) {
+         $total = $model;
+        }
+    }
+    return $total;
+}
+
+function getEmpcomshare($emp_id, $job_main_id)
+{
     $data = [];
-    if($emp_id != null && $job_main_id != null){
+    if ($emp_id != null && $job_main_id != null) {
         $model = \common\models\JobComShare::find()->where(['emp_id' => $emp_id, 'job_id' => $job_main_id])->one();
-        if($model){
-            array_push($data,[
+        if ($model) {
+            array_push($data, [
                 'share_per' => $model->share_per,
                 'share_amount' => $model->share_amount,
                 'ttar_amount' => $model->ttar_amount,

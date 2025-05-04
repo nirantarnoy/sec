@@ -121,10 +121,10 @@ class Employee extends \common\models\Employee
         return $model != null ? $model->fname.' '.$model->lname : '';
     }
 
-    public static function isTeamHead($team_id,$id)
+    public static function isTeamHead($id)
     {
         $model = null;
-        $model = TeamLine::find()->where(['team_id'=>$team_id,'emp_id' => $id])->one();
+        $model = TeamLine::find()->where(['emp_id' => $id])->one();
         return $model != null ? $model->is_head : 0;
     }
 

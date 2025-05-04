@@ -442,6 +442,9 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                             </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
+                        <?php
+                             $line_for_com_profit = 0;
+                        ?>
                         <tr>
                             <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
                                                            class="form-control line-profit-std-amt"
@@ -581,6 +584,9 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                     $sum_profit2 = 0;
                     $sum_profit_per2 = 0;
                     $sum_profit_amount2 = 0;
+                    $total_achievement_amount = 0;
+                    $pay_by_company = 0;
+                    $pay_by_team_lead = 0;
 
                     if ($model_job_main_com_std_sum != null) {
                         if ($model_job_main_com_std_sum->std_amount > 0) {
@@ -599,6 +605,12 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         $sum_profit2 = $model_job_main_com_std_sum_level_2->std_amount;
                         $sum_profit_per2 = $model_job_main_com_std_sum_level_2->commission_per;
                         $sum_profit_amount2 = $model_job_main_com_std_sum_level_2->commission_amount;
+                    }
+
+                    $total_achievement_amount = getAcheivementAmount(6);
+                    if($model_job_main_com_std_sum != null){
+                        $pay_by_company = $total_achievement_amount/2;
+                        $pay_by_team_lead = $total_achievement_amount/2;
                     }
 
 
@@ -645,10 +657,10 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         <td style="padding: 0;"><input type="text"
                                                        style="border: none;text-align: right;background-color: lightblue;"
                                                        class="form-control" name="x"
-                                                       value="0" readonly></td>
+                                                       value="50" readonly></td>
                         <td style="padding: 0;"><input type="text"
-                                                       style="border: none;text-align: right;background-color: lightblue;"
-                                                       class="form-control line-profit-std-total-amtx" value="0"
+                                                       style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
+                                                       class="form-control line-profit-std-total-amtx" value="<?=number_format($total_achievement_amount,2)?>"
                                                        name="line_profit_std_total_amt[]" readonly></td>
                         <!--                        <td style="padding: 0;"></td>-->
                     </tr>
@@ -658,10 +670,10 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         <td style="padding: 0;"><input type="text"
                                                        style="border: none;text-align: right;background-color: lightblue;"
                                                        class="form-control" name="x"
-                                                       value="0" readonly></td>
+                                                       value="50" readonly></td>
                         <td style="padding: 0;"><input type="text"
-                                                       style="border: none;text-align: right;background-color: lightblue;"
-                                                       class="form-control line-profit-std-total-amtx" value="0"
+                                                       style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
+                                                       class="form-control line-profit-std-total-amtx" value="<?=number_format($pay_by_company,2)?>"
                                                        name="line_profit_std_total_amt[]" readonly></td>
                         <!--                        <td></td>-->
                     </tr>
@@ -673,8 +685,8 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                                                        class="form-control" name="x"
                                                        value="0" readonly></td>
                         <td style="padding: 0;"><input type="text"
-                                                       style="border: none;text-align: right;background-color: lightblue;"
-                                                       class="form-control line-profit-std-total-amtx" value="0"
+                                                       style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
+                                                       class="form-control line-profit-std-total-amtx" value="<?=number_format($pay_by_team_lead,2)?>"
                                                        name="line_profit_std_total_amt[]" readonly></td>
                         <!--                        <td></td>-->
                     </tr>
@@ -688,7 +700,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         <td style="padding: 0;background-color: lightblue"><input type="text"
                                                                                   style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
                                                                                   class="form-control line-profit-std-grand-total"
-                                                                                  value="<?= number_format(getGrandTotalCommission($model->id), 2) ?>"
+                                                                                  value="<?= number_format($sum_profit_amount2 + $total_achievement_amount, 2) ?>" /> <!--number_format(getGrandTotalCommission($model->id) --
                                                                                   name="line_profit_std_grand_total"
                                                                                   readonly></td>
                         <!--                        <td></td>-->
@@ -927,6 +939,21 @@ function getGrandTotalCommissionLevel2($job_main_id)
         $model = \common\models\JobProfitComStd::find()->select(['commission_amount'])->where(['job_id' => $job_main_id, 'type_id' => 1])->one();
         if ($model) {
             $total = $model->commission_amount;
+        }
+    }
+    return $total;
+}
+
+function getAcheivementAmount($team_extra_com_id)
+{
+    $total = 0;
+  //  $month = date('m', strtotime($trans_date));
+  //  $year = date('Y', strtotime($trans_date));
+    //if ($team_id != null && $month != null && $year != null) {
+    if($team_extra_com_id != null){
+        $model = \common\models\TeamExtraComLine::find()->where(['team_extra_com_id' => $team_extra_com_id])->sum('sum_total');
+        if ($model) {
+         $total = $model;
         }
     }
     return $total;
