@@ -209,25 +209,35 @@ class AdvancetableController extends Controller
         $html= '';
         $name = \Yii::$app->request->post('name');
         $description = \Yii::$app->request->post('description');
+        $is_saved = 0;
         if($name){
-            $model = new \common\models\Customer();
-            $model->name = $name;
-            $model->description = $description;
-            $model->status = 1;
-            $model->can_new = 0;
-            if($model->save(false)){
-                $new_id = $model->id;
-                $model_list = \backend\models\Customer::find()->where(['status'=>1])->orderBy(['can_new'=>SORT_ASC])->all();
-                if($model_list){
-                    foreach($model_list as $value){
-                        $selected = '';
-                        if($value->id == $new_id){
-                            $selected = 'selected';
+
+            $model_check_dup = \backend\models\Customer::find()->where(['name'=>$name])->one();
+            if($model_check_dup){
+               $html = 'duplicate';
+            }else{
+                $model = new \common\models\Customer();
+                $model->name = $name;
+                $model->description = $description;
+                $model->status = 1;
+                $model->can_new = 0;
+                if($model->save(false)){
+                    $is_saved = 1;
+                    $new_id = $model->id;
+                    $model_list = \backend\models\Customer::find()->where(['status'=>1])->orderBy(['can_new'=>SORT_ASC])->all();
+                    if($model_list){
+                        foreach($model_list as $value){
+                            $selected = '';
+                            if($value->id == $new_id){
+                                $selected = 'selected';
+                            }
+                            $html .= '<option value="'.$value->id.'" '.$selected.'>'.$value->name.'</option>';
                         }
-                        $html .= '<option value="'.$value->id.'" '.$selected.'>'.$value->name.'</option>';
                     }
                 }
             }
+
+
         }
         echo $html;
     }

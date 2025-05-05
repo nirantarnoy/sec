@@ -1360,7 +1360,7 @@ function createnewdistributor(){
                 // $("#selected-unit-id").val(data).change();
                 if(data != '' || data != null){
                     if(data == 'duplicate'){
-                        $(".name-validate").html("ชื่อลูกค้าซ้ำในระบบ").show();
+                        $(".name-validate").html("Duplicate Name").show();
                     }else{
                         $(".name-validate").hide();
                         $("#selected-customer-id").html(data);
