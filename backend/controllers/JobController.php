@@ -282,7 +282,8 @@ class JobController extends Controller
                 }
                 \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));
                // return $this->redirect(['index']);
-                return $this->redirect(['jobmain/update', 'id' => $model->job_master_id]);
+              //  return $this->redirect(['jobmain/update', 'id' => $model->job_master_id]);
+                return $this->redirect(['job/update', 'id' => $id]);
             }
         }
 

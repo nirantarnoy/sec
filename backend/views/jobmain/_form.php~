@@ -73,7 +73,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                                 <?php
                                 echo \kartik\select2\Select2::widget([
                                     'name' => 'customer_id',
-                                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Customer::find()->where(['status' => 1])->orderBy(['can_new'=>SORT_ASC])->all(), 'id', function ($data) {
+                                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Customer::find()->where(['status' => 1])->orderBy(['can_new' => SORT_ASC])->all(), 'id', function ($data) {
                                         return $data->name;
                                     }),
                                     'options' => ['id' => 'selected-customer-id', 'placeholder' => 'Select a customer ...',
@@ -444,135 +444,137 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         <?php endforeach; ?>
                     <?php else: ?>
                         <?php
-                             $line_for_com_profit = 0;
+                        $line_for_com_profit = 0;
                         ?>
-                        <tr>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt"
-                                                           value="<?= number_format(100000, 2) ?>"
-                                                           name="line_profit_std_amt[]"
-                                                           onchange="cal_profit_std($(this))">
-                            </td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
-                                                           class="form-control line-profit-std-com-per" value="0"
-                                                           name="line_profit_std_com_per[]"
-                                                           onchange="cal_profit_std($(this))"></td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-total-amt" value="0"
-                                                           name="line_profit_std_total_amt[]" readonly></td>
-                            <!--                            <td style="padding: 0.1em;">-->
-                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
-                            <!--                            </td>-->
-                        </tr>
-                        <tr>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt"
-                                                           value="<?= number_format(100000, 2) ?>"
-                                                           name="line_profit_std_amt[]"
-                                                           onchange="cal_profit_std($(this))">
-                            </td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
-                                                           class="form-control line-profit-std-com-per" value="0"
-                                                           name="line_profit_std_com_per[]"
-                                                           onchange="cal_profit_std($(this))"></td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-total-amt" value="0"
-                                                           name="line_profit_std_total_amt[]" readonly></td>
-                            <!--                            <td style="padding: 0.1em;">-->
-                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
-                            <!--                            </td>-->
-                        </tr>
-                        <tr>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt"
-                                                           value="<?= number_format(100000, 2) ?>"
-                                                           name="line_profit_std_amt[]"
-                                                           onchange="cal_profit_std($(this))">
-                            </td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
-                                                           class="form-control line-profit-std-com-per" value="0"
-                                                           name="line_profit_std_com_per[]"
-                                                           onchange="cal_profit_std($(this))"></td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-total-amt" value="0"
-                                                           name="line_profit_std_total_amt[]" readonly></td>
-                            <!--                            <td style="padding: 0.1em;">-->
-                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
-                            <!--                            </td>-->
-                        </tr>
-                        <tr>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt"
-                                                           value="<?= number_format(100000, 2) ?>"
-                                                           name="line_profit_std_amt[]"
-                                                           onchange="cal_profit_std($(this))">
-                            </td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
-                                                           class="form-control line-profit-std-com-per" value="0"
-                                                           name="line_profit_std_com_per[]"
-                                                           onchange="cal_profit_std($(this))"></td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-total-amt" value="0"
-                                                           name="line_profit_std_total_amt[]" readonly></td>
-                            <!--                            <td style="padding: 0.1em;">-->
-                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
-                            <!--                            </td>-->
-                        </tr>
-                        <tr>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt"
-                                                           value="<?= number_format(100000, 2) ?>"
-                                                           name="line_profit_std_amt[]"
-                                                           onchange="cal_profit_std($(this))">
-                            </td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
-                                                           class="form-control line-profit-std-com-per" value="0"
-                                                           name="line_profit_std_com_per[]"
-                                                           onchange="cal_profit_std($(this))"></td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-total-amt" value="0"
-                                                           name="line_profit_std_total_amt[]" readonly></td>
-                            <!--                            <td style="padding: 0.1em;">-->
-                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
-                            <!--                            </td>-->
-                        </tr>
-                        <tr>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt"
-                                                           value="<?= number_format(100000, 2) ?>"
-                                                           name="line_profit_std_amt[]"
-                                                           onchange="cal_profit_std($(this))">
-                            </td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
-                                                           class="form-control line-profit-std-com-per" value="0"
-                                                           name="line_profit_std_com_per[]"
-                                                           onchange="cal_profit_std($(this))"></td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-total-amt" value="0"
-                                                           name="line_profit_std_total_amt[]" readonly></td>
-                            <!--                            <td style="padding: 0.1em;">-->
-                            <!--<!--                                <div class="btn btn-sm btn-danger">-</div>-->
-                            <!--                            </td>-->
-                        </tr>
-                        <tr>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-amt"
-                                                           value="<?= number_format(100000, 2) ?>"
-                                                           name="line_profit_std_amt[]"
-                                                           onchange="cal_profit_std($(this))">
-                            </td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
-                                                           class="form-control line-profit-std-com-per" value="0"
-                                                           name="line_profit_std_com_per[]"
-                                                           onchange="cal_profit_std($(this))"></td>
-                            <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
-                                                           class="form-control line-profit-std-total-amt" value="0"
-                                                           name="line_profit_std_total_amt[]" readonly></td>
-                            <!--                            <td style="padding: 0.1em;">-->
-                            <!--                                <div class="btn btn-sm btn-danger">-</div>-->
-                            <!--                            </td>-->
-                        </tr>
+                        <?php if (0>1): ?>
+                            <tr>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-amt"
+                                                               value="<?= number_format(100000, 2) ?>"
+                                                               name="line_profit_std_amt[]"
+                                                               onchange="cal_profit_std($(this))">
+                                </td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
+                                                               class="form-control line-profit-std-com-per" value="0"
+                                                               name="line_profit_std_com_per[]"
+                                                               onchange="cal_profit_std($(this))"></td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-total-amt" value="0"
+                                                               name="line_profit_std_total_amt[]" readonly></td>
+                                <!--                            <td style="padding: 0.1em;">-->
+                                <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                                <!--                            </td>-->
+                            </tr>
+                            <tr>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-amt"
+                                                               value="<?= number_format(100000, 2) ?>"
+                                                               name="line_profit_std_amt[]"
+                                                               onchange="cal_profit_std($(this))">
+                                </td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
+                                                               class="form-control line-profit-std-com-per" value="0"
+                                                               name="line_profit_std_com_per[]"
+                                                               onchange="cal_profit_std($(this))"></td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-total-amt" value="0"
+                                                               name="line_profit_std_total_amt[]" readonly></td>
+                                <!--                            <td style="padding: 0.1em;">-->
+                                <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                                <!--                            </td>-->
+                            </tr>
+                            <tr>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-amt"
+                                                               value="<?= number_format(100000, 2) ?>"
+                                                               name="line_profit_std_amt[]"
+                                                               onchange="cal_profit_std($(this))">
+                                </td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
+                                                               class="form-control line-profit-std-com-per" value="0"
+                                                               name="line_profit_std_com_per[]"
+                                                               onchange="cal_profit_std($(this))"></td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-total-amt" value="0"
+                                                               name="line_profit_std_total_amt[]" readonly></td>
+                                <!--                            <td style="padding: 0.1em;">-->
+                                <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                                <!--                            </td>-->
+                            </tr>
+                            <tr>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-amt"
+                                                               value="<?= number_format(100000, 2) ?>"
+                                                               name="line_profit_std_amt[]"
+                                                               onchange="cal_profit_std($(this))">
+                                </td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
+                                                               class="form-control line-profit-std-com-per" value="0"
+                                                               name="line_profit_std_com_per[]"
+                                                               onchange="cal_profit_std($(this))"></td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-total-amt" value="0"
+                                                               name="line_profit_std_total_amt[]" readonly></td>
+                                <!--                            <td style="padding: 0.1em;">-->
+                                <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                                <!--                            </td>-->
+                            </tr>
+                            <tr>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-amt"
+                                                               value="<?= number_format(100000, 2) ?>"
+                                                               name="line_profit_std_amt[]"
+                                                               onchange="cal_profit_std($(this))">
+                                </td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
+                                                               class="form-control line-profit-std-com-per" value="0"
+                                                               name="line_profit_std_com_per[]"
+                                                               onchange="cal_profit_std($(this))"></td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-total-amt" value="0"
+                                                               name="line_profit_std_total_amt[]" readonly></td>
+                                <!--                            <td style="padding: 0.1em;">-->
+                                <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                                <!--                            </td>-->
+                            </tr>
+                            <tr>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-amt"
+                                                               value="<?= number_format(100000, 2) ?>"
+                                                               name="line_profit_std_amt[]"
+                                                               onchange="cal_profit_std($(this))">
+                                </td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
+                                                               class="form-control line-profit-std-com-per" value="0"
+                                                               name="line_profit_std_com_per[]"
+                                                               onchange="cal_profit_std($(this))"></td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-total-amt" value="0"
+                                                               name="line_profit_std_total_amt[]" readonly></td>
+                                <!--                            <td style="padding: 0.1em;">-->
+                                <!--<!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                                <!--                            </td>-->
+                            </tr>
+                            <tr>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-amt"
+                                                               value="<?= number_format(100000, 2) ?>"
+                                                               name="line_profit_std_amt[]"
+                                                               onchange="cal_profit_std($(this))">
+                                </td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align:right;"
+                                                               class="form-control line-profit-std-com-per" value="0"
+                                                               name="line_profit_std_com_per[]"
+                                                               onchange="cal_profit_std($(this))"></td>
+                                <td style="padding: 0;"><input type="text" style="border: none;text-align: right;"
+                                                               class="form-control line-profit-std-total-amt" value="0"
+                                                               name="line_profit_std_total_amt[]" readonly></td>
+                                <!--                            <td style="padding: 0.1em;">-->
+                                <!--                                <div class="btn btn-sm btn-danger">-</div>-->
+                                <!--                            </td>-->
+                            </tr>
 
+                        <?php endif; ?>
                     <?php endif; ?>
 
 
@@ -609,9 +611,9 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                     }
 
                     $total_achievement_amount = getAcheivementAmount(6);
-                    if($model_job_main_com_std_sum != null){
-                        $pay_by_company = $total_achievement_amount/2;
-                        $pay_by_team_lead = $total_achievement_amount/2;
+                    if ($model_job_main_com_std_sum != null) {
+                        $pay_by_company = $total_achievement_amount / 2;
+                        $pay_by_team_lead = $total_achievement_amount / 2;
                     }
 
 
@@ -661,7 +663,8 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                                                        value="50" readonly></td>
                         <td style="padding: 0;"><input type="text"
                                                        style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
-                                                       class="form-control line-profit-std-total-amtx" value="<?=number_format($total_achievement_amount,2)?>"
+                                                       class="form-control line-profit-std-total-amtx"
+                                                       value="<?= number_format($total_achievement_amount, 2) ?>"
                                                        name="line_profit_std_total_amt[]" readonly></td>
                         <!--                        <td style="padding: 0;"></td>-->
                     </tr>
@@ -674,7 +677,8 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                                                        value="50" readonly></td>
                         <td style="padding: 0;"><input type="text"
                                                        style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
-                                                       class="form-control line-profit-std-total-amtx" value="<?=number_format($pay_by_company,2)?>"
+                                                       class="form-control line-profit-std-total-amtx"
+                                                       value="<?= number_format($pay_by_company, 2) ?>"
                                                        name="line_profit_std_total_amt[]" readonly></td>
                         <!--                        <td></td>-->
                     </tr>
@@ -687,7 +691,8 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                                                        value="0" readonly></td>
                         <td style="padding: 0;"><input type="text"
                                                        style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
-                                                       class="form-control line-profit-std-total-amtx" value="<?=number_format($pay_by_team_lead,2)?>"
+                                                       class="form-control line-profit-std-total-amtx"
+                                                       value="<?= number_format($pay_by_team_lead, 2) ?>"
                                                        name="line_profit_std_total_amt[]" readonly></td>
                         <!--                        <td></td>-->
                     </tr>
@@ -701,7 +706,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         <td style="padding: 0;background-color: lightblue"><input type="text"
                                                                                   style="border: none;text-align: right;background-color: lightblue;font-weight: bold;"
                                                                                   class="form-control line-profit-std-grand-total"
-                                                                                  value="<?= number_format($sum_profit_amount2 + $total_achievement_amount, 2) ?>" /> <!--number_format(getGrandTotalCommission($model->id) --
+                                                                                  value="<?= number_format($sum_profit_amount2 + $total_achievement_amount, 2) ?>"/> <!--number_format(getGrandTotalCommission($model->id) --
                                                                                   name="line_profit_std_grand_total"
                                                                                   readonly></td>
                         <!--                        <td></td>-->
@@ -993,13 +998,13 @@ function getGrandTotalCommissionLevel2($job_main_id)
 function getAcheivementAmount($team_extra_com_id)
 {
     $total = 0;
-  //  $month = date('m', strtotime($trans_date));
-  //  $year = date('Y', strtotime($trans_date));
+    //  $month = date('m', strtotime($trans_date));
+    //  $year = date('Y', strtotime($trans_date));
     //if ($team_id != null && $month != null && $year != null) {
-    if($team_extra_com_id != null){
+    if ($team_extra_com_id != null) {
         $model = \common\models\TeamExtraComLine::find()->where(['team_extra_com_id' => $team_extra_com_id])->sum('sum_total');
         if ($model) {
-         $total = $model;
+            $total = $model;
         }
     }
     return $total;
@@ -1180,12 +1185,13 @@ function getemployee(e){
 function addJob(){
     var url = "$url_to_add_job";
     var jobmain_id = $("#jobmain-id").val();
-    var customer_id = $("#customer-id").val();
+    var customer_id = $("#selected-customer-id").val();
     var tags = $("#hiddenTags").val();
     var tags2 = $("#hiddenInvoiceTags").val();
     var team_id = $("#team-id").val();
     var head_id = $("#head-id").val();
-    
+    //alert(jobmain_id);
+    //alert(customer_id);
    
     if(jobmain_id && customer_id){
       //   alert(team_id);
@@ -1199,7 +1205,7 @@ function addJob(){
           // window.location.reload();
         },
         error: function (err) {
-           // alert('error');
+            alert('error');
         }
     });
     }
@@ -1360,7 +1366,7 @@ function createnewdistributor(){
                 // $("#selected-unit-id").val(data).change();
                 if(data != '' || data != null){
                     if(data == 'duplicate'){
-                        $(".name-validate").html("Duplicate Name").show();
+                        $(".name-validate").html("ชื่อลูกค้าซ้ำในระบบ").show();
                     }else{
                         $(".name-validate").hide();
                         $("#selected-customer-id").html(data);

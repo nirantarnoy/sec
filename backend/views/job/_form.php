@@ -109,7 +109,7 @@ $product_as_service = \common\models\CostCalType::find()->all();
         <h5><b>ข้อมูลการชำระเงิน / Payment Information</b></h5>
         <div class="row" style="background-color: lightblue;padding: 8px;">
             <div class="col-lg-3">
-                <?= $form->field($model, 'paid_amount')->textInput(['maxlength' => true, 'readonly' => 'readonly', 'value' => number_format(getJobpayment($model->id, 3))]) ?>
+                <?= $form->field($model, 'paid_amount')->textInput(['maxlength' => true, 'readonly' => 'readonly', 'value' => number_format(getJobpayment($model->id),2,'.',',')]) ?>
             </div>
             <div class="col-lg-3">
                 <?= $form->field($model, 'withholding_amount')->textInput(['maxlength' => true, 'readonly' => 'readonly', 'value' => number_format(getWithholdingAmount($model->id, 3))]) ?>
@@ -1221,8 +1221,8 @@ $(function(){
 function checkDuplicate(e){
     $("#table-list tbody tr").each(function(){
         if($(this).closest("tr").find(".line-product-id").val() == e.val()){
-            alert('ไม่สามารถเลือกรายการซ้ําได้');
-            return;
+            // alert('ไม่สามารถเลือกรายการซ้ําได้'); // ลูกค้าบอกให้สามารถเลือกรายการซ้ําได้
+            // return;
         }
     });
 }
