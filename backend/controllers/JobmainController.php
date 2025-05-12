@@ -251,7 +251,7 @@ class JobmainController extends Controller
                     }
 
 
-                    $total_com_amt = str_replace(",","",$total_profit_summary) * str_replace(",","",$total_profit_summary_per)/100;
+                    $total_com_amt = (double)str_replace(",","",$total_profit_summary) * (double)str_replace(",","",$total_profit_summary_per)/100;
                     $model_sum = new \common\models\JobProfitComStd();
                     $model_sum->job_id = $jobmain_id;
                     $model_sum->std_amount = str_replace(",","",$total_profit_summary);
@@ -268,7 +268,7 @@ class JobmainController extends Controller
                     $model_grand->type_id = 2;
                     $model_grand->save(false);
 
-                   \common\models\JobMaster::updateAll(['total_commission_amount' => str_replace(",","",$line_profit_std_grand_total)], ['id' => $jobmain_id]);
+                   \common\models\JobMaster::updateAll(['total_commission_amount' => (double)str_replace(",","",$line_profit_std_grand_total)], ['id' => $jobmain_id]);
 
             }
 
