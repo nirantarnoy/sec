@@ -667,10 +667,16 @@ function sumcostvat($job_id, $deduct_id, $vat_type)
                                 <b><?= number_format($cost_with_vat, 2) ?></b></td>
                         </tr>
                         <?php foreach ($product_as_service as $service_value): ?>
+                            <?php
+                                 $cost_vat_total = sumcost($model->id, $service_value->id, 1);
+                                 if($service_value->name == 'Cash advance') {
+                                     $cost_vat_total = getJobCashAdvanceAmount($model->quotation_ref_no);
+                                 }
+                            ?>
                             <tr>
                                 <td style="text-indent: 20px;"><?= $service_value->name ?></td>
                                 <td style="text-align: right">
-                                    <?= number_format(sumcost($model->id, $service_value->id, 1), 2) ?></td>
+                                    <?= number_format($cost_vat_total, 2) ?></td>
                             </tr>
                         <?php endforeach; ?>
                         <tr>
@@ -1181,6 +1187,27 @@ function getJobAllCost($job_id)
             $amount = $model;
         }
     }
+    return $amount;
+}
+
+function getJobCashAdvanceAmount($quotation_no){
+    $amount = 0;
+    if($quotation_no!=null || $quotation_no!=""){
+
+        $xp = explode(',',$quotation_no);
+        if($xp != null){
+            if(count($xp) > 0){
+                for($x=0;$x<=count($xp)-1;$x++){
+                    $model = \common\models\CashAdvance::find()->where(['like','quotation_ref_no',$xp[$x]])->sum('out_amount');
+                    if($model){
+                        $amount += $model;
+                    }
+                }
+            }
+        }
+
+    }
+
     return $amount;
 }
 
