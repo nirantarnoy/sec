@@ -85,7 +85,7 @@ $product_as_service = \common\models\CostCalType::find()->all();
             <div class="col-lg-3">
                 <?= $form->field($model, 'job_type_id')->widget(\kartik\select2\Select2::className(), [
                     'data' => \yii\helpers\ArrayHelper::map(\common\models\WorkType::find()->where(['status' => 1])->all(), 'id', 'name'),
-                    'options' => ['placeholder' => 'Select a Job type ...',],
+                    'options' => ['id' => 'job-type-id','placeholder' => 'Select a Job type ...','onchange' => 'enableinstallteam($(this));'],
                     'pluginOptions' => ['allowClear' => true],
                 ]) ?>
             </div>
@@ -98,16 +98,19 @@ $product_as_service = \common\models\CostCalType::find()->all();
             <div class="col-lg-3">
                 <?= $form->field($model, 'install_team_id')->widget(\kartik\select2\Select2::className(), [
                     'data' => \yii\helpers\ArrayHelper::map(\backend\models\Team::find()->where(['status' => 1, 'team_type_id' => 2])->all(), 'id', 'name'),
-                    'options' => ['placeholder' => 'Select a team ...',],
+                    'options' => ['id'=>'install-team-id','placeholder' => 'Select a team ...',],
                     'pluginOptions' => ['allowClear' => true],
                 ]) ?>
             </div>
             <div class="col-lg-3">
-                <?= $form->field($model, 'main_distributor_id')->widget(\kartik\select2\Select2::className(), [
-                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Distributor::find()->where(['status' => 1, 'can_new' => 0])->all(), 'id', 'name'),
-                    'options' => ['placeholder' => 'Select',],
-                    'pluginOptions' => ['allowClear' => true],
-                ]) ?>
+                <?= $form->field($model,'job_type_description')->textInput(['maxlength' => true,'readonly' => 'readonly','class'=>'form-control job-type-description']) ?>
+            </div>
+            <div class="col-lg-3">
+<!--                --><?php //= $form->field($model, 'main_distributor_id')->widget(\kartik\select2\Select2::className(), [
+//                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Distributor::find()->where(['status' => 1, 'can_new' => 0])->all(), 'id', 'name'),
+//                    'options' => ['placeholder' => 'Select',],
+//                    'pluginOptions' => ['allowClear' => true],
+//                ]) ?>
             </div>
         </div>
         <br/>
@@ -965,7 +968,7 @@ function sumcostvat($job_id, $deduct_id, $vat_type)
                     <div class="btn btn-primary" onclick="submitJob();">นำส่งข้อมูล / Submit</div>
                 <?php endif; ?>
                 <?php if ($model->status == 2): ?>
-                    <div class="btn btn-warning">รีวิวการชำระเงิน / Payment Review</div>
+                    <div class="btn btn-warning" onclick="paymentreviewjob();">รีวิวการชำระเงิน / Payment Review</div>
                 <?php endif; ?>
             </div>
         </div>
@@ -1314,6 +1317,23 @@ function createproductline(){
     var add_withholding_type = document.querySelector('input[name="withholding_type"]:checked').value;
     var add_distributor_id = $("#selected-distributor-id").val();
     var stock_id = $(".stock-id").val();
+    
+    
+    var job_type_id = $("#job-type-id").val();
+   
+    if(job_type_id == -1 || job_type_id == null){
+        alert("กรุณาเลือกประเภทงาน");
+        return false;
+    }
+    if(job_type_id >=2 && job_type_id <= 5){
+        var team_install_id = $("#install-team-id").val();
+       // console.log(team_install_id);
+        if(team_install_id === -1 || team_install_id == null || team_install_id == ''){
+            alert("กรุณาเลือกทีมติดตั้ง");
+            return false;
+        }
+        
+    }
     
   //  alert(add_total_sale_price);
     
@@ -1893,6 +1913,22 @@ function submitJob(){
             });
         }
 
+    }
+    
+    function enableinstallteam(e){
+      var id = e.val();
+      //alert(id);
+      if (id !=2 && id !=6) {
+        $("#install-team-id").prop("disabled", "");
+        $(".job-type-description").prop("readonly","readonly");
+      }else if(id != 6){
+        $("#install-team-id").prop("disabled", "disabled");
+        $(".job-type-description").prop("readonly","readonly");
+      }else if(id==6){
+          $(".job-type-description").prop("readonly","");
+          $("#install-team-id").prop("disabled", "disabled");
+      }
+      
     }
 
 JS;

@@ -41,7 +41,7 @@ class Job extends \yii\db\ActiveRecord
             [['quotation_ref_no'],'unique','targetAttribute' => ['quotation_ref_no']],
             [['trans_date','status'], 'safe'],
             [['customer_id', 'created_at', 'created_by', 'updated_at', 'updated_by', 'team_id', 'head_id', 'payment_status','job_master_id',], 'integer'],
-            [['job_no', 'quotation_ref_no','invoice_ref_no','remark'], 'string', 'max' => 255],
+            [['job_no', 'quotation_ref_no','invoice_ref_no','remark','job_type_description'], 'string', 'max' => 255],
             [['job_type_id','install_team_id','main_distributor_id','set_to_zero'],'integer'],
             [['vat_amount','payment_amount','withholding_amount'],'number'],
             [['pending_amount','job_value_amount','job_cost_amount','job_benefit_amount','job_benefit_per','commission_amount','paid_amount'],'safe']
@@ -84,6 +84,7 @@ class Job extends \yii\db\ActiveRecord
             'job_benefit_per'=>'%กำไร',
             'commission_amount'=>'ค่าคอมมิชชั่น',
             'remark' => 'หมายเหตุ',
+            'job_type_description' => 'อื่นๆ',
         ];
     }
 }
