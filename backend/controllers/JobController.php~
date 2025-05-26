@@ -1014,14 +1014,4 @@ class JobController extends Controller
         \Yii::$app->session->setFlash('msg-success', 'submit ใบงานให้แผนกบัญชีตรวจสอบแล้ว.');
         return $this->redirect(['job/update', 'id'=>$job_id]);
     }
-    public function actionPaymentreviewjob(){
-        $job_id = \Yii::$app->request->post('job_id');
-        $model = \common\models\Job::find()->where(['id'=>$job_id])->one();
-        if($model){
-            $model->status = 3; // review payment
-            $model->save(false);
-        }
-        \Yii::$app->session->setFlash('msg-success', 'Payment review ใบงานเรียบร้อยแล้ว.');
-        return $this->redirect(['job/update', 'id'=>$job_id]);
-    }
 }

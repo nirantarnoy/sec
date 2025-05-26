@@ -126,51 +126,51 @@ function workqueConfirm(){
         // });
     });
 
-    // function submitJob(){
-    //     //e.preventDefault();
-    //     //alert(url);
-    //     var id = $(".current-job-id").val();
-    //     if(id!=null){
-    //         swal({
-    //             title: "ต้องการยืนยันส่งรายการนี้ใช่หรือไม่",
-    //             text: "",
-    //             type: "error",
-    //             showCancelButton: true,
-    //             closeOnConfirm: true,
-    //             showLoaderOnConfirm: true
-    //         }, function () {
-    //             // alert($("form#form-delete").attr('action'));
-    //
-    //             //$("form#form-submit-job").attr('action',url);
-    //             $("form#form-submit-job").submit();
-    //             // $.ajax({
-    //             //     'type': 'get',
-    //             //     'dataType': 'html',
-    //             //     'url': url,
-    //             //     'data': {'id': id},
-    //             //     'success': function(data){
-    //             //         if(data ==1){
-    //             //             location.reload();
-    //             //            // alert(data);
-    //             //            // showAlert('success','ทำรายการสำเร็จ');//
-    //             //            // $("#btn-show-alert").trigger('click');
-    //             //         }else{
-    //             //            // alert(data);
-    //             //           //  showAlert('error','พบข้อผิดพลาด');
-    //             //         }
-    //             //         // setTimeout(function(){
-    //             //     location.reload();
-    //             //         // },3000);
-    //             //
-    //             //        // return;
-    //             //     },
-    //             //     'error': function(data){
-    //             //          alert(data);//return;
-    //             //     }
-    //             // });
-    //         });
-    //     }
-    //
-    // }
+    function submitJob(){
+        //e.preventDefault();
+        //alert(url);
+        var id = $(".current-job-id").val();
+        if(id!=null){
+            swal({
+                title: "ต้องการยืนยันส่งรายการนี้ใช่หรือไม่",
+                text: "",
+                type: "error",
+                showCancelButton: true,
+                closeOnConfirm: true,
+                showLoaderOnConfirm: true
+            }, function () {
+                // alert($("form#form-delete").attr('action'));
+
+                //$("form#form-submit-job").attr('action',url);
+                $("form#form-submit-job").submit();
+                // $.ajax({
+                //     'type': 'get',
+                //     'dataType': 'html',
+                //     'url': url,
+                //     'data': {'id': id},
+                //     'success': function(data){
+                //         if(data ==1){
+                //             location.reload();
+                //            // alert(data);
+                //            // showAlert('success','ทำรายการสำเร็จ');//
+                //            // $("#btn-show-alert").trigger('click');
+                //         }else{
+                //            // alert(data);
+                //           //  showAlert('error','พบข้อผิดพลาด');
+                //         }
+                //         // setTimeout(function(){
+                //     location.reload();
+                //         // },3000);
+                //
+                //        // return;
+                //     },
+                //     'error': function(data){
+                //          alert(data);//return;
+                //     }
+                // });
+            });
+        }
+
+    }
 }
 
