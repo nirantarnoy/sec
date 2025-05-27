@@ -177,10 +177,10 @@ $is_pos_user = 0;
             $("#form-perpage").submit();
         });
 
-        if (cururl == 'pos' || cururl == 'orders' || cururl == 'salereport' || cururl == 'salereportemp') {
-            $(".sidebar-mini").removeClass('layout-fixed');
-            $(".sidebar-mini").addClass('sidebar-collapse');
-        }
+        // if (cururl == 'pos' || cururl == 'orders' || cururl == 'salereport' || cururl == 'salereportemp') {
+        //     $(".sidebar-mini").removeClass('layout-fixed');
+        //     $(".sidebar-mini").addClass('sidebar-collapse');
+        // }
 
         //     var xx = $(".nav-sidebar").find(".nav-item").find("."+cururl+"").find(".nav-link").parent().parent().attr("class");
         var current_active_menu = null;
@@ -191,7 +191,7 @@ $is_pos_user = 0;
             if ($.inArray("has-sub", list_class) !== -1) {
                 $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).addClass("active");
                 $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).parent().parent().parent().find(".nav-link").trigger("click");
-                $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).parent().parent().parent().hide();
+                $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).parent().parent().parent().trigger("click");
 
                 //console.log(x);
 

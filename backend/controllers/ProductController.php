@@ -71,6 +71,7 @@ class ProductController extends Controller
         $pageSize = \Yii::$app->request->post("perpage");
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(\Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['cal_type_id'=>1]);
 //        if($viewstatus ==1){
 //            $dataProvider->query->andFilterWhere(['status'=>$viewstatus]);
 //        }

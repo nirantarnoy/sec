@@ -35,7 +35,7 @@ use yii\widgets\ActiveForm;
         ])->label(false) ?>
         <span style="margin-left: 5px;"></span>
         <?= $form->field($model, 'product_id')->widget(\kartik\select2\Select2::className(), [
-            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Product::find()->where(['status'=>1])->all(), 'id', function ($data) {
+            'data' => \yii\helpers\ArrayHelper::map(\backend\models\Product::find()->where(['status'=>1,'cal_type_id'=>1])->all(), 'id', function ($data) {
                 return $data->name;
             }),
             'options' => [

@@ -73,6 +73,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => \yii\helpers\ArrayHelper::map(\backend\helpers\GenderType::asArrayObject(),'id','name'),
                 'filterType' => GridView::FILTER_SELECT2,
                 'filterInputOptions' => ['class' => 'form-control', 'prompt' => '--- เลือก ---'],
+                'filterWidgetOptions' => [
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ],
             ],
             [
                 'attribute' => 'position',
@@ -82,6 +87,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => \yii\helpers\ArrayHelper::map(\backend\models\Position::find()->where(['status'=>1])->all(),'id','name'),
                 'filterType' => GridView::FILTER_SELECT2,
                 'filterInputOptions' => ['class' => 'form-control', 'prompt' => '--- เลือก ---'],
+                'filterWidgetOptions' => [
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ],
             ],
             [
                 'attribute' => 'status',
@@ -98,6 +108,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => \yii\helpers\ArrayHelper::map(\backend\helpers\CommonStatueType::asArrayObject(),'id','name'),
                 'filterType' => GridView::FILTER_SELECT2,
                 'filterInputOptions' => ['class' => 'form-control', 'prompt' => '--- เลือก ---'],
+                'filterWidgetOptions' => [
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+                ],
             ],
 
             [

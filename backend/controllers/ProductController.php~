@@ -494,6 +494,6 @@ class ProductController extends Controller
                 }
             }
         }
-        echo $new_id;
+        echo $html;
     }
 }

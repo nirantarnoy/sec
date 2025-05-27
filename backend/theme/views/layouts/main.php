@@ -177,31 +177,49 @@ $is_pos_user = 0;
             $("#form-perpage").submit();
         });
 
-        if (cururl == 'pos' || cururl == 'orders' || cururl == 'salereport' || cururl == 'salereportemp') {
-            $(".sidebar-mini").removeClass('layout-fixed');
-            $(".sidebar-mini").addClass('sidebar-collapse');
-        }
+        // if (cururl == 'pos' || cururl == 'orders' || cururl == 'salereport' || cururl == 'salereportemp') {
+        //     $(".sidebar-mini").removeClass('layout-fixed');
+        //     $(".sidebar-mini").addClass('sidebar-collapse');
+        // }
 
         //     var xx = $(".nav-sidebar").find(".nav-item").find("."+cururl+"").find(".nav-link").parent().parent().attr("class");
-        var current_active_menu = null;
-        $("ul.nav-sidebar li").each(function (index) {
-            var cli = $(this).attr("class");
-            var list_class = cli.split(" ");
-            //console.log(list_class);
-            if ($.inArray("has-sub", list_class) !== -1) {
-                $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).addClass("active");
-                $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).parent().parent().parent().find(".nav-link").trigger("click");
-                $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).parent().parent().parent().trigger("click");
+        // var current_active_menu = null;
+        // $("ul.nav-sidebar li").each(function (index) {
+        //     var cli = $(this).attr("class");
+        //     var list_class = cli.split(" ");
+        //     //console.log(list_class);
+        //     if ($.inArray("has-sub", list_class) !== -1) {
+        //         $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).addClass("active");
+        //         $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).parent().parent().parent().find(".nav-link").trigger("click");
+        //         $(this).find(".nav-treeview").find(".nav-item").find("." + cururl).parent().parent().parent().trigger("click");
+        //
+        //         //console.log(x);
+        //
+        //         // if(cururl == 'job'){
+        //         //     $(this).find(".nav-treeview").find(".nav-item").find(".jobmain").addClass("active");
+        //         // }
+        //     } else {
+        //         $(this).find("." + cururl).addClass("active");
+        //     }
+        //
+        // });
 
-                //console.log(x);
-
-                // if(cururl == 'job'){
-                //     $(this).find(".nav-treeview").find(".nav-item").find(".jobmain").addClass("active");
-                // }
+        // Highlight current menu
+        $("ul.nav-sidebar li").each(function () {
+            let $this = $(this);
+            if ($this.hasClass("has-sub")) {
+                let $target = $this.find(".nav-link." + cururl);
+                if ($target.length > 0) {
+                    $target.addClass("active");
+                    $this.addClass("menu-open");
+                    $this.children("a.nav-link").addClass("active");
+                }
             } else {
-                $(this).find("." + cururl).addClass("active");
+                let $target = $this.find("a.nav-link." + cururl);
+                if ($target.length > 0) {
+                    $target.addClass("active");
+                }
             }
-
         });
 
 
