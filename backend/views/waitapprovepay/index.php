@@ -12,7 +12,7 @@ use yii\widgets\LinkPager;
 /** @var backend\models\JobSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = 'ใบงาน';
+$this->title = 'ใบงานรออนุมัติจ่าย';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="job-index">
@@ -25,11 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-lg-10">
             <p>
-<!--                --><?php //= Html::a(Yii::t('app', '<i class="fa fa-plus"></i> สร้างใหม่'), ['create'], ['class' => 'btn btn-success']) ?>
+                <?= Html::a(Yii::t('app', '<i class="fa fa-plus"></i> สร้างใหม่'), ['create'], ['class' => 'btn btn-success']) ?>
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['job/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['warehouse/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
@@ -113,26 +113,17 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions' => ['style' => 'text-align:center;', 'class' => 'activity-view-link',],
                 'class' => 'yii\grid\ActionColumn',
                 'contentOptions' => ['style' => 'text-align: center'],
-                'template' => '{view} {update}{delete}',
+                'template' => '{view}{approve}',
                 'buttons' => [
                     'view' => function ($url, $data, $index) {
-                        $options = [
+                        $options = array_merge([
                             'title' => Yii::t('yii', 'View'),
                             'aria-label' => Yii::t('yii', 'View'),
-                            'data-pjax' => '0',
-                        ];
-                        return Html::a(
-                            '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, $options);
-                    },
-                    'update' => function ($url, $data, $index) {
-                        $options = array_merge([
-                            'title' => Yii::t('yii', 'Update'),
-                            'aria-label' => Yii::t('yii', 'Update'),
                             'data-pjax' => '0',
                             'id' => 'modaledit',
                         ]);
                         return Html::a(
-                            '<span class="fas fa-edit btn btn-xs btn-default"></span>', $url, [
+                            '<span class="fas fa-eye btn btn-xs btn-default"></span>', $url, [
                             'id' => 'activity-view-link',
                             //'data-toggle' => 'modal',
                             // 'data-target' => '#modal',
@@ -141,18 +132,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             // 'style'=>['float'=>'rigth'],
                         ]);
                     },
-                    'delete' => function ($url, $data, $index) {
+                    'approve' => function ($url, $data, $index) {
                         $options = array_merge([
-                            'title' => Yii::t('yii', 'Delete'),
-                            'aria-label' => Yii::t('yii', 'Delete'),
+                            'title' => Yii::t('yii', 'Approve'),
+                            'aria-label' => Yii::t('yii', 'Approve'),
                             //'data-confirm' => Yii::t('yii', 'Are you sure you want to delete this item?'),
                             //'data-method' => 'post',
                             //'data-pjax' => '0',
                             'data-url' => $url,
                             'data-var' => $data->id,
-                            'onclick' => 'recDelete($(this));'
+                            'onclick' => 'approvePay($(this));'
                         ]);
-                        return Html::a('<span class="fas fa-trash-alt btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
+                        return Html::a('<span class="fas fa-check-circle btn btn-xs btn-default"></span>', 'javascript:void(0)', $options);
                     }
                 ]
             ],

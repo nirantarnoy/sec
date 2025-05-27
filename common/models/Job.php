@@ -42,7 +42,7 @@ class Job extends \yii\db\ActiveRecord
             [['trans_date','status'], 'safe'],
             [['customer_id', 'created_at', 'created_by', 'updated_at', 'updated_by', 'team_id', 'head_id', 'payment_status','job_master_id',], 'integer'],
             [['job_no', 'quotation_ref_no','invoice_ref_no','remark','job_type_description'], 'string', 'max' => 255],
-            [['job_type_id','install_team_id','main_distributor_id','set_to_zero'],'integer'],
+            [['job_type_id','install_team_id','main_distributor_id','set_to_zero','emp_sale_id'],'integer'],
             [['vat_amount','payment_amount','withholding_amount'],'number'],
             [['pending_amount','job_value_amount','job_cost_amount','job_benefit_amount','job_benefit_per','commission_amount','paid_amount'],'safe']
         ];
@@ -67,7 +67,8 @@ class Job extends \yii\db\ActiveRecord
             'updated_at' => 'วันที่แก้ไขรายการ',
             'updated_by' => 'แก้ไขรายการโดย',
             'team_id' => 'ทีมขาย',
-            'head_id' => 'พนักงานขาย',
+            'head_id' => 'หัวหน้าทีม',
+            'emp_sale_id' => 'พนักงานขาย',
             'job_type_id' => 'ประเภทงาน',
             'install_team_id' => 'ทีมติดตั้ง',
             'main_distributor_id' => 'ผู้นำเข้าหลัก',

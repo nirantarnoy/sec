@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </p>
         </div>
         <div class="col-lg-2" style="text-align: right">
-            <form id="form-perpage" class="form-inline" action="<?= Url::to(['warehouse/index'], true) ?>"
+            <form id="form-perpage" class="form-inline" action="<?= Url::to(['job/index'], true) ?>"
                   method="post">
                 <div class="form-group">
                     <label>แสดง </label>
@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
         //    'hover' => true,
         'id' => 'product-grid',
         //'responsiveWrap' => true,
-        'tableOptions' => ['class' => 'table table-responsive table-hover'],
+        //'tableOptions' => ['class' => 'table table-responsive table-hover'],
         'emptyText' => '<div style="color: red;text-align: center;"> <b>ไม่พบรายการไดๆ</b> <span> เพิ่มรายการโดยการคลิกที่ปุ่ม </span><span class="text-success">"สร้างใหม่"</span></div>',
         'columns' => [
             [

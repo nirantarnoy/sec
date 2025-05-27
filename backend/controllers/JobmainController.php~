@@ -268,7 +268,7 @@ class JobmainController extends Controller
                     $model_grand->type_id = 2;
                     $model_grand->save(false);
 
-                   \common\models\JobMaster::updateAll(['total_commission_amount' => str_replace(",","",$line_profit_std_grand_total)], ['id' => $jobmain_id]);
+                   \common\models\JobMaster::updateAll(['total_commission_amount' => (double)str_replace(",","",$line_profit_std_grand_total)], ['id' => $jobmain_id]);
 
             }
 

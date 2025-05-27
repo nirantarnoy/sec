@@ -444,6 +444,24 @@
 
                         </ul>
                     </li>
+                <li class="nav-item has-treeview has-sub">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-clock"></i>
+                        <p>
+                            Summary
+                            <i class="fas fa-angle-left right"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="index.php?r=waitapprovepay/index" class="nav-link waitapprovepay">
+                                <i class="far fa-file-import nav-icon"></i>
+                                <p>รออนุมัติจ่าย</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
                 <?php //if (\Yii::$app->user->can('dbbackup/backuplist')): ?>
                     <li class="nav-item has-treeview has-sub">
                         <a href="#" class="nav-link">

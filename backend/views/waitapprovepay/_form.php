@@ -1089,12 +1089,14 @@ function sumcostvat($job_id, $deduct_id, $vat_type)
                             <label for="">ชื่อ</label>
                             <input type="text" class="form-control new-distributor-name" name="new_distributor_name"
                                    required value="">
+
                         </div>
                         <div class="col-lg-4">
                             <label for="">รายละเอียด</label>
                             <input type="text" class="form-control" name="new_distributor_description" required
                                    value="">
                         </div>
+
 
                     </div>
                     <div style="height: 10px;"></div>

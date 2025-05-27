@@ -83,14 +83,20 @@ $product_as_service = \common\models\CostCalType::find()->all();
                 <?php endif; ?>
             </div>
             <div class="col-lg-3">
+                <?= $form->field($model, 'emp_sale_id')->widget(\kartik\select2\Select2::className(), [
+                    'data' => \yii\helpers\ArrayHelper::map(\backend\models\Employee::find()->where(['status' => 1])->all(), 'id', function($data){
+                        return $data->f_name . ' ' . $data->l_name;
+                    }),
+                    'options' => ['id'=>'emp-sale-id','placeholder' => 'Select a  ...',],
+                    'pluginOptions' => ['allowClear' => true],
+                ]) ?>
+            </div>
+            <div class="col-lg-3">
                 <?= $form->field($model, 'job_type_id')->widget(\kartik\select2\Select2::className(), [
                     'data' => \yii\helpers\ArrayHelper::map(\common\models\WorkType::find()->where(['status' => 1])->all(), 'id', 'name'),
                     'options' => ['id' => 'job-type-id','placeholder' => 'Select a Job type ...','onchange' => 'enableinstallteam($(this));'],
                     'pluginOptions' => ['allowClear' => true],
                 ]) ?>
-            </div>
-            <div class="col-lg-3">
-                <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly', 'style' => $model->status == 1 ? 'color:red' : 'color:green', 'value' => $model->isNewRecord ? 'Open' : \backend\helpers\JobStatus::getTypeById($model->status)]) ?>
             </div>
         </div>
         <div class="row" style="background-color: lightblue;padding: 8px;">
@@ -104,6 +110,9 @@ $product_as_service = \common\models\CostCalType::find()->all();
             </div>
             <div class="col-lg-3">
                 <?= $form->field($model,'job_type_description')->textInput(['maxlength' => true,'readonly' => 'readonly','class'=>'form-control job-type-description']) ?>
+            </div>
+            <div class="col-lg-3">
+                <?= $form->field($model, 'status')->textInput(['readonly' => 'readonly', 'style' => $model->status == 1 ? 'color:red' : 'color:green', 'value' => $model->isNewRecord ? 'Open' : \backend\helpers\JobStatus::getTypeById($model->status)]) ?>
             </div>
             <div class="col-lg-3">
 <!--                --><?php //= $form->field($model, 'main_distributor_id')->widget(\kartik\select2\Select2::className(), [
@@ -1088,7 +1097,6 @@ function sumcostvat($job_id, $deduct_id, $vat_type)
                                    value="">
                         </div>
 
-
                     </div>
                     <div style="height: 10px;"></div>
 
@@ -1249,7 +1257,7 @@ var selecteditem = [];
 var removelist = [];
 $(function(){
     calTotal();
-    
+    $("#install-team-id").prop("disabled", "disabled");
     $('#selected-distributor-id').on('select2:open', function() {
             setTimeout(function() {
                 $(".select2-results__option").each(function() {
@@ -1865,7 +1873,7 @@ function submitJob(){
                 closeOnConfirm: true,
                 showLoaderOnConfirm: true
             }, function () {
-                alert(id);
+               // alert(id);
                     $.ajax({
                         url: "$url_to_submit_job",
                         type: 'post',
@@ -1896,7 +1904,7 @@ function submitJob(){
                 closeOnConfirm: true,
                 showLoaderOnConfirm: true
             }, function () {
-                alert(id);
+               // alert(id);
                     $.ajax({
                         url: "$url_to_review_payment_job",
                         type: 'post',

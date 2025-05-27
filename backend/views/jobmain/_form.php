@@ -110,6 +110,19 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                                 <!-- Hidden Field to Store Tags (For Form Submission) -->
                                 <?= Html::hiddenInput('invoice_tags', '', ['id' => 'hiddenInvoiceTags']) ?>
                             </div>
+                            <div class="col-lg-3">
+                                <label for="">พนักงานขาย</label>
+                                <?php
+                                echo \kartik\select2\Select2::widget([
+                                    'name' => 'emp_slae_id',
+                                    'data' => \yii\helpers\ArrayHelper::map(\common\models\Employee::find()->where(['status' => 1])->orderBy(['id' => SORT_ASC])->all(), 'id', function ($data) {
+                                        return $data->f_name.' '.$data->l_name;
+                                    }),
+                                    'options' => ['id' => 'selected-employee-id', 'placeholder' => 'Select a employee ...',],
+                                    'pluginOptions' => ['allowClear' => true],
+                                ])
+                                ?>
+                            </div>
                         </div>
                     </form>
                     <br/>
@@ -621,7 +634,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <div class="btn btn-sm btn-primary">เพิ่มแถว</div>
+<!--                            <div class="btn btn-sm btn-primary">เพิ่มแถว</div>-->
                         </td>
                         <td colspan="2" style="text-align: right;">
                             <button class="btn btn-sm btn-warning">อัพเดทตาราง</button>
@@ -1121,6 +1134,7 @@ function addJob(){
     var tags2 = $("#hiddenInvoiceTags").val();
     var team_id = $("#team-id").val();
     var head_id = $("#head-id").val();
+    var emp_sale_id = $("#emp-sale-id").val();
     //alert(jobmain_id);
     //alert(customer_id);
    
@@ -1130,7 +1144,7 @@ function addJob(){
         url: url,
         type: 'post',
         dataType: 'html',
-        data: {id: jobmain_id,customer_id:customer_id,tags:tags,tags2:tags2,team_id:team_id,head_id:head_id},
+        data: {id: jobmain_id,customer_id:customer_id,tags:tags,tags2:tags2,team_id:team_id,head_id:head_id,emp_sale_id:emp_sale_id},
         success: function (data) {
            //alert('ok');
           // window.location.reload();
@@ -1146,9 +1160,20 @@ function addJob(){
 function cal_profit_std(e){
     var line_profit_std = e.closest('tr').find(".line-profit-std-amt").val().replace(",","");
     var line_profit_commission_rate = e.closest('tr').find(".line-profit-std-com-per").val().replace(",","");
-    
+    //alert(line_profit_std);
     var line_total = (parseFloat(line_profit_std) * parseFloat(line_profit_commission_rate)) / 100;
     e.closest('tr').find(".line-profit-std-total-amt").val(parseFloat(line_total).toFixed(2));
+    
+  //  cal_profit_std();
+   var sum = 0;
+   var sum_line_total = 0;
+   $("table#table-commission tbody tr").each(function(){
+        sum += parseFloat($(this).find(".line-profit-std-amt").val().replace(",",""));
+        sum_line_total += parseFloat($(this).find(".line-profit-std-total-amt").val().replace(",",""));
+    });
+   
+   $(".total-profit-summary-2").val(parseFloat(sum).toFixed(2).toLocaleString("en"));
+   $(".total-profit-summary-cal-2").val(parseFloat(sum_line_total).toFixed(2).toLocaleString("en"));
 }
 
 function calProfitsum(){

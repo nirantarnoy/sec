@@ -190,6 +190,7 @@ class JobmainController extends Controller
         $tags2 = \Yii::$app->request->post('tags2');
         $team_id = \Yii::$app->request->post('team_id');
         $head_id = \Yii::$app->request->post('head_id');
+        $emp_sale_id = \Yii::$app->request->post('emp_sale_id');
 
         if ($jobmain_id) {
             $model = new \backend\models\Job();
@@ -203,6 +204,7 @@ class JobmainController extends Controller
             $model->head_id = $head_id;
             $model->payment_status = 1;
             $model->status = 1;
+            $model->emp_sale_id = $emp_sale_id;
             $model->job_value_amount = 0;
             if ($model->save(false)) {
                 \Yii::$app->getSession()->setFlash('success', \Yii::t('app', 'บันทึกข้อมูลเรียบร้อยแล้ว'));

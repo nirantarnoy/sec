@@ -203,19 +203,25 @@ $is_pos_user = 0;
         //     }
         //
         // });
-
+// alert(cururl);
         // Highlight current menu
         $("ul.nav-sidebar li").each(function () {
             let $this = $(this);
+            let targetClass = cururl;
+
+            if(cururl.includes('job')){
+                targetClass = 'jobmain';
+            }
+
             if ($this.hasClass("has-sub")) {
-                let $target = $this.find(".nav-link." + cururl);
+                let $target = $this.find(".nav-link." + targetClass);
                 if ($target.length > 0) {
                     $target.addClass("active");
                     $this.addClass("menu-open");
                     $this.children("a.nav-link").addClass("active");
                 }
             } else {
-                let $target = $this.find("a.nav-link." + cururl);
+                let $target = $this.find("a.nav-link." + targetClass);
                 if ($target.length > 0) {
                     $target.addClass("active");
                 }
