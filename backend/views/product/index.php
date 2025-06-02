@@ -100,7 +100,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 'contentOptions' => ['style' => 'text-align: right'],
                 'value' => function ($data) {
                     $qty = \backend\models\Product::getTotalQty($data->id);
-                   return number_format($qty,0);
+                    return number_format($qty,0);
+                }
+            ],
+
+            [
+                'attribute' => 'total_amount',
+                'label' => 'มูลค่าคงคลัง',
+                'headerOptions' => ['style' => 'text-align: right'],
+                'contentOptions' => ['style' => 'text-align: right'],
+                'value' => function ($data) {
+                    $amt = \backend\models\Product::getTotalAmount($data->id);
+                    return number_format($amt,2);
                 }
             ],
 

@@ -106,7 +106,7 @@ class Product extends \common\models\Product
         $total_amount = 0;
         $model = \backend\models\Stocksum::find()->where(['product_id'=>$id])->sum('qty');
         $cost = Product::find()->where(['id'=>$id])->one();
-        $total_amount = $model*$cost->cost;
+        $total_amount = $model*$cost->cost_price;
         return $total_amount;
     }
 
