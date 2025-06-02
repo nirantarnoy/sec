@@ -169,5 +169,27 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
     <?php Pjax::end(); ?>
-
+    <br />
+    <div class="row">
+        <div class="col-lg-6">
+            <table class="table-table-bordered">
+                <tr>
+                    <td><h5 style="color: green;"><b>มูลค่ารวมคลังทั้งหมด</b></h5></td>
+                    <td style="text-align: right;"><h5><b><?=number_format(getValueAmount(),0)?></b></h5></td>
+                </tr>
+            </table>
+        </div>
+    </div>
 </div>
+
+<?php
+function getValueAmount(){
+    $amount = 0;
+    $model = \backend\models\Stocksum::find()->where(['>','qty',0])->all();
+    foreach ($model as $value) {
+       $cost = backend\models\Product::find()->where(['id'=>$value->product_id])->one();
+       $amount += $value->qty*$cost->cost;
+    }
+    return $amount;
+}
+?>
