@@ -143,7 +143,7 @@ $this->title = 'Performance Chart ' . $find_month_name . ' ' . $selected_year;
                         $line_job_value_amount = $sale_data[0]['job_value_amount'];
                         $total_sale_amount = $sale_data[0]['total_sale_amount'];
 
-                        $line_sale_per_amount = ($line_job_value_amount / $total_sale_amount) * 100;
+                        $line_sale_per_amount = $line_job_value_amount == 0 || $total_sale_amount == 0 ? 0: ($line_job_value_amount / $total_sale_amount) * 100;
                         $total_sele_per = ($total_sele_per + $line_sale_per_amount);
 
                         $line_profit_amount = $sale_data[0]['profit_amount'];

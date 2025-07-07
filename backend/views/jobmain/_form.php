@@ -567,7 +567,7 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                                                        style="border: none;text-align: right;background-color: lightblue;font-weight: bold;color: red;"
                                                        class="form-control total-profit-summary-per-2"
                                                        name="total_profit_summary_per_2"
-                                                       value="<?= number_format(($total_commission_amount / $total_profit_amount)*100, 2) ?>"></td>
+                                                       value="<?= $total_commission_amount == 0 || $total_profit_amount == 0 ?0: number_format(($total_commission_amount / $total_profit_amount)*100, 2) ?>"></td>
                         <td style="padding: 0;"><input type="text"
                                                        style="border: none;text-align: right;background-color: lightblue;font-weight: bold;color: red;"
                                                        class="form-control total-profit-summary-cal-2"
