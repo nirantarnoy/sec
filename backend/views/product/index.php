@@ -75,6 +75,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return \backend\models\Productgroup::findName($data->product_cat_id);
                 }
             ],
+            [
+                'attribute' => 'cal_type_id',
+                'value' => function ($data) {
+                    return \backend\models\Product::findCalTypeName($data->cal_type_id);
+                }
+            ],
             //'product_cat_id',
             //'status',
             //'last_price',

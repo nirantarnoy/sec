@@ -110,6 +110,11 @@ class Product extends \common\models\Product
         return $total_amount;
     }
 
+    public static function findCalTypeName($id){
+        $model = \common\models\CostCalType::find()->where(['id'=>$id])->one();
+        return $model!= null?$model->name:'';
+    }
+
 //    public static function findName($id){
 //        $model = \common\models\RoutePlan::find()->where(['id'=>$id])->one();
 //        return $model!= null?$model->name:'';
