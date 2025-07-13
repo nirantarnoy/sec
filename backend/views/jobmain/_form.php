@@ -474,8 +474,9 @@ $model_job_main_com_std_sum_level_2 = \common\models\JobProfitComStd::find()->wh
                         if ($total_profit_amount > 0) {
                             $profit_loop = $total_profit_amount / 100000;
                         }
-                        echo "loop is " . round($profit_loop); ?>
-                        ?>
+                       // echo "loop is " . round($profit_loop);
+                         ?>
+
                         <?php if ($profit_loop > 0): ?>
                             <?php for ($a = 0; $a <= $profit_loop; $a++): ?>
                             <?php
